@@ -1,5 +1,7 @@
 {
     "compilerOptions": {
+        "allowJs": true,
+        "allowSyntheticDefaultImports": true,
         "target": "es5",
         "module": "commonjs",
         "baseUrl": ".",
