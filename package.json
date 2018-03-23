@@ -1,0 +1,55 @@
+{
+  "name": "devextreme-vue",
+  "version": "18.1.1-alpha.1",
+  "description": "",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "start": "npm run build && npm run serve",
+    "build": "npm run clean && npm run generate",
+    "clean": "gulp clean",
+    "generate": "gulp generate",
+    "lint": "gulp lint",
+    "pack": "gulp npm.pack",
+    "serve": "webpack-dev-server",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test-watch": "echo \"Error: no test-watch specified\" && exit 1"
+  },
+  "keywords": [
+    "vue",
+    "devextreme",
+    "devexpress"
+  ],
+  "author": "Developer Express Inc.",
+  "license": "MIT",
+  "peerDependencies": {
+    "devextreme": "^18.1.1-pre-18079",
+    "vue": "^2.5.16"
+  },
+  "devDependencies": {
+    "@types/node": "^9.4.7",
+    "css-loader": "^0.28.11",
+    "dasherize": "^2.0.0",
+    "devextreme": "^18.1.1-pre-18079",
+    "dot": "^1.1.2",
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.4.0",
+    "gulp-shell": "^0.6.5",
+    "gulp-tslint": "^8.1.3",
+    "gulp-typescript": "^4.0.1",
+    "run-sequence": "^2.2.1",
+    "source-map-loader": "^0.2.3",
+    "style-loader": "^0.20.3",
+    "ts-loader": "^4.1.0",
+    "tslint": "^5.9.1",
+    "typescript": "^2.7.2",
+    "url-loader": "^1.0.1",
+    "vue": "^2.5.16",
+    "vue-class-component": "^6.2.0",
+    "vue-loader": "^14.2.1",
+    "vue-template-compiler": "^2.5.16",
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.12",
+    "webpack-dev-server": "^3.1.1"
+  }
+}
