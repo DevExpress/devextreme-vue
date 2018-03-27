@@ -5,11 +5,12 @@ import BaseComponent from "../core/component";
 const createWidgetMock = jest.fn();
 
 @VueComponent({
-    mixins: [BaseComponent]
+    mixins: [BaseComponent],
+    props: ["sampleProp"]
 })
 class TestComponent extends Vue {
-    protected _createWidget(): any {
-        createWidgetMock();
+    protected _createWidget(element: HTMLElement, props: any): any {
+        createWidgetMock(element, props);
     }
 }
 
@@ -27,5 +28,14 @@ describe("component rendering", () => {
     it("calls widget creation", () => {
         new Vue(TestComponent).$mount();
         expect(createWidgetMock).toHaveBeenCalledTimes(2);
+    });
+});
+
+describe("option processing", () => {
+    it("pass props to option on mounting", () => {
+        const vm = new Vue(TestComponent).$mount();
+        expect(createWidgetMock).toHaveBeenCalledWith(vm.$el, {
+            sampleProp: undefined
+        });
     });
 });
