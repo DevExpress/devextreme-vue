@@ -5,11 +5,17 @@ interface IComponent {
     name: string;
     baseComponentPath: string;
     dxExportPath: string;
+    options?: IOption[];
+}
+
+interface IExtendedComponent extends IComponent {
+    widgetName: string;
+    optionsName: string;
 }
 
 interface IOption {
     name: string;
-    type: string;
+    type?: string[];
 }
 
 function generate(component: IComponent): string {
@@ -22,13 +28,7 @@ function generate(component: IComponent): string {
     return renderComponent(componentModel);
 }
 
-const renderComponent: (model: {
-    name: string;
-    widgetName: string;
-    optionsName: string;
-    baseComponentPath: string;
-    dxExportPath: string;
-}
+const renderComponent: (model: IExtendedComponent
 // tslint:disable:max-line-length
 ) => string = createTempate(`
 import <#= it.widgetName #> from "devextreme/<#= it.dxExportPath #>";
@@ -38,7 +38,8 @@ import Vue from "vue";
 import VueComponent from "vue-class-component";
 
 @VueComponent({
-    mixins: [BaseComponent]
+    mixins: [BaseComponent],
+    props: <#= it.options ? "[" +  it.options.map((m) => '"'+ m.name +'"').toString() + "]" : undefined #>
 })
 class <#= it.name #> extends Vue {
 

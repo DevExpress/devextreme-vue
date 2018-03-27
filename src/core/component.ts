@@ -8,7 +8,7 @@ export default class DxComponent extends Vue {
     protected _instance: any;
 
     public mounted(): void {
-        this._instance = this._createWidget(this.$el, this.$props);
+        this._instance = this._createWidget(this.$el, this.$options.propsData);
     }
 
     protected _createWidget(element: HTMLElement, props: Record<string, any>): any {
