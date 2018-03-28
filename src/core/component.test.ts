@@ -2,14 +2,21 @@ import Vue from "vue";
 import VueComponent from "vue-class-component";
 import BaseComponent from "../core/component";
 
-const createWidgetMock = jest.fn();
+import * as events from "devextreme/events";
+
+const Widget = {
+    option: jest.fn(),
+    dispose: jest.fn()
+};
+
+const WidgetClass = jest.fn(() => Widget);
 
 @VueComponent({
     mixins: [BaseComponent]
 })
 class TestComponent extends Vue {
     protected _createWidget(element: HTMLElement, props: any): any {
-        createWidgetMock(element, props);
+        return new WidgetClass(element, props);
     }
 }
 
@@ -26,7 +33,7 @@ describe("component rendering", () => {
 
     it("calls widget creation", () => {
         new TestComponent().$mount();
-        expect(createWidgetMock).toHaveBeenCalledTimes(1);
+        expect(WidgetClass).toHaveBeenCalledTimes(1);
     });
 });
 
@@ -37,8 +44,29 @@ describe("option processing", () => {
                 sampleProp: "default"
             }
         }).$mount();
-        expect(createWidgetMock).toHaveBeenCalledWith(vm.$el, {
+        expect(WidgetClass).toHaveBeenCalledWith(vm.$el, {
             sampleProp: "default"
         });
+    });
+});
+
+describe("disposing", () => {
+
+    it("call dispose", () => {
+        const component = new TestComponent().$mount();
+
+        component.$destroy();
+
+        expect(Widget.dispose).toBeCalled();
+    });
+
+    it("fires dxremove", () => {
+        const handleDxRemove = jest.fn();
+        const component = new TestComponent().$mount();
+
+        events.on(component.$el, "dxremove", handleDxRemove);
+        component.$destroy();
+
+        expect(handleDxRemove).toHaveBeenCalledTimes(1);
     });
 });
