@@ -3795,6 +3795,20 @@
             ]
           },
           {
+            "name": "aggregationGroupWidth",
+            "type": [
+              "Number"
+            ]
+          },
+          {
+            "name": "aggregationInterval",
+            "type": [
+              "Number",
+              "Object",
+              "String"
+            ]
+          },
+          {
             "name": "label",
             "type": [
               "Object"
@@ -7532,6 +7546,10 @@
     "exportPath": "ui/data_grid",
     "subscribableOptions": [
       {
+        "name": "columns",
+        "type": "any"
+      },
+      {
         "name": "selectionFilter",
         "type": "any"
       },
@@ -9317,18 +9335,6 @@
         ]
       },
       {
-        "name": "maxZoomLevel",
-        "type": [
-          "Enums.CalendarZoomLevel"
-        ]
-      },
-      {
-        "name": "minZoomLevel",
-        "type": [
-          "Enums.CalendarZoomLevel"
-        ]
-      },
-      {
         "name": "pickerType",
         "type": [
           "Enums.DateBoxPickerType"
@@ -9362,6 +9368,12 @@
         "name": "adaptivityEnabled",
         "type": [
           "Boolean"
+        ]
+      },
+      {
+        "name": "calendarOptions",
+        "type": [
+          "dxCalendar_Options"
         ]
       },
       {
@@ -21600,6 +21612,20 @@
             "type": [
               "Boolean"
             ]
+          },
+          {
+            "name": "aggregationGroupWidth",
+            "type": [
+              "Number"
+            ]
+          },
+          {
+            "name": "aggregationInterval",
+            "type": [
+              "Number",
+              "Object",
+              "String"
+            ]
           }
         ]
       },
@@ -27743,6 +27769,10 @@
     "name": "DxTreeList",
     "exportPath": "ui/tree_list",
     "subscribableOptions": [
+      {
+        "name": "columns",
+        "type": "any"
+      },
       {
         "name": "expandedRowKeys",
         "type": "any"
