@@ -1,6 +1,6 @@
 import { writeFileSync as writeFile } from "fs";
 import { dirname as getDirName, join as joinPaths, relative as getRelativePath, sep as pathSeparator } from "path";
-import generateComponent from "./component-generator";
+import generateComponent, { IComponent } from "./component-generator";
 import { removeExtension, removePrefix, toKebabCase } from "./helpers";
 import generateIndex from "./index-generator";
 
@@ -28,7 +28,7 @@ function generate(
   writeFile(out.indexFileName, generateIndex(modulePaths), { encoding: "utf8" });
 }
 
-function mapWidget(raw: any, baseComponent: string) {
+function mapWidget(raw: any, baseComponent: string): { fileName: string, component: IComponent } {
   const name = removePrefix(raw.name, "dx");
 
   return {
@@ -37,9 +37,8 @@ function mapWidget(raw: any, baseComponent: string) {
       name,
       baseComponentPath: baseComponent,
       dxExportPath: raw.exportPath,
-      templates: raw.templates,
-      subscribableOptions: raw.subscribableOptions,
-      options: raw.options
+      options: raw.options,
+      isEditor: !!raw.isEditor
     }
   };
 }

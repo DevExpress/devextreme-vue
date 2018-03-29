@@ -6,6 +6,7 @@ interface IComponent {
     baseComponentPath: string;
     dxExportPath: string;
     options?: IOption[];
+    isEditor?: boolean;
 }
 
 interface IExtendedComponent extends IComponent {
@@ -39,7 +40,8 @@ import VueComponent from "vue-class-component";
 
 @VueComponent({
     mixins: [BaseComponent],
-    props: <#= it.options ? "[" +  it.options.map((m) => '"'+ m.name +'"').toString() + "]" : undefined #>
+    props: <#= it.options ? "[" +  it.options.map((m) => '"'+ m.name +'"').toString() + "]" : undefined #><#? it.isEditor #>,
+    model: { prop: "value", event: "update:value" }<#?#>
 })
 class <#= it.name #> extends Vue {
 
@@ -55,3 +57,4 @@ export { <#= it.name #> };
 `.trimLeft());
 
 export default generate;
+export { IComponent };

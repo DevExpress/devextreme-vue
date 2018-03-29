@@ -15,7 +15,7 @@
       <h4 class='alive'>:value.sync</h4>
       <text-box :value.sync='text' valueChangeEvent='input' />
 
-      <h4 class='dead'>v-model</h4>
+      <h4 class='alive'>v-model</h4>
       <text-box v-model='text' valueChangeEvent='input' />
   </div>
 </template>
