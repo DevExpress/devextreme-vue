@@ -1,28 +1,24 @@
 <template>
     <div>
-        <div>Hello {{name}}!</div>
-        Name: <input v-model="name" type="text">
-        <dx-button text="text"/>
-        <dx-list :items="items" />
-        <dx-autocomplete :dataSource="items" />
+        <dx-button text="Example button"/>
+        <br/>
+        <br/>
+        <popup-example/>
     </div>
 </template>
 
-<script lang="ts">
+<script>
 
-import { List, Button, Autocomplete } from "../src";
+import { Button } from "../src";
 
-const data: object = {
-    name: "World",
-    items: ["1111", "22222", "33333"]
-}
+
+import PopupExample from "./components/PopupExample.vue";
+
 
 export default {
-    data: () => data,
     components: {
         "dx-button": Button,
-        "dx-list": List,
-        "dx-autocomplete": Autocomplete
+        PopupExample
     },
     name: "app"
 }
