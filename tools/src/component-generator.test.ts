@@ -3,7 +3,7 @@ import generate from "./component-generator";
 it("generates", () => {
     //#region EXPECTED
     const EXPECTED = `
-import dxCLASS_NAME from "devextreme/DX/WIDGET/PATH";
+import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
 import BaseComponent from "BASE_COMPONENT_PATH";
 
 import Vue from "vue";
@@ -13,17 +13,17 @@ import VueComponent from "vue-class-component";
     mixins: [BaseComponent],
     props: undefined
 })
-class CLASS_NAME extends Vue {
+class DxCLASS_NAME extends Vue {
 
-  public get instance(): dxCLASS_NAME {
+  public get instance(): CLASS_NAME {
     return this._instance;
   }
 
   protected _createWidget(element: HTMLElement, props: Record<string, any>): any {
-    return new dxCLASS_NAME(element, props);
+    return new CLASS_NAME(element, props);
   }
 }
-export { CLASS_NAME };
+export { DxCLASS_NAME };
 `.trimLeft();
     //#endregion
 
@@ -39,7 +39,7 @@ export { CLASS_NAME };
 it("generates class with props", () => {
     //#region EXPECTED
     const EXPECTED = `
-import dxCLASS_NAME from "devextreme/DX/WIDGET/PATH";
+import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
 import BaseComponent from "BASE_COMPONENT_PATH";
 
 import Vue from "vue";
@@ -49,17 +49,17 @@ import VueComponent from "vue-class-component";
     mixins: [BaseComponent],
     props: ["PROP1","PROP2"]
 })
-class CLASS_NAME extends Vue {
+class DxCLASS_NAME extends Vue {
 
-  public get instance(): dxCLASS_NAME {
+  public get instance(): CLASS_NAME {
     return this._instance;
   }
 
   protected _createWidget(element: HTMLElement, props: Record<string, any>): any {
-    return new dxCLASS_NAME(element, props);
+    return new CLASS_NAME(element, props);
   }
 }
-export { CLASS_NAME };
+export { DxCLASS_NAME };
 `.trimLeft();
     //#endregion
 
@@ -76,7 +76,7 @@ export { CLASS_NAME };
 it("generates class with model", () => {
     //#region EXPECTED
     const EXPECTED = `
-import dxCLASS_NAME from "devextreme/DX/WIDGET/PATH";
+import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
 import BaseComponent from "BASE_COMPONENT_PATH";
 
 import Vue from "vue";
@@ -87,17 +87,17 @@ import VueComponent from "vue-class-component";
     props: undefined,
     model: { prop: "value", event: "update:value" }
 })
-class CLASS_NAME extends Vue {
+class DxCLASS_NAME extends Vue {
 
-  public get instance(): dxCLASS_NAME {
+  public get instance(): CLASS_NAME {
     return this._instance;
   }
 
   protected _createWidget(element: HTMLElement, props: Record<string, any>): any {
-    return new dxCLASS_NAME(element, props);
+    return new CLASS_NAME(element, props);
   }
 }
-export { CLASS_NAME };
+export { DxCLASS_NAME };
 `.trimLeft();
     //#endregion
 

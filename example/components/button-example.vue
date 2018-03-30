@@ -7,7 +7,7 @@
 <script>
 import ExampleBlock from "./example-block";
 
-import { Button as DxButton } from "../../src";
+import { DxButton } from "../../src";
 
 export default {
   components: {

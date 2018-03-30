@@ -11,9 +11,9 @@
 import ExampleBlock from "./example-block";
 
 import {
-  Button as DxButton,
-  Popup as DxPopup,
-  TextBox as DxTextBox
+  DxButton,
+  DxPopup,
+  DxTextBox
 } from "../../src";
 
 export default {

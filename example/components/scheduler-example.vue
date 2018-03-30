@@ -1,6 +1,6 @@
 <template>
     <example-block title="dxScheduler">
-        <scheduler 
+        <dx-scheduler 
             currentView="week"
             :dataSource="appointments"
             :height="400"
@@ -13,13 +13,13 @@
 <script>
 import ExampleBlock from "./example-block";
 import { appointments } from "./data";
-import { Scheduler } from "../../src";
+import { DxScheduler } from "../../src";
 
 
 export default {
     components: {
         ExampleBlock,
-        Scheduler
+        DxScheduler
     },
     data: function() {
         return {

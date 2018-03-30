@@ -1,6 +1,6 @@
 <template>
     <example-block title="dxDataGrid">
-        <data-grid 
+        <dx-data-grid 
             :dataSource="sales"
             keyExpr="orderId"
             :allowColumnReordering="true"
@@ -8,7 +8,7 @@
             :groupPanel="{ visible: true }"
             :paging="{ pageSize: 10 }"
             :selection="{ mode: 'multiple' }"
-            :filterRow="{ visible: true }"       
+            :filterRow="{ visible: true }"
             :selectedRowKeys="selectedRowKeys"
             :columns="columns"
         />
@@ -18,7 +18,7 @@
 <script>
 import ExampleBlock from "./example-block";
 import { sales } from "./data";
-import { DataGrid } from "../../src";
+import { DxDataGrid } from "../../src";
 
 const selectedKeys = [10273, 10277, 10292, 10295, 10300, 10302, 10305, 10308, 10312, 
 10319, 10321, 10323, 10326, 10328, 10331, 10334, 10335, 10341, 10351, 10353, 10356, 
@@ -27,7 +27,7 @@ const selectedKeys = [10273, 10277, 10292, 10295, 10300, 10302, 10305, 10308, 10
 export default {
     components: {
         ExampleBlock,
-        DataGrid
+        DxDataGrid
     },
     data: function() {
         return {
