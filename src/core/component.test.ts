@@ -4,9 +4,13 @@ import BaseComponent from "../core/component";
 
 import * as events from "devextreme/events";
 
+const eventHandlers: { [index: string]: (e?: any) => void}  = {};
 const Widget = {
     option: jest.fn(),
-    dispose: jest.fn()
+    dispose: jest.fn(),
+    on: (event: string, handler: (e: any) => void) => {
+        eventHandlers[event] = handler;
+    },
 };
 
 const WidgetClass = jest.fn(() => Widget);
@@ -46,6 +50,29 @@ describe("option processing", () => {
         }).$mount();
         expect(WidgetClass).toHaveBeenCalledWith(vm.$el, {
             sampleProp: "default"
+        });
+    });
+
+    it("subscribes to optionChanged", () => {
+        new TestComponent({
+            props: ["sampleProp"]
+        }).$mount();
+
+        expect(eventHandlers).toHaveProperty("optionChanged");
+    });
+
+    it("watch prop changing", (done) => {
+        const vm = new TestComponent({
+            props: ["sampleProp"],
+            propsData: {
+                sampleProp: "default"
+            }
+        }).$mount();
+
+        vm.$props.sampleProp = "new";
+        Vue.nextTick(() => {
+            expect(Widget.option).toHaveBeenCalledTimes(1);
+            done();
         });
     });
 });
