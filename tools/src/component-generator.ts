@@ -22,7 +22,7 @@ interface IOption {
 function generate(component: IComponent): string {
     const componentModel = {
         ...component,
-        widgetName: `dx${uppercaseFirst(component.name)}`,
+        widgetName: `${uppercaseFirst(component.name)}`,
         optionsName: `I${component.name}Options`
     };
 
@@ -43,7 +43,7 @@ import VueComponent from "vue-class-component";
     props: <#= it.options ? "[" +  it.options.map((m) => '"'+ m.name +'"').toString() + "]" : undefined #><#? it.isEditor #>,
     model: { prop: "value", event: "update:value" }<#?#>
 })
-class <#= it.name #> extends Vue {
+class Dx<#= it.name #> extends Vue {
 
   public get instance(): <#= it.widgetName #> {
     return this._instance;
@@ -53,7 +53,7 @@ class <#= it.name #> extends Vue {
     return new <#= it.widgetName #>(element, props);
   }
 }
-export { <#= it.name #> };
+export { Dx<#= it.name #> };
 `.trimLeft());
 
 export default generate;

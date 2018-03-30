@@ -21,7 +21,7 @@
 <script>
 import ExampleBlock from "./example-block";
 
-import { TextBox as DxTextBox } from "../../src";
+import { DxTextBox } from "../../src";
 
 export default {
   components: {

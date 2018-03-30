@@ -1,6 +1,6 @@
 <template>
     <example-block title="dxChart">
-        <chart 
+        <dx-chart 
             :dataSource="chartData"
             :series="series"
         />
@@ -10,13 +10,12 @@
 <script>
 import ExampleBlock from "./example-block";
 import { orangesByDay } from "./data";
-import { Chart } from "../../src";
-
+import { DxChart } from "../../src";
 
 export default {
     components: {
         ExampleBlock,
-        Chart
+        DxChart
     },
     data: function() {
         return {
