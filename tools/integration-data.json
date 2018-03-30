@@ -852,7 +852,8 @@
           "function"
         ]
       }
-    ]
+    ],
+    "isEditor": true
   },
   {
     "name": "DxBarGauge",
@@ -2344,7 +2345,8 @@
           "function"
         ]
       }
-    ]
+    ],
+    "isEditor": true
   },
   {
     "name": "DxChart",
@@ -6052,7 +6054,8 @@
           "function"
         ]
       }
-    ]
+    ],
+    "isEditor": true
   },
   {
     "name": "DxCircularGauge",
@@ -7183,7 +7186,8 @@
           "function"
         ]
       }
-    ]
+    ],
+    "isEditor": true
   },
   {
     "name": "DxContextMenu",
@@ -9658,7 +9662,8 @@
           "function"
         ]
       }
-    ]
+    ],
+    "isEditor": true
   },
   {
     "name": "DxDeferRendering",
@@ -10136,7 +10141,8 @@
           "function"
         ]
       }
-    ]
+    ],
+    "isEditor": true
   },
   {
     "name": "DxFileUploader",
@@ -14371,7 +14377,8 @@
           "function"
         ]
       }
-    ]
+    ],
+    "isEditor": true
   },
   {
     "name": "DxMap",
@@ -15760,7 +15767,8 @@
           "function"
         ]
       }
-    ]
+    ],
+    "isEditor": true
   },
   {
     "name": "DxPanorama",
@@ -21275,7 +21283,8 @@
           "function"
         ]
       }
-    ]
+    ],
+    "isEditor": true
   },
   {
     "name": "DxRangeSelector",
@@ -22591,7 +22600,8 @@
           "function"
         ]
       }
-    ]
+    ],
+    "isEditor": true
   },
   {
     "name": "DxResizable",
@@ -24148,7 +24158,8 @@
           "function"
         ]
       }
-    ]
+    ],
+    "isEditor": true
   },
   {
     "name": "DxSlideOut",
@@ -24747,7 +24758,8 @@
           "function"
         ]
       }
-    ]
+    ],
+    "isEditor": true
   },
   {
     "name": "DxSparkline",
@@ -25342,7 +25354,8 @@
           "function"
         ]
       }
-    ]
+    ],
+    "isEditor": true
   },
   {
     "name": "DxTabPanel",
@@ -26308,7 +26321,8 @@
           "function"
         ]
       }
-    ]
+    ],
+    "isEditor": true
   },
   {
     "name": "DxTextArea",
@@ -26585,7 +26599,8 @@
           "function"
         ]
       }
-    ]
+    ],
+    "isEditor": true
   },
   {
     "name": "DxTextBox",
@@ -26890,7 +26905,8 @@
           "function"
         ]
       }
-    ]
+    ],
+    "isEditor": true
   },
   {
     "name": "DxTileView",
