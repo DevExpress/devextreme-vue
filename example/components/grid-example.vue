@@ -17,7 +17,7 @@
 
 <script>
 import ExampleBlock from "./example-block";
-import { sales } from "./data";
+import { sales } from "../data";
 import { DxDataGrid } from "../../src";
 
 const selectedKeys = [10273, 10277, 10292, 10295, 10300, 10302, 10305, 10308, 10312, 

@@ -9,7 +9,7 @@
 
 <script>
 import ExampleBlock from "./example-block";
-import { orangesByDay } from "./data";
+import { orangesByDay } from "../data";
 import { DxChart } from "../../src";
 
 export default {
