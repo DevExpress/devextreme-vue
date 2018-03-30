@@ -1,29 +1,32 @@
 <template>
-  <div>
-      <h4>standard input</h4>
-      <input v-model='text' />
+  <example-block title="dxTextBox" :state="$data">
 
-      <h4 class='alive'>v-bind</h4>
-      <text-box :value='text' valueChangeEvent='input' />
+      <h5>v-bind</h5>
+      <dx-text-box :value="text" valueChangeEvent="input" />
 
-      <h4 class='dead'>v-on:valueChanged</h4>
-      <text-box @valueChanged='text = $event.value' valueChangeEvent='input' />
+      <h5>@update:value</h5>
+      <dx-text-box @update:value="text = $event" valueChangeEvent="input" />
 
-      <h4 class='alive'>v-on:update:value</h4>
-      <text-box @update:value='text = $event' valueChangeEvent='input' />
+      <h5 class="dead">@valueChanged</h5>
+      <dx-text-box @valueChanged="text = $event.value" valueChangeEvent="input" />
 
-      <h4 class='alive'>:value.sync</h4>
-      <text-box :value.sync='text' valueChangeEvent='input' />
+      <h5>:value.sync</h5>
+      <dx-text-box :value.sync="text" valueChangeEvent="input" />
 
-      <h4 class='alive'>v-model</h4>
-      <text-box v-model='text' valueChangeEvent='input' />
-  </div>
+      <h5>v-model</h5>
+      <dx-text-box v-model="text" valueChangeEvent="input" />
+  </example-block>
 </template>
+
 <script>
-import { TextBox } from "../../src";
+import ExampleBlock from "./example-block";
+
+import { TextBox as DxTextBox } from "../../src";
+
 export default {
   components: {
-    TextBox
+    ExampleBlock,
+    DxTextBox
   },
   data: function() {
     return {
@@ -32,15 +35,13 @@ export default {
   }
 };
 </script>
+
 <style scoped>
-h4 {
+h5 {
   font-weight: 900;
+  margin-top: 20px;
 }
 .dead {
   color: red;
 }
-.alive {
-  color: blue;
-}
 </style>
-

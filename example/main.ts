@@ -2,7 +2,7 @@ import "devextreme/dist/css/dx.common.css";
 import "devextreme/dist/css/dx.light.compact.css";
 
 import Vue from "vue";
-import App from "./App.vue";
+import App from "./app.vue";
 
 // tslint:disable-next-line:no-unused-expression
 new Vue({
