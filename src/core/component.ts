@@ -13,10 +13,8 @@ export default class DxComponent extends Vue {
 
     public mounted(): void {
         this._instance = this._createWidget(this.$el, this.$options.propsData as any);
-        this._propsWatcher();
-        this._instance.on("optionChanged", (args: any) => {
-            this.$emit("update:" + args.name, args.value);
-        });
+        this._instance.on("optionChanged", this._handleOptionChanged.bind(this));
+        this._watchProps();
     }
 
     public beforeDestroy(): void {
@@ -24,7 +22,14 @@ export default class DxComponent extends Vue {
         this._instance.dispose();
     }
 
-    protected _propsWatcher(): void {
+    protected _handleOptionChanged(args: any): void {
+        this.$emit("update:" + args.name, args.value);
+    }
+
+    protected _watchProps(): void {
+        if (!this.$props) {
+            return;
+        }
         Object.keys(this.$props).forEach((prop: string) => {
             this.$watch(prop, (value) => {
                 this._instance.option(prop, value);
