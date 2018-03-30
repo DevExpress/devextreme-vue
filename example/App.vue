@@ -1,7 +1,6 @@
 <template>
     <div>
-        <dx-button text="Example button"/>
-        <br/>
+        <button-example/>
         <br/>
         <popup-example/>
         <br/>
@@ -11,14 +10,13 @@
 
 <script>
 
-import { Button } from "../src";
-
-import PopupExample from "./components/PopupExample.vue";
+import ButtonExample from "./components/button-example";
+import PopupExample from "./components/popup-example";
 import TextBoxExample from "./components/text-box-example";
 
 export default {
     components: {
-        "dx-button": Button,
+        ButtonExample,
         PopupExample,
         TextBoxExample
     },
