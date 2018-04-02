@@ -91,13 +91,13 @@ describe("events emitting", () => {
             template: "<TestComponent v-on:testEventName=''></TestComponent>",
             components: { TestComponent }
         }).$mount();
-        const spy = jest.spyOn(parent.$children[0], "$emit");
+        const $emitSpy = jest.spyOn(parent.$children[0], "$emit");
 
         Widget.fire("testEventName", expectedArgs);
 
-        expect(spy).toHaveBeenCalledTimes(1);
-        expect(spy.mock.calls[0][0]).toBe("testEventName");
-        expect(spy.mock.calls[0][1]).toBe(expectedArgs);
+        expect($emitSpy).toHaveBeenCalledTimes(1);
+        expect($emitSpy.mock.calls[0][0]).toBe("testEventName");
+        expect($emitSpy.mock.calls[0][1]).toBe(expectedArgs);
     });
 });
 
