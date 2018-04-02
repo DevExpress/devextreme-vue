@@ -12,9 +12,8 @@
 
 <script>
 import ExampleBlock from "./example-block";
-import { appointments } from "./data";
+import { appointments } from "../data";
 import { DxScheduler } from "../../src";
-
 
 export default {
     components: {

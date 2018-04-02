@@ -6,7 +6,7 @@
 
 <script>
 import ExampleBlock from "./example-block";
-import { orangesByDay } from "./data";
+import { orangesByDay } from "../data";
 import { DxList } from "../../src";
 
 export default {
