@@ -6,6 +6,8 @@
         <br/>
         <text-box-example/>
         <br/>
+        <scroll-view-example/>
+        <br/>
         <list-example/>
         <br/>
         <grid-example/>
@@ -24,6 +26,7 @@ import GridExample from "./components/grid-example";
 import PopupExample from "./components/popup-example";
 import TextBoxExample from "./components/text-box-example";
 import SchedulerExample from "./components/scheduler-example";
+import ScrollViewExample from "./components/scroll-view-example";
 import ChartExample from "./components/chart-example";
 
 export default {
@@ -34,6 +37,7 @@ export default {
         ListExample,
         GridExample,
         SchedulerExample,
+        ScrollViewExample,
         ChartExample
     },
     name: "app"

@@ -39,6 +39,18 @@ describe("component rendering", () => {
         new TestComponent().$mount();
         expect(WidgetClass).toHaveBeenCalledTimes(1);
     });
+
+    it("creates nested component", () => {
+        new Vue({
+            template: "<test-component><test-component/></test-component>",
+            components: {
+                TestComponent
+            }
+        }).$mount();
+
+        expect(WidgetClass.mock.instances.length).toBe(2);
+        expect(WidgetClass.mock.instances[1]).toEqual({});
+    });
 });
 
 describe("option processing", () => {
