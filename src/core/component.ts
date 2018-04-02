@@ -6,7 +6,7 @@ import * as events from "devextreme/events";
 const DX_REMOVE_EVENT = "dxremove";
 
 @Component({
-  template: "<div/>"
+  template: "<div><slot/></div>"
 })
 export default class DxComponent extends Vue {
     protected _instance: any;

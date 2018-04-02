@@ -1,6 +1,9 @@
 <template>
     <example-block title="dxList">
-        <dx-list :items="listData" :itemTemplate="itemTemplate" />
+        <dx-list 
+            :items="listData" 
+            :itemTemplate="itemTemplate" 
+        />
     </example-block>
 </template>
 
