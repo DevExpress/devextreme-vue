@@ -95,6 +95,51 @@ describe("option processing", () => {
     });
 });
 
+describe("templates", () => {
+
+    const DX_TEMPLATE_WRAPPER = "dx-template-wrapper";
+
+    const renderItemTemplate: (model: object) => Element = (model: object) => {
+        const render = WidgetClass.mock.calls[0][1].integrationOptions.templates.item.render;
+        return render({
+            container: document.createElement("div"), model
+        });
+    };
+
+    it("pass integrationOptions to widget", () => {
+        new Vue({
+            template: "<test-component><div slot='item' slot-scope='data'>1</div></test-component>",
+            components: {
+                TestComponent
+            }
+        }).$mount();
+        const integrationOptions = WidgetClass.mock.calls[0][1].integrationOptions;
+
+        expect(integrationOptions).toBeDefined();
+        expect(integrationOptions.templates).toBeDefined();
+        expect(integrationOptions.templates.item).toBeDefined();
+        expect(typeof integrationOptions.templates.item.render).toBe("function");
+    });
+
+    it("renders", () => {
+        new Vue({
+            template: `<test-component>
+                            <div slot='item' slot-scope='props'>Template {{props.text}}</div>
+                        </test-component>`,
+            components: {
+                TestComponent
+            }
+        }).$mount();
+        const renderedTemplate = renderItemTemplate({ text: "with data" });
+
+        expect(renderedTemplate.nodeName).toBe("DIV");
+        expect(renderedTemplate.className).toBe(DX_TEMPLATE_WRAPPER);
+        expect(renderedTemplate.innerHTML).toBe("Template with data");
+    });
+
+    
+});
+
 describe("events emitting", () => {
 
     it("forwards DevExtreme events", () => {

@@ -1,9 +1,14 @@
 <template>
     <example-block title="dxList">
-        <dx-list 
-            :items="listData" 
-            :itemTemplate="itemTemplate" 
-        />
+        <h4>List with simple items</h4>
+        <dx-list :items="[1, 2, 3, 4]" />
+        <br/>
+        <h4>List with simple items</h4>
+        <dx-list :items="listData">
+            <div slot="item" slot-scope="data">
+                <i>{{data.day}}</i>
+            </div>
+        </dx-list>
     </example-block>
 </template>
 
