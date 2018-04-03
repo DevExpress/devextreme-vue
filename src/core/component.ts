@@ -15,6 +15,7 @@ export default class DxComponent extends Vue {
         this._instance = this._createWidget(this.$el, this.$options.propsData as any);
         this._instance.on("optionChanged", this._handleOptionChanged.bind(this));
         this._watchProps();
+        this._createEmitters();
     }
 
     public beforeDestroy(): void {
@@ -39,5 +40,13 @@ export default class DxComponent extends Vue {
 
     protected _createWidget(element: HTMLElement, props: Record<string, any>): any {
         return null;
+    }
+
+    private _createEmitters(): void {
+        Object.keys(this.$listeners).forEach((eventName: string) => {
+            this._instance.on(eventName, (e: any) => {
+                this.$emit(eventName, e);
+            });
+        });
     }
 }

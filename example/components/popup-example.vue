@@ -1,8 +1,8 @@
 <template>
-    <example-block title="dxPopup">
-        <dx-text-box :value="text" :onValueChanged="handleTextUpdate" valueChangeEvent="input" />
+    <example-block title="dxPopup" :state="$data">
+        <dx-text-box :value="text" @valueChanged="handleTextUpdate" valueChangeEvent="input" />
         <br />
-        <dx-button text="Show popup" :onClick="handleClick" />
+        <dx-button text="Show popup" @click="handleClick" />
         <dx-popup :visible.sync="visible" width="600" height="400"/>
     </example-block>
 </template>

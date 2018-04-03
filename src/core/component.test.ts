@@ -11,6 +11,12 @@ const Widget = {
     on: (event: string, handler: (e: any) => void) => {
         eventHandlers[event] = handler;
     },
+    fire: (event: string, args: any) => {
+        if (!eventHandlers[event]) {
+            throw new Error(`no handler registered for '${event}'`);
+        }
+        eventHandlers[event](args);
+    }
 };
 
 const WidgetClass = jest.fn(() => Widget);
@@ -86,6 +92,24 @@ describe("option processing", () => {
             expect(Widget.option).toHaveBeenCalledTimes(1);
             done();
         });
+    });
+});
+
+describe("events emitting", () => {
+
+    it("forwards DevExtreme events", () => {
+        const expectedArgs = {};
+        const parent = new Vue({
+            template: "<TestComponent v-on:testEventName=''></TestComponent>",
+            components: { TestComponent }
+        }).$mount();
+        const $emitSpy = jest.spyOn(parent.$children[0], "$emit");
+
+        Widget.fire("testEventName", expectedArgs);
+
+        expect($emitSpy).toHaveBeenCalledTimes(1);
+        expect($emitSpy.mock.calls[0][0]).toBe("testEventName");
+        expect($emitSpy.mock.calls[0][1]).toBe(expectedArgs);
     });
 });
 
