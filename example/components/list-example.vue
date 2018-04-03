@@ -1,9 +1,9 @@
 <template>
     <example-block title="dxList">
-        <h4>List with simple items</h4>
+        <h4>List of simple items</h4>
         <dx-list :items="[1, 2, 3, 4]" />
         <br/>
-        <h4>List with simple items</h4>
+        <h4>List with item template</h4>
         <dx-list :items="listData">
             <div slot="item" slot-scope="data">
                 <i>{{data.day}}</i>
@@ -25,11 +25,6 @@ export default {
     data: function() {
         return {
             listData: orangesByDay
-        }
-    },
-    methods: {
-        itemTemplate: function(data, index, element) {
-            element.textContent = data.day;
         }
     }
 }

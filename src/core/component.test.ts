@@ -102,7 +102,8 @@ describe("templates", () => {
     const renderItemTemplate: (model: object) => Element = (model: object) => {
         const render = WidgetClass.mock.calls[0][1].integrationOptions.templates.item.render;
         return render({
-            container: document.createElement("div"), model
+            container: document.createElement("div"),
+            model
         });
     };
 
@@ -136,8 +137,6 @@ describe("templates", () => {
         expect(renderedTemplate.className).toBe(DX_TEMPLATE_WRAPPER);
         expect(renderedTemplate.innerHTML).toBe("Template with data");
     });
-
-    
 });
 
 describe("events emitting", () => {

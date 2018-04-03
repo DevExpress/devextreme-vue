@@ -37,17 +37,17 @@ export default class DxComponent extends Vue {
             return {};
         }
 
-        const result: any = {
-            integrationOptions: {
-                templates: {}
-            }
-        };
+        const templates: Record<string, any> = {};
 
         Object.keys(this.$scopedSlots).forEach((slotName: string) => {
-            result.integrationOptions.templates[slotName] = this._fillTemplate(this.$scopedSlots[slotName]);
+            templates[slotName] = this._fillTemplate(this.$scopedSlots[slotName]);
         });
 
-        return result;
+        return {
+            integrationOptions: {
+                templates
+            }
+        };
     }
 
     private _fillTemplate(template: any): object {
@@ -58,6 +58,7 @@ export default class DxComponent extends Vue {
                         return template(data.model);
                     }
                 }).$mount(document.createElement("div"));
+
                 const element = vm.$el;
                 element.className = DX_TEMPLATE_WRAPPER_CLASS;
                 data.container.appendChild(element);
