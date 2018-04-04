@@ -14,6 +14,7 @@ import VueComponent from "vue-class-component";
     props: undefined
 })
 class DxCLASS_NAME extends Vue {
+  private _instance: any;
 
   public get instance(): CLASS_NAME {
     return this._instance;
@@ -50,6 +51,7 @@ import VueComponent from "vue-class-component";
     props: ["PROP1","PROP2"]
 })
 class DxCLASS_NAME extends Vue {
+  private _instance: any;
 
   public get instance(): CLASS_NAME {
     return this._instance;
@@ -88,6 +90,7 @@ import VueComponent from "vue-class-component";
     model: { prop: "value", event: "update:value" }
 })
 class DxCLASS_NAME extends Vue {
+  private _instance: any;
 
   public get instance(): CLASS_NAME {
     return this._instance;
