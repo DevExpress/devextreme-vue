@@ -1,37 +1,48 @@
-import { lowercaseFirst, uppercaseFirst } from "./helpers";
+import { createKeyComparator, lowercaseFirst, uppercaseFirst } from "./helpers";
 import createTempate from "./template";
 
 interface IComponent {
     name: string;
     baseComponentPath: string;
     dxExportPath: string;
-    options?: IOption[];
-    isEditor?: boolean;
+    props?: IProp[];
+    hasModel?: boolean;
 }
 
-interface IExtendedComponent extends IComponent {
-    widgetName: string;
-    optionsName: string;
-}
-
-interface IOption {
+interface IComponentModel {
     name: string;
-    type?: string[];
+    baseComponentPath: string;
+    dxExportPath: string;
+    renderedProps?: string[];
+    hasModel?: boolean;
+    widgetName: string;
+}
+
+interface IProp {
+    name: string;
+    types?: string[];
+    acceptableValues?: string[];
 }
 
 function generate(component: IComponent): string {
     const componentModel = {
         ...component,
-        widgetName: `${uppercaseFirst(component.name)}`,
-        optionsName: `I${component.name}Options`
+        renderedProps: component.props
+            ? component.props.sort(createKeyComparator<IProp>((p) => p.name)).map(createPropModel)
+            : undefined,
+        widgetName: `${uppercaseFirst(component.name)}`
     };
 
     return renderComponent(componentModel);
 }
 
-const renderComponent: (model: IExtendedComponent
+function createPropModel(p: IProp) {
+    const hasExtendedDeclaration = !p.types || !!p.acceptableValues;
+    return hasExtendedDeclaration ? renderExtendedProp(p) : renderSimpleProp(p);
+}
+
 // tslint:disable:max-line-length
-) => string = createTempate(`
+const renderComponent: (model: IComponentModel) => string = createTempate(`
 import <#= it.widgetName #> from "devextreme/<#= it.dxExportPath #>";
 import BaseComponent from "<#= it.baseComponentPath #>";
 
@@ -39,8 +50,9 @@ import Vue from "vue";
 import VueComponent from "vue-class-component";
 
 @VueComponent({
-    mixins: [BaseComponent],
-    props: <#= it.options ? "[" +  it.options.map((m) => '"'+ m.name +'"').toString() + "]" : undefined #><#? it.isEditor #>,
+    mixins: [BaseComponent]<#? it.props#>,
+    props: {<#= it.renderedProps.join(',') #>
+    }<#?#><#? it.hasModel #>,
     model: { prop: "value", event: "update:value" }<#?#>
 })
 class Dx<#= it.name #> extends Vue {
@@ -55,6 +67,18 @@ class Dx<#= it.name #> extends Vue {
 }
 export { Dx<#= it.name #> };
 `.trimLeft());
+
+const renderSimpleProp: (model: IProp) => string = createTempate(`
+        <#= it.name #>: <#? it.types.length > 1 #>[<#?#><#= it.types.join(', ') #><#? it.types.length > 1 #>]<#?#>
+`.trimRight());
+
+const renderExtendedProp: (model: IProp) => string = createTempate(`
+        <#= it.name #>: {<#? it.types #>
+            type: <#? it.types.length > 1 #>[<#?#><#= it.types.join(', ') #><#? it.types.length > 1 #>]<#?#><#?#><#? it.acceptableValues #>,
+            validator: (v) => [<#= it.acceptableValues.join(', ') #>].indexOf(v) !== -1
+        <#?#>}
+`.trimRight());
+// tslint:enable:max-line-length
 
 export default generate;
 export { IComponent };

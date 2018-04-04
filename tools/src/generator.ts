@@ -1,6 +1,8 @@
 import { writeFileSync as writeFile } from "fs";
 import { dirname as getDirName, join as joinPaths, relative as getRelativePath, sep as pathSeparator } from "path";
+
 import generateComponent, { IComponent } from "./component-generator";
+import { convertTypes } from "./converter";
 import { removeExtension, removePrefix, toKebabCase } from "./helpers";
 import generateIndex from "./index-generator";
 
@@ -37,9 +39,16 @@ function mapWidget(raw: any, baseComponent: string): { fileName: string, compone
       name,
       baseComponentPath: baseComponent,
       dxExportPath: raw.exportPath,
-      options: raw.options,
-      isEditor: !!raw.isEditor
+      props: raw.options.map(mapProp),
+      hasModel: !!raw.isEditor,
     }
+  };
+}
+
+function mapProp(rawOption: any) {
+  return {
+    ...rawOption,
+    types: convertTypes(rawOption.types)
   };
 }
 
