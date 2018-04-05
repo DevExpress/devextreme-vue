@@ -49,7 +49,49 @@ new Vue({
 
 Note that a [predefined theme](https://js.devexpress.com/Documentation/Guide/Themes/Predefined_Themes/) is required.
 
+You can also use DevExtreme Vue Components inside [Single file component](https://vuejs.org/v2/guide/single-file-components.html):
+```html
+<template>
+	<dx-button :text='text'/>
+</template>
 
+<script>
+import { DxButton } from 'devextreme-vue';
+export default {
+  name: 'HelloWorld',
+  data() {
+    return {
+      text: 'Hello!'
+    };
+  },
+  components: {
+    DxButton
+  }
+};
+</script>
+```
+
+Or with [jsx](https://vuejs.org/v2/guide/render-function.html) render function:
+```jsx
+import Vue from 'vue';
+import { DxButton } from 'devextreme-vue';
+
+
+new Vue({
+  el: '#app',
+  data: function() {
+    return {
+      text: "Hello!"
+    }
+  },
+  render: function(h) {
+    return (
+      <DxButton text={this.text}/>
+    )
+  }
+});
+
+```
 ## <a name="api-reference"></a>API Reference ##
 
 The complete list of components and their APIs are described in the [DevExtreme API Reference](http://js.devexpress.com/Documentation/ApiReference/).
@@ -85,7 +127,29 @@ new Vue({
 });
 
 ```
-The 'item' name is default template name for the 'itemTemplate' option of the dxList widget. You can set your own name for the 'itemTemplate' option and for your 'slot'
+The 'item' name is default template name for the 'itemTemplate' option of the dxList widget. You can set your own name for the 'itemTemplate' option and for your 'slot':
+
+```html
+<div id="app">
+    <dx-list :items="items" itemTemplate="my-template">
+        <template slot="my-template" slot-scope="data">
+            <i>This is my template for {{data}}</i>
+        </template>
+    </dx-list>
+</div>
+```
+
+Note that in single file component, you can't use '<template>' tag for slot element. Use '<div>' instead:
+
+```html
+<template>
+    <dx-list :items="items">
+        <div slot="item" slot-scope="data">
+            <i>This is my template for {{data}}</i>
+        </div>
+    </dx-list>
+</template>
+```
 
 ### <a name="components-with-transcluded-content"></a>Components with Transcluded Content ###
 
