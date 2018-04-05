@@ -97,6 +97,7 @@ import VueComponent from "vue-class-component";
     }
 })
 class DxCLASS_NAME extends Vue {
+  private _instance: any;
 
   public get instance(): CLASS_NAME {
     return this._instance;
@@ -137,6 +138,7 @@ import VueComponent from "vue-class-component";
     }
 })
 class DxCLASS_NAME extends Vue {
+  private _instance: any;
 
   public get instance(): CLASS_NAME {
     return this._instance;
@@ -179,6 +181,7 @@ import VueComponent from "vue-class-component";
     }
 })
 class DxCLASS_NAME extends Vue {
+  private _instance: any;
 
   public get instance(): CLASS_NAME {
     return this._instance;
