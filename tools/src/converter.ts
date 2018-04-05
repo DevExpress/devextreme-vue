@@ -1,18 +1,11 @@
 function convertTypes(types: string[]): string[] {
-    if (typeof (types) === "undefined" || types.length === 0) {
-        return undefined;
+    if (types === undefined || types === null || types.length === 0) {
+        return;
     }
 
-    const convertedTypes = new Set();
-    types.forEach((type) => {
-        const convertedType = convertType(type);
-        if (convertedType !== null) {
-            convertedTypes.add(convertedType);
-        }
-    });
-
+    const convertedTypes = new Set(types.map(convertType));
     if (convertedTypes.has("Any")) {
-        return undefined;
+        return;
     }
 
     return Array.from(convertedTypes);

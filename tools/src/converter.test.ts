@@ -16,3 +16,7 @@ it("returns undefined if array is empty", () => {
 it("returns undefined if array is undefined", () => {
     expect(convertTypes([])).toBeUndefined();
 });
+
+it("returns undefined if array is null", () => {
+    expect(convertTypes([])).toBeUndefined();
+});
