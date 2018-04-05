@@ -62,13 +62,13 @@ To specify a DevExtreme Vue Component template, use the [named slot](https://vue
 For instance, we can specify the itemTemplate:
 
 ```html
-	<div id="app">
-		<dx-list :items="items">
-			<template slot="item" slot-scope="data">
-				<i>This is my template for {{data}}</i>
-			</template>
-		</dx-list>
-	</div>
+<div id="app">
+    <dx-list :items="items">
+        <template slot="item" slot-scope="data">
+            <i>This is my template for {{data}}</i>
+        </template>
+    </dx-list>
+</div>
 ```
 ```js
 import Vue from 'vue';
