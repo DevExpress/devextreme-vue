@@ -13,6 +13,7 @@ import VueComponent from "vue-class-component";
     mixins: [BaseComponent]
 })
 class DxCLASS_NAME extends Vue {
+  private _instance: any;
 
   public get instance(): CLASS_NAME {
     return this._instance;
@@ -56,6 +57,7 @@ import VueComponent from "vue-class-component";
     }
 })
 class DxCLASS_NAME extends Vue {
+  private _instance: any;
 
   public get instance(): CLASS_NAME {
     return this._instance;
@@ -95,6 +97,7 @@ import VueComponent from "vue-class-component";
     }
 })
 class DxCLASS_NAME extends Vue {
+  private _instance: any;
 
   public get instance(): CLASS_NAME {
     return this._instance;
@@ -135,6 +138,7 @@ import VueComponent from "vue-class-component";
     }
 })
 class DxCLASS_NAME extends Vue {
+  private _instance: any;
 
   public get instance(): CLASS_NAME {
     return this._instance;
@@ -177,6 +181,7 @@ import VueComponent from "vue-class-component";
     }
 })
 class DxCLASS_NAME extends Vue {
+  private _instance: any;
 
   public get instance(): CLASS_NAME {
     return this._instance;
@@ -221,6 +226,7 @@ import VueComponent from "vue-class-component";
     model: { prop: "value", event: "update:value" }
 })
 class DxCLASS_NAME extends Vue {
+  private _instance: any;
 
   public get instance(): CLASS_NAME {
     return this._instance;
