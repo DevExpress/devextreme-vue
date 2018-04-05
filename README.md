@@ -10,7 +10,7 @@ This project allows you to use [DevExtreme Widgets](http://js.devexpress.com/Dem
   * [Install DevExtreme](#installation)
   * [Use DevExtreme Components](#use-components)
 * [Custom templates](#custom-templates)
-* [Components with Transcluded Content](#components-with-transcluded-content")
+* [Components with Transcluded Content](#components-with-transcluded-content)
 * [License](#license)
 * [Support & feedback](#support-feedback)
 ## <a name="getting-started"></a>Getting Started ##
@@ -127,7 +127,7 @@ new Vue({
 });
 
 ```
-The 'item' name is default template name for the 'itemTemplate' option of the dxList widget. You can set your own name for the 'itemTemplate' option and for your 'slot':
+The `item` name is default template name for the `itemTemplate` option of the dxList widget. You can set your own name for the `itemTemplate` option and for your `slot`:
 
 ```html
 <div id="app">
@@ -139,7 +139,7 @@ The 'item' name is default template name for the 'itemTemplate' option of the dx
 </div>
 ```
 
-Note that in single file component, you can't use '<template>' tag for slot element. Use '<div>' instead:
+Note that in single file component, you can't use `<template>` tag for slot element. Use `<div>` instead:
 
 ```html
 <template>
