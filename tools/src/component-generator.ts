@@ -56,6 +56,7 @@ import VueComponent from "vue-class-component";
     model: { prop: "value", event: "update:value" }<#?#>
 })
 class Dx<#= it.name #> extends Vue {
+  private _instance: any;
 
   public get instance(): <#= it.widgetName #> {
     return this._instance;

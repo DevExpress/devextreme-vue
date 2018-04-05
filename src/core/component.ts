@@ -28,7 +28,7 @@ export default class DxComponent extends Vue {
         this._instance.dispose();
     }
 
-    protected _createWidget(element: HTMLElement, props: Record<string, any>): any {
+    protected _createWidget(..._args): any {
         return null;
     }
 
