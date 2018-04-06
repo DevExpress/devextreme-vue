@@ -9,7 +9,14 @@ This project allows you to use [DevExtreme Widgets](http://js.devexpress.com/Dem
   * [Prerequisites](#prerequisites)
   * [Install DevExtreme](#installation)
   * [Use DevExtreme Components](#use-components)
-* [Custom templates](#custom-templates)
+  * [API Reference](#api-reference)
+* [Component Configuration](#component-configuration)
+  * [Set Component Option](#component-option)
+  * [Two-way Binding](#two-way-binding)
+  * [Forms](#forms)
+  * [Custom templates](#custom-templates)
+  * [Event Handling](#event-handling)
+* [DevExtreme Data Layer and Utils](#data-layer-and-utils)
 * [Components with Transcluded Content](#components-with-transcluded-content)
 * [License](#license)
 * [Support & feedback](#support-feedback)
@@ -17,7 +24,7 @@ This project allows you to use [DevExtreme Widgets](http://js.devexpress.com/Dem
 ### <a name="prerequisites"></a>Prerequisites ###
 [Node.js and npm](https://docs.npmjs.com/getting-started/installing-node) are required
 
-### <a name="installation"></a>Install DevExtreme ####
+### <a name="installation"></a>Install DevExtreme ###
 
 Install the **devextreme** and **devextreme-vue** npm packages:
 
@@ -25,7 +32,7 @@ Install the **devextreme** and **devextreme-vue** npm packages:
 npm install --save devextreme@18.1-unstable devextreme-vue
 ```
 
-### <a name="use-components"></a>Use DevExtreme Components  ####
+### <a name="use-components"></a>Use DevExtreme Components  ###
 
 ```js
 import 'devextreme/dist/css/dx.common.css';
@@ -37,7 +44,7 @@ import { DxButton } from 'devextreme-vue';
 new Vue({
   el: '#app',
   components: { DxButton },
-  template: '<dx-button :text="text"/>',
+  template: '<dx-button :text="text" />',
   data() {
     return {
       text: 'Hello!'
@@ -52,7 +59,7 @@ Note that a [predefined theme](https://js.devexpress.com/Documentation/Guide/The
 You can also use DevExtreme Vue Components inside [Single file component](https://vuejs.org/v2/guide/single-file-components.html):
 ```html
 <template>
-	<dx-button :text='text'/>
+    <dx-button :text='text'/>
 </template>
 
 <script>
@@ -86,7 +93,7 @@ new Vue({
   },
   render: function(h) {
     return (
-      <DxButton text={this.text}/>
+      <DxButton text={this.text} />
     )
   }
 });
@@ -96,7 +103,31 @@ new Vue({
 
 The complete list of components and their APIs are described in the [DevExtreme API Reference](http://js.devexpress.com/Documentation/ApiReference/).
 
-## <a name="custom-templates"></a>Custom templates
+## <a name="component-configuration"></a>Component Configuration ##
+###  <a name="component-option"></a>Set Component Option ### 
+To specify a widget's option
+(the [text](http://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxButton/Configuration/#text)
+option of dxButton):
+
+```html
+<dx-button :text="Simple button" />
+```
+
+### <a name="two-way-binding"></a>Two-way Binding ###
+You can set option with `sync` modifier to bind `bindingProperty` to widget option.
+
+```html
+<dx-text-box :value.sync="bindingProperty" />
+```
+
+###  <a name="forms"></a>Forms ###
+The DevExtreme Vue editors support [v-model](https://vuejs.org/v2/guide/forms.html) directive which create two-way binding on the editor's [value](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxTextBox/Configuration/#value)
+
+```html
+<dx-text-box v-model="text" />
+```
+
+### <a name="custom-templates"></a>Custom templates ###
 You can customize widget elements' appearance via the corresponding template properties. 
 
 To specify a DevExtreme Vue Component template, use the [named slot](https://vuejs.org/v2/guide/components-slots.html#Named-Slots) to set a template markup. You also should specify a [slot scope](https://vuejs.org/v2/guide/components-slots.html#Scoped-Slots) to get access to the data of the template element.
@@ -151,7 +182,19 @@ Note that in single file component, you can't use `<template>` tag for slot elem
 </template>
 ```
 
-### <a name="components-with-transcluded-content"></a>Components with Transcluded Content ###
+
+### <a name="event-handling"></a>Event Handling ###
+You can also subscribe to DevExtreme Component Events() via Vue [`v-on` (or  short`@`) directive](https://vuejs.org/v2/guide/events.html)
+
+```html
+<dx-text-box @focusIn="text = 'focused!'" />
+```
+The full list of a component events you can find in [Events](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxTextBox/Events/) section of each DevExtreme widget API Reference.
+
+## <a name="data-layer-and-utils"></a>DevExtreme Data Layer and Utils ##
+The DevExtreme includes a [data layer]((https://js.devexpress.com/Documentation/Guide/Data_Layer/Data_Layer/)) and [utils](https://js.devexpress.com/Documentation/ApiReference/Common/utils/) which can be helpfull in different application parts.
+
+## <a name="components-with-transcluded-content"></a>Components with Transcluded Content ##
 
 In addition to using template, it is possible to put the content of the following widgets directly into the markup:
 [dxResizable](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxResizable/),
