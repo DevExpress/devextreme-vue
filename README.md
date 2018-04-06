@@ -178,7 +178,7 @@ The `item` name is default template name for the `itemTemplate` option of the dx
 </div>
 ```
 
-Note that in single file component, you can't use `<template>` tag for slot element. Use `<div>` instead:
+Note that in single file component, you can't use `<template>` tag for slot element (currently not allowed in Vue). Use `<div>` instead:
 
 ```html
 <template>
@@ -214,7 +214,7 @@ You can subscribe to DevExtreme Component Events via Vue [`v-on` (or  short`@`) 
 The full list of a component events you can find in Events section of each DevExtreme widget API Reference (e.g. [TexBox events](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxTextBox/Events/)).
 
 ## <a name="data-layer-and-utils"></a>DevExtreme Data Layer and Utils ##
-The DevExtreme includes a [Data Layer](https://js.devexpress.com/Documentation/Guide/Data_Layer/Data_Layer/) and [Utils](https://js.devexpress.com/Documentation/ApiReference/Common/utils/) which can be helpfull in different application parts.
+The DevExtreme includes a [Data Layer](https://js.devexpress.com/Documentation/Guide/Data_Layer/Data_Layer/) and [Utils](https://js.devexpress.com/Documentation/ApiReference/Common/utils/) which can be helpfull in different scenarios.
 
 
 ## <a name="license"></a>License ##
