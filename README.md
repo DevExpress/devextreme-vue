@@ -2,7 +2,7 @@
 
 [![Run Status](https://api.shippable.com/projects/5ab4c6354a24a207009ec636/badge?branch=master)](https://app.shippable.com/github/DevExpress/devextreme-vue)
 
-This project allows you to use [DevExtreme Widgets](http://js.devexpress.com/Demos/WidgetsGallery/) as [Vue Components](https://vuejs.org).
+This project allows you to use [DevExtreme Widgets](http://js.devexpress.com/Demos/WidgetsGallery/) as [Vue](https://vuejs.org) Components.
 
 
 * [Getting started](#getting-started)
@@ -15,9 +15,9 @@ This project allows you to use [DevExtreme Widgets](http://js.devexpress.com/Dem
   * [Two-way Binding](#two-way-binding)
   * [Forms](#forms)
   * [Custom templates](#custom-templates)
+  * [Components with Transcluded Content](#components-with-transcluded-content)
   * [Event Handling](#event-handling)
 * [DevExtreme Data Layer and Utils](#data-layer-and-utils)
-* [Components with Transcluded Content](#components-with-transcluded-content)
 * [License](#license)
 * [Support & feedback](#support-feedback)
 ## <a name="getting-started"></a>Getting Started ##
@@ -56,7 +56,7 @@ new Vue({
 
 Note that a [predefined theme](https://js.devexpress.com/Documentation/Guide/Themes/Predefined_Themes/) is required.
 
-You can also use DevExtreme Vue Components inside [Single file component](https://vuejs.org/v2/guide/single-file-components.html):
+You can also use DevExtreme Vue Components inside a [single file component](https://vuejs.org/v2/guide/single-file-components.html):
 ```html
 <template>
     <dx-button :text='text'/>
@@ -78,7 +78,7 @@ export default {
 </script>
 ```
 
-Or with [jsx](https://vuejs.org/v2/guide/render-function.html) render function:
+Or with [jsx](https://vuejs.org/v2/guide/render-function.html#JSX) render function:
 ```jsx
 import Vue from 'vue';
 import { DxButton } from 'devextreme-vue';
@@ -104,24 +104,32 @@ new Vue({
 The complete list of components and their APIs are described in the [DevExtreme API Reference](http://js.devexpress.com/Documentation/ApiReference/).
 
 ## <a name="component-configuration"></a>Component Configuration ##
+
 ###  <a name="component-option"></a>Set Component Option ### 
-To specify a widget's option
-(the [text](http://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxButton/Configuration/#text)
-option of dxButton):
+To set a constant value
+(e.g. the dxButton [text](http://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxButton/Configuration/#text)
+option):
 
 ```html
-<dx-button :text="Simple button" />
+<dx-button text="Simple button" />
 ```
+You can also use a value from a component data:
+
+```html
+<dx-button :text="text" />
+```
+where `:` is a shorthand for [v-bind directive](https://vuejs.org/v2/api/#v-bind).
 
 ### <a name="two-way-binding"></a>Two-way Binding ###
-You can set option with `sync` modifier to bind `bindingProperty` to widget option.
+
+To bind some `bindingProperty` to a widget option use [`sync`](https://vuejs.org/v2/guide/components-custom-events.html#sync-Modifier) modifier:
 
 ```html
 <dx-text-box :value.sync="bindingProperty" />
 ```
 
-###  <a name="forms"></a>Forms ###
-The DevExtreme Vue editors support [v-model](https://vuejs.org/v2/guide/forms.html) directive which create two-way binding on the editor's [value](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxTextBox/Configuration/#value)
+###  <a name="forms"></a>Editors Value Binding ###
+The DevExtreme Vue editors also support [v-model](https://vuejs.org/v2/guide/forms.html) directive which create two-way binding on the editor's [value](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxTextBox/Configuration/#value)
 
 ```html
 <dx-text-box v-model="text" />
@@ -182,21 +190,9 @@ Note that in single file component, you can't use `<template>` tag for slot elem
 </template>
 ```
 
+### <a name="components-with-transcluded-content"></a>Components with Transcluded Content ##
 
-### <a name="event-handling"></a>Event Handling ###
-You can also subscribe to DevExtreme Component Events() via Vue [`v-on` (or  short`@`) directive](https://vuejs.org/v2/guide/events.html)
-
-```html
-<dx-text-box @focusIn="text = 'focused!'" />
-```
-The full list of a component events you can find in [Events](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxTextBox/Events/) section of each DevExtreme widget API Reference.
-
-## <a name="data-layer-and-utils"></a>DevExtreme Data Layer and Utils ##
-The DevExtreme includes a [data layer]((https://js.devexpress.com/Documentation/Guide/Data_Layer/Data_Layer/)) and [utils](https://js.devexpress.com/Documentation/ApiReference/Common/utils/) which can be helpfull in different application parts.
-
-## <a name="components-with-transcluded-content"></a>Components with Transcluded Content ##
-
-In addition to using template, it is possible to put the content of the following widgets directly into the markup:
+In addition to using templates, it is possible to put the content of the following widgets directly into the markup:
 [dxResizable](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxResizable/),
 [dxScrollView](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxScrollView/),
 [dxValidationGroup](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxValidationGroup/).
@@ -208,6 +204,17 @@ the [dxScrollView](https://js.devexpress.com/Documentation/ApiReference/UI_Widge
     <div>Some scrollable content</div>
 </dx-scroll-view>
 ```
+
+### <a name="event-handling"></a>Event Handling ###
+You can subscribe to DevExtreme Component Events via Vue [`v-on` (or  short`@`) directive](https://vuejs.org/v2/guide/events.html)
+
+```html
+<dx-text-box @focusIn="text = 'focused!'" />
+```
+The full list of a component events you can find in Events section of each DevExtreme widget API Reference (e.g. [TexBox events](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxTextBox/Events/)).
+
+## <a name="data-layer-and-utils"></a>DevExtreme Data Layer and Utils ##
+The DevExtreme includes a [Data Layer](https://js.devexpress.com/Documentation/Guide/Data_Layer/Data_Layer/) and [Utils](https://js.devexpress.com/Documentation/ApiReference/Common/utils/) which can be helpfull in different application parts.
 
 
 ## <a name="license"></a>License ##
