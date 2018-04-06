@@ -108,8 +108,7 @@ The complete list of components and their APIs are described in the [DevExtreme 
 
 ###  <a name="component-option"></a>Set Component Option ### 
 To set a constant value
-(e.g. the dxButton [text](http://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxButton/Configuration/#text)
-option):
+(e.g. the Button [text](http://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxButton/Configuration/#text)):
 
 ```html
 <dx-button text="Simple button" />
@@ -119,7 +118,7 @@ You can also use a value from a component data:
 ```html
 <dx-button :text="text" />
 ```
-where `:` is a shorthand for [v-bind directive](https://vuejs.org/v2/api/#v-bind).
+where `:` is a shorthand for [`v-bind` directive](https://vuejs.org/v2/api/#v-bind).
 
 ### <a name="two-way-binding"></a>Two-way Binding ###
 
@@ -130,7 +129,7 @@ To bind some `bindingProperty` to a widget option use [`sync`](https://vuejs.org
 ```
 
 ###  <a name="editor-value-binding"></a>Editors Value Binding ###
-The DevExtreme Vue editors also support [v-model](https://vuejs.org/v2/guide/forms.html) directive which create two-way binding on the editor's [value](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxTextBox/Configuration/#value)
+The DevExtreme Vue editors also support [`v-model`](https://vuejs.org/v2/guide/forms.html) directive which create two-way binding on the editor's value (e.g. TextBox [value](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxTextBox/Configuration/#value))
 
 ```html
 <dx-text-box v-model="text" />
@@ -194,11 +193,11 @@ Note that in single file component, you can't use `<template>` tag for slot elem
 ### <a name="components-with-transcluded-content"></a>Components with Transcluded Content ##
 
 In addition to using templates, it is possible to put the content of the following widgets directly into the markup:
-[dxResizable](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxResizable/),
-[dxScrollView](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxScrollView/),
-[dxValidationGroup](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxValidationGroup/).
+[Resizable](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxResizable/),
+[ScrollView](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxScrollView/),
+[ValidationGroup](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxValidationGroup/).
 For instance, we can set the content for
-the [dxScrollView](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxScrollView/) widget as shown below:
+the [ScrollView](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxScrollView/) widget as shown below:
 
 ```html
 <dx-scroll-view>
@@ -207,12 +206,12 @@ the [dxScrollView](https://js.devexpress.com/Documentation/ApiReference/UI_Widge
 ```
 
 ### <a name="event-handling"></a>Event Handling ###
-You can subscribe to DevExtreme Component Events via Vue [`v-on` (or  short`@`) directive](https://vuejs.org/v2/guide/events.html)
+You can subscribe to DevExtreme Component Events via Vue [`v-on` directive](https://vuejs.org/v2/guide/events.html) (or `@` shorthand)
 
 ```html
 <dx-text-box @focusIn="text = 'focused!'" />
 ```
-The full list of a component events you can find in Events section of each DevExtreme widget API Reference (e.g. [TexBox events](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxTextBox/Events/)).
+The full list of a component events you can find in Events section of each DevExtreme widget API Reference (e.g. [TextBox events](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxTextBox/Events/)).
 
 ## <a name="type-checks"></a>Type Checks ##
 DevExtreme Vue provides [Prop Validation and Type Checks](https://vuejs.org/v2/guide/components-props.html#Prop-Validation). That means each DevExtreme Vue Component specifies the types and acceptable values for its props. If such constraints are broken, Vue will produce a console warning (if using the development build).
