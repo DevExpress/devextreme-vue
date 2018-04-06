@@ -13,7 +13,7 @@ This project allows you to use [DevExtreme Widgets](http://js.devexpress.com/Dem
 * [Component Configuration](#component-configuration)
   * [Set Component Option](#component-option)
   * [Two-way Binding](#two-way-binding)
-  * [Forms](#forms)
+  * [Editors Value Binding](#editors-value-binding)
   * [Custom templates](#custom-templates)
   * [Components with Transcluded Content](#components-with-transcluded-content)
   * [Event Handling](#event-handling)
@@ -128,7 +128,7 @@ To bind some `bindingProperty` to a widget option use [`sync`](https://vuejs.org
 <dx-text-box :value.sync="bindingProperty" />
 ```
 
-###  <a name="forms"></a>Editors Value Binding ###
+###  <a name="editor-value-binding"></a>Editors Value Binding ###
 The DevExtreme Vue editors also support [v-model](https://vuejs.org/v2/guide/forms.html) directive which create two-way binding on the editor's [value](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxTextBox/Configuration/#value)
 
 ```html
