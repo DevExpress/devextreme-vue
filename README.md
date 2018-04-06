@@ -17,6 +17,7 @@ This project allows you to use [DevExtreme Widgets](http://js.devexpress.com/Dem
   * [Custom templates](#custom-templates)
   * [Components with Transcluded Content](#components-with-transcluded-content)
   * [Event Handling](#event-handling)
+* [Type Checks](#type-checks)
 * [DevExtreme Data Layer and Utils](#data-layer-and-utils)
 * [License](#license)
 * [Support & feedback](#support-feedback)
@@ -212,6 +213,10 @@ You can subscribe to DevExtreme Component Events via Vue [`v-on` (or  short`@`) 
 <dx-text-box @focusIn="text = 'focused!'" />
 ```
 The full list of a component events you can find in Events section of each DevExtreme widget API Reference (e.g. [TexBox events](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxTextBox/Events/)).
+
+## <a name="type-checks"></a>Type Checks ##
+DevExtreme Vue provides [Prop Validation and Type Checks](https://vuejs.org/v2/guide/components-props.html#Prop-Validation). That means each DevExtreme Vue Component specifies the types and acceptable values for its props. If such constraints are broken, Vue will produce a console warning (if using the development build).
+
 
 ## <a name="data-layer-and-utils"></a>DevExtreme Data Layer and Utils ##
 The DevExtreme includes a [Data Layer](https://js.devexpress.com/Documentation/Guide/Data_Layer/Data_Layer/) and [Utils](https://js.devexpress.com/Documentation/ApiReference/Common/utils/) which can be helpfull in different scenarios.
