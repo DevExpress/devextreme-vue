@@ -42,24 +42,24 @@ import ExampleBlock from "./example-block";
 import { DxScrollView, DxButton, DxTextBox } from "../../src";
 
 export default {
-    components: {
-        ExampleBlock,
-        DxScrollView,
-        DxButton,
-        DxTextBox
+  components: {
+    ExampleBlock,
+    DxScrollView,
+    DxButton,
+    DxTextBox
+  },
+  data: function() {
+    return {
+      text: ""
+    };
+  },
+  methods: {
+    showAlert: function() {
+      alert("shown");
     },
-    data: function() {
-        return {
-            text: ""
-        }
-    },
-    methods: {
-        showAlert: function() { 
-            alert("shown");
-        },
-        clearText: function() {
-            this.text = "";
-        }
+    clearText: function() {
+      this.text = "";
     }
-}
+  }
+};
 </script>

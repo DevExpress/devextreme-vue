@@ -16,14 +16,14 @@ import { appointments } from "../data";
 import { DxScheduler } from "../../src";
 
 export default {
-    components: {
-        ExampleBlock,
-        DxScheduler
-    },
-    data: function() {
-        return {
-            appointments: appointments
-        }
-    }
-}
+  components: {
+    ExampleBlock,
+    DxScheduler
+  },
+  data: function() {
+    return {
+      appointments: appointments
+    };
+  }
+};
 </script>

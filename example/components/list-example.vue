@@ -18,14 +18,14 @@ import { orangesByDay } from "../data";
 import { DxList } from "../../src";
 
 export default {
-    components: {
-        ExampleBlock,
-        DxList
-    },
-    data: function() {
-        return {
-            listData: orangesByDay
-        }
-    }
-}
+  components: {
+    ExampleBlock,
+    DxList
+  },
+  data: function() {
+    return {
+      listData: orangesByDay
+    };
+  }
+};
 </script>
