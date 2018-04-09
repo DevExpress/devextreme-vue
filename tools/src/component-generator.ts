@@ -44,40 +44,35 @@ function createPropModel(p: IProp) {
 // tslint:disable:max-line-length
 const renderComponent: (model: IComponentModel) => string = createTempate(`
 import <#= it.widgetName #> from "devextreme/<#= it.dxExportPath #>";
+import Vue, { VueConstructor } from "vue";
 import BaseComponent from "<#= it.baseComponentPath #>";
 
-import Vue from "vue";
-import VueComponent from "vue-class-component";
-
-@VueComponent({
-    mixins: [BaseComponent]<#? it.props#>,
-    props: {<#= it.renderedProps.join(',') #>
-    }<#?#><#? it.hasModel #>,
-    model: { prop: "value", event: "update:value" }<#?#>
-})
-class Dx<#= it.name #> extends Vue {
-  private _instance: any;
-
-  public get instance(): <#= it.widgetName #> {
-    return this._instance;
+const Dx<#= it.name #>: VueConstructor = Vue.extend({
+  extends: BaseComponent,<#? it.props #>
+  props: {<#= it.renderedProps.join(',') #>
+  },<#?#><#? it.hasModel #>
+  model: { prop: "value", event: "update:value" },<#?#>
+  computed: {
+    instance(): <#= it.widgetName #> {
+      return (this as any)._instance;
+    }
+  },
+  beforeCreate() {
+    (this as any)._WidgetClass = <#= it.widgetName #>;
   }
-
-  protected _createWidget(element: HTMLElement, props: Record<string, any>): any {
-    return new <#= it.widgetName #>(element, props);
-  }
-}
+});
 export { Dx<#= it.name #> };
 `.trimLeft());
 
 const renderSimpleProp: (model: IProp) => string = createTempate(`
-        <#= it.name #>: <#? it.types.length > 1 #>[<#?#><#= it.types.join(', ') #><#? it.types.length > 1 #>]<#?#>
+    <#= it.name #>: <#? it.types.length > 1 #>[<#?#><#= it.types.join(', ') #><#? it.types.length > 1 #>]<#?#>
 `.trimRight());
 
 const renderExtendedProp: (model: IProp) => string = createTempate(`
-        <#= it.name #>: {<#? it.types #>
-            type: <#? it.types.length > 1 #>[<#?#><#= it.types.join(', ') #><#? it.types.length > 1 #>]<#?#><#?#><#? it.acceptableValues #>,
-            validator: (v) => [<#= it.acceptableValues.join(', ') #>].indexOf(v) !== -1
-        <#?#>}
+    <#= it.name #>: {<#? it.types #>
+      type: <#? it.types.length > 1 #>[<#?#><#= it.types.join(', ') #><#? it.types.length > 1 #>]<#?#><#?#><#? it.acceptableValues #>,
+      validator: (v) => [<#= it.acceptableValues.join(', ') #>].indexOf(v) !== -1
+    <#?#>}
 `.trimRight());
 // tslint:enable:max-line-length
 

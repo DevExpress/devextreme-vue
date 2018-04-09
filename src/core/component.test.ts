@@ -1,5 +1,4 @@
 import Vue from "vue";
-import VueComponent from "vue-class-component";
 import BaseComponent from "../core/component";
 
 import * as events from "devextreme/events";
@@ -20,15 +19,12 @@ const Widget = {
 };
 
 const WidgetClass = jest.fn(() => Widget);
-
-@VueComponent({
-    mixins: [BaseComponent]
-})
-class TestComponent extends Vue {
-    protected _createWidget(element: HTMLElement, props: any): any {
-        return new WidgetClass(element, props);
+const TestComponent = Vue.extend({
+    extends: BaseComponent,
+    beforeCreate() {
+        (this as any)._WidgetClass = WidgetClass;
     }
-}
+});
 
 beforeEach(() => {
     jest.clearAllMocks();

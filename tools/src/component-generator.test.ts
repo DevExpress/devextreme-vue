@@ -4,25 +4,20 @@ it("generates", () => {
     //#region EXPECTED
     const EXPECTED = `
 import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
+import Vue, { VueConstructor } from "vue";
 import BaseComponent from "BASE_COMPONENT_PATH";
 
-import Vue from "vue";
-import VueComponent from "vue-class-component";
-
-@VueComponent({
-    mixins: [BaseComponent]
-})
-class DxCLASS_NAME extends Vue {
-  private _instance: any;
-
-  public get instance(): CLASS_NAME {
-    return this._instance;
+const DxCLASS_NAME: VueConstructor = Vue.extend({
+  extends: BaseComponent,
+  computed: {
+    instance(): CLASS_NAME {
+      return (this as any)._instance;
+    }
+  },
+  beforeCreate() {
+    (this as any)._WidgetClass = CLASS_NAME;
   }
-
-  protected _createWidget(element: HTMLElement, props: Record<string, any>): any {
-    return new CLASS_NAME(element, props);
-  }
-}
+});
 export { DxCLASS_NAME };
 `.trimLeft();
     //#endregion
@@ -39,37 +34,32 @@ export { DxCLASS_NAME };
 describe("props generation", () => {
 
     it("renders props in alphabetic order", () => {
-    //#region EXPECTED
+        //#region EXPECTED
         const EXPECTED = `
 import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
+import Vue, { VueConstructor } from "vue";
 import BaseComponent from "BASE_COMPONENT_PATH";
 
-import Vue from "vue";
-import VueComponent from "vue-class-component";
-
-@VueComponent({
-    mixins: [BaseComponent],
-    props: {
-        --PROP: {},
-        a-PROP: {},
-        B-PROP: {},
-        b-PROP: {}
+const DxCLASS_NAME: VueConstructor = Vue.extend({
+  extends: BaseComponent,
+  props: {
+    --PROP: {},
+    a-PROP: {},
+    B-PROP: {},
+    b-PROP: {}
+  },
+  computed: {
+    instance(): CLASS_NAME {
+      return (this as any)._instance;
     }
-})
-class DxCLASS_NAME extends Vue {
-  private _instance: any;
-
-  public get instance(): CLASS_NAME {
-    return this._instance;
+  },
+  beforeCreate() {
+    (this as any)._WidgetClass = CLASS_NAME;
   }
-
-  protected _createWidget(element: HTMLElement, props: Record<string, any>): any {
-    return new CLASS_NAME(element, props);
-  }
-}
+});
 export { DxCLASS_NAME };
 `.trimLeft();
-    //#endregion
+        //#endregion
 
         expect(
             generate({
@@ -82,34 +72,29 @@ export { DxCLASS_NAME };
     });
 
     it("renders props without type", () => {
-    //#region EXPECTED
+        //#region EXPECTED
         const EXPECTED = `
 import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
+import Vue, { VueConstructor } from "vue";
 import BaseComponent from "BASE_COMPONENT_PATH";
 
-import Vue from "vue";
-import VueComponent from "vue-class-component";
-
-@VueComponent({
-    mixins: [BaseComponent],
-    props: {
-        PROP1: {}
+const DxCLASS_NAME: VueConstructor = Vue.extend({
+  extends: BaseComponent,
+  props: {
+    PROP1: {}
+  },
+  computed: {
+    instance(): CLASS_NAME {
+      return (this as any)._instance;
     }
-})
-class DxCLASS_NAME extends Vue {
-  private _instance: any;
-
-  public get instance(): CLASS_NAME {
-    return this._instance;
+  },
+  beforeCreate() {
+    (this as any)._WidgetClass = CLASS_NAME;
   }
-
-  protected _createWidget(element: HTMLElement, props: Record<string, any>): any {
-    return new CLASS_NAME(element, props);
-  }
-}
+});
 export { DxCLASS_NAME };
 `.trimLeft();
-    //#endregion
+        //#endregion
 
         expect(
             generate({
@@ -122,35 +107,30 @@ export { DxCLASS_NAME };
     });
 
     it("renders props with type", () => {
-    //#region EXPECTED
+        //#region EXPECTED
         const EXPECTED = `
 import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
+import Vue, { VueConstructor } from "vue";
 import BaseComponent from "BASE_COMPONENT_PATH";
 
-import Vue from "vue";
-import VueComponent from "vue-class-component";
-
-@VueComponent({
-    mixins: [BaseComponent],
-    props: {
-        PROP1: TYPE1,
-        PROP2: [TYPE2, TYPE3]
+const DxCLASS_NAME: VueConstructor = Vue.extend({
+  extends: BaseComponent,
+  props: {
+    PROP1: TYPE1,
+    PROP2: [TYPE2, TYPE3]
+  },
+  computed: {
+    instance(): CLASS_NAME {
+      return (this as any)._instance;
     }
-})
-class DxCLASS_NAME extends Vue {
-  private _instance: any;
-
-  public get instance(): CLASS_NAME {
-    return this._instance;
+  },
+  beforeCreate() {
+    (this as any)._WidgetClass = CLASS_NAME;
   }
-
-  protected _createWidget(element: HTMLElement, props: Record<string, any>): any {
-    return new CLASS_NAME(element, props);
-  }
-}
+});
 export { DxCLASS_NAME };
 `.trimLeft();
-    //#endregion
+        //#endregion
 
         expect(
             generate({
@@ -163,37 +143,32 @@ export { DxCLASS_NAME };
     });
 
     it("renders props with acceptable values", () => {
-    //#region EXPECTED
+        //#region EXPECTED
         const EXPECTED = `
 import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
+import Vue, { VueConstructor } from "vue";
 import BaseComponent from "BASE_COMPONENT_PATH";
 
-import Vue from "vue";
-import VueComponent from "vue-class-component";
-
-@VueComponent({
-    mixins: [BaseComponent],
-    props: {
-        PROP1: {
-            type: TYPE1,
-            validator: (v) => ["VAL1", "VAL2"].indexOf(v) !== -1
-        }
+const DxCLASS_NAME: VueConstructor = Vue.extend({
+  extends: BaseComponent,
+  props: {
+    PROP1: {
+      type: TYPE1,
+      validator: (v) => ["VAL1", "VAL2"].indexOf(v) !== -1
     }
-})
-class DxCLASS_NAME extends Vue {
-  private _instance: any;
-
-  public get instance(): CLASS_NAME {
-    return this._instance;
+  },
+  computed: {
+    instance(): CLASS_NAME {
+      return (this as any)._instance;
+    }
+  },
+  beforeCreate() {
+    (this as any)._WidgetClass = CLASS_NAME;
   }
-
-  protected _createWidget(element: HTMLElement, props: Record<string, any>): any {
-    return new CLASS_NAME(element, props);
-  }
-}
+});
 export { DxCLASS_NAME };
 `.trimLeft();
-    //#endregion
+        //#endregion
 
         expect(
             generate({
@@ -204,7 +179,7 @@ export { DxCLASS_NAME };
                     {
                         name: "PROP1",
                         types: ["TYPE1"],
-                        acceptableValues: [ `"VAL1"`, `"VAL2"` ]
+                        acceptableValues: [`"VAL1"`, `"VAL2"`]
                     }
                 ]
             })
@@ -216,26 +191,21 @@ it("generates class with model", () => {
     //#region EXPECTED
     const EXPECTED = `
 import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
+import Vue, { VueConstructor } from "vue";
 import BaseComponent from "BASE_COMPONENT_PATH";
 
-import Vue from "vue";
-import VueComponent from "vue-class-component";
-
-@VueComponent({
-    mixins: [BaseComponent],
-    model: { prop: "value", event: "update:value" }
-})
-class DxCLASS_NAME extends Vue {
-  private _instance: any;
-
-  public get instance(): CLASS_NAME {
-    return this._instance;
+const DxCLASS_NAME: VueConstructor = Vue.extend({
+  extends: BaseComponent,
+  model: { prop: "value", event: "update:value" },
+  computed: {
+    instance(): CLASS_NAME {
+      return (this as any)._instance;
+    }
+  },
+  beforeCreate() {
+    (this as any)._WidgetClass = CLASS_NAME;
   }
-
-  protected _createWidget(element: HTMLElement, props: Record<string, any>): any {
-    return new CLASS_NAME(element, props);
-  }
-}
+});
 export { DxCLASS_NAME };
 `.trimLeft();
     //#endregion
