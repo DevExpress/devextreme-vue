@@ -15,7 +15,7 @@ const DxCLASS_NAME: VueConstructor = Vue.extend({
     }
   },
   beforeCreate() {
-    (this as any)._Widget = CLASS_NAME;
+    (this as any)._WidgetClass = CLASS_NAME;
   }
 });
 export { DxCLASS_NAME };
@@ -54,7 +54,7 @@ const DxCLASS_NAME: VueConstructor = Vue.extend({
     }
   },
   beforeCreate() {
-    (this as any)._Widget = CLASS_NAME;
+    (this as any)._WidgetClass = CLASS_NAME;
   }
 });
 export { DxCLASS_NAME };
@@ -89,7 +89,7 @@ const DxCLASS_NAME: VueConstructor = Vue.extend({
     }
   },
   beforeCreate() {
-    (this as any)._Widget = CLASS_NAME;
+    (this as any)._WidgetClass = CLASS_NAME;
   }
 });
 export { DxCLASS_NAME };
@@ -125,7 +125,7 @@ const DxCLASS_NAME: VueConstructor = Vue.extend({
     }
   },
   beforeCreate() {
-    (this as any)._Widget = CLASS_NAME;
+    (this as any)._WidgetClass = CLASS_NAME;
   }
 });
 export { DxCLASS_NAME };
@@ -163,7 +163,7 @@ const DxCLASS_NAME: VueConstructor = Vue.extend({
     }
   },
   beforeCreate() {
-    (this as any)._Widget = CLASS_NAME;
+    (this as any)._WidgetClass = CLASS_NAME;
   }
 });
 export { DxCLASS_NAME };
@@ -203,7 +203,7 @@ const DxCLASS_NAME: VueConstructor = Vue.extend({
     }
   },
   beforeCreate() {
-    (this as any)._Widget = CLASS_NAME;
+    (this as any)._WidgetClass = CLASS_NAME;
   }
 });
 export { DxCLASS_NAME };

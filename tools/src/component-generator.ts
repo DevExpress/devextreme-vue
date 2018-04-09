@@ -58,7 +58,7 @@ const Dx<#= it.name #>: VueConstructor = Vue.extend({
     }
   },
   beforeCreate() {
-    (this as any)._Widget = <#= it.widgetName #>;
+    (this as any)._WidgetClass = <#= it.widgetName #>;
   }
 });
 export { Dx<#= it.name #> };

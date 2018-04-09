@@ -14,7 +14,7 @@ const DxComponent: VueConstructor = Vue.extend({
             ...this.$options.propsData
         };
 
-        const instance = new (this as any)._Widget(this.$el, options);
+        const instance = new (this as any)._WidgetClass(this.$el, options);
         instance.on("optionChanged", this._handleOptionChanged.bind(this));
         (this as any)._instance = instance;
         this._watchProps();

@@ -22,7 +22,7 @@ const WidgetClass = jest.fn(() => Widget);
 const TestComponent = Vue.extend({
     extends: BaseComponent,
     beforeCreate() {
-        (this as any)._Widget = WidgetClass;
+        (this as any)._WidgetClass = WidgetClass;
     }
 });
 
