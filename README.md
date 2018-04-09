@@ -55,7 +55,7 @@ new Vue({
 
 ```
 
-Note that a [predefined theme](https://js.devexpress.com/Documentation/Guide/Themes/Predefined_Themes/) is required.
+Note that a [predefined theme](https://js.devexpress.com/Documentation/Guide/Themes/Predefined_Themes/#Themes_in_Sites) is required.
 
 You can also use DevExtreme Vue Components inside a [single file component](https://vuejs.org/v2/guide/single-file-components.html):
 ```html
@@ -209,8 +209,19 @@ the [ScrollView](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets
 You can subscribe to DevExtreme Component Events via Vue [`v-on` directive](https://vuejs.org/v2/guide/events.html) (or `@` shorthand)
 
 ```html
-<dx-text-box @focusIn="text = 'focused!'" />
+<dx-text-box v-model="text" @focusIn="handleFocusIn'" />
 ```
+```js
+data: function() {
+  return {
+    text: "text",
+    handleFocusIn: () => {
+      this.text = 'focused!';
+    }
+  };
+}
+```
+
 The full list of a component events you can find in Events section of each DevExtreme widget API Reference (e.g. [TextBox events](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxTextBox/Events/)).
 
 ## <a name="type-checks"></a>Type Checks ##
