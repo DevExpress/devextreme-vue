@@ -10,25 +10,25 @@ const DxComponent: VueConstructor = Vue.extend({
 
     mounted(): void {
         const options: object = {
-            ...this._getIntegrationOptions(),
+            ...this.$_getIntegrationOptions(),
             ...this.$options.propsData
         };
 
-        const instance = new (this as any)._WidgetClass(this.$el, options);
-        instance.on("optionChanged", this._handleOptionChanged.bind(this));
-        (this as any)._instance = instance;
-        this._watchProps();
-        this._createEmitters();
+        const instance = new (this as any).$_WidgetClass(this.$el, options);
+        instance.on("optionChanged", this.$_handleOptionChanged.bind(this));
+        (this as any).$_instance = instance;
+        this.$_watchProps();
+        this.$_createEmitters();
     },
 
     beforeDestroy(): void {
         events.triggerHandler(this.$el, DX_REMOVE_EVENT);
-        (this as any)._instance.dispose();
+        (this as any).$_instance.dispose();
     },
 
     methods: {
 
-        _getIntegrationOptions(): object {
+        $_getIntegrationOptions(): object {
             if (!this.$scopedSlots || !Object.keys(this.$scopedSlots).length) {
                 return {};
             }
@@ -36,7 +36,7 @@ const DxComponent: VueConstructor = Vue.extend({
             const templates: Record<string, any> = {};
 
             Object.keys(this.$scopedSlots).forEach((slotName: string) => {
-                templates[slotName] = this._fillTemplate(this.$scopedSlots[slotName]);
+                templates[slotName] = this.$_fillTemplate(this.$scopedSlots[slotName]);
             });
 
             return {
@@ -46,7 +46,7 @@ const DxComponent: VueConstructor = Vue.extend({
             };
         },
 
-        _fillTemplate(template: any): object {
+        $_fillTemplate(template: any): object {
             return {
                 render: (data: any) => {
                     const vm = new Vue({
@@ -68,24 +68,24 @@ const DxComponent: VueConstructor = Vue.extend({
             };
         },
 
-        _handleOptionChanged(args: any): void {
+        $_handleOptionChanged(args: any): void {
             this.$emit("update:" + args.name, args.value);
         },
 
-        _watchProps(): void {
+        $_watchProps(): void {
             if (!this.$props) {
                 return;
             }
             Object.keys(this.$props).forEach((prop: string) => {
                 this.$watch(prop, (value) => {
-                    (this as any)._instance.option(prop, value);
+                    (this as any).$_instance.option(prop, value);
                 });
             });
         },
 
-        _createEmitters(): void {
+        $_createEmitters(): void {
             Object.keys(this.$listeners).forEach((eventName: string) => {
-                (this as any)._instance.on(eventName, (e: any) => {
+                (this as any).$_instance.on(eventName, (e: any) => {
                     this.$emit(eventName, e);
                 });
             });

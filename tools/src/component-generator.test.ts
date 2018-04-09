@@ -11,11 +11,11 @@ const DxCLASS_NAME: VueConstructor = Vue.extend({
   extends: BaseComponent,
   computed: {
     instance(): CLASS_NAME {
-      return (this as any)._instance;
+      return (this as any).$_instance;
     }
   },
   beforeCreate() {
-    (this as any)._WidgetClass = CLASS_NAME;
+    (this as any).$_WidgetClass = CLASS_NAME;
   }
 });
 export { DxCLASS_NAME };
@@ -50,11 +50,11 @@ const DxCLASS_NAME: VueConstructor = Vue.extend({
   },
   computed: {
     instance(): CLASS_NAME {
-      return (this as any)._instance;
+      return (this as any).$_instance;
     }
   },
   beforeCreate() {
-    (this as any)._WidgetClass = CLASS_NAME;
+    (this as any).$_WidgetClass = CLASS_NAME;
   }
 });
 export { DxCLASS_NAME };
@@ -85,11 +85,11 @@ const DxCLASS_NAME: VueConstructor = Vue.extend({
   },
   computed: {
     instance(): CLASS_NAME {
-      return (this as any)._instance;
+      return (this as any).$_instance;
     }
   },
   beforeCreate() {
-    (this as any)._WidgetClass = CLASS_NAME;
+    (this as any).$_WidgetClass = CLASS_NAME;
   }
 });
 export { DxCLASS_NAME };
@@ -121,11 +121,11 @@ const DxCLASS_NAME: VueConstructor = Vue.extend({
   },
   computed: {
     instance(): CLASS_NAME {
-      return (this as any)._instance;
+      return (this as any).$_instance;
     }
   },
   beforeCreate() {
-    (this as any)._WidgetClass = CLASS_NAME;
+    (this as any).$_WidgetClass = CLASS_NAME;
   }
 });
 export { DxCLASS_NAME };
@@ -159,11 +159,11 @@ const DxCLASS_NAME: VueConstructor = Vue.extend({
   },
   computed: {
     instance(): CLASS_NAME {
-      return (this as any)._instance;
+      return (this as any).$_instance;
     }
   },
   beforeCreate() {
-    (this as any)._WidgetClass = CLASS_NAME;
+    (this as any).$_WidgetClass = CLASS_NAME;
   }
 });
 export { DxCLASS_NAME };
@@ -199,11 +199,11 @@ const DxCLASS_NAME: VueConstructor = Vue.extend({
   model: { prop: "value", event: "update:value" },
   computed: {
     instance(): CLASS_NAME {
-      return (this as any)._instance;
+      return (this as any).$_instance;
     }
   },
   beforeCreate() {
-    (this as any)._WidgetClass = CLASS_NAME;
+    (this as any).$_WidgetClass = CLASS_NAME;
   }
 });
 export { DxCLASS_NAME };
