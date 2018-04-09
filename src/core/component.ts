@@ -15,10 +15,11 @@ const DxComponent: VueConstructor = Vue.extend({
         };
 
         const instance = new (this as any).$_WidgetClass(this.$el, options);
-        instance.on("optionChanged", this.$_handleOptionChanged.bind(this));
         (this as any).$_instance = instance;
-        this.$_watchProps();
-        this.$_createEmitters();
+
+        instance.on("optionChanged", this.$_handleOptionChanged.bind(this));
+        this.$_watchProps(instance);
+        this.$_createEmitters(instance);
     },
 
     beforeDestroy(): void {
@@ -72,20 +73,20 @@ const DxComponent: VueConstructor = Vue.extend({
             this.$emit("update:" + args.name, args.value);
         },
 
-        $_watchProps(): void {
+        $_watchProps(instance: any): void {
             if (!this.$props) {
                 return;
             }
             Object.keys(this.$props).forEach((prop: string) => {
                 this.$watch(prop, (value) => {
-                    (this as any).$_instance.option(prop, value);
+                    instance.option(prop, value);
                 });
             });
         },
 
-        $_createEmitters(): void {
+        $_createEmitters(instance: any): void {
             Object.keys(this.$listeners).forEach((eventName: string) => {
-                (this as any).$_instance.on(eventName, (e: any) => {
+                instance.on(eventName, (e: any) => {
                     this.$emit(eventName, e);
                 });
             });
