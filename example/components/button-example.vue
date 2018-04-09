@@ -1,7 +1,10 @@
 <template>
     <example-block title="dxButton">
         <dx-button text="clik me"/>
-        <dx-button text="I'm colored" :elementAttr="{ style: 'background-color: #ffc' }"/>
+        <dx-button
+            text="I'm colored"
+            :elementAttr="{ style: 'background-color: #ffc' }"
+        />
     </example-block>
 </template>
 
@@ -12,8 +15,8 @@ import { DxButton } from "../../src";
 
 export default {
   components: {
-      ExampleBlock,
-      DxButton
+    ExampleBlock,
+    DxButton
   }
-}
+};
 </script>

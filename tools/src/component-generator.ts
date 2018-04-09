@@ -54,11 +54,11 @@ const Dx<#= it.name #>: VueConstructor = Vue.extend({
   model: { prop: "value", event: "update:value" },<#?#>
   computed: {
     instance(): <#= it.widgetName #> {
-      return (this as any)._instance;
+      return (this as any).$_instance;
     }
   },
   beforeCreate() {
-    (this as any)._WidgetClass = <#= it.widgetName #>;
+    (this as any).$_WidgetClass = <#= it.widgetName #>;
   }
 });
 export { Dx<#= it.name #> };

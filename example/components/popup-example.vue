@@ -1,20 +1,27 @@
 <template>
     <example-block title="dxPopup" :state="$data">
-        <dx-text-box :value="text" @valueChanged="handleTextUpdate" valueChangeEvent="input" />
+        <dx-text-box
+          :value="text"
+          @valueChanged="handleTextUpdate"
+          valueChangeEvent="input"
+        />
         <br />
-        <dx-button text="Show popup" @click="handleClick" />
-        <dx-popup :visible.sync="visible" width="600" height="400"/>
+        <dx-button
+          text="Show popup"
+          @click="handleClick"
+        />
+        <dx-popup
+          :visible.sync="visible"
+          width="600"
+          height="400"
+        />
     </example-block>
 </template>
 
 <script>
 import ExampleBlock from "./example-block";
 
-import {
-  DxButton,
-  DxPopup,
-  DxTextBox
-} from "../../src";
+import { DxButton, DxPopup, DxTextBox } from "../../src";
 
 export default {
   components: {

@@ -13,20 +13,22 @@ import { orangesByDay } from "../data";
 import { DxChart } from "../../src";
 
 export default {
-    components: {
-        ExampleBlock,
-        DxChart
-    },
-    data: function() {
-        return {
-            chartData: orangesByDay,
-            series: [{
-                argumentField: "day",
-                valueField: "oranges",
-                name: "My oranges",
-                type: "line"
-            }]
+  components: {
+    ExampleBlock,
+    DxChart
+  },
+  data: function() {
+    return {
+      chartData: orangesByDay,
+      series: [
+        {
+          argumentField: "day",
+          valueField: "oranges",
+          name: "My oranges",
+          type: "line"
         }
-    }
-}
+      ]
+    };
+  }
+};
 </script>

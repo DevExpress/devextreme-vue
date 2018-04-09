@@ -25,51 +25,51 @@ const selectedKeys = [10273, 10277, 10292, 10295, 10300, 10302, 10305, 10308, 10
 10362, 10367, 10373, 10376, 10383, 10387];
 
 export default {
-    components: {
-        ExampleBlock,
-        DxDataGrid
-    },
-    data: function() {
-        return {
-            sales: sales,
-            selectedRowKeys: selectedKeys,
-            columns: [
-                {
-                    dataField: 'orderId',
-                    caption: 'Order ID',
-                    allowSorting: false,
-                    allowFiltering: false,
-                    allowGrouping: false,
-                    allowReordering: false,
-                    width: 100
-                },
-                {
-                    dataField: 'city',
-                },
-                {
-                    dataField: 'country',
-                    sortOrder: 'asc',
-                },
-                {
-                    dataField: 'region',
-                    groupIndex: 0
-                },
-                {
-                    dataField: 'date',
-                    dataType: 'date',
-                    selectedFilterOperation: '>=',
-                    filterValue: '2013/04/01',
-                    width: 150
-                },
-                {
-                    dataField: 'amount',
-                    format: 'currency',
-                    selectedFilterOperation: '>=',
-                    filterValue: 1000,
-                    width: 100
-                }
-            ]
+  components: {
+    ExampleBlock,
+    DxDataGrid
+  },
+  data: function() {
+    return {
+      sales: sales,
+      selectedRowKeys: selectedKeys,
+      columns: [
+        {
+          dataField: "orderId",
+          caption: "Order ID",
+          allowSorting: false,
+          allowFiltering: false,
+          allowGrouping: false,
+          allowReordering: false,
+          width: 100
+        },
+        {
+          dataField: "city"
+        },
+        {
+          dataField: "country",
+          sortOrder: "asc"
+        },
+        {
+          dataField: "region",
+          groupIndex: 0
+        },
+        {
+          dataField: "date",
+          dataType: "date",
+          selectedFilterOperation: ">=",
+          filterValue: "2013/04/01",
+          width: 150
+        },
+        {
+          dataField: "amount",
+          format: "currency",
+          selectedFilterOperation: ">=",
+          filterValue: 1000,
+          width: 100
         }
-    }
-}
+      ]
+    };
+  }
+};
 </script>
