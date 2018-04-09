@@ -1179,20 +1179,22 @@
           "String"
         ],
         "acceptableValues": [
-          "\"Default\"",
-          "\"Soft Pastel\"",
-          "\"Harmony Light\"",
-          "\"Pastel\"",
           "\"Bright\"",
-          "\"Soft\"",
+          "\"Default\"",
+          "\"Harmony Light\"",
           "\"Ocean\"",
+          "\"Pastel\"",
+          "\"Soft\"",
+          "\"Soft Pastel\"",
           "\"Vintage\"",
           "\"Violet\"",
           "\"Carmine\"",
           "\"Dark Moon\"",
-          "\"Soft Blue\"",
           "\"Dark Violet\"",
-          "\"Green Mist\""
+          "\"Green Mist\"",
+          "\"Soft Blue\"",
+          "\"Material\"",
+          "\"Office\""
         ]
       },
       {
@@ -6144,20 +6146,22 @@
           "String"
         ],
         "acceptableValues": [
-          "\"Default\"",
-          "\"Soft Pastel\"",
-          "\"Harmony Light\"",
-          "\"Pastel\"",
           "\"Bright\"",
-          "\"Soft\"",
+          "\"Default\"",
+          "\"Harmony Light\"",
           "\"Ocean\"",
+          "\"Pastel\"",
+          "\"Soft\"",
+          "\"Soft Pastel\"",
           "\"Vintage\"",
           "\"Violet\"",
           "\"Carmine\"",
           "\"Dark Moon\"",
-          "\"Soft Blue\"",
           "\"Dark Violet\"",
-          "\"Green Mist\""
+          "\"Green Mist\"",
+          "\"Soft Blue\"",
+          "\"Material\"",
+          "\"Office\""
         ]
       },
       {
@@ -6964,20 +6968,22 @@
               "String"
             ],
             "acceptableValues": [
-              "\"Default\"",
-              "\"Soft Pastel\"",
-              "\"Harmony Light\"",
-              "\"Pastel\"",
               "\"Bright\"",
-              "\"Soft\"",
+              "\"Default\"",
+              "\"Harmony Light\"",
               "\"Ocean\"",
+              "\"Pastel\"",
+              "\"Soft\"",
+              "\"Soft Pastel\"",
               "\"Vintage\"",
               "\"Violet\"",
               "\"Carmine\"",
               "\"Dark Moon\"",
-              "\"Soft Blue\"",
               "\"Dark Violet\"",
-              "\"Green Mist\""
+              "\"Green Mist\"",
+              "\"Soft Blue\"",
+              "\"Material\"",
+              "\"Office\""
             ]
           },
           {
@@ -8429,6 +8435,12 @@
             ]
           },
           {
+            "name": "useIcons",
+            "types": [
+              "Boolean"
+            ]
+          },
+          {
             "name": "form",
             "types": [
               "Object"
@@ -8580,6 +8592,12 @@
           },
           {
             "name": "allowExportSelectedData",
+            "types": [
+              "Boolean"
+            ]
+          },
+          {
+            "name": "ignoreExcelErrors",
             "types": [
               "Boolean"
             ]
@@ -9082,9 +9100,29 @@
             ]
           },
           {
+            "name": "columnRenderingMode",
+            "types": [
+              "String"
+            ],
+            "acceptableValues": [
+              "\"standard\"",
+              "\"virtual\""
+            ]
+          },
+          {
             "name": "preloadEnabled",
             "types": [
               "Boolean"
+            ]
+          },
+          {
+            "name": "rowRenderingMode",
+            "types": [
+              "String"
+            ],
+            "acceptableValues": [
+              "\"standard\"",
+              "\"virtual\""
             ]
           }
         ]
@@ -9540,9 +9578,61 @@
         ]
       },
       {
-        "name": "filterPopup",
+        "name": "filterBuilderPopup",
         "types": [
           "Object"
+        ]
+      },
+      {
+        "name": "filterPanel",
+        "types": [
+          "Object"
+        ],
+        "options": [
+          {
+            "name": "visible",
+            "types": [
+              "Boolean"
+            ]
+          },
+          {
+            "name": "filterEnabled",
+            "types": [
+              "Boolean"
+            ]
+          },
+          {
+            "name": "customizeText",
+            "types": [
+              "Function"
+            ]
+          },
+          {
+            "name": "texts",
+            "types": [
+              "Object"
+            ],
+            "options": [
+              {
+                "name": "createFilter",
+                "types": [
+                  "String"
+                ]
+              },
+              {
+                "name": "clearFilter",
+                "types": [
+                  "String"
+                ]
+              },
+              {
+                "name": "filterEnabledHint",
+                "types": [
+                  "String"
+                ]
+              }
+            ]
+          }
         ]
       },
       {
@@ -9688,7 +9778,13 @@
       {
         "name": "filterSyncEnabled",
         "types": [
+          "String",
           "Boolean"
+        ],
+        "acceptableValues": [
+          "\"auto\"",
+          "true",
+          "false"
         ]
       },
       {
@@ -11876,20 +11972,22 @@
           "String"
         ],
         "acceptableValues": [
-          "\"Default\"",
-          "\"Soft Pastel\"",
-          "\"Harmony Light\"",
-          "\"Pastel\"",
           "\"Bright\"",
-          "\"Soft\"",
+          "\"Default\"",
+          "\"Harmony Light\"",
           "\"Ocean\"",
+          "\"Pastel\"",
+          "\"Soft\"",
+          "\"Soft Pastel\"",
           "\"Vintage\"",
           "\"Violet\"",
           "\"Carmine\"",
           "\"Dark Moon\"",
-          "\"Soft Blue\"",
           "\"Dark Violet\"",
-          "\"Green Mist\""
+          "\"Green Mist\"",
+          "\"Soft Blue\"",
+          "\"Material\"",
+          "\"Office\""
         ]
       },
       {
@@ -13539,20 +13637,22 @@
               "String"
             ],
             "acceptableValues": [
-              "\"Default\"",
-              "\"Soft Pastel\"",
-              "\"Harmony Light\"",
-              "\"Pastel\"",
               "\"Bright\"",
-              "\"Soft\"",
+              "\"Default\"",
+              "\"Harmony Light\"",
               "\"Ocean\"",
+              "\"Pastel\"",
+              "\"Soft\"",
+              "\"Soft Pastel\"",
               "\"Vintage\"",
               "\"Violet\"",
               "\"Carmine\"",
               "\"Dark Moon\"",
-              "\"Soft Blue\"",
               "\"Dark Violet\"",
-              "\"Green Mist\""
+              "\"Green Mist\"",
+              "\"Soft Blue\"",
+              "\"Material\"",
+              "\"Office\""
             ]
           },
           {
@@ -17483,20 +17583,22 @@
           "String"
         ],
         "acceptableValues": [
-          "\"Default\"",
-          "\"Soft Pastel\"",
-          "\"Harmony Light\"",
-          "\"Pastel\"",
           "\"Bright\"",
-          "\"Soft\"",
+          "\"Default\"",
+          "\"Harmony Light\"",
           "\"Ocean\"",
+          "\"Pastel\"",
+          "\"Soft\"",
+          "\"Soft Pastel\"",
           "\"Vintage\"",
           "\"Violet\"",
           "\"Carmine\"",
           "\"Dark Moon\"",
-          "\"Soft Blue\"",
           "\"Dark Violet\"",
-          "\"Green Mist\""
+          "\"Green Mist\"",
+          "\"Soft Blue\"",
+          "\"Material\"",
+          "\"Office\""
         ]
       },
       {
@@ -18491,6 +18593,16 @@
             ]
           },
           {
+            "name": "applyChangesMode",
+            "types": [
+              "String"
+            ],
+            "acceptableValues": [
+              "\"instantly\"",
+              "\"onDemand\""
+            ]
+          },
+          {
             "name": "texts",
             "types": [
               "Object"
@@ -18674,6 +18786,12 @@
             "name": "proxyUrl",
             "types": [
               "String"
+            ]
+          },
+          {
+            "name": "ignoreExcelErrors",
+            "types": [
+              "Boolean"
             ]
           }
         ]
@@ -19146,6 +19264,22 @@
               "String"
             ]
           }
+        ]
+      },
+      {
+        "name": "applyChangesMode",
+        "types": [
+          "String"
+        ],
+        "acceptableValues": [
+          "\"instantly\"",
+          "\"onDemand\""
+        ]
+      },
+      {
+        "name": "state",
+        "types": [
+          "Object"
         ]
       },
       {
@@ -21459,20 +21593,22 @@
           "String"
         ],
         "acceptableValues": [
-          "\"Default\"",
-          "\"Soft Pastel\"",
-          "\"Harmony Light\"",
-          "\"Pastel\"",
           "\"Bright\"",
-          "\"Soft\"",
+          "\"Default\"",
+          "\"Harmony Light\"",
           "\"Ocean\"",
+          "\"Pastel\"",
+          "\"Soft\"",
+          "\"Soft Pastel\"",
           "\"Vintage\"",
           "\"Violet\"",
           "\"Carmine\"",
           "\"Dark Moon\"",
-          "\"Soft Blue\"",
           "\"Dark Violet\"",
-          "\"Green Mist\""
+          "\"Green Mist\"",
+          "\"Soft Blue\"",
+          "\"Material\"",
+          "\"Office\""
         ]
       },
       {
@@ -21966,6 +22102,13 @@
         ]
       },
       {
+        "name": "container",
+        "types": [
+          "String",
+          "Any"
+        ]
+      },
+      {
         "name": "titleTemplate",
         "types": [
           "Object",
@@ -22246,6 +22389,13 @@
         "name": "showTitle",
         "types": [
           "Boolean"
+        ]
+      },
+      {
+        "name": "container",
+        "types": [
+          "String",
+          "Any"
         ]
       },
       {
@@ -23793,20 +23943,22 @@
               "String"
             ],
             "acceptableValues": [
-              "\"Default\"",
-              "\"Soft Pastel\"",
-              "\"Harmony Light\"",
-              "\"Pastel\"",
               "\"Bright\"",
-              "\"Soft\"",
+              "\"Default\"",
+              "\"Harmony Light\"",
               "\"Ocean\"",
+              "\"Pastel\"",
+              "\"Soft\"",
+              "\"Soft Pastel\"",
               "\"Vintage\"",
               "\"Violet\"",
               "\"Carmine\"",
               "\"Dark Moon\"",
-              "\"Soft Blue\"",
               "\"Dark Violet\"",
-              "\"Green Mist\""
+              "\"Green Mist\"",
+              "\"Soft Blue\"",
+              "\"Material\"",
+              "\"Office\""
             ]
           },
           {
@@ -24954,6 +25106,16 @@
             "name": "agendaDuration",
             "types": [
               "Number"
+            ]
+          },
+          {
+            "name": "groupOrientation",
+            "types": [
+              "String"
+            ],
+            "acceptableValues": [
+              "\"horizontal\"",
+              "\"vertical\""
             ]
           }
         ],
@@ -29734,6 +29896,13 @@
         ]
       },
       {
+        "name": "container",
+        "types": [
+          "String",
+          "Any"
+        ]
+      },
+      {
         "name": "visible",
         "types": [
           "Boolean"
@@ -30063,6 +30232,12 @@
             ]
           },
           {
+            "name": "useIcons",
+            "types": [
+              "Boolean"
+            ]
+          },
+          {
             "name": "form",
             "types": [
               "Object"
@@ -30142,9 +30317,29 @@
             ]
           },
           {
+            "name": "columnRenderingMode",
+            "types": [
+              "String"
+            ],
+            "acceptableValues": [
+              "\"standard\"",
+              "\"virtual\""
+            ]
+          },
+          {
             "name": "preloadEnabled",
             "types": [
               "Boolean"
+            ]
+          },
+          {
+            "name": "rowRenderingMode",
+            "types": [
+              "String"
+            ],
+            "acceptableValues": [
+              "\"standard\"",
+              "\"virtual\""
             ]
           }
         ]
@@ -30633,9 +30828,61 @@
         ]
       },
       {
-        "name": "filterPopup",
+        "name": "filterBuilderPopup",
         "types": [
           "Object"
+        ]
+      },
+      {
+        "name": "filterPanel",
+        "types": [
+          "Object"
+        ],
+        "options": [
+          {
+            "name": "visible",
+            "types": [
+              "Boolean"
+            ]
+          },
+          {
+            "name": "filterEnabled",
+            "types": [
+              "Boolean"
+            ]
+          },
+          {
+            "name": "customizeText",
+            "types": [
+              "Function"
+            ]
+          },
+          {
+            "name": "texts",
+            "types": [
+              "Object"
+            ],
+            "options": [
+              {
+                "name": "createFilter",
+                "types": [
+                  "String"
+                ]
+              },
+              {
+                "name": "clearFilter",
+                "types": [
+                  "String"
+                ]
+              },
+              {
+                "name": "filterEnabledHint",
+                "types": [
+                  "String"
+                ]
+              }
+            ]
+          }
         ]
       },
       {
@@ -30781,7 +31028,13 @@
       {
         "name": "filterSyncEnabled",
         "types": [
+          "String",
           "Boolean"
+        ],
+        "acceptableValues": [
+          "\"auto\"",
+          "true",
+          "false"
         ]
       },
       {
@@ -31561,20 +31814,22 @@
               "String"
             ],
             "acceptableValues": [
-              "\"Default\"",
-              "\"Soft Pastel\"",
-              "\"Harmony Light\"",
-              "\"Pastel\"",
               "\"Bright\"",
-              "\"Soft\"",
+              "\"Default\"",
+              "\"Harmony Light\"",
               "\"Ocean\"",
+              "\"Pastel\"",
+              "\"Soft\"",
+              "\"Soft Pastel\"",
               "\"Vintage\"",
               "\"Violet\"",
               "\"Carmine\"",
               "\"Dark Moon\"",
-              "\"Soft Blue\"",
               "\"Dark Violet\"",
-              "\"Green Mist\""
+              "\"Green Mist\"",
+              "\"Soft Blue\"",
+              "\"Material\"",
+              "\"Office\""
             ]
           },
           {
@@ -32917,20 +33172,22 @@
               "String"
             ],
             "acceptableValues": [
-              "\"Default\"",
-              "\"Soft Pastel\"",
-              "\"Harmony Light\"",
-              "\"Pastel\"",
               "\"Bright\"",
-              "\"Soft\"",
+              "\"Default\"",
+              "\"Harmony Light\"",
               "\"Ocean\"",
+              "\"Pastel\"",
+              "\"Soft\"",
+              "\"Soft Pastel\"",
               "\"Vintage\"",
               "\"Violet\"",
               "\"Carmine\"",
               "\"Dark Moon\"",
-              "\"Soft Blue\"",
               "\"Dark Violet\"",
-              "\"Green Mist\""
+              "\"Green Mist\"",
+              "\"Soft Blue\"",
+              "\"Material\"",
+              "\"Office\""
             ]
           },
           {
