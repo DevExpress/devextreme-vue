@@ -35,13 +35,13 @@ npm install --save devextreme@18.1-unstable devextreme-vue
 
 ### <a name="import_devextreme_modules"></a>Import DevExtreme Modules and Themes  ###
 
-Import DevExtreme modules in a file where you use a DevExtreme component.
+Import DevExtreme modules in a DevExtreme component's file.
 
 ```js
 import { DxButton } from 'devextreme-vue';
 ```
 
-DevExtreme themes can be imported only once in the main file of your application:
+DevExtreme themes can be imported only once in your application's main file:
 
 ```js
 import 'devextreme/dist/css/dx.common.css';
@@ -117,18 +117,18 @@ new Vue({
 
 ## <a name="api-reference"></a>API Reference ##
 
-DevExtreme Vue components mirror [DevExtreme JavaScript API](http://js.devexpress.com/Documentation/ApiReference/) but use Vue syntax for specifying widget options, subscribing to events and custom templates declaration.
+DevExtreme Vue components mirror [DevExtreme JavaScript API](http://js.devexpress.com/Documentation/ApiReference/) but use Vue syntax for specifying widget options, subscribing to events and custom template declaration.
 
 ## <a name="component-configuration"></a>Component Configuration ##
 
 ###  <a name="component-option"></a>Set Component Option ### 
-- A constant string value (e.g. the Button [text](http://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxButton/Configuration/#text)):
+- A constant string value (for example, the Button [text](http://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxButton/Configuration/#text)):
 
  ```html
  <dx-button text="Simple button" />
  ```
  
- - A constant non-string value (e.g. the CheckBox [value](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxCheckBox/Configuration/#value)):
+ - A constant non-string value (for example, the CheckBox [value](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxCheckBox/Configuration/#value)):
 
  ```html
  <dx-check-box :value="true" />
@@ -143,14 +143,14 @@ DevExtreme Vue components mirror [DevExtreme JavaScript API](http://js.devexpres
 
 ### <a name="two-way-binding"></a>Two-way Binding ###
 
-To bind some `bindingProperty` to a widget option use the [`sync`](https://vuejs.org/v2/guide/components-custom-events.html#sync-Modifier) modifier:
+Use the [`sync`](https://vuejs.org/v2/guide/components-custom-events.html#sync-Modifier) modifier to bind a `bindingProperty` to a widget option:
 
 ```html
 <dx-text-box :value.sync="bindingProperty" />
 ```
 
 ###  <a name="editor-value-binding"></a>Editors Value Binding ###
-The DevExtreme Vue editors also support [`v-model`](https://vuejs.org/v2/guide/forms.html) directive that creates two-way binding on the editor's value (e.g. TextBox [value](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxTextBox/Configuration/#value)):
+The DevExtreme Vue editors also support [`v-model`](https://vuejs.org/v2/guide/forms.html) directive that creates two-way binding on the editor's value (for example, TextBox [value](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxTextBox/Configuration/#value)):
 
 ```html
 <dx-text-box v-model="text" />
@@ -159,7 +159,7 @@ The DevExtreme Vue editors also support [`v-model`](https://vuejs.org/v2/guide/f
 ### <a name="custom-templates"></a>Custom templates ###
 You can customize widget elements' appearance via the corresponding template properties. 
 
-To specify a DevExtreme Vue Component template, use a [named slot](https://vuejs.org/v2/guide/components-slots.html#Named-Slots) to specify a template markup. You also should specify a [slot scope](https://vuejs.org/v2/guide/components-slots.html#Scoped-Slots) to get access to the template element data.
+To specify a DevExtreme Vue Component template, use a [named slot](https://vuejs.org/v2/guide/components-slots.html#Named-Slots) to specify a template markup. You also should specify a [slot scope](https://vuejs.org/v2/guide/components-slots.html#Scoped-Slots) to access the template element data.
 
 For instance, you can specify the itemTemplate:
 
@@ -189,7 +189,7 @@ new Vue({
 
 ```
 
-`item` is the default template name for the `itemTemplate` option of the dxList widget. You can specify a custom name for the `itemTemplate` option and for your `slot`:
+`item` is the default template name of the dxList widget's `itemTemplate` option. You can specify a custom name for the `itemTemplate` option and for your `slot`:
 
 ```html
 <div id="app">
@@ -201,7 +201,7 @@ new Vue({
 </div>
 ```
 
-Note that in a single file component, you cannot use the `<template>` tag for slot element (currently not allowed in Vue). Use `<div>` instead:
+Note that in a single file component, you cannot use the `<template>` tag for a slot element (currently not allowed in Vue). Use `<div>` instead:
 
 ```html
 <template>
@@ -219,7 +219,7 @@ In addition to using templates, you can put the following widgets' content direc
 [Resizable](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxResizable/),
 [ScrollView](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxScrollView/),
 [ValidationGroup](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxValidationGroup/).
-For instance, you can specify content for the [ScrollView](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxScrollView/) widget as follows:
+For instance, you can specify the [ScrollView](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxScrollView/) widget's content as follows:
 
 ```html
 <dx-scroll-view>
@@ -244,10 +244,10 @@ data: function() {
 }
 ```
 
-You can find the full list of component events in the Events section of each DevExtreme widget API Reference (e.g. [TextBox events](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxTextBox/Events/)).
+You can find the full list of component events in each DevExtreme widget API Reference's Events section (for example, [TextBox events](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxTextBox/Events/)).
 
 ## <a name="type-checks"></a>Type Checks ##
-DevExtreme Vue compoents provide [Prop Validation and Type Checks](https://vuejs.org/v2/guide/components-props.html#Prop-Validation), which means that you should specify proper values for the components' properties. Otherwise, Vue produces a console warning (if you are using the development build).
+DevExtreme Vue components provide [Prop Validation and Type Checks](https://vuejs.org/v2/guide/components-props.html#Prop-Validation), which means that you should specify proper values for the components' properties. Otherwise, Vue produces a console warning (if you are using the development build).
 
 ## <a name="data-layer-and-utils"></a>DevExtreme Data Layer and Utils ##
 The DevExtreme includes a [Data Layer](https://js.devexpress.com/Documentation/Guide/Data_Layer/Data_Layer/) and [Utils](https://js.devexpress.com/Documentation/ApiReference/Common/utils/) that can be helpful in different scenarios.
@@ -255,12 +255,12 @@ The DevExtreme includes a [Data Layer](https://js.devexpress.com/Documentation/G
 
 ## <a name="license"></a>License ##
 
-**DevExtreme Vue components are released as a MIT-licensed (free and open-source) add-on to DevExtreme.**
+**DevExtreme Vue components are released as an MIT-licensed (free and open-source) add-on to DevExtreme.**
 
 Familiarize yourself with the [DevExtreme License](https://js.devexpress.com/Licensing/).
 
 [A free trial is available!](http://js.devexpress.com/Buy/)
 
 ## <a name="support-feedback"></a>Support & Feedback ##
-* For general Vue questions, check [Vue Guide](https://vuejs.org/v2/guide/)
-* For questions regarding DevExtreme libraries and widgets' APIs, use [DevExpress Support Center](https://www.devexpress.com/Support/Center)
+* Check the [Vue Guide](https://vuejs.org/v2/guide/) for general Vue questions
+* For questions regarding DevExtreme libraries and widgets' APIs, use the [DevExpress Support Center](https://www.devexpress.com/Support/Center)
