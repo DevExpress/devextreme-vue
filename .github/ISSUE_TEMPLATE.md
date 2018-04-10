@@ -1,5 +1,5 @@
 <!--
-  Note: if the issue is a general React question, please check React Docs first: https://reactjs.org/docs
+  Note: if the issue is a general Vue question, please check Vue Docs first: https://vuejs.org/v2/guide/
   If your question is about  DevExtreme widgets' APIs, use the DevExpress Support Center: https://www.devexpress.com/Support/Center
 -->
 
@@ -23,5 +23,5 @@
 
 ### Environment Details
 <!--
-Specify DevExtreme version, DevExtreme React Components version, React version and other environment details or notes you consider important.
+Specify DevExtreme version, DevExtreme Vue Components version, Vue version and other environment details or notes you consider important.
 -->
