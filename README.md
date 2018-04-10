@@ -122,10 +122,16 @@ DevExtreme Vue components mirror [DevExtreme JavaScript API](http://js.devexpres
 ## <a name="component-configuration"></a>Component Configuration ##
 
 ###  <a name="component-option"></a>Set Component Option ### 
-- A constant value (e.g. the Button [text](http://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxButton/Configuration/#text)):
+- A constant string value (e.g. the Button [text](http://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxButton/Configuration/#text)):
 
  ```html
  <dx-button text="Simple button" />
+ ```
+ 
+ - A constant non-string value (e.g. the CheckBox [value](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxCheckBox/Configuration/#value)):
+
+ ```html
+ <dx-check-box :value="true" />
  ```
 
 - A value from a component data:
