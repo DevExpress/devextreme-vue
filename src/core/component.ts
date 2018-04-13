@@ -1,4 +1,4 @@
-import Vue, { VueConstructor } from "vue";
+import Vue, { VueConstructor, VNode } from "vue";
 
 import * as events from "devextreme/events";
 
@@ -6,7 +6,9 @@ const DX_TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper";
 const DX_REMOVE_EVENT = "dxremove";
 
 const DxComponent: VueConstructor = Vue.extend({
-    template: "<div><slot/></div>",
+    render(createElement : any) : VNode {
+        return createElement('div', this.$slots.default)
+    },
 
     mounted(): void {
         const options: object = {
