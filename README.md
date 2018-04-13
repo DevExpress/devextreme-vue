@@ -11,7 +11,7 @@ This project allows you to use [DevExtreme Widgets](http://js.devexpress.com/Dem
   * [Prerequisites](#prerequisites)
   * [Install DevExtreme](#installation)
   * [Use DevExtreme Components](#use-components)
-  * [API Reference](#api-reference)
+* [API Reference](#api-reference)
 * [Component Configuration](#component-configuration)
   * [Set Component Option](#component-option)
   * [Two-way Binding](#two-way-binding)
