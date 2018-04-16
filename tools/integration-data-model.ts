@@ -7,12 +7,16 @@ export interface IWidget {
   templates: string[];
 }
 export interface IOption {
-  acceptableValues: string[];
   name: string;
   options: IOption[];
   types: string[];
+  valueRestriction: IValueRestriction;
 }
 export interface ISubscribableOption {
   name: string;
+  type: string;
+}
+export interface IValueRestriction {
+  acceptableValues: string[];
   type: string;
 }
