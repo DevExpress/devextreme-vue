@@ -9156,8 +9156,7 @@
       {
         "name": "filterSyncEnabled",
         "types": [
-          "Boolean",
-          "String"
+          "Boolean"
         ]
       },
       {
@@ -9376,8 +9375,7 @@
           {
             "name": "enabled",
             "types": [
-              "Boolean",
-              "String"
+              "Boolean"
             ]
           },
           {
@@ -9660,8 +9658,7 @@
           {
             "name": "allowedPageSizes",
             "types": [
-              "Array",
-              "String"
+              "Array"
             ]
           },
           {
@@ -9691,8 +9688,7 @@
           {
             "name": "visible",
             "types": [
-              "Boolean",
-              "String"
+              "Boolean"
             ]
           }
         ]
@@ -9727,8 +9723,7 @@
         "name": "remoteOperations",
         "types": [
           "Boolean",
-          "Object",
-          "String"
+          "Object"
         ],
         "options": [
           {
@@ -9870,8 +9865,7 @@
           {
             "name": "useNative",
             "types": [
-              "Boolean",
-              "String"
+              "Boolean"
             ]
           }
         ]
@@ -17486,219 +17480,6 @@
     "isEditor": true
   },
   {
-    "name": "DxPanorama",
-    "exportPath": "ui/panorama",
-    "subscribableOptions": [
-      {
-        "name": "items",
-        "type": "any"
-      },
-      {
-        "name": "selectedIndex",
-        "type": "any"
-      },
-      {
-        "name": "selectedItem",
-        "type": "any"
-      }
-    ],
-    "templates": [
-      "itemTemplate"
-    ],
-    "options": [
-      {
-        "name": "activeStateEnabled",
-        "types": [
-          "Boolean"
-        ]
-      },
-      {
-        "name": "backgroundImage",
-        "types": [
-          "Object"
-        ],
-        "options": [
-          {
-            "name": "height",
-            "types": [
-              "Number"
-            ]
-          },
-          {
-            "name": "url",
-            "types": [
-              "String"
-            ]
-          },
-          {
-            "name": "width",
-            "types": [
-              "Number"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "dataSource",
-        "types": [
-          "Array",
-          "Object",
-          "String"
-        ]
-      },
-      {
-        "name": "disabled",
-        "types": [
-          "Boolean"
-        ]
-      },
-      {
-        "name": "elementAttr",
-        "types": [
-          "Object"
-        ]
-      },
-      {
-        "name": "focusStateEnabled",
-        "types": [
-          "Boolean"
-        ]
-      },
-      {
-        "name": "height",
-        "types": [
-          "Function",
-          "Number",
-          "String"
-        ]
-      },
-      {
-        "name": "hint",
-        "types": [
-          "String"
-        ]
-      },
-      {
-        "name": "hoverStateEnabled",
-        "types": [
-          "Boolean"
-        ]
-      },
-      {
-        "name": "itemHoldTimeout",
-        "types": [
-          "Number"
-        ]
-      },
-      {
-        "name": "items",
-        "types": [
-          "Array"
-        ]
-      },
-      {
-        "name": "itemTemplate",
-        "types": [
-          "Function",
-          "Object"
-        ]
-      },
-      {
-        "name": "onContentReady",
-        "types": [
-          "Function"
-        ]
-      },
-      {
-        "name": "onDisposing",
-        "types": [
-          "Function"
-        ]
-      },
-      {
-        "name": "onInitialized",
-        "types": [
-          "Function"
-        ]
-      },
-      {
-        "name": "onItemClick",
-        "types": [
-          "Function",
-          "String"
-        ]
-      },
-      {
-        "name": "onItemContextMenu",
-        "types": [
-          "Function"
-        ]
-      },
-      {
-        "name": "onItemHold",
-        "types": [
-          "Function"
-        ]
-      },
-      {
-        "name": "onItemRendered",
-        "types": [
-          "Function"
-        ]
-      },
-      {
-        "name": "onOptionChanged",
-        "types": [
-          "Function"
-        ]
-      },
-      {
-        "name": "onSelectionChanged",
-        "types": [
-          "Function"
-        ]
-      },
-      {
-        "name": "rtlEnabled",
-        "types": [
-          "Boolean"
-        ]
-      },
-      {
-        "name": "selectedIndex",
-        "types": [
-          "Number"
-        ]
-      },
-      {
-        "name": "selectedItem",
-        "types": [
-          "Object"
-        ]
-      },
-      {
-        "name": "title",
-        "types": [
-          "String"
-        ]
-      },
-      {
-        "name": "visible",
-        "types": [
-          "Boolean"
-        ]
-      },
-      {
-        "name": "width",
-        "types": [
-          "Function",
-          "Number",
-          "String"
-        ]
-      }
-    ]
-  },
-  {
     "name": "DxPieChart",
     "exportPath": "viz/pie_chart",
     "options": [
@@ -18736,203 +18517,6 @@
     ]
   },
   {
-    "name": "DxPivot",
-    "exportPath": "ui/pivot",
-    "subscribableOptions": [
-      {
-        "name": "items",
-        "type": "any"
-      },
-      {
-        "name": "selectedIndex",
-        "type": "any"
-      },
-      {
-        "name": "selectedItem",
-        "type": "any"
-      }
-    ],
-    "templates": [
-      "contentTemplate",
-      "itemTemplate",
-      "itemTitleTemplate"
-    ],
-    "options": [
-      {
-        "name": "activeStateEnabled",
-        "types": [
-          "Boolean"
-        ]
-      },
-      {
-        "name": "contentTemplate",
-        "types": [
-          "Function",
-          "Object"
-        ]
-      },
-      {
-        "name": "dataSource",
-        "types": [
-          "Array",
-          "Object",
-          "String"
-        ]
-      },
-      {
-        "name": "disabled",
-        "types": [
-          "Boolean"
-        ]
-      },
-      {
-        "name": "elementAttr",
-        "types": [
-          "Object"
-        ]
-      },
-      {
-        "name": "height",
-        "types": [
-          "Function",
-          "Number",
-          "String"
-        ]
-      },
-      {
-        "name": "hint",
-        "types": [
-          "String"
-        ]
-      },
-      {
-        "name": "hoverStateEnabled",
-        "types": [
-          "Boolean"
-        ]
-      },
-      {
-        "name": "itemHoldTimeout",
-        "types": [
-          "Number"
-        ]
-      },
-      {
-        "name": "items",
-        "types": [
-          "Array"
-        ]
-      },
-      {
-        "name": "itemTemplate",
-        "types": [
-          "Function",
-          "Object"
-        ]
-      },
-      {
-        "name": "itemTitleTemplate",
-        "types": [
-          "Function",
-          "Object"
-        ]
-      },
-      {
-        "name": "onContentReady",
-        "types": [
-          "Function"
-        ]
-      },
-      {
-        "name": "onDisposing",
-        "types": [
-          "Function"
-        ]
-      },
-      {
-        "name": "onInitialized",
-        "types": [
-          "Function"
-        ]
-      },
-      {
-        "name": "onItemClick",
-        "types": [
-          "Function",
-          "String"
-        ]
-      },
-      {
-        "name": "onItemContextMenu",
-        "types": [
-          "Function"
-        ]
-      },
-      {
-        "name": "onItemHold",
-        "types": [
-          "Function"
-        ]
-      },
-      {
-        "name": "onItemRendered",
-        "types": [
-          "Function"
-        ]
-      },
-      {
-        "name": "onOptionChanged",
-        "types": [
-          "Function"
-        ]
-      },
-      {
-        "name": "onSelectionChanged",
-        "types": [
-          "Function"
-        ]
-      },
-      {
-        "name": "rtlEnabled",
-        "types": [
-          "Boolean"
-        ]
-      },
-      {
-        "name": "selectedIndex",
-        "types": [
-          "Number"
-        ]
-      },
-      {
-        "name": "selectedItem",
-        "types": [
-          "Object"
-        ]
-      },
-      {
-        "name": "swipeEnabled",
-        "types": [
-          "Boolean"
-        ]
-      },
-      {
-        "name": "visible",
-        "types": [
-          "Boolean"
-        ]
-      },
-      {
-        "name": "width",
-        "types": [
-          "Function",
-          "Number",
-          "String"
-        ]
-      }
-    ]
-  },
-  {
     "name": "DxPivotGrid",
     "exportPath": "ui/pivot_grid",
     "options": [
@@ -19426,8 +19010,7 @@
           {
             "name": "useNative",
             "types": [
-              "Boolean",
-              "String"
+              "Boolean"
             ]
           }
         ]
@@ -25923,6 +25506,12 @@
         ]
       },
       {
+        "name": "selectedCellData",
+        "types": [
+          "Array"
+        ]
+      },
+      {
         "name": "shadeUntilCurrentTime",
         "types": [
           "Boolean"
@@ -31219,8 +30808,7 @@
       {
         "name": "filterSyncEnabled",
         "types": [
-          "Boolean",
-          "String"
+          "Boolean"
         ]
       },
       {
@@ -31343,8 +30931,7 @@
           {
             "name": "enabled",
             "types": [
-              "Boolean",
-              "String"
+              "Boolean"
             ]
           },
           {
@@ -31588,8 +31175,7 @@
           {
             "name": "allowedPageSizes",
             "types": [
-              "Array",
-              "String"
+              "Array"
             ]
           },
           {
@@ -31619,8 +31205,7 @@
           {
             "name": "visible",
             "types": [
-              "Boolean",
-              "String"
+              "Boolean"
             ]
           }
         ]
@@ -31661,8 +31246,7 @@
       {
         "name": "remoteOperations",
         "types": [
-          "Object",
-          "String"
+          "Object"
         ],
         "options": [
           {
@@ -31784,8 +31368,7 @@
           {
             "name": "useNative",
             "types": [
-              "Boolean",
-              "String"
+              "Boolean"
             ]
           }
         ]
