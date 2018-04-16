@@ -77,4 +77,4 @@ const renderExtendedProp: (model: IProp) => string = createTempate(`
 // tslint:enable:max-line-length
 
 export default generate;
-export { IComponent };
+export { IComponent, IProp };

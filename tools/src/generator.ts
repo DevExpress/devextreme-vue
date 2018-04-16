@@ -2,7 +2,7 @@ import { writeFileSync as writeFile } from "fs";
 import { dirname as getDirName, join as joinPaths, relative as getRelativePath, sep as pathSeparator } from "path";
 
 import { IOption, IWidget } from "../integration-data-model";
-import generateComponent, { IComponent } from "./component-generator";
+import generateComponent, { IComponent, IProp } from "./component-generator";
 import { convertTypes } from "./converter";
 import { removeExtension, removePrefix, toKebabCase } from "./helpers";
 import generateIndex from "./index-generator";
@@ -46,9 +46,10 @@ function mapWidget(raw: IWidget, baseComponent: string): { fileName: string, com
   };
 }
 
-function mapProp(rawOption: IOption) {
+function mapProp(rawOption: IOption): IProp {
   return {
-    ...rawOption,
+    name: rawOption.name,
+    acceptableValues: rawOption.valueRestriction && rawOption.valueRestriction.acceptableValues,
     types: convertTypes(rawOption.types)
   };
 }
