@@ -154,7 +154,7 @@ const DxCLASS_NAME: VueConstructor = Vue.extend({
   props: {
     PROP1: {
       type: TYPE1,
-      validator: (v) => ["VAL1", "VAL2"].indexOf(v) !== -1
+      validator: (v) => typeof(v) !== "string" || ["VAL1", "VAL2"].indexOf(v) !== -1
     }
   },
   computed: {

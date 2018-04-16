@@ -5,6 +5,10 @@
             text="I'm colored"
             :elementAttr="{ style: 'background-color: #ffc' }"
         />
+        <dx-button
+            text="I'm dangerous"
+            type="danger"
+        />
     </example-block>
 </template>
 
