@@ -198,7 +198,7 @@ new Vue({
 
 ```html
 <div id="app">
-    <dx-list :items="items" itemTemplate="my-template">
+    <dx-list :items="items" item-template="my-template">
         <template slot="my-template" slot-scope="data">
             <i>This is my template for {{data}}</i>
         </template>
