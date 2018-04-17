@@ -3,8 +3,10 @@ import generate from "./component-generator";
 it("generates", () => {
     //#region EXPECTED
     const EXPECTED = `
+import * as VueType from "vue";
+const Vue = VueType.default || VueType;
 import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
-import Vue, { VueConstructor } from "vue";
+import { VueConstructor } from "vue";
 import BaseComponent from "BASE_COMPONENT_PATH";
 
 const DxCLASS_NAME: VueConstructor = Vue.extend({
@@ -36,8 +38,10 @@ describe("props generation", () => {
     it("renders props in alphabetic order", () => {
         //#region EXPECTED
         const EXPECTED = `
+import * as VueType from "vue";
+const Vue = VueType.default || VueType;
 import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
-import Vue, { VueConstructor } from "vue";
+import { VueConstructor } from "vue";
 import BaseComponent from "BASE_COMPONENT_PATH";
 
 const DxCLASS_NAME: VueConstructor = Vue.extend({
@@ -74,8 +78,10 @@ export { DxCLASS_NAME };
     it("renders props without type", () => {
         //#region EXPECTED
         const EXPECTED = `
+import * as VueType from "vue";
+const Vue = VueType.default || VueType;
 import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
-import Vue, { VueConstructor } from "vue";
+import { VueConstructor } from "vue";
 import BaseComponent from "BASE_COMPONENT_PATH";
 
 const DxCLASS_NAME: VueConstructor = Vue.extend({
@@ -109,8 +115,10 @@ export { DxCLASS_NAME };
     it("renders props with type", () => {
         //#region EXPECTED
         const EXPECTED = `
+import * as VueType from "vue";
+const Vue = VueType.default || VueType;
 import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
-import Vue, { VueConstructor } from "vue";
+import { VueConstructor } from "vue";
 import BaseComponent from "BASE_COMPONENT_PATH";
 
 const DxCLASS_NAME: VueConstructor = Vue.extend({
@@ -145,8 +153,10 @@ export { DxCLASS_NAME };
     it("renders props with acceptable values", () => {
         //#region EXPECTED
         const EXPECTED = `
+import * as VueType from "vue";
+const Vue = VueType.default || VueType;
 import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
-import Vue, { VueConstructor } from "vue";
+import { VueConstructor } from "vue";
 import BaseComponent from "BASE_COMPONENT_PATH";
 
 const DxCLASS_NAME: VueConstructor = Vue.extend({
@@ -190,8 +200,10 @@ export { DxCLASS_NAME };
 it("generates class with model", () => {
     //#region EXPECTED
     const EXPECTED = `
+import * as VueType from "vue";
+const Vue = VueType.default || VueType;
 import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
-import Vue, { VueConstructor } from "vue";
+import { VueConstructor } from "vue";
 import BaseComponent from "BASE_COMPONENT_PATH";
 
 const DxCLASS_NAME: VueConstructor = Vue.extend({
