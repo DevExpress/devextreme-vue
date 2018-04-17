@@ -24,7 +24,7 @@ This project allows you to use [DevExtreme Widgets](http://js.devexpress.com/Dem
 * [License](#license)
 * [Support & feedback](#support-feedback)
 ## <a name="getting-started"></a>Getting Started ##
-You can try this [live example](https://plnkr.co/edit/Jqnd4HB7CpFp1Xd3Ngj3?p=preview) (no need to install anything).
+You can try this [live example](https://embed.plnkr.co/Jqnd4HB7CpFp1Xd3Ngj3/) (no need to install anything).
 
 If you’d rather use a local development environment check out the sections below.
 ### <a name="prerequisites"></a>Prerequisites ###
