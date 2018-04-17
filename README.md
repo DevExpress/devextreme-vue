@@ -171,9 +171,9 @@ For instance, you can specify the itemTemplate:
 ```html
 <div id="app">
     <dx-list :items="items">
-        <template slot="item" slot-scope="data">
+        <div slot="item" slot-scope="data">
             <i>This is my template for {{data}}</i>
-        </template>
+        </div>
     </dx-list>
 </div>
 ```
@@ -199,23 +199,11 @@ new Vue({
 ```html
 <div id="app">
     <dx-list :items="items" item-template="my-template">
-        <template slot="my-template" slot-scope="data">
-            <i>This is my template for {{data}}</i>
-        </template>
-    </dx-list>
-</div>
-```
-
-Note that in a single file component, you cannot use the `<template>` tag for a slot element (currently not allowed in Vue). Use `<div>` instead:
-
-```html
-<template>
-    <dx-list :items="items">
-        <div slot="item" slot-scope="data">
+        <div slot="my-template" slot-scope="data">
             <i>This is my template for {{data}}</i>
         </div>
     </dx-list>
-</template>
+</div>
 ```
 
 ### <a name="components-with-transcluded-content"></a>Components with Transcluded Content ##
