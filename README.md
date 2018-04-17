@@ -106,7 +106,7 @@ new Vue({
 
 ... or directly in a vue template
 
-```
+```js
 new Vue({
   el: '#app',
   components: { DxButton },
