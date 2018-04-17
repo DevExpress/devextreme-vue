@@ -43,8 +43,10 @@ function createPropModel(p: IProp) {
 
 // tslint:disable:max-line-length
 const renderComponent: (model: IComponentModel) => string = createTempate(`
+import VueType = require("vue");
+const Vue = VueType.default || VueType;
 import <#= it.widgetName #> from "devextreme/<#= it.dxExportPath #>";
-import Vue, { VueConstructor } from "vue";
+import { VueConstructor } from "vue";
 import BaseComponent from "<#= it.baseComponentPath #>";
 
 const Dx<#= it.name #>: VueConstructor = Vue.extend({
