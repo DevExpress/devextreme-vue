@@ -1,5 +1,4 @@
-// tslint:disable-next-line:no-var-requires
-const VueType = require("vue");
+import * as VueType from "vue";
 import { VNode, VueConstructor } from "vue";
 
 import * as events from "devextreme/events";
