@@ -1266,7 +1266,32 @@
         "name": "theme",
         "types": [
           "String"
-        ]
+        ],
+        "valueRestriction": {
+          "type": "String",
+          "acceptableValues": [
+            "\"generic.light\"",
+            "\"generic.dark\"",
+            "\"generic.contrast\"",
+            "\"generic.carmine\"",
+            "\"generic.darkmoon\"",
+            "\"generic.softblue\"",
+            "\"generic.darkviolet\"",
+            "\"generic.greenmist\"",
+            "\"android5.light\"",
+            "\"ios7.default\"",
+            "\"generic.light\"",
+            "\"generic.dark\"",
+            "\"generic.contrast\"",
+            "\"generic.carmine\"",
+            "\"generic.darkmoon\"",
+            "\"generic.softblue\"",
+            "\"generic.darkviolet\"",
+            "\"generic.greenmist\"",
+            "\"android5.light\"",
+            "\"ios7.default\""
+          ]
+        }
       },
       {
         "name": "title",
@@ -1911,7 +1936,32 @@
         "name": "theme",
         "types": [
           "String"
-        ]
+        ],
+        "valueRestriction": {
+          "type": "String",
+          "acceptableValues": [
+            "\"generic.light\"",
+            "\"generic.dark\"",
+            "\"generic.contrast\"",
+            "\"generic.carmine\"",
+            "\"generic.darkmoon\"",
+            "\"generic.softblue\"",
+            "\"generic.darkviolet\"",
+            "\"generic.greenmist\"",
+            "\"android5.light\"",
+            "\"ios7.default\"",
+            "\"generic.light\"",
+            "\"generic.dark\"",
+            "\"generic.contrast\"",
+            "\"generic.carmine\"",
+            "\"generic.darkmoon\"",
+            "\"generic.softblue\"",
+            "\"generic.darkviolet\"",
+            "\"generic.greenmist\"",
+            "\"android5.light\"",
+            "\"ios7.default\""
+          ]
+        }
       },
       {
         "name": "tooltip",
@@ -2604,7 +2654,30 @@
               "Number",
               "Object",
               "String"
-            ]
+            ],
+            "valueRestriction": {
+              "type": "String",
+              "acceptableValues": [
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\"",
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\""
+              ]
+            }
           },
           {
             "name": "allowDecimals",
@@ -3058,7 +3131,20 @@
                 "types": [
                   "Object",
                   "String"
-                ]
+                ],
+                "valueRestriction": {
+                  "type": "String",
+                  "acceptableValues": [
+                    "\"stagger\"",
+                    "\"rotate\"",
+                    "\"hide\"",
+                    "\"none\"",
+                    "\"stagger\"",
+                    "\"rotate\"",
+                    "\"hide\"",
+                    "\"none\""
+                  ]
+                }
               },
               {
                 "name": "rotationAngle",
@@ -3190,7 +3276,30 @@
               "Number",
               "Object",
               "String"
-            ]
+            ],
+            "valueRestriction": {
+              "type": "String",
+              "acceptableValues": [
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\"",
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\""
+              ]
+            }
           },
           {
             "name": "minValueMargin",
@@ -3427,7 +3536,30 @@
               "Number",
               "Object",
               "String"
-            ]
+            ],
+            "valueRestriction": {
+              "type": "String",
+              "acceptableValues": [
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\"",
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\""
+              ]
+            }
           },
           {
             "name": "title",
@@ -3753,7 +3885,20 @@
                 "types": [
                   "Object",
                   "String"
-                ]
+                ],
+                "valueRestriction": {
+                  "type": "String",
+                  "acceptableValues": [
+                    "\"stagger\"",
+                    "\"rotate\"",
+                    "\"hide\"",
+                    "\"none\"",
+                    "\"stagger\"",
+                    "\"rotate\"",
+                    "\"hide\"",
+                    "\"none\""
+                  ]
+                }
               },
               {
                 "name": "rotationAngle",
@@ -5485,7 +5630,32 @@
         "name": "theme",
         "types": [
           "String"
-        ]
+        ],
+        "valueRestriction": {
+          "type": "String",
+          "acceptableValues": [
+            "\"generic.light\"",
+            "\"generic.dark\"",
+            "\"generic.contrast\"",
+            "\"generic.carmine\"",
+            "\"generic.darkmoon\"",
+            "\"generic.softblue\"",
+            "\"generic.darkviolet\"",
+            "\"generic.greenmist\"",
+            "\"android5.light\"",
+            "\"ios7.default\"",
+            "\"generic.light\"",
+            "\"generic.dark\"",
+            "\"generic.contrast\"",
+            "\"generic.carmine\"",
+            "\"generic.darkmoon\"",
+            "\"generic.softblue\"",
+            "\"generic.darkviolet\"",
+            "\"generic.greenmist\"",
+            "\"android5.light\"",
+            "\"ios7.default\""
+          ]
+        }
       },
       {
         "name": "title",
@@ -6212,7 +6382,20 @@
                 "types": [
                   "Object",
                   "String"
-                ]
+                ],
+                "valueRestriction": {
+                  "type": "String",
+                  "acceptableValues": [
+                    "\"stagger\"",
+                    "\"rotate\"",
+                    "\"hide\"",
+                    "\"none\"",
+                    "\"stagger\"",
+                    "\"rotate\"",
+                    "\"hide\"",
+                    "\"none\""
+                  ]
+                }
               },
               {
                 "name": "rotationAngle",
@@ -6350,7 +6533,30 @@
               "Number",
               "Object",
               "String"
-            ]
+            ],
+            "valueRestriction": {
+              "type": "String",
+              "acceptableValues": [
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\"",
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\""
+              ]
+            }
           },
           {
             "name": "minValueMargin",
@@ -6611,7 +6817,30 @@
               "Number",
               "Object",
               "String"
-            ]
+            ],
+            "valueRestriction": {
+              "type": "String",
+              "acceptableValues": [
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\"",
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\""
+              ]
+            }
           },
           {
             "name": "title",
@@ -7477,7 +7706,24 @@
             "name": "type",
             "types": [
               "String"
-            ]
+            ],
+            "valueRestriction": {
+              "type": "String",
+              "acceptableValues": [
+                "\"rectangleNeedle\"",
+                "\"triangleNeedle\"",
+                "\"twoColorNeedle\"",
+                "\"rangeBar\"",
+                "\"triangleMarker\"",
+                "\"textCloud\"",
+                "\"rectangleNeedle\"",
+                "\"triangleNeedle\"",
+                "\"twoColorNeedle\"",
+                "\"rangeBar\"",
+                "\"triangleMarker\"",
+                "\"textCloud\""
+              ]
+            }
           }
         ]
       },
@@ -7491,7 +7737,32 @@
         "name": "theme",
         "types": [
           "String"
-        ]
+        ],
+        "valueRestriction": {
+          "type": "String",
+          "acceptableValues": [
+            "\"generic.light\"",
+            "\"generic.dark\"",
+            "\"generic.contrast\"",
+            "\"generic.carmine\"",
+            "\"generic.darkmoon\"",
+            "\"generic.softblue\"",
+            "\"generic.darkviolet\"",
+            "\"generic.greenmist\"",
+            "\"android5.light\"",
+            "\"ios7.default\"",
+            "\"generic.light\"",
+            "\"generic.dark\"",
+            "\"generic.contrast\"",
+            "\"generic.carmine\"",
+            "\"generic.darkmoon\"",
+            "\"generic.softblue\"",
+            "\"generic.darkviolet\"",
+            "\"generic.greenmist\"",
+            "\"android5.light\"",
+            "\"ios7.default\""
+          ]
+        }
       },
       {
         "name": "title",
@@ -7777,7 +8048,24 @@
             "name": "type",
             "types": [
               "String"
-            ]
+            ],
+            "valueRestriction": {
+              "type": "String",
+              "acceptableValues": [
+                "\"rectangleNeedle\"",
+                "\"triangleNeedle\"",
+                "\"twoColorNeedle\"",
+                "\"rangeBar\"",
+                "\"triangleMarker\"",
+                "\"textCloud\"",
+                "\"rectangleNeedle\"",
+                "\"triangleNeedle\"",
+                "\"twoColorNeedle\"",
+                "\"rangeBar\"",
+                "\"triangleMarker\"",
+                "\"textCloud\""
+              ]
+            }
           }
         ]
       }
@@ -10038,6 +10326,7 @@
             "valueRestriction": {
               "type": "String",
               "acceptableValues": [
+                "undefined",
                 "undefined",
                 "\"asc\"",
                 "\"desc\""
@@ -13108,7 +13397,32 @@
         "name": "theme",
         "types": [
           "String"
-        ]
+        ],
+        "valueRestriction": {
+          "type": "String",
+          "acceptableValues": [
+            "\"generic.light\"",
+            "\"generic.dark\"",
+            "\"generic.contrast\"",
+            "\"generic.carmine\"",
+            "\"generic.darkmoon\"",
+            "\"generic.softblue\"",
+            "\"generic.darkviolet\"",
+            "\"generic.greenmist\"",
+            "\"android5.light\"",
+            "\"ios7.default\"",
+            "\"generic.light\"",
+            "\"generic.dark\"",
+            "\"generic.contrast\"",
+            "\"generic.carmine\"",
+            "\"generic.darkmoon\"",
+            "\"generic.softblue\"",
+            "\"generic.darkviolet\"",
+            "\"generic.greenmist\"",
+            "\"android5.light\"",
+            "\"ios7.default\""
+          ]
+        }
       },
       {
         "name": "title",
@@ -14274,7 +14588,24 @@
             "name": "type",
             "types": [
               "String"
-            ]
+            ],
+            "valueRestriction": {
+              "type": "String",
+              "acceptableValues": [
+                "\"rectangle\"",
+                "\"circle\"",
+                "\"rhombus\"",
+                "\"rangeBar\"",
+                "\"triangleMarker\"",
+                "\"textCloud\"",
+                "\"rectangle\"",
+                "\"circle\"",
+                "\"rhombus\"",
+                "\"rangeBar\"",
+                "\"triangleMarker\"",
+                "\"textCloud\""
+              ]
+            }
           }
         ]
       },
@@ -14288,7 +14619,32 @@
         "name": "theme",
         "types": [
           "String"
-        ]
+        ],
+        "valueRestriction": {
+          "type": "String",
+          "acceptableValues": [
+            "\"generic.light\"",
+            "\"generic.dark\"",
+            "\"generic.contrast\"",
+            "\"generic.carmine\"",
+            "\"generic.darkmoon\"",
+            "\"generic.softblue\"",
+            "\"generic.darkviolet\"",
+            "\"generic.greenmist\"",
+            "\"android5.light\"",
+            "\"ios7.default\"",
+            "\"generic.light\"",
+            "\"generic.dark\"",
+            "\"generic.contrast\"",
+            "\"generic.carmine\"",
+            "\"generic.darkmoon\"",
+            "\"generic.softblue\"",
+            "\"generic.darkviolet\"",
+            "\"generic.greenmist\"",
+            "\"android5.light\"",
+            "\"ios7.default\""
+          ]
+        }
       },
       {
         "name": "title",
@@ -14574,7 +14930,24 @@
             "name": "type",
             "types": [
               "String"
-            ]
+            ],
+            "valueRestriction": {
+              "type": "String",
+              "acceptableValues": [
+                "\"rectangle\"",
+                "\"circle\"",
+                "\"rhombus\"",
+                "\"rangeBar\"",
+                "\"triangleMarker\"",
+                "\"textCloud\"",
+                "\"rectangle\"",
+                "\"circle\"",
+                "\"rhombus\"",
+                "\"rangeBar\"",
+                "\"triangleMarker\"",
+                "\"textCloud\""
+              ]
+            }
           }
         ]
       }
@@ -18224,7 +18597,32 @@
         "name": "theme",
         "types": [
           "String"
-        ]
+        ],
+        "valueRestriction": {
+          "type": "String",
+          "acceptableValues": [
+            "\"generic.light\"",
+            "\"generic.dark\"",
+            "\"generic.contrast\"",
+            "\"generic.carmine\"",
+            "\"generic.darkmoon\"",
+            "\"generic.softblue\"",
+            "\"generic.darkviolet\"",
+            "\"generic.greenmist\"",
+            "\"android5.light\"",
+            "\"ios7.default\"",
+            "\"generic.light\"",
+            "\"generic.dark\"",
+            "\"generic.contrast\"",
+            "\"generic.carmine\"",
+            "\"generic.darkmoon\"",
+            "\"generic.softblue\"",
+            "\"generic.darkviolet\"",
+            "\"generic.greenmist\"",
+            "\"android5.light\"",
+            "\"ios7.default\""
+          ]
+        }
       },
       {
         "name": "title",
@@ -19815,7 +20213,16 @@
                 "name": "overlappingBehavior",
                 "types": [
                   "String"
-                ]
+                ],
+                "valueRestriction": {
+                  "type": "String",
+                  "acceptableValues": [
+                    "\"hide\"",
+                    "\"none\"",
+                    "\"hide\"",
+                    "\"none\""
+                  ]
+                }
               },
               {
                 "name": "visible",
@@ -19913,7 +20320,30 @@
               "Number",
               "Object",
               "String"
-            ]
+            ],
+            "valueRestriction": {
+              "type": "String",
+              "acceptableValues": [
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\"",
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\""
+              ]
+            }
           },
           {
             "name": "opacity",
@@ -20055,7 +20485,30 @@
               "Number",
               "Object",
               "String"
-            ]
+            ],
+            "valueRestriction": {
+              "type": "String",
+              "acceptableValues": [
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\"",
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\""
+              ]
+            }
           },
           {
             "name": "type",
@@ -20249,7 +20702,16 @@
                 "name": "overlappingBehavior",
                 "types": [
                   "String"
-                ]
+                ],
+                "valueRestriction": {
+                  "type": "String",
+                  "acceptableValues": [
+                    "\"hide\"",
+                    "\"none\"",
+                    "\"hide\"",
+                    "\"none\""
+                  ]
+                }
               },
               {
                 "name": "visible",
@@ -21183,7 +21645,32 @@
         "name": "theme",
         "types": [
           "String"
-        ]
+        ],
+        "valueRestriction": {
+          "type": "String",
+          "acceptableValues": [
+            "\"generic.light\"",
+            "\"generic.dark\"",
+            "\"generic.contrast\"",
+            "\"generic.carmine\"",
+            "\"generic.darkmoon\"",
+            "\"generic.softblue\"",
+            "\"generic.darkviolet\"",
+            "\"generic.greenmist\"",
+            "\"android5.light\"",
+            "\"ios7.default\"",
+            "\"generic.light\"",
+            "\"generic.dark\"",
+            "\"generic.contrast\"",
+            "\"generic.carmine\"",
+            "\"generic.darkmoon\"",
+            "\"generic.softblue\"",
+            "\"generic.darkviolet\"",
+            "\"generic.greenmist\"",
+            "\"android5.light\"",
+            "\"ios7.default\""
+          ]
+        }
       },
       {
         "name": "title",
@@ -21722,7 +22209,16 @@
                 "name": "overlappingBehavior",
                 "types": [
                   "String"
-                ]
+                ],
+                "valueRestriction": {
+                  "type": "String",
+                  "acceptableValues": [
+                    "\"hide\"",
+                    "\"none\"",
+                    "\"hide\"",
+                    "\"none\""
+                  ]
+                }
               },
               {
                 "name": "visible",
@@ -21826,7 +22322,30 @@
               "Number",
               "Object",
               "String"
-            ]
+            ],
+            "valueRestriction": {
+              "type": "String",
+              "acceptableValues": [
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\"",
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\""
+              ]
+            }
           },
           {
             "name": "minValueMargin",
@@ -21962,7 +22481,30 @@
               "Number",
               "Object",
               "String"
-            ]
+            ],
+            "valueRestriction": {
+              "type": "String",
+              "acceptableValues": [
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\"",
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\""
+              ]
+            }
           },
           {
             "name": "type",
@@ -23773,7 +24315,30 @@
               "Number",
               "Object",
               "String"
-            ]
+            ],
+            "valueRestriction": {
+              "type": "String",
+              "acceptableValues": [
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\"",
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\""
+              ]
+            }
           },
           {
             "name": "allowDecimals",
@@ -23967,7 +24532,30 @@
               "Number",
               "Object",
               "String"
-            ]
+            ],
+            "valueRestriction": {
+              "type": "String",
+              "acceptableValues": [
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\"",
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\""
+              ]
+            }
           },
           {
             "name": "minorTick",
@@ -24013,7 +24601,30 @@
               "Number",
               "Object",
               "String"
-            ]
+            ],
+            "valueRestriction": {
+              "type": "String",
+              "acceptableValues": [
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\"",
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\""
+              ]
+            }
           },
           {
             "name": "minRange",
@@ -24021,7 +24632,30 @@
               "Number",
               "Object",
               "String"
-            ]
+            ],
+            "valueRestriction": {
+              "type": "String",
+              "acceptableValues": [
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\"",
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\""
+              ]
+            }
           },
           {
             "name": "placeholderHeight",
@@ -24081,7 +24715,30 @@
               "Number",
               "Object",
               "String"
-            ]
+            ],
+            "valueRestriction": {
+              "type": "String",
+              "acceptableValues": [
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\"",
+                "\"millisecond\"",
+                "\"second\"",
+                "\"minute\"",
+                "\"hour\"",
+                "\"day\"",
+                "\"week\"",
+                "\"month\"",
+                "\"quarter\"",
+                "\"year\""
+              ]
+            }
           },
           {
             "name": "type",
@@ -24264,7 +24921,32 @@
         "name": "theme",
         "types": [
           "String"
-        ]
+        ],
+        "valueRestriction": {
+          "type": "String",
+          "acceptableValues": [
+            "\"generic.light\"",
+            "\"generic.dark\"",
+            "\"generic.contrast\"",
+            "\"generic.carmine\"",
+            "\"generic.darkmoon\"",
+            "\"generic.softblue\"",
+            "\"generic.darkviolet\"",
+            "\"generic.greenmist\"",
+            "\"android5.light\"",
+            "\"ios7.default\"",
+            "\"generic.light\"",
+            "\"generic.dark\"",
+            "\"generic.contrast\"",
+            "\"generic.carmine\"",
+            "\"generic.darkmoon\"",
+            "\"generic.softblue\"",
+            "\"generic.darkviolet\"",
+            "\"generic.greenmist\"",
+            "\"android5.light\"",
+            "\"ios7.default\""
+          ]
+        }
       },
       {
         "name": "title",
@@ -24695,7 +25377,22 @@
         "name": "handles",
         "types": [
           "String"
-        ]
+        ],
+        "valueRestriction": {
+          "type": "String",
+          "acceptableValues": [
+            "\"top\"",
+            "\"bottom\"",
+            "\"right\"",
+            "\"left\"",
+            "\"all\"",
+            "\"top\"",
+            "\"bottom\"",
+            "\"right\"",
+            "\"left\"",
+            "\"all\""
+          ]
+        }
       },
       {
         "name": "height",
@@ -25748,7 +26445,30 @@
               ]
             }
           }
-        ]
+        ],
+        "valueRestriction": {
+          "type": "String",
+          "acceptableValues": [
+            "\"day\"",
+            "\"week\"",
+            "\"workWeek\"",
+            "\"month\"",
+            "\"timelineDay\"",
+            "\"timelineWeek\"",
+            "\"timelineWorkWeek\"",
+            "\"timelineMonth\"",
+            "\"agenda\"",
+            "\"day\"",
+            "\"week\"",
+            "\"workWeek\"",
+            "\"month\"",
+            "\"timelineDay\"",
+            "\"timelineWeek\"",
+            "\"timelineWorkWeek\"",
+            "\"timelineMonth\"",
+            "\"agenda\""
+          ]
+        }
       },
       {
         "name": "visible",
@@ -25898,7 +26618,20 @@
         "name": "showScrollbar",
         "types": [
           "String"
-        ]
+        ],
+        "valueRestriction": {
+          "type": "String",
+          "acceptableValues": [
+            "\"onScroll\"",
+            "\"onHover\"",
+            "\"always\"",
+            "\"never\"",
+            "\"onScroll\"",
+            "\"onHover\"",
+            "\"always\"",
+            "\"never\""
+          ]
+        }
       },
       {
         "name": "useNative",
@@ -27277,7 +28010,32 @@
         "name": "theme",
         "types": [
           "String"
-        ]
+        ],
+        "valueRestriction": {
+          "type": "String",
+          "acceptableValues": [
+            "\"generic.light\"",
+            "\"generic.dark\"",
+            "\"generic.contrast\"",
+            "\"generic.carmine\"",
+            "\"generic.darkmoon\"",
+            "\"generic.softblue\"",
+            "\"generic.darkviolet\"",
+            "\"generic.greenmist\"",
+            "\"android5.light\"",
+            "\"ios7.default\"",
+            "\"generic.light\"",
+            "\"generic.dark\"",
+            "\"generic.contrast\"",
+            "\"generic.carmine\"",
+            "\"generic.darkmoon\"",
+            "\"generic.softblue\"",
+            "\"generic.darkviolet\"",
+            "\"generic.greenmist\"",
+            "\"android5.light\"",
+            "\"ios7.default\""
+          ]
+        }
       },
       {
         "name": "tooltip",
@@ -32156,7 +32914,32 @@
         "name": "theme",
         "types": [
           "String"
-        ]
+        ],
+        "valueRestriction": {
+          "type": "String",
+          "acceptableValues": [
+            "\"generic.light\"",
+            "\"generic.dark\"",
+            "\"generic.contrast\"",
+            "\"generic.carmine\"",
+            "\"generic.darkmoon\"",
+            "\"generic.softblue\"",
+            "\"generic.darkviolet\"",
+            "\"generic.greenmist\"",
+            "\"android5.light\"",
+            "\"ios7.default\"",
+            "\"generic.light\"",
+            "\"generic.dark\"",
+            "\"generic.contrast\"",
+            "\"generic.carmine\"",
+            "\"generic.darkmoon\"",
+            "\"generic.softblue\"",
+            "\"generic.darkviolet\"",
+            "\"generic.greenmist\"",
+            "\"android5.light\"",
+            "\"ios7.default\""
+          ]
+        }
       },
       {
         "name": "tile",
@@ -34045,7 +34828,32 @@
         "name": "theme",
         "types": [
           "String"
-        ]
+        ],
+        "valueRestriction": {
+          "type": "String",
+          "acceptableValues": [
+            "\"generic.light\"",
+            "\"generic.dark\"",
+            "\"generic.contrast\"",
+            "\"generic.carmine\"",
+            "\"generic.darkmoon\"",
+            "\"generic.softblue\"",
+            "\"generic.darkviolet\"",
+            "\"generic.greenmist\"",
+            "\"android5.light\"",
+            "\"ios7.default\"",
+            "\"generic.light\"",
+            "\"generic.dark\"",
+            "\"generic.contrast\"",
+            "\"generic.carmine\"",
+            "\"generic.darkmoon\"",
+            "\"generic.softblue\"",
+            "\"generic.darkviolet\"",
+            "\"generic.greenmist\"",
+            "\"android5.light\"",
+            "\"ios7.default\""
+          ]
+        }
       },
       {
         "name": "title",

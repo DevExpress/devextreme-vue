@@ -6,6 +6,7 @@
             :height="400"
             :currentDate="new Date(2017, 4, 25)"
             :startDayHour="9"
+            :views="['month', 'week', 'day']"
         />
     </example-block>
 </template>

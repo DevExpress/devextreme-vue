@@ -47,10 +47,12 @@ function mapWidget(raw: IWidget, baseComponent: string): { fileName: string, com
 }
 
 function mapProp(rawOption: IOption): IProp {
+  const types = convertTypes(rawOption.types);
   return {
     name: rawOption.name,
     acceptableValues: rawOption.valueRestriction && rawOption.valueRestriction.acceptableValues,
-    types: convertTypes(rawOption.types)
+    types,
+    isArray: types && types.length === 1 && types[0] === "Array"
   };
 }
 
