@@ -165,6 +165,10 @@ const DxCLASS_NAME: VueConstructor = Vue.extend({
     PROP1: {
       type: TYPE1,
       validator: (v) => typeof(v) !== "string" || ["VAL1", "VAL2"].indexOf(v) !== -1
+    },
+    PROP2: {
+      type: TYPE2,
+      validator: (v) => typeof(v) !== "TYPE3" || ["VAL1", "VAL2"].indexOf(v) !== -1
     }
   },
   computed: {
@@ -190,6 +194,12 @@ export { DxCLASS_NAME };
                         name: "PROP1",
                         types: ["TYPE1"],
                         acceptableValues: [`"VAL1"`, `"VAL2"`]
+                    },
+                    {
+                        name: "PROP2",
+                        types: ["TYPE2"],
+                        acceptableValues: [`"VAL1"`, `"VAL2"`],
+                        acceptableValueType: "TYPE3"
                     }
                 ]
             })
