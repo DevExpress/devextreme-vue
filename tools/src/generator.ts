@@ -52,7 +52,8 @@ function mapProp(rawOption: IOption): IProp {
     name: rawOption.name,
     acceptableValues: rawOption.valueRestriction && rawOption.valueRestriction.acceptableValues,
     types,
-    isArray: types && types.length === 1 && types[0] === "Array"
+    isArray: types && types.length === 1 && types[0] === "Array",
+    acceptableValueType: rawOption.valueRestriction && rawOption.valueRestriction.type.toLowerCase()
   };
 }
 
