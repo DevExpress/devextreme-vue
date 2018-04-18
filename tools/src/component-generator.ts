@@ -22,6 +22,7 @@ interface IProp {
     name: string;
     types?: string[];
     acceptableValues?: string[];
+    isArray?: boolean;
 }
 
 function generate(component: IComponent): string {
@@ -73,7 +74,7 @@ const renderSimpleProp: (model: IProp) => string = createTempate(`
 const renderExtendedProp: (model: IProp) => string = createTempate(`
     <#= it.name #>: {<#? it.types #>
       type: <#? it.types.length > 1 #>[<#?#><#= it.types.join(', ') #><#? it.types.length > 1 #>]<#?#><#?#><#? it.acceptableValues #>,
-      validator: (v) => typeof(v) !== "string" || [<#= it.acceptableValues.join(', ') #>].indexOf(v) !== -1
+      validator: (v) => <#? it.isArray #>!Array.isArray(v) || v.filter(i => [<#= it.acceptableValues.join(', ') #>].indexOf(i) === -1).length === 0<#??#>typeof(v) !== "string" || [<#= it.acceptableValues.join(', ') #>].indexOf(v) !== -1<#?#>
     <#?#>}
 `.trimRight());
 // tslint:enable:max-line-length

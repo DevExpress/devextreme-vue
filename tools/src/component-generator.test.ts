@@ -195,6 +195,53 @@ export { DxCLASS_NAME };
             })
         ).toBe(EXPECTED);
     });
+
+    it("renders props with array of acceptable values", () => {
+        //#region EXPECTED
+        const EXPECTED = `
+import * as VueType from "vue";
+const Vue = VueType.default || VueType;
+import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
+import { VueConstructor } from "vue";
+import BaseComponent from "BASE_COMPONENT_PATH";
+
+const DxCLASS_NAME: VueConstructor = Vue.extend({
+  extends: BaseComponent,
+  props: {
+    PROP1: {
+      type: TYPE1,
+      validator: (v) => !Array.isArray(v) || v.filter(i => ["VAL1", "VAL2"].indexOf(i) === -1).length === 0
+    }
+  },
+  computed: {
+    instance(): CLASS_NAME {
+      return (this as any).$_instance;
+    }
+  },
+  beforeCreate() {
+    (this as any).$_WidgetClass = CLASS_NAME;
+  }
+});
+export { DxCLASS_NAME };
+`.trimLeft();
+        //#endregion
+
+        expect(
+            generate({
+                name: "CLASS_NAME",
+                baseComponentPath: "BASE_COMPONENT_PATH",
+                dxExportPath: "DX/WIDGET/PATH",
+                props: [
+                    {
+                        name: "PROP1",
+                        types: ["TYPE1"],
+                        acceptableValues: [`"VAL1"`, `"VAL2"`],
+                        isArray: true
+                    }
+                ]
+            })
+        ).toBe(EXPECTED);
+    });
 });
 
 it("generates class with model", () => {
