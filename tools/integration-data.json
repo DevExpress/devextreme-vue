@@ -2304,7 +2304,7 @@
       {
         "name": "firstDayOfWeek",
         "types": [
-          "String"
+          "Number"
         ],
         "valueRestriction": {
           "type": "Number",
@@ -18648,7 +18648,7 @@
           {
             "name": "layout",
             "types": [
-              "String"
+              "Number"
             ],
             "valueRestriction": {
               "type": "Number",
@@ -19348,7 +19348,7 @@
       {
         "name": "layout",
         "types": [
-          "String"
+          "Number"
         ],
         "valueRestriction": {
           "type": "Number",
@@ -25210,7 +25210,7 @@
       {
         "name": "firstDayOfWeek",
         "types": [
-          "String"
+          "Number"
         ],
         "valueRestriction": {
           "type": "Number",
@@ -25640,7 +25640,7 @@
           {
             "name": "firstDayOfWeek",
             "types": [
-              "String"
+              "Number"
             ],
             "valueRestriction": {
               "type": "Number",
