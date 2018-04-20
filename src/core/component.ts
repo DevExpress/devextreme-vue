@@ -59,15 +59,15 @@ const DxComponent: VueConstructor = Vue.extend({
                         render: () => {
                             return template(data.model);
                         }
-                    }).$mount(document.createElement("div"));
+                    }).$mount();
 
                     const element = vm.$el;
-                    element.className = DX_TEMPLATE_WRAPPER_CLASS;
-                    data.container.appendChild(element);
+                    element.classList.add(DX_TEMPLATE_WRAPPER_CLASS);
 
-                    events.one(element, DX_REMOVE_EVENT, () => {
-                        vm.$destroy();
-                    });
+                    const container = data.container.get ? data.container.get(0) : data.container;
+                    container.appendChild(element);
+
+                    events.one(element, DX_REMOVE_EVENT, vm.$destroy);
 
                     return element;
                 }
