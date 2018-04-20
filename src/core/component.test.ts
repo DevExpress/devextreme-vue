@@ -91,19 +91,19 @@ describe("option processing", () => {
     });
 });
 
-describe("templates", () => {
+describe("template", () => {
 
     const DX_TEMPLATE_WRAPPER = "dx-template-wrapper";
 
-    const renderItemTemplate: (model: object) => Element = (model: object) => {
+    function renderItemTemplate(model: object, container: any = null): Element {
         const render = WidgetClass.mock.calls[0][1].integrationOptions.templates.item.render;
         return render({
-            container: document.createElement("div"),
+            container: container || document.createElement("div"),
             model
         });
-    };
+    }
 
-    it("pass integrationOptions to widget", () => {
+    it("passes integrationOptions to widget", () => {
         new Vue({
             template: "<test-component><div slot='item' slot-scope='data'>1</div></test-component>",
             components: {
@@ -132,6 +132,53 @@ describe("templates", () => {
         expect(renderedTemplate.nodeName).toBe("DIV");
         expect(renderedTemplate.className).toBe(DX_TEMPLATE_WRAPPER);
         expect(renderedTemplate.innerHTML).toBe("Template with data");
+    });
+
+    it("unwraps container", () => {
+        new Vue({
+            template: `<test-component>
+                            <div slot='item' slot-scope='props'>Template {{props.text}}</div>
+                        </test-component>`,
+            components: {
+                TestComponent
+            }
+        }).$mount();
+        const renderedTemplate = renderItemTemplate(
+            { text: "with data" },
+            { get: () => document.createElement("div") }
+        );
+
+        expect(renderedTemplate.nodeName).toBe("DIV");
+        expect(renderedTemplate.innerHTML).toBe("Template with data");
+    });
+
+    it("preserves classes", () => {
+        new Vue({
+            template: `<test-component>
+                            <div slot='item' slot-scope='props' class='custom-class'></div>
+                        </test-component>`,
+            components: {
+                TestComponent
+            }
+        }).$mount();
+        const renderedTemplate = renderItemTemplate({});
+
+        expect(renderedTemplate.className).toBe(`custom-class ${DX_TEMPLATE_WRAPPER}`);
+    });
+
+    it("preserves custom-attrs", () => {
+        new Vue({
+            template: `<test-component>
+                            <div slot='item' slot-scope='props' custom-attr=123 ></div>
+                        </test-component>`,
+            components: {
+                TestComponent
+            }
+        }).$mount();
+        const renderedTemplate = renderItemTemplate({});
+
+        expect(renderedTemplate.attributes).toHaveProperty("custom-attr");
+        expect(renderedTemplate.attributes["custom-attr"].value).toBe("123");
     });
 });
 
