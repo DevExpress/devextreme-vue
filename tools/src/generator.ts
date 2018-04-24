@@ -1,7 +1,7 @@
 import { writeFileSync as writeFile } from "fs";
 import { dirname as getDirName, join as joinPaths, relative as getRelativePath, sep as pathSeparator } from "path";
 
-import { IOption, IWidget } from "../integration-data-model";
+import { IOption, ITypeDescriptor, IWidget } from "../integration-data-model";
 import generateComponent, { IComponent, IProp } from "./component-generator";
 import { convertTypes } from "./converter";
 import { removeExtension, removePrefix, toKebabCase } from "./helpers";
@@ -47,13 +47,17 @@ function mapWidget(raw: IWidget, baseComponent: string): { fileName: string, com
 }
 
 function mapProp(rawOption: IOption): IProp {
-  const types = convertTypes(rawOption.types);
+  const types = convertTypes(rawOption.types.map((t) => t.type));
+  const restrictedTypes: ITypeDescriptor[] = rawOption.types.filter(
+    (t) => t.acceptableValues && t.acceptableValues.length > 0
+  );
+  const valueRestriction: ITypeDescriptor = restrictedTypes.length > 0 ? restrictedTypes[0] : null;
   return {
     name: rawOption.name,
-    acceptableValues: rawOption.valueRestriction && rawOption.valueRestriction.acceptableValues,
+    acceptableValues: valueRestriction && valueRestriction.acceptableValues,
     types,
     isArray: types && types.length === 1 && types[0] === "Array",
-    acceptableValueType: rawOption.valueRestriction && rawOption.valueRestriction.type.toLowerCase()
+    acceptableValueType: valueRestriction && valueRestriction.type.toLowerCase()
   };
 }
 
