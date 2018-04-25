@@ -1762,16 +1762,10 @@
               "\"generic.greenmist\"",
               "\"android5.light\"",
               "\"ios7.default\"",
-              "\"generic.light\"",
-              "\"generic.dark\"",
-              "\"generic.contrast\"",
-              "\"generic.carmine\"",
-              "\"generic.darkmoon\"",
-              "\"generic.softblue\"",
-              "\"generic.darkviolet\"",
-              "\"generic.greenmist\"",
-              "\"android5.light\"",
-              "\"ios7.default\""
+              "\"win8.black\"",
+              "\"win8.white\"",
+              "\"win10.black\"",
+              "\"win10.white\""
             ]
           }
         ]
@@ -2638,16 +2632,10 @@
               "\"generic.greenmist\"",
               "\"android5.light\"",
               "\"ios7.default\"",
-              "\"generic.light\"",
-              "\"generic.dark\"",
-              "\"generic.contrast\"",
-              "\"generic.carmine\"",
-              "\"generic.darkmoon\"",
-              "\"generic.softblue\"",
-              "\"generic.darkviolet\"",
-              "\"generic.greenmist\"",
-              "\"android5.light\"",
-              "\"ios7.default\""
+              "\"win8.black\"",
+              "\"win8.white\"",
+              "\"win10.black\"",
+              "\"win10.white\""
             ]
           }
         ]
@@ -3562,15 +3550,6 @@
                   "\"week\"",
                   "\"month\"",
                   "\"quarter\"",
-                  "\"year\"",
-                  "\"millisecond\"",
-                  "\"second\"",
-                  "\"minute\"",
-                  "\"hour\"",
-                  "\"day\"",
-                  "\"week\"",
-                  "\"month\"",
-                  "\"quarter\"",
                   "\"year\""
                 ]
               }
@@ -4143,10 +4122,8 @@
                       "\"rotate\"",
                       "\"hide\"",
                       "\"none\"",
-                      "\"stagger\"",
-                      "\"rotate\"",
-                      "\"hide\"",
-                      "\"none\""
+                      "\"ignore\"",
+                      "\"enlargeTickInterval\""
                     ]
                   }
                 ]
@@ -4333,15 +4310,6 @@
               {
                 "type": "String",
                 "acceptableValues": [
-                  "\"millisecond\"",
-                  "\"second\"",
-                  "\"minute\"",
-                  "\"hour\"",
-                  "\"day\"",
-                  "\"week\"",
-                  "\"month\"",
-                  "\"quarter\"",
-                  "\"year\"",
                   "\"millisecond\"",
                   "\"second\"",
                   "\"minute\"",
@@ -4668,15 +4636,6 @@
               {
                 "type": "String",
                 "acceptableValues": [
-                  "\"millisecond\"",
-                  "\"second\"",
-                  "\"minute\"",
-                  "\"hour\"",
-                  "\"day\"",
-                  "\"week\"",
-                  "\"month\"",
-                  "\"quarter\"",
-                  "\"year\"",
                   "\"millisecond\"",
                   "\"second\"",
                   "\"minute\"",
@@ -5092,10 +5051,8 @@
                       "\"rotate\"",
                       "\"hide\"",
                       "\"none\"",
-                      "\"stagger\"",
-                      "\"rotate\"",
-                      "\"hide\"",
-                      "\"none\""
+                      "\"ignore\"",
+                      "\"enlargeTickInterval\""
                     ]
                   }
                 ]
@@ -7289,16 +7246,10 @@
               "\"generic.greenmist\"",
               "\"android5.light\"",
               "\"ios7.default\"",
-              "\"generic.light\"",
-              "\"generic.dark\"",
-              "\"generic.contrast\"",
-              "\"generic.carmine\"",
-              "\"generic.darkmoon\"",
-              "\"generic.softblue\"",
-              "\"generic.darkviolet\"",
-              "\"generic.greenmist\"",
-              "\"android5.light\"",
-              "\"ios7.default\""
+              "\"win8.black\"",
+              "\"win8.white\"",
+              "\"win10.black\"",
+              "\"win10.white\""
             ]
           }
         ]
@@ -8216,10 +8167,8 @@
                       "\"rotate\"",
                       "\"hide\"",
                       "\"none\"",
-                      "\"stagger\"",
-                      "\"rotate\"",
-                      "\"hide\"",
-                      "\"none\""
+                      "\"ignore\"",
+                      "\"enlargeTickInterval\""
                     ]
                   }
                 ]
@@ -8414,15 +8363,6 @@
               {
                 "type": "String",
                 "acceptableValues": [
-                  "\"millisecond\"",
-                  "\"second\"",
-                  "\"minute\"",
-                  "\"hour\"",
-                  "\"day\"",
-                  "\"week\"",
-                  "\"month\"",
-                  "\"quarter\"",
-                  "\"year\"",
                   "\"millisecond\"",
                   "\"second\"",
                   "\"minute\"",
@@ -8765,15 +8705,6 @@
               {
                 "type": "String",
                 "acceptableValues": [
-                  "\"millisecond\"",
-                  "\"second\"",
-                  "\"minute\"",
-                  "\"hour\"",
-                  "\"day\"",
-                  "\"week\"",
-                  "\"month\"",
-                  "\"quarter\"",
-                  "\"year\"",
                   "\"millisecond\"",
                   "\"second\"",
                   "\"minute\"",
@@ -9900,12 +9831,6 @@
                   "\"twoColorNeedle\"",
                   "\"rangeBar\"",
                   "\"triangleMarker\"",
-                  "\"textCloud\"",
-                  "\"rectangleNeedle\"",
-                  "\"triangleNeedle\"",
-                  "\"twoColorNeedle\"",
-                  "\"rangeBar\"",
-                  "\"triangleMarker\"",
                   "\"textCloud\""
                 ]
               }
@@ -9942,16 +9867,10 @@
               "\"generic.greenmist\"",
               "\"android5.light\"",
               "\"ios7.default\"",
-              "\"generic.light\"",
-              "\"generic.dark\"",
-              "\"generic.contrast\"",
-              "\"generic.carmine\"",
-              "\"generic.darkmoon\"",
-              "\"generic.softblue\"",
-              "\"generic.darkviolet\"",
-              "\"generic.greenmist\"",
-              "\"android5.light\"",
-              "\"ios7.default\""
+              "\"win8.black\"",
+              "\"win8.white\"",
+              "\"win10.black\"",
+              "\"win10.white\""
             ]
           }
         ]
@@ -10321,12 +10240,6 @@
               {
                 "type": "String",
                 "acceptableValues": [
-                  "\"rectangleNeedle\"",
-                  "\"triangleNeedle\"",
-                  "\"twoColorNeedle\"",
-                  "\"rangeBar\"",
-                  "\"triangleMarker\"",
-                  "\"textCloud\"",
                   "\"rectangleNeedle\"",
                   "\"triangleNeedle\"",
                   "\"twoColorNeedle\"",
@@ -13298,8 +13211,6 @@
               {
                 "type": "String",
                 "acceptableValues": [
-                  "undefined",
-                  "undefined",
                   "\"asc\"",
                   "\"desc\""
                 ]
@@ -17343,16 +17254,10 @@
               "\"generic.greenmist\"",
               "\"android5.light\"",
               "\"ios7.default\"",
-              "\"generic.light\"",
-              "\"generic.dark\"",
-              "\"generic.contrast\"",
-              "\"generic.carmine\"",
-              "\"generic.darkmoon\"",
-              "\"generic.softblue\"",
-              "\"generic.darkviolet\"",
-              "\"generic.greenmist\"",
-              "\"android5.light\"",
-              "\"ios7.default\""
+              "\"win8.black\"",
+              "\"win8.white\"",
+              "\"win10.black\"",
+              "\"win10.white\""
             ]
           }
         ]
@@ -18887,12 +18792,6 @@
                   "\"rhombus\"",
                   "\"rangeBar\"",
                   "\"triangleMarker\"",
-                  "\"textCloud\"",
-                  "\"rectangle\"",
-                  "\"circle\"",
-                  "\"rhombus\"",
-                  "\"rangeBar\"",
-                  "\"triangleMarker\"",
                   "\"textCloud\""
                 ]
               }
@@ -18929,16 +18828,10 @@
               "\"generic.greenmist\"",
               "\"android5.light\"",
               "\"ios7.default\"",
-              "\"generic.light\"",
-              "\"generic.dark\"",
-              "\"generic.contrast\"",
-              "\"generic.carmine\"",
-              "\"generic.darkmoon\"",
-              "\"generic.softblue\"",
-              "\"generic.darkviolet\"",
-              "\"generic.greenmist\"",
-              "\"android5.light\"",
-              "\"ios7.default\""
+              "\"win8.black\"",
+              "\"win8.white\"",
+              "\"win10.black\"",
+              "\"win10.white\""
             ]
           }
         ]
@@ -19308,12 +19201,6 @@
               {
                 "type": "String",
                 "acceptableValues": [
-                  "\"rectangle\"",
-                  "\"circle\"",
-                  "\"rhombus\"",
-                  "\"rangeBar\"",
-                  "\"triangleMarker\"",
-                  "\"textCloud\"",
                   "\"rectangle\"",
                   "\"circle\"",
                   "\"rhombus\"",
@@ -24237,16 +24124,10 @@
               "\"generic.greenmist\"",
               "\"android5.light\"",
               "\"ios7.default\"",
-              "\"generic.light\"",
-              "\"generic.dark\"",
-              "\"generic.contrast\"",
-              "\"generic.carmine\"",
-              "\"generic.darkmoon\"",
-              "\"generic.softblue\"",
-              "\"generic.darkviolet\"",
-              "\"generic.greenmist\"",
-              "\"android5.light\"",
-              "\"ios7.default\""
+              "\"win8.black\"",
+              "\"win8.white\"",
+              "\"win10.black\"",
+              "\"win10.white\""
             ]
           }
         ]
@@ -26290,8 +26171,8 @@
                     "acceptableValues": [
                       "\"hide\"",
                       "\"none\"",
-                      "\"hide\"",
-                      "\"none\""
+                      "\"ignore\"",
+                      "\"enlargeTickInterval\""
                     ]
                   }
                 ]
@@ -26426,15 +26307,6 @@
               {
                 "type": "String",
                 "acceptableValues": [
-                  "\"millisecond\"",
-                  "\"second\"",
-                  "\"minute\"",
-                  "\"hour\"",
-                  "\"day\"",
-                  "\"week\"",
-                  "\"month\"",
-                  "\"quarter\"",
-                  "\"year\"",
                   "\"millisecond\"",
                   "\"second\"",
                   "\"minute\"",
@@ -26647,15 +26519,6 @@
               {
                 "type": "String",
                 "acceptableValues": [
-                  "\"millisecond\"",
-                  "\"second\"",
-                  "\"minute\"",
-                  "\"hour\"",
-                  "\"day\"",
-                  "\"week\"",
-                  "\"month\"",
-                  "\"quarter\"",
-                  "\"year\"",
                   "\"millisecond\"",
                   "\"second\"",
                   "\"minute\"",
@@ -26908,8 +26771,8 @@
                     "acceptableValues": [
                       "\"hide\"",
                       "\"none\"",
-                      "\"hide\"",
-                      "\"none\""
+                      "\"ignore\"",
+                      "\"enlargeTickInterval\""
                     ]
                   }
                 ]
@@ -28108,16 +27971,10 @@
               "\"generic.greenmist\"",
               "\"android5.light\"",
               "\"ios7.default\"",
-              "\"generic.light\"",
-              "\"generic.dark\"",
-              "\"generic.contrast\"",
-              "\"generic.carmine\"",
-              "\"generic.darkmoon\"",
-              "\"generic.softblue\"",
-              "\"generic.darkviolet\"",
-              "\"generic.greenmist\"",
-              "\"android5.light\"",
-              "\"ios7.default\""
+              "\"win8.black\"",
+              "\"win8.white\"",
+              "\"win10.black\"",
+              "\"win10.white\""
             ]
           }
         ]
@@ -28825,8 +28682,8 @@
                     "acceptableValues": [
                       "\"hide\"",
                       "\"none\"",
-                      "\"hide\"",
-                      "\"none\""
+                      "\"ignore\"",
+                      "\"enlargeTickInterval\""
                     ]
                   }
                 ]
@@ -28969,15 +28826,6 @@
               {
                 "type": "String",
                 "acceptableValues": [
-                  "\"millisecond\"",
-                  "\"second\"",
-                  "\"minute\"",
-                  "\"hour\"",
-                  "\"day\"",
-                  "\"week\"",
-                  "\"month\"",
-                  "\"quarter\"",
-                  "\"year\"",
                   "\"millisecond\"",
                   "\"second\"",
                   "\"minute\"",
@@ -29182,15 +29030,6 @@
               {
                 "type": "String",
                 "acceptableValues": [
-                  "\"millisecond\"",
-                  "\"second\"",
-                  "\"minute\"",
-                  "\"hour\"",
-                  "\"day\"",
-                  "\"week\"",
-                  "\"month\"",
-                  "\"quarter\"",
-                  "\"year\"",
                   "\"millisecond\"",
                   "\"second\"",
                   "\"minute\"",
@@ -31604,15 +31443,6 @@
                   "\"week\"",
                   "\"month\"",
                   "\"quarter\"",
-                  "\"year\"",
-                  "\"millisecond\"",
-                  "\"second\"",
-                  "\"minute\"",
-                  "\"hour\"",
-                  "\"day\"",
-                  "\"week\"",
-                  "\"month\"",
-                  "\"quarter\"",
                   "\"year\""
                 ]
               }
@@ -31908,15 +31738,6 @@
                   "\"week\"",
                   "\"month\"",
                   "\"quarter\"",
-                  "\"year\"",
-                  "\"millisecond\"",
-                  "\"second\"",
-                  "\"minute\"",
-                  "\"hour\"",
-                  "\"day\"",
-                  "\"week\"",
-                  "\"month\"",
-                  "\"quarter\"",
                   "\"year\""
                 ]
               }
@@ -31992,15 +31813,6 @@
                   "\"week\"",
                   "\"month\"",
                   "\"quarter\"",
-                  "\"year\"",
-                  "\"millisecond\"",
-                  "\"second\"",
-                  "\"minute\"",
-                  "\"hour\"",
-                  "\"day\"",
-                  "\"week\"",
-                  "\"month\"",
-                  "\"quarter\"",
                   "\"year\""
                 ]
               }
@@ -32018,15 +31830,6 @@
               {
                 "type": "String",
                 "acceptableValues": [
-                  "\"millisecond\"",
-                  "\"second\"",
-                  "\"minute\"",
-                  "\"hour\"",
-                  "\"day\"",
-                  "\"week\"",
-                  "\"month\"",
-                  "\"quarter\"",
-                  "\"year\"",
                   "\"millisecond\"",
                   "\"second\"",
                   "\"minute\"",
@@ -32140,15 +31943,6 @@
               {
                 "type": "String",
                 "acceptableValues": [
-                  "\"millisecond\"",
-                  "\"second\"",
-                  "\"minute\"",
-                  "\"hour\"",
-                  "\"day\"",
-                  "\"week\"",
-                  "\"month\"",
-                  "\"quarter\"",
-                  "\"year\"",
                   "\"millisecond\"",
                   "\"second\"",
                   "\"minute\"",
@@ -32404,16 +32198,10 @@
               "\"generic.greenmist\"",
               "\"android5.light\"",
               "\"ios7.default\"",
-              "\"generic.light\"",
-              "\"generic.dark\"",
-              "\"generic.contrast\"",
-              "\"generic.carmine\"",
-              "\"generic.darkmoon\"",
-              "\"generic.softblue\"",
-              "\"generic.darkviolet\"",
-              "\"generic.greenmist\"",
-              "\"android5.light\"",
-              "\"ios7.default\""
+              "\"win8.black\"",
+              "\"win8.white\"",
+              "\"win10.black\"",
+              "\"win10.white\""
             ]
           }
         ]
@@ -32973,11 +32761,6 @@
           {
             "type": "String",
             "acceptableValues": [
-              "\"top\"",
-              "\"bottom\"",
-              "\"right\"",
-              "\"left\"",
-              "\"all\"",
               "\"top\"",
               "\"bottom\"",
               "\"right\"",
@@ -34238,27 +34021,7 @@
             "type": "Array",
             "typeParams": [
               {
-                "type": "String",
-                "acceptableValues": [
-                  "\"day\"",
-                  "\"week\"",
-                  "\"workWeek\"",
-                  "\"month\"",
-                  "\"timelineDay\"",
-                  "\"timelineWeek\"",
-                  "\"timelineWorkWeek\"",
-                  "\"timelineMonth\"",
-                  "\"agenda\"",
-                  "\"day\"",
-                  "\"week\"",
-                  "\"workWeek\"",
-                  "\"month\"",
-                  "\"timelineDay\"",
-                  "\"timelineWeek\"",
-                  "\"timelineWorkWeek\"",
-                  "\"timelineMonth\"",
-                  "\"agenda\""
-                ]
+                "type": "String"
               }
             ]
           }
@@ -34678,10 +34441,6 @@
           {
             "type": "String",
             "acceptableValues": [
-              "\"onScroll\"",
-              "\"onHover\"",
-              "\"always\"",
-              "\"never\"",
               "\"onScroll\"",
               "\"onHover\"",
               "\"always\"",
@@ -36560,16 +36319,10 @@
               "\"generic.greenmist\"",
               "\"android5.light\"",
               "\"ios7.default\"",
-              "\"generic.light\"",
-              "\"generic.dark\"",
-              "\"generic.contrast\"",
-              "\"generic.carmine\"",
-              "\"generic.darkmoon\"",
-              "\"generic.softblue\"",
-              "\"generic.darkviolet\"",
-              "\"generic.greenmist\"",
-              "\"android5.light\"",
-              "\"ios7.default\""
+              "\"win8.black\"",
+              "\"win8.white\"",
+              "\"win10.black\"",
+              "\"win10.white\""
             ]
           }
         ]
@@ -43146,16 +42899,10 @@
               "\"generic.greenmist\"",
               "\"android5.light\"",
               "\"ios7.default\"",
-              "\"generic.light\"",
-              "\"generic.dark\"",
-              "\"generic.contrast\"",
-              "\"generic.carmine\"",
-              "\"generic.darkmoon\"",
-              "\"generic.softblue\"",
-              "\"generic.darkviolet\"",
-              "\"generic.greenmist\"",
-              "\"android5.light\"",
-              "\"ios7.default\""
+              "\"win8.black\"",
+              "\"win8.white\"",
+              "\"win10.black\"",
+              "\"win10.white\""
             ]
           }
         ]
@@ -45689,16 +45436,10 @@
               "\"generic.greenmist\"",
               "\"android5.light\"",
               "\"ios7.default\"",
-              "\"generic.light\"",
-              "\"generic.dark\"",
-              "\"generic.contrast\"",
-              "\"generic.carmine\"",
-              "\"generic.darkmoon\"",
-              "\"generic.softblue\"",
-              "\"generic.darkviolet\"",
-              "\"generic.greenmist\"",
-              "\"android5.light\"",
-              "\"ios7.default\""
+              "\"win8.black\"",
+              "\"win8.white\"",
+              "\"win10.black\"",
+              "\"win10.white\""
             ]
           }
         ]
