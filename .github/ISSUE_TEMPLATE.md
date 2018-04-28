@@ -8,12 +8,12 @@
 
 ### Description
 
+#### Steps to Reproduce
+<!-- If the current behavior is a bug, please provide the steps to reproduce -->
+
 #### Current Behavior
 
 #### Expected Behavior
-
-### Steps to Reproduce
-<!-- If the current behavior is a bug, please provide the steps to reproduce -->
 
 #### Demo
 <!--
