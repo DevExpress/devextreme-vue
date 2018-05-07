@@ -2,28 +2,6 @@
   {
     "name": "DxAccordion",
     "exportPath": "ui/accordion",
-    "subscribableOptions": [
-      {
-        "name": "items",
-        "type": "any"
-      },
-      {
-        "name": "selectedIndex",
-        "type": "any"
-      },
-      {
-        "name": "selectedItem",
-        "type": "any"
-      },
-      {
-        "name": "selectedItemKeys",
-        "type": "any"
-      },
-      {
-        "name": "selectedItems",
-        "type": "any"
-      }
-    ],
     "templates": [
       "itemTemplate",
       "itemTitleTemplate"
@@ -158,6 +136,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "items",
         "types": [
           {
@@ -963,6 +942,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedIndex",
         "types": [
           {
@@ -971,6 +951,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedItem",
         "types": [
           {
@@ -979,6 +960,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedItemKeys",
         "types": [
           {
@@ -992,6 +974,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedItems",
         "types": [
           {
@@ -1043,12 +1026,6 @@
   {
     "name": "DxActionSheet",
     "exportPath": "ui/action_sheet",
-    "subscribableOptions": [
-      {
-        "name": "items",
-        "type": "any"
-      }
-    ],
     "templates": [
       "itemTemplate"
     ],
@@ -1142,6 +1119,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "items",
         "types": [
           {
@@ -1860,16 +1838,6 @@
   {
     "name": "DxAutocomplete",
     "exportPath": "ui/autocomplete",
-    "subscribableOptions": [
-      {
-        "name": "opened",
-        "type": "any"
-      },
-      {
-        "name": "value",
-        "type": "any"
-      }
-    ],
     "templates": [
       "dropDownButtonTemplate",
       "groupTemplate",
@@ -3387,6 +3355,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "opened",
         "types": [
           {
@@ -3515,6 +3484,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "value",
         "types": [
           {
@@ -5042,12 +5012,6 @@
   {
     "name": "DxBox",
     "exportPath": "ui/box",
-    "subscribableOptions": [
-      {
-        "name": "items",
-        "type": "any"
-      }
-    ],
     "templates": [
       "itemTemplate"
     ],
@@ -5166,6 +5130,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "items",
         "types": [
           {
@@ -7252,12 +7217,6 @@
   {
     "name": "DxCalendar",
     "exportPath": "ui/calendar",
-    "subscribableOptions": [
-      {
-        "name": "value",
-        "type": "any"
-      }
-    ],
     "templates": [
       "cellTemplate"
     ],
@@ -7843,6 +7802,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "value",
         "types": [
           {
@@ -14808,12 +14768,6 @@
   {
     "name": "DxCheckBox",
     "exportPath": "ui/check_box",
-    "subscribableOptions": [
-      {
-        "name": "value",
-        "type": "any"
-      }
-    ],
     "options": [
       {
         "name": "accessKey",
@@ -15241,6 +15195,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "value",
         "types": [
           {
@@ -17051,16 +17006,6 @@
   {
     "name": "DxColorBox",
     "exportPath": "ui/color_box",
-    "subscribableOptions": [
-      {
-        "name": "opened",
-        "type": "any"
-      },
-      {
-        "name": "value",
-        "type": "any"
-      }
-    ],
     "templates": [
       "dropDownButtonTemplate",
       "fieldTemplate"
@@ -18330,6 +18275,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "opened",
         "types": [
           {
@@ -18398,6 +18344,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "value",
         "types": [
           {
@@ -18437,20 +18384,6 @@
   {
     "name": "DxContextMenu",
     "exportPath": "ui/context_menu",
-    "subscribableOptions": [
-      {
-        "name": "items",
-        "type": "any"
-      },
-      {
-        "name": "selectedItem",
-        "type": "any"
-      },
-      {
-        "name": "visible",
-        "type": "any"
-      }
-    ],
     "templates": [
       "itemTemplate"
     ],
@@ -18640,6 +18573,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "items",
         "types": [
           {
@@ -19547,6 +19481,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedItem",
         "types": [
           {
@@ -19686,6 +19621,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "visible",
         "types": [
           {
@@ -19716,20 +19652,6 @@
   {
     "name": "DxDataGrid",
     "exportPath": "ui/data_grid",
-    "subscribableOptions": [
-      {
-        "name": "columns",
-        "type": "any"
-      },
-      {
-        "name": "selectedRowKeys",
-        "type": "any"
-      },
-      {
-        "name": "selectionFilter",
-        "type": "any"
-      }
-    ],
     "templates": [
       "rowTemplate"
     ],
@@ -19949,6 +19871,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "columns",
         "types": [
           {
@@ -23960,6 +23883,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "paging",
         "types": [
           {
@@ -23976,6 +23900,7 @@
             ]
           },
           {
+            "isSubscribable": true,
             "name": "pageIndex",
             "types": [
               {
@@ -23984,6 +23909,7 @@
             ]
           },
           {
+            "isSubscribable": true,
             "name": "pageSize",
             "types": [
               {
@@ -24196,6 +24122,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "searchPanel",
         "types": [
           {
@@ -24236,6 +24163,7 @@
             ]
           },
           {
+            "isSubscribable": true,
             "name": "text",
             "types": [
               {
@@ -24262,6 +24190,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedRowKeys",
         "types": [
           {
@@ -24340,6 +24269,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectionFilter",
         "types": [
           {
@@ -25055,16 +24985,6 @@
   {
     "name": "DxDateBox",
     "exportPath": "ui/date_box",
-    "subscribableOptions": [
-      {
-        "name": "opened",
-        "type": "any"
-      },
-      {
-        "name": "value",
-        "type": "any"
-      }
-    ],
     "templates": [
       "dropDownButtonTemplate"
     ],
@@ -26482,6 +26402,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "opened",
         "types": [
           {
@@ -26601,6 +26522,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "value",
         "types": [
           {
@@ -27109,12 +27031,6 @@
   {
     "name": "DxDropDownBox",
     "exportPath": "ui/drop_down_box",
-    "subscribableOptions": [
-      {
-        "name": "opened",
-        "type": "any"
-      }
-    ],
     "templates": [
       "contentTemplate",
       "dropDownButtonTemplate",
@@ -28446,6 +28362,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "opened",
         "types": [
           {
@@ -28584,12 +28501,6 @@
   {
     "name": "DxFileUploader",
     "exportPath": "ui/file_uploader",
-    "subscribableOptions": [
-      {
-        "name": "value",
-        "type": "any"
-      }
-    ],
     "options": [
       {
         "name": "accept",
@@ -29555,6 +29466,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "value",
         "types": [
           {
@@ -29598,12 +29510,6 @@
   {
     "name": "DxFilterBuilder",
     "exportPath": "ui/filter_builder",
-    "subscribableOptions": [
-      {
-        "name": "value",
-        "type": "any"
-      }
-    ],
     "options": [
       {
         "name": "accessKey",
@@ -30392,6 +30298,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "value",
         "types": [
           {
@@ -30430,12 +30337,6 @@
   {
     "name": "DxForm",
     "exportPath": "ui/form",
-    "subscribableOptions": [
-      {
-        "name": "formData",
-        "type": "any"
-      }
-    ],
     "options": [
       {
         "name": "accessKey",
@@ -30549,6 +30450,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "formData",
         "types": [
           {
@@ -33449,20 +33351,6 @@
   {
     "name": "DxGallery",
     "exportPath": "ui/gallery",
-    "subscribableOptions": [
-      {
-        "name": "items",
-        "type": "any"
-      },
-      {
-        "name": "selectedIndex",
-        "type": "any"
-      },
-      {
-        "name": "selectedItem",
-        "type": "any"
-      }
-    ],
     "templates": [
       "itemTemplate"
     ],
@@ -33596,6 +33484,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "items",
         "types": [
           {
@@ -34264,6 +34153,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedIndex",
         "types": [
           {
@@ -34272,6 +34162,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedItem",
         "types": [
           {
@@ -36168,20 +36059,6 @@
   {
     "name": "DxList",
     "exportPath": "ui/list",
-    "subscribableOptions": [
-      {
-        "name": "items",
-        "type": "any"
-      },
-      {
-        "name": "selectedItemKeys",
-        "type": "any"
-      },
-      {
-        "name": "selectedItems",
-        "type": "any"
-      }
-    ],
     "templates": [
       "groupTemplate",
       "itemTemplate"
@@ -36396,6 +36273,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "items",
         "types": [
           {
@@ -37914,6 +37792,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedItemKeys",
         "types": [
           {
@@ -37927,6 +37806,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedItems",
         "types": [
           {
@@ -38308,12 +38188,6 @@
   {
     "name": "DxLoadPanel",
     "exportPath": "ui/load_panel",
-    "subscribableOptions": [
-      {
-        "name": "visible",
-        "type": "any"
-      }
-    ],
     "options": [
       {
         "name": "animation",
@@ -38989,6 +38863,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "visible",
         "types": [
           {
@@ -39019,16 +38894,6 @@
   {
     "name": "DxLookup",
     "exportPath": "ui/lookup",
-    "subscribableOptions": [
-      {
-        "name": "opened",
-        "type": "any"
-      },
-      {
-        "name": "value",
-        "type": "any"
-      }
-    ],
     "templates": [
       "dropDownButtonTemplate",
       "fieldTemplate",
@@ -40244,6 +40109,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "opened",
         "types": [
           {
@@ -40548,6 +40414,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "value",
         "types": [
           {
@@ -41515,16 +41382,6 @@
   {
     "name": "DxMenu",
     "exportPath": "ui/menu",
-    "subscribableOptions": [
-      {
-        "name": "items",
-        "type": "any"
-      },
-      {
-        "name": "selectedItem",
-        "type": "any"
-      }
-    ],
     "templates": [
       "itemTemplate"
     ],
@@ -41706,6 +41563,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "items",
         "types": [
           {
@@ -42570,6 +42428,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedItem",
         "types": [
           {
@@ -42757,20 +42616,6 @@
   {
     "name": "DxMultiView",
     "exportPath": "ui/multi_view",
-    "subscribableOptions": [
-      {
-        "name": "items",
-        "type": "any"
-      },
-      {
-        "name": "selectedIndex",
-        "type": "any"
-      },
-      {
-        "name": "selectedItem",
-        "type": "any"
-      }
-    ],
     "templates": [
       "itemTemplate"
     ],
@@ -42896,6 +42741,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "items",
         "types": [
           {
@@ -43572,6 +43418,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedIndex",
         "types": [
           {
@@ -43580,6 +43427,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedItem",
         "types": [
           {
@@ -43634,28 +43482,6 @@
   {
     "name": "DxNavBar",
     "exportPath": "ui/nav_bar",
-    "subscribableOptions": [
-      {
-        "name": "items",
-        "type": "any"
-      },
-      {
-        "name": "selectedIndex",
-        "type": "any"
-      },
-      {
-        "name": "selectedItem",
-        "type": "any"
-      },
-      {
-        "name": "selectedItemKeys",
-        "type": "any"
-      },
-      {
-        "name": "selectedItems",
-        "type": "any"
-      }
-    ],
     "templates": [
       "itemTemplate"
     ],
@@ -43757,6 +43583,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "items",
         "types": [
           {
@@ -44440,6 +44267,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedIndex",
         "types": [
           {
@@ -44448,6 +44276,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedItem",
         "types": [
           {
@@ -44456,6 +44285,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedItemKeys",
         "types": [
           {
@@ -44469,6 +44299,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedItems",
         "types": [
           {
@@ -44538,12 +44369,6 @@
   {
     "name": "DxNumberBox",
     "exportPath": "ui/number_box",
-    "subscribableOptions": [
-      {
-        "name": "value",
-        "type": "any"
-      }
-    ],
     "options": [
       {
         "name": "accessKey",
@@ -45757,6 +45582,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "value",
         "types": [
           {
@@ -54930,20 +54756,6 @@
   {
     "name": "DxPopover",
     "exportPath": "ui/popover",
-    "subscribableOptions": [
-      {
-        "name": "height",
-        "type": "any"
-      },
-      {
-        "name": "visible",
-        "type": "any"
-      },
-      {
-        "name": "width",
-        "type": "any"
-      }
-    ],
     "templates": [
       "contentTemplate",
       "titleTemplate"
@@ -55067,6 +54879,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "height",
         "types": [
           {
@@ -55892,6 +55705,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "visible",
         "types": [
           {
@@ -55900,6 +55714,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "width",
         "types": [
           {
@@ -55922,20 +55737,6 @@
   {
     "name": "DxPopup",
     "exportPath": "ui/popup",
-    "subscribableOptions": [
-      {
-        "name": "height",
-        "type": "any"
-      },
-      {
-        "name": "visible",
-        "type": "any"
-      },
-      {
-        "name": "width",
-        "type": "any"
-      }
-    ],
     "templates": [
       "contentTemplate",
       "titleTemplate"
@@ -56091,6 +55892,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "height",
         "types": [
           {
@@ -57016,6 +56818,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "visible",
         "types": [
           {
@@ -57024,6 +56827,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "width",
         "types": [
           {
@@ -57046,12 +56850,6 @@
   {
     "name": "DxProgressBar",
     "exportPath": "ui/progress_bar",
-    "subscribableOptions": [
-      {
-        "name": "value",
-        "type": "any"
-      }
-    ],
     "options": [
       {
         "name": "disabled",
@@ -57550,6 +57348,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "value",
         "types": [
           {
@@ -57588,12 +57387,6 @@
   {
     "name": "DxRadioGroup",
     "exportPath": "ui/radio_group",
-    "subscribableOptions": [
-      {
-        "name": "value",
-        "type": "any"
-      }
-    ],
     "templates": [
       "itemTemplate"
     ],
@@ -58115,6 +57908,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "value",
         "types": [
           {
@@ -58169,12 +57963,6 @@
   {
     "name": "DxRangeSelector",
     "exportPath": "viz/range_selector",
-    "subscribableOptions": [
-      {
-        "name": "value",
-        "type": "any"
-      }
-    ],
     "options": [
       {
         "name": "background",
@@ -60479,6 +60267,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "value",
         "types": [
           {
@@ -60502,12 +60291,6 @@
   {
     "name": "DxRangeSlider",
     "exportPath": "ui/range_slider",
-    "subscribableOptions": [
-      {
-        "name": "value",
-        "type": "any"
-      }
-    ],
     "options": [
       {
         "name": "accessKey",
@@ -61047,6 +60830,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "value",
         "types": [
           {
@@ -61091,16 +60875,6 @@
   {
     "name": "DxResizable",
     "exportPath": "ui/resizable",
-    "subscribableOptions": [
-      {
-        "name": "height",
-        "type": "any"
-      },
-      {
-        "name": "width",
-        "type": "any"
-      }
-    ],
     "options": [
       {
         "name": "elementAttr",
@@ -61126,6 +60900,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "height",
         "types": [
           {
@@ -61578,6 +61353,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "width",
         "types": [
           {
@@ -61600,12 +61376,6 @@
   {
     "name": "DxResponsiveBox",
     "exportPath": "ui/responsive_box",
-    "subscribableOptions": [
-      {
-        "name": "items",
-        "type": "any"
-      }
-    ],
     "templates": [
       "itemTemplate"
     ],
@@ -61736,6 +61506,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "items",
         "types": [
           {
@@ -62426,16 +62197,6 @@
   {
     "name": "DxScheduler",
     "exportPath": "ui/scheduler",
-    "subscribableOptions": [
-      {
-        "name": "currentDate",
-        "type": "any"
-      },
-      {
-        "name": "currentView",
-        "type": "any"
-      }
-    ],
     "templates": [
       "appointmentTemplate",
       "appointmentTooltipTemplate",
@@ -62551,6 +62312,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "currentDate",
         "types": [
           {
@@ -62565,6 +62327,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "currentView",
         "types": [
           {
@@ -65537,16 +65300,6 @@
   {
     "name": "DxSelectBox",
     "exportPath": "ui/select_box",
-    "subscribableOptions": [
-      {
-        "name": "opened",
-        "type": "any"
-      },
-      {
-        "name": "value",
-        "type": "any"
-      }
-    ],
     "templates": [
       "dropDownButtonTemplate",
       "fieldTemplate",
@@ -67189,6 +66942,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "opened",
         "types": [
           {
@@ -67341,6 +67095,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "value",
         "types": [
           {
@@ -67403,20 +67158,6 @@
   {
     "name": "DxSlideOut",
     "exportPath": "ui/slide_out",
-    "subscribableOptions": [
-      {
-        "name": "items",
-        "type": "any"
-      },
-      {
-        "name": "selectedIndex",
-        "type": "any"
-      },
-      {
-        "name": "selectedItem",
-        "type": "any"
-      }
-    ],
     "templates": [
       "contentTemplate",
       "itemTemplate",
@@ -67537,6 +67278,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "items",
         "types": [
           {
@@ -68407,6 +68149,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedIndex",
         "types": [
           {
@@ -68415,6 +68158,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedItem",
         "types": [
           {
@@ -68796,12 +68540,6 @@
   {
     "name": "DxSlider",
     "exportPath": "ui/slider",
-    "subscribableOptions": [
-      {
-        "name": "value",
-        "type": "any"
-      }
-    ],
     "options": [
       {
         "name": "accessKey",
@@ -69349,6 +69087,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "value",
         "types": [
           {
@@ -70489,12 +70228,6 @@
   {
     "name": "DxSwitch",
     "exportPath": "ui/switch",
-    "subscribableOptions": [
-      {
-        "name": "value",
-        "type": "any"
-      }
-    ],
     "options": [
       {
         "name": "accessKey",
@@ -70930,6 +70663,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "value",
         "types": [
           {
@@ -70969,20 +70703,6 @@
   {
     "name": "DxTabPanel",
     "exportPath": "ui/tab_panel",
-    "subscribableOptions": [
-      {
-        "name": "items",
-        "type": "any"
-      },
-      {
-        "name": "selectedIndex",
-        "type": "any"
-      },
-      {
-        "name": "selectedItem",
-        "type": "any"
-      }
-    ],
     "templates": [
       "itemTemplate",
       "itemTitleTemplate"
@@ -71109,6 +70829,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "items",
         "types": [
           {
@@ -72033,6 +71754,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedIndex",
         "types": [
           {
@@ -72041,6 +71763,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedItem",
         "types": [
           {
@@ -72103,28 +71826,6 @@
   {
     "name": "DxTabs",
     "exportPath": "ui/tabs",
-    "subscribableOptions": [
-      {
-        "name": "items",
-        "type": "any"
-      },
-      {
-        "name": "selectedIndex",
-        "type": "any"
-      },
-      {
-        "name": "selectedItem",
-        "type": "any"
-      },
-      {
-        "name": "selectedItemKeys",
-        "type": "any"
-      },
-      {
-        "name": "selectedItems",
-        "type": "any"
-      }
-    ],
     "templates": [
       "itemTemplate"
     ],
@@ -72226,6 +71927,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "items",
         "types": [
           {
@@ -72917,6 +72619,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedIndex",
         "types": [
           {
@@ -72925,6 +72628,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedItem",
         "types": [
           {
@@ -72933,6 +72637,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedItemKeys",
         "types": [
           {
@@ -72946,6 +72651,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedItems",
         "types": [
           {
@@ -73023,16 +72729,6 @@
   {
     "name": "DxTagBox",
     "exportPath": "ui/tag_box",
-    "subscribableOptions": [
-      {
-        "name": "opened",
-        "type": "any"
-      },
-      {
-        "name": "value",
-        "type": "any"
-      }
-    ],
     "templates": [
       "dropDownButtonTemplate",
       "fieldTemplate",
@@ -74679,6 +74375,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "opened",
         "types": [
           {
@@ -74886,6 +74583,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "value",
         "types": [
           {
@@ -74951,12 +74649,6 @@
   {
     "name": "DxTextArea",
     "exportPath": "ui/text_area",
-    "subscribableOptions": [
-      {
-        "name": "value",
-        "type": "any"
-      }
-    ],
     "options": [
       {
         "name": "accessKey",
@@ -76142,6 +75834,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "value",
         "types": [
           {
@@ -76189,12 +75882,6 @@
   {
     "name": "DxTextBox",
     "exportPath": "ui/text_box",
-    "subscribableOptions": [
-      {
-        "name": "value",
-        "type": "any"
-      }
-    ],
     "options": [
       {
         "name": "accessKey",
@@ -77426,6 +77113,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "value",
         "types": [
           {
@@ -77473,12 +77161,6 @@
   {
     "name": "DxTileView",
     "exportPath": "ui/tile_view",
-    "subscribableOptions": [
-      {
-        "name": "items",
-        "type": "any"
-      }
-    ],
     "templates": [
       "itemTemplate"
     ],
@@ -77617,6 +77299,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "items",
         "types": [
           {
@@ -78258,12 +77941,6 @@
   {
     "name": "DxToast",
     "exportPath": "ui/toast",
-    "subscribableOptions": [
-      {
-        "name": "visible",
-        "type": "any"
-      }
-    ],
     "templates": [
       "contentTemplate"
     ],
@@ -78979,6 +78656,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "visible",
         "types": [
           {
@@ -79009,12 +78687,6 @@
   {
     "name": "DxToolbar",
     "exportPath": "ui/toolbar",
-    "subscribableOptions": [
-      {
-        "name": "items",
-        "type": "any"
-      }
-    ],
     "templates": [
       "itemTemplate",
       "menuItemTemplate"
@@ -79101,6 +78773,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "items",
         "types": [
           {
@@ -79778,20 +79451,6 @@
   {
     "name": "DxTooltip",
     "exportPath": "ui/tooltip",
-    "subscribableOptions": [
-      {
-        "name": "height",
-        "type": "any"
-      },
-      {
-        "name": "visible",
-        "type": "any"
-      },
-      {
-        "name": "width",
-        "type": "any"
-      }
-    ],
     "templates": [
       "contentTemplate"
     ],
@@ -79914,6 +79573,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "height",
         "types": [
           {
@@ -80530,6 +80190,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "visible",
         "types": [
           {
@@ -80538,6 +80199,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "width",
         "types": [
           {
@@ -80560,20 +80222,6 @@
   {
     "name": "DxTreeList",
     "exportPath": "ui/tree_list",
-    "subscribableOptions": [
-      {
-        "name": "columns",
-        "type": "any"
-      },
-      {
-        "name": "expandedRowKeys",
-        "type": "any"
-      },
-      {
-        "name": "selectedRowKeys",
-        "type": "any"
-      }
-    ],
     "options": [
       {
         "name": "accessKey",
@@ -80798,6 +80446,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "columns",
         "types": [
           {
@@ -81087,6 +80736,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "expandedRowKeys",
         "types": [
           {
@@ -84378,6 +84028,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "paging",
         "types": [
           {
@@ -84394,6 +84045,7 @@
             ]
           },
           {
+            "isSubscribable": true,
             "name": "pageIndex",
             "types": [
               {
@@ -84402,6 +84054,7 @@
             ]
           },
           {
+            "isSubscribable": true,
             "name": "pageSize",
             "types": [
               {
@@ -84577,6 +84230,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "searchPanel",
         "types": [
           {
@@ -84617,6 +84271,7 @@
             ]
           },
           {
+            "isSubscribable": true,
             "name": "text",
             "types": [
               {
@@ -84643,6 +84298,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "selectedRowKeys",
         "types": [
           {
@@ -86928,12 +86584,6 @@
   {
     "name": "DxTreeView",
     "exportPath": "ui/tree_view",
-    "subscribableOptions": [
-      {
-        "name": "items",
-        "type": "any"
-      }
-    ],
     "templates": [
       "itemTemplate"
     ],
@@ -87160,6 +86810,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "items",
         "types": [
           {
@@ -88396,12 +88047,6 @@
   {
     "name": "DxValidationSummary",
     "exportPath": "ui/validation_summary",
-    "subscribableOptions": [
-      {
-        "name": "items",
-        "type": "any"
-      }
-    ],
     "templates": [
       "itemTemplate"
     ],
@@ -88423,6 +88068,7 @@
         ]
       },
       {
+        "isSubscribable": true,
         "name": "items",
         "types": [
           {

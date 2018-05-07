@@ -3,11 +3,11 @@ export interface IWidget {
   isEditor: boolean;
   name: string;
   options: IOption[];
-  subscribableOptions: ISubscribableOption[];
   templates: string[];
 }
 
 export interface IOption {
+  isSubscribable: boolean;
   name: string;
   options: IOption[];
   types: ITypeDescriptor[];
@@ -26,7 +26,7 @@ export interface IFunctionDescriptor extends ITypeDescriptor {
   params: {
     name: string;
     types: ITypeDescriptor[];
-  }[];
+  }[]; // tslint:disable-line:array-type
   returnValueType: ITypeDescriptor;
 }
 
@@ -34,10 +34,5 @@ export interface IObjectDescriptor extends ITypeDescriptor {
   fields: {
     name: string;
     types: ITypeDescriptor[];
-  }[];
-}
-
-export interface ISubscribableOption {
-  name: string;
-  type: string;
+  }[]; // tslint:disable-line:array-type
 }
