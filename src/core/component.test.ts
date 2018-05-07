@@ -182,7 +182,7 @@ describe("template", () => {
     });
 
     it("doesn't throw on dxremove", () => {
-        const parent = new Vue({
+        new Vue({
             template: `<test-component>
                             <div slot='item' slot-scope='props'>Template {{props.text}}</div>
                         </test-component>`,
@@ -190,8 +190,10 @@ describe("template", () => {
                 TestComponent
             }
         }).$mount();
+
         const renderedTemplate = renderItemTemplate({ text: "with data" });
-        events.triggerHandler(renderedTemplate, "dxremove");
+
+        expect(() => events.triggerHandler(renderedTemplate, "dxremove")).not.toThrow();
     });
 });
 
