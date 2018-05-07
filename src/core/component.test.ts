@@ -180,6 +180,21 @@ describe("template", () => {
         expect(renderedTemplate.attributes).toHaveProperty("custom-attr");
         expect(renderedTemplate.attributes["custom-attr"].value).toBe("123");
     });
+
+    it("doesn't throw on dxremove", () => {
+        new Vue({
+            template: `<test-component>
+                            <div slot='item' slot-scope='props'>Template {{props.text}}</div>
+                        </test-component>`,
+            components: {
+                TestComponent
+            }
+        }).$mount();
+
+        const renderedTemplate = renderItemTemplate({ text: "with data" });
+
+        expect(() => events.triggerHandler(renderedTemplate, "dxremove")).not.toThrow();
+    });
 });
 
 describe("events emitting", () => {

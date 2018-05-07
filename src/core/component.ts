@@ -67,7 +67,7 @@ const DxComponent: VueConstructor = Vue.extend({
                     const container = data.container.get ? data.container.get(0) : data.container;
                     container.appendChild(element);
 
-                    events.one(element, DX_REMOVE_EVENT, vm.$destroy);
+                    events.one(element, DX_REMOVE_EVENT, vm.$destroy.bind(vm));
 
                     return element;
                 }
