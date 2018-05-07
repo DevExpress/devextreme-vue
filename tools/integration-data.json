@@ -3702,6 +3702,14 @@
             ]
           },
           {
+            "name": "margin",
+            "types": [
+              {
+                "type": "Number"
+              }
+            ]
+          },
+          {
             "name": "printingEnabled",
             "types": [
               {
@@ -4611,20 +4619,25 @@
           {
             "type": "String",
             "acceptableValues": [
-              "\"generic.light\"",
-              "\"generic.dark\"",
-              "\"generic.contrast\"",
-              "\"generic.carmine\"",
-              "\"generic.darkmoon\"",
-              "\"generic.softblue\"",
-              "\"generic.darkviolet\"",
-              "\"generic.greenmist\"",
               "\"android5.light\"",
+              "\"generic.dark\"",
+              "\"generic.light\"",
+              "\"generic.contrast\"",
               "\"ios7.default\"",
+              "\"win10.black\"",
+              "\"win10.white\"",
               "\"win8.black\"",
               "\"win8.white\"",
-              "\"win10.black\"",
-              "\"win10.white\""
+              "\"generic.carmine\"",
+              "\"generic.darkmoon\"",
+              "\"generic.darkviolet\"",
+              "\"generic.greenmist\"",
+              "\"generic.softblue\"",
+              "\"material.blue.light\"",
+              "\"material.lime.light\"",
+              "\"material.orange.light\"",
+              "\"material.purple.light\"",
+              "\"material.teal.light\""
             ]
           }
         ]
@@ -6483,20 +6496,25 @@
           {
             "type": "String",
             "acceptableValues": [
-              "\"generic.light\"",
-              "\"generic.dark\"",
-              "\"generic.contrast\"",
-              "\"generic.carmine\"",
-              "\"generic.darkmoon\"",
-              "\"generic.softblue\"",
-              "\"generic.darkviolet\"",
-              "\"generic.greenmist\"",
               "\"android5.light\"",
+              "\"generic.dark\"",
+              "\"generic.light\"",
+              "\"generic.contrast\"",
               "\"ios7.default\"",
+              "\"win10.black\"",
+              "\"win10.white\"",
               "\"win8.black\"",
               "\"win8.white\"",
-              "\"win10.black\"",
-              "\"win10.white\""
+              "\"generic.carmine\"",
+              "\"generic.darkmoon\"",
+              "\"generic.darkviolet\"",
+              "\"generic.greenmist\"",
+              "\"generic.softblue\"",
+              "\"material.blue.light\"",
+              "\"material.lime.light\"",
+              "\"material.orange.light\"",
+              "\"material.purple.light\"",
+              "\"material.teal.light\""
             ]
           }
         ]
@@ -10896,6 +10914,14 @@
             ]
           },
           {
+            "name": "margin",
+            "types": [
+              {
+                "type": "Number"
+              }
+            ]
+          },
+          {
             "name": "printingEnabled",
             "types": [
               {
@@ -13100,20 +13126,25 @@
           {
             "type": "String",
             "acceptableValues": [
-              "\"generic.light\"",
-              "\"generic.dark\"",
-              "\"generic.contrast\"",
-              "\"generic.carmine\"",
-              "\"generic.darkmoon\"",
-              "\"generic.softblue\"",
-              "\"generic.darkviolet\"",
-              "\"generic.greenmist\"",
               "\"android5.light\"",
+              "\"generic.dark\"",
+              "\"generic.light\"",
+              "\"generic.contrast\"",
               "\"ios7.default\"",
+              "\"win10.black\"",
+              "\"win10.white\"",
               "\"win8.black\"",
               "\"win8.white\"",
-              "\"win10.black\"",
-              "\"win10.white\""
+              "\"generic.carmine\"",
+              "\"generic.darkmoon\"",
+              "\"generic.darkviolet\"",
+              "\"generic.greenmist\"",
+              "\"generic.softblue\"",
+              "\"material.blue.light\"",
+              "\"material.lime.light\"",
+              "\"material.orange.light\"",
+              "\"material.purple.light\"",
+              "\"material.teal.light\""
             ]
           }
         ]
@@ -15350,6 +15381,14 @@
             ]
           },
           {
+            "name": "margin",
+            "types": [
+              {
+                "type": "Number"
+              }
+            ]
+          },
+          {
             "name": "printingEnabled",
             "types": [
               {
@@ -16576,20 +16615,25 @@
           {
             "type": "String",
             "acceptableValues": [
-              "\"generic.light\"",
-              "\"generic.dark\"",
-              "\"generic.contrast\"",
-              "\"generic.carmine\"",
-              "\"generic.darkmoon\"",
-              "\"generic.softblue\"",
-              "\"generic.darkviolet\"",
-              "\"generic.greenmist\"",
               "\"android5.light\"",
+              "\"generic.dark\"",
+              "\"generic.light\"",
+              "\"generic.contrast\"",
               "\"ios7.default\"",
+              "\"win10.black\"",
+              "\"win10.white\"",
               "\"win8.black\"",
               "\"win8.white\"",
-              "\"win10.black\"",
-              "\"win10.white\""
+              "\"generic.carmine\"",
+              "\"generic.darkmoon\"",
+              "\"generic.darkviolet\"",
+              "\"generic.greenmist\"",
+              "\"generic.softblue\"",
+              "\"material.blue.light\"",
+              "\"material.lime.light\"",
+              "\"material.orange.light\"",
+              "\"material.purple.light\"",
+              "\"material.teal.light\""
             ]
           }
         ]
@@ -31189,6 +31233,14 @@
             ]
           },
           {
+            "name": "margin",
+            "types": [
+              {
+                "type": "Number"
+              }
+            ]
+          },
+          {
             "name": "printingEnabled",
             "types": [
               {
@@ -32963,20 +33015,25 @@
           {
             "type": "String",
             "acceptableValues": [
-              "\"generic.light\"",
-              "\"generic.dark\"",
-              "\"generic.contrast\"",
-              "\"generic.carmine\"",
-              "\"generic.darkmoon\"",
-              "\"generic.softblue\"",
-              "\"generic.darkviolet\"",
-              "\"generic.greenmist\"",
               "\"android5.light\"",
+              "\"generic.dark\"",
+              "\"generic.light\"",
+              "\"generic.contrast\"",
               "\"ios7.default\"",
+              "\"win10.black\"",
+              "\"win10.white\"",
               "\"win8.black\"",
               "\"win8.white\"",
-              "\"win10.black\"",
-              "\"win10.white\""
+              "\"generic.carmine\"",
+              "\"generic.darkmoon\"",
+              "\"generic.darkviolet\"",
+              "\"generic.greenmist\"",
+              "\"generic.softblue\"",
+              "\"material.blue.light\"",
+              "\"material.lime.light\"",
+              "\"material.orange.light\"",
+              "\"material.purple.light\"",
+              "\"material.teal.light\""
             ]
           }
         ]
@@ -34410,6 +34467,14 @@
             ]
           },
           {
+            "name": "margin",
+            "types": [
+              {
+                "type": "Number"
+              }
+            ]
+          },
+          {
             "name": "printingEnabled",
             "types": [
               {
@@ -35667,20 +35732,25 @@
           {
             "type": "String",
             "acceptableValues": [
-              "\"generic.light\"",
-              "\"generic.dark\"",
-              "\"generic.contrast\"",
-              "\"generic.carmine\"",
-              "\"generic.darkmoon\"",
-              "\"generic.softblue\"",
-              "\"generic.darkviolet\"",
-              "\"generic.greenmist\"",
               "\"android5.light\"",
+              "\"generic.dark\"",
+              "\"generic.light\"",
+              "\"generic.contrast\"",
               "\"ios7.default\"",
+              "\"win10.black\"",
+              "\"win10.white\"",
               "\"win8.black\"",
               "\"win8.white\"",
-              "\"win10.black\"",
-              "\"win10.white\""
+              "\"generic.carmine\"",
+              "\"generic.darkmoon\"",
+              "\"generic.darkviolet\"",
+              "\"generic.greenmist\"",
+              "\"generic.softblue\"",
+              "\"material.blue.light\"",
+              "\"material.lime.light\"",
+              "\"material.orange.light\"",
+              "\"material.purple.light\"",
+              "\"material.teal.light\""
             ]
           }
         ]
@@ -38331,7 +38401,17 @@
         "name": "height",
         "types": [
           {
+            "type": "Function",
+            "params": [],
+            "returnValueType": {
+              "type": "Number"
+            }
+          },
+          {
             "type": "Number"
+          },
+          {
+            "type": "String"
           }
         ]
       },
@@ -38920,7 +39000,17 @@
         "name": "width",
         "types": [
           {
+            "type": "Function",
+            "params": [],
+            "returnValueType": {
+              "type": "Number"
+            }
+          },
+          {
             "type": "Number"
+          },
+          {
+            "type": "String"
           }
         ]
       }
@@ -45929,6 +46019,14 @@
             ]
           },
           {
+            "name": "margin",
+            "types": [
+              {
+                "type": "Number"
+              }
+            ]
+          },
+          {
             "name": "printingEnabled",
             "types": [
               {
@@ -47515,20 +47613,25 @@
           {
             "type": "String",
             "acceptableValues": [
-              "\"generic.light\"",
-              "\"generic.dark\"",
-              "\"generic.contrast\"",
-              "\"generic.carmine\"",
-              "\"generic.darkmoon\"",
-              "\"generic.softblue\"",
-              "\"generic.darkviolet\"",
-              "\"generic.greenmist\"",
               "\"android5.light\"",
+              "\"generic.dark\"",
+              "\"generic.light\"",
+              "\"generic.contrast\"",
               "\"ios7.default\"",
+              "\"win10.black\"",
+              "\"win10.white\"",
               "\"win8.black\"",
               "\"win8.white\"",
-              "\"win10.black\"",
-              "\"win10.white\""
+              "\"generic.carmine\"",
+              "\"generic.darkmoon\"",
+              "\"generic.darkviolet\"",
+              "\"generic.greenmist\"",
+              "\"generic.softblue\"",
+              "\"material.blue.light\"",
+              "\"material.lime.light\"",
+              "\"material.orange.light\"",
+              "\"material.purple.light\"",
+              "\"material.teal.light\""
             ]
           }
         ]
@@ -51763,6 +51866,14 @@
             ]
           },
           {
+            "name": "margin",
+            "types": [
+              {
+                "type": "Number"
+              }
+            ]
+          },
+          {
             "name": "printingEnabled",
             "types": [
               {
@@ -53588,20 +53699,25 @@
           {
             "type": "String",
             "acceptableValues": [
-              "\"generic.light\"",
-              "\"generic.dark\"",
-              "\"generic.contrast\"",
-              "\"generic.carmine\"",
-              "\"generic.darkmoon\"",
-              "\"generic.softblue\"",
-              "\"generic.darkviolet\"",
-              "\"generic.greenmist\"",
               "\"android5.light\"",
+              "\"generic.dark\"",
+              "\"generic.light\"",
+              "\"generic.contrast\"",
               "\"ios7.default\"",
+              "\"win10.black\"",
+              "\"win10.white\"",
               "\"win8.black\"",
               "\"win8.white\"",
-              "\"win10.black\"",
-              "\"win10.white\""
+              "\"generic.carmine\"",
+              "\"generic.darkmoon\"",
+              "\"generic.darkviolet\"",
+              "\"generic.greenmist\"",
+              "\"generic.softblue\"",
+              "\"material.blue.light\"",
+              "\"material.lime.light\"",
+              "\"material.orange.light\"",
+              "\"material.purple.light\"",
+              "\"material.teal.light\""
             ]
           }
         ]
@@ -58620,6 +58736,14 @@
             ]
           },
           {
+            "name": "margin",
+            "types": [
+              {
+                "type": "Number"
+              }
+            ]
+          },
+          {
             "name": "printingEnabled",
             "types": [
               {
@@ -60195,20 +60319,25 @@
           {
             "type": "String",
             "acceptableValues": [
-              "\"generic.light\"",
-              "\"generic.dark\"",
-              "\"generic.contrast\"",
-              "\"generic.carmine\"",
-              "\"generic.darkmoon\"",
-              "\"generic.softblue\"",
-              "\"generic.darkviolet\"",
-              "\"generic.greenmist\"",
               "\"android5.light\"",
+              "\"generic.dark\"",
+              "\"generic.light\"",
+              "\"generic.contrast\"",
               "\"ios7.default\"",
+              "\"win10.black\"",
+              "\"win10.white\"",
               "\"win8.black\"",
               "\"win8.white\"",
-              "\"win10.black\"",
-              "\"win10.white\""
+              "\"generic.carmine\"",
+              "\"generic.darkmoon\"",
+              "\"generic.darkviolet\"",
+              "\"generic.greenmist\"",
+              "\"generic.softblue\"",
+              "\"material.blue.light\"",
+              "\"material.lime.light\"",
+              "\"material.orange.light\"",
+              "\"material.purple.light\"",
+              "\"material.teal.light\""
             ]
           }
         ]
@@ -70070,20 +70199,25 @@
           {
             "type": "String",
             "acceptableValues": [
-              "\"generic.light\"",
-              "\"generic.dark\"",
-              "\"generic.contrast\"",
-              "\"generic.carmine\"",
-              "\"generic.darkmoon\"",
-              "\"generic.softblue\"",
-              "\"generic.darkviolet\"",
-              "\"generic.greenmist\"",
               "\"android5.light\"",
+              "\"generic.dark\"",
+              "\"generic.light\"",
+              "\"generic.contrast\"",
               "\"ios7.default\"",
+              "\"win10.black\"",
+              "\"win10.white\"",
               "\"win8.black\"",
               "\"win8.white\"",
-              "\"win10.black\"",
-              "\"win10.white\""
+              "\"generic.carmine\"",
+              "\"generic.darkmoon\"",
+              "\"generic.darkviolet\"",
+              "\"generic.greenmist\"",
+              "\"generic.softblue\"",
+              "\"material.blue.light\"",
+              "\"material.lime.light\"",
+              "\"material.orange.light\"",
+              "\"material.purple.light\"",
+              "\"material.teal.light\""
             ]
           }
         ]
@@ -84964,6 +85098,14 @@
             ]
           },
           {
+            "name": "margin",
+            "types": [
+              {
+                "type": "Number"
+              }
+            ]
+          },
+          {
             "name": "printingEnabled",
             "types": [
               {
@@ -86210,20 +86352,25 @@
           {
             "type": "String",
             "acceptableValues": [
-              "\"generic.light\"",
-              "\"generic.dark\"",
-              "\"generic.contrast\"",
-              "\"generic.carmine\"",
-              "\"generic.darkmoon\"",
-              "\"generic.softblue\"",
-              "\"generic.darkviolet\"",
-              "\"generic.greenmist\"",
               "\"android5.light\"",
+              "\"generic.dark\"",
+              "\"generic.light\"",
+              "\"generic.contrast\"",
               "\"ios7.default\"",
+              "\"win10.black\"",
+              "\"win10.white\"",
               "\"win8.black\"",
               "\"win8.white\"",
-              "\"win10.black\"",
-              "\"win10.white\""
+              "\"generic.carmine\"",
+              "\"generic.darkmoon\"",
+              "\"generic.darkviolet\"",
+              "\"generic.greenmist\"",
+              "\"generic.softblue\"",
+              "\"material.blue.light\"",
+              "\"material.lime.light\"",
+              "\"material.orange.light\"",
+              "\"material.purple.light\"",
+              "\"material.teal.light\""
             ]
           }
         ]
@@ -89277,6 +89424,14 @@
             ]
           },
           {
+            "name": "margin",
+            "types": [
+              {
+                "type": "Number"
+              }
+            ]
+          },
+          {
             "name": "printingEnabled",
             "types": [
               {
@@ -91007,20 +91162,25 @@
           {
             "type": "String",
             "acceptableValues": [
-              "\"generic.light\"",
-              "\"generic.dark\"",
-              "\"generic.contrast\"",
-              "\"generic.carmine\"",
-              "\"generic.darkmoon\"",
-              "\"generic.softblue\"",
-              "\"generic.darkviolet\"",
-              "\"generic.greenmist\"",
               "\"android5.light\"",
+              "\"generic.dark\"",
+              "\"generic.light\"",
+              "\"generic.contrast\"",
               "\"ios7.default\"",
+              "\"win10.black\"",
+              "\"win10.white\"",
               "\"win8.black\"",
               "\"win8.white\"",
-              "\"win10.black\"",
-              "\"win10.white\""
+              "\"generic.carmine\"",
+              "\"generic.darkmoon\"",
+              "\"generic.darkviolet\"",
+              "\"generic.greenmist\"",
+              "\"generic.softblue\"",
+              "\"material.blue.light\"",
+              "\"material.lime.light\"",
+              "\"material.orange.light\"",
+              "\"material.purple.light\"",
+              "\"material.teal.light\""
             ]
           }
         ]
