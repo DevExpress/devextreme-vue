@@ -4,7 +4,7 @@
             currentView="week"
             :dataSource="appointments"
             :height="400"
-            :currentDate="new Date(2017, 4, 25)"
+            :currentDate="currentDate"
             :startDayHour="9"
             :views="['month', 'week', 'day']"
         />
@@ -23,7 +23,8 @@ export default {
   },
   data: function() {
     return {
-      appointments: appointments
+      appointments: appointments,
+      currentDate: new Date(2017, 4, 25)
     };
   }
 };

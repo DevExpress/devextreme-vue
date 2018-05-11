@@ -1,26 +1,37 @@
 <template>
     <example-block title="dxDataGrid">
-        <dx-data-grid 
-            :dataSource="sales"
-            keyExpr="orderId"
-            :allowColumnReordering="true"
-            :grouping="{ autoExpandAll: true }"
-            :groupPanel="{ visible: true }"
-            :paging="{ pageSize: 10 }"
-            :selection="{ mode: 'multiple' }"
-            :filterRow="{ visible: true }"
-            :selectedRowKeys="selectedRowKeys"
-            :columns="columns"
-        >
-          <dx-button slot="cell-city" slot-scope="data" :text="data.text" />
-        </dx-data-grid>
+      <div class="flex-container">
+        <dx-check-box 
+          v-model="alternateRowColors" 
+          text="Alternate Row Colors"
+        />
+        <dx-check-box 
+          v-model="filterRowVisible" 
+          text="Filter Row Visible"
+        />
+      </div>
+      <dx-data-grid 
+          :dataSource="sales"
+          keyExpr="orderId"
+          :rowAlternationEnabled="alternateRowColors"
+          :allowColumnReordering="true"
+          :grouping="grouping"
+          :groupPanel="groupPanel"
+          :paging="paging"
+          :selection="selection"
+          :filterRow="filterRow"
+          :selectedRowKeys="selectedRowKeys"
+          :columns="columns"
+      >
+        <dx-button slot="cell-city" slot-scope="data" :text="data.text" />
+      </dx-data-grid>
     </example-block>
 </template>
 
 <script>
 import ExampleBlock from "./example-block";
 import { sales } from "../data";
-import { DxDataGrid, DxButton } from "../../src";
+import { DxDataGrid, DxButton, DxCheckBox } from "../../src";
 import Vue from "vue";
 
 const selectedKeys = [10273, 10277, 10292, 10295, 10300, 10302, 10305, 10308, 10312, 
@@ -31,12 +42,24 @@ export default {
   components: {
     ExampleBlock,
     DxDataGrid,
-    DxButton
+    DxButton,
+    DxCheckBox
+  },
+  computed: {
+    filterRow() {
+      return { visible: this.filterRowVisible };
+    }
   },
   data: function() {
     return {
       sales: sales,
+      alternateRowColors: true,
       selectedRowKeys: selectedKeys,
+      grouping: { autoExpandAll: true },
+      filterRowVisible: true,
+      groupPanel: { visible: true },
+      paging: { pageSize: 10 },
+      selection: { mode: 'multiple' },
       columns: [
         {
           dataField: "orderId",
@@ -78,3 +101,10 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+  .flex-container {
+    display: flex;
+    flex-direction: row;
+  }
+</style>

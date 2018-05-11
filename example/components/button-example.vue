@@ -3,7 +3,7 @@
         <dx-button text="clik me"/>
         <dx-button
             text="I'm colored"
-            :elementAttr="{ style: 'background-color: #ffc' }"
+            :elementAttr="buttonAttrs"
         />
         <dx-button
             text="I'm dangerous"
@@ -21,6 +21,13 @@ export default {
   components: {
     ExampleBlock,
     DxButton
+  },
+  data: function() {
+      return {
+        buttonAttrs: { 
+            style: 'background-color: #ffc' 
+        }
+      }
   }
 };
 </script>
