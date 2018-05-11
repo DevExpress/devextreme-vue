@@ -1,7 +1,7 @@
 <template>
     <example-block title="dxList">
         <h4>List of simple items</h4>
-        <dx-list :items="[1, 2, 3, 4]" />
+        <dx-list :items="simpleData" />
         <br/>
         <h4>List with item template</h4>
         <dx-list :items="listData">
@@ -24,6 +24,7 @@ export default {
   },
   data: function() {
     return {
+      simpleData: [1, 2, 3, 4],
       listData: orangesByDay
     };
   }
