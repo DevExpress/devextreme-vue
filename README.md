@@ -7,7 +7,7 @@
 This project allows you to use [DevExtreme Widgets](http://js.devexpress.com/Demos/WidgetsGallery/) as [Vue](https://vuejs.org) Components.
 
 
-* [Getting started](#getting-started)
+* [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Install DevExtreme](#installation)
   * [Use DevExtreme Components](#use-components)
@@ -16,13 +16,14 @@ This project allows you to use [DevExtreme Widgets](http://js.devexpress.com/Dem
   * [Set Component Option](#component-option)
   * [Two-way Binding](#two-way-binding)
   * [Editors Value Binding](#editors-value-binding)
-  * [Custom templates](#custom-templates)
+  * [Custom Templates](#custom-templates)
   * [Components with Transcluded Content](#components-with-transcluded-content)
   * [Event Handling](#event-handling)
+  * [Getting Widget Instance](#widget-instance)
 * [Type Checks](#type-checks)
 * [DevExtreme Data Layer and Utils](#data-layer-and-utils)
 * [License](#license)
-* [Support & feedback](#support-feedback)
+* [Support & Feedback](#support-feedback)
 ## <a name="getting-started"></a>Getting Started ##
 You can try this [live example](https://codesandbox.io/s/4zr81zl1x/) (no need to install anything).
 
@@ -161,7 +162,7 @@ The DevExtreme Vue editors also support [`v-model`](https://vuejs.org/v2/guide/f
 <dx-text-box v-model="text" />
 ```
 
-### <a name="custom-templates"></a>Custom templates ###
+### <a name="custom-templates"></a>Custom Templates ###
 You can customize widget elements' appearance via the corresponding template properties. 
 
 To specify a DevExtreme Vue Component template, use a [named slot](https://vuejs.org/v2/guide/components-slots.html#Named-Slots) to specify a template markup. You also should specify a [slot scope](https://vuejs.org/v2/guide/components-slots.html#Scoped-Slots) to access the template element data.
@@ -238,6 +239,53 @@ data: function() {
 ```
 
 You can find the full list of component events in each DevExtreme widget API Reference's Events section (for example, [TextBox events](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxTextBox/Events/)).
+
+### <a name="widget-instance"></a>Getting Widget Instance ###
+In some cases, a widget instance is required (e.g. when you need to call a widget method). You can get it in the following way:
+1. Assign a unique key to [the `ref` attribute](https://vuejs.org/v2/api/#ref) of the component you're interested in
+1. Use this key to get the component from the [the `$refs` property](https://vuejs.org/v2/api/#vm-refs)
+1. Get the widget instance using the `instance` property of the component
+
+```html
+<template>
+    <div title="Accessing Widget Instance">
+        <dx-text-box :ref="textBoxRefName"/>
+        <br/>
+        <dx-button text="Set focus" @click="setFocus"/>
+    </div>
+</template>
+
+<script>
+import { DxButton, DxTextBox } from "devextreme-vue";
+
+const textBoxRefName = "some-ref-name";
+
+export default {
+  data: function() {
+    return {
+      textBoxRefName
+    };
+  },
+
+  components: {
+    DxTextBox,
+    DxButton
+  },
+
+  methods: {
+    setFocus: function() {
+      this.textBox.focus();
+    }
+  },
+
+  computed: {
+    textBox: function() {
+      return this.$refs[textBoxRefName].instance;
+    }
+  }
+};
+</script>
+```
 
 ## <a name="type-checks"></a>Type Checks ##
 DevExtreme Vue components provide [Prop Validation and Type Checks](https://vuejs.org/v2/guide/components-props.html#Prop-Validation), which means that you should specify proper values for the components' properties. Otherwise, Vue produces a console warning (if you are using the development build).
