@@ -243,7 +243,7 @@ You can find the full list of component events in each DevExtreme widget API Ref
 ### <a name="widget-instance"></a>Getting a Widget Instance ###
 A widget instance is most often necessary when you need to call a widget method. You can get it in the following way:
 1. Assign a unique key to the [`ref` attribute](https://vuejs.org/v2/api/#ref) of the component you're interested in.
-1. Use this key to retrieve the component from the [the `$refs` property](https://vuejs.org/v2/api/#vm-refs).
+1. Use this key to retrieve the component from the [`$refs` property](https://vuejs.org/v2/api/#vm-refs).
 1. Use the component's `instance` property to get the widget instance.
 
 ```html
