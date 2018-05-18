@@ -15,11 +15,14 @@
         <scheduler-example/>
         <br/>
         <chart-example/>
+        <br/>
+        <accessing-instance-example/>
     </div>
 </template>
 
 <script>
 
+import AccessingInstanceExample from "./components/accessing-instance-example";
 import ButtonExample from "./components/button-example";
 import ListExample from "./components/list-example";
 import GridExample from "./components/grid-example";
@@ -31,6 +34,7 @@ import ChartExample from "./components/chart-example";
 
 export default {
     components: {
+        AccessingInstanceExample,
         ButtonExample,
         PopupExample,
         TextBoxExample,
