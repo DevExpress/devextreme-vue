@@ -19,7 +19,7 @@ This project allows you to use [DevExtreme Widgets](http://js.devexpress.com/Dem
   * [Custom Templates](#custom-templates)
   * [Components with Transcluded Content](#components-with-transcluded-content)
   * [Event Handling](#event-handling)
-  * [Getting Widget Instance](#widget-instance)
+  * [Getting a Widget Instance](#widget-instance)
 * [Type Checks](#type-checks)
 * [DevExtreme Data Layer and Utils](#data-layer-and-utils)
 * [License](#license)
@@ -240,11 +240,11 @@ data: function() {
 
 You can find the full list of component events in each DevExtreme widget API Reference's Events section (for example, [TextBox events](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxTextBox/Events/)).
 
-### <a name="widget-instance"></a>Getting Widget Instance ###
-In some cases, a widget instance is required (e.g. when you need to call a widget method). You can get it in the following way:
-1. Assign a unique key to [the `ref` attribute](https://vuejs.org/v2/api/#ref) of the component you're interested in
-1. Use this key to get the component from the [the `$refs` property](https://vuejs.org/v2/api/#vm-refs)
-1. Get the widget instance using the `instance` property of the component
+### <a name="widget-instance"></a>Getting a Widget Instance ###
+A widget instance is most often necessary when you need to call a widget method. You can get it in the following way:
+1. Assign a unique key to the [`ref` attribute](https://vuejs.org/v2/api/#ref) of the component you're interested in.
+1. Use this key to retrieve the component from the [the `$refs` property](https://vuejs.org/v2/api/#vm-refs).
+1. Use the component's `instance` property to get the widget instance.
 
 ```html
 <template>
