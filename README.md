@@ -27,7 +27,7 @@ This project allows you to use [DevExtreme Widgets](http://js.devexpress.com/Dem
 ## <a name="getting-started"></a>Getting Started ##
 You can try this [live example](https://codesandbox.io/s/4zr81zl1x/) (no need to install anything).
 
-If you’d rather use a local development environment check out the sections below.
+See the sections below if you prefer using a local development environment.
 ### <a name="prerequisites"></a>Prerequisites ###
 [Node.js and npm](https://docs.npmjs.com/getting-started/installing-node) are required
 
@@ -59,7 +59,7 @@ See the [Predefined Themes](https://js.devexpress.com/Documentation/Guide/Themes
 
 ### <a name="use-components"></a>Use DevExtreme Components  ###
 
-You can use DevExtreme components in a [single file component](https://vuejs.org/v2/guide/single-file-components.html)
+You can use DevExtreme components in a [single file component](https://vuejs.org/v2/guide/single-file-components.html)...
 
 ```html
 <template>
@@ -123,7 +123,7 @@ new Vue({
 
 ## <a name="api-reference"></a>API Reference ##
 
-DevExtreme Vue components mirror [DevExtreme JavaScript API](http://js.devexpress.com/Documentation/ApiReference/) but use Vue syntax for specifying widget options, subscribing to events and custom template declaration.
+DevExtreme Vue components are similar to the [DevExtreme JavaScript API](http://js.devexpress.com/Documentation/ApiReference/) but use Vue syntax for specifying widget options, subscribing to events and custom template declaration.
 
 ## <a name="component-configuration"></a>Component Configuration ##
 
@@ -165,7 +165,7 @@ The DevExtreme Vue editors also support [`v-model`](https://vuejs.org/v2/guide/f
 ### <a name="custom-templates"></a>Custom Templates ###
 You can customize widget elements' appearance via the corresponding template properties. 
 
-To specify a DevExtreme Vue Component template, use a [named slot](https://vuejs.org/v2/guide/components-slots.html#Named-Slots) to specify a template markup. You also should specify a [slot scope](https://vuejs.org/v2/guide/components-slots.html#Scoped-Slots) to access the template element data.
+To specify a DevExtreme Vue Component template, use a [named slot](https://vuejs.org/v2/guide/components-slots.html#Named-Slots) to specify a template's markup. You also should specify a [slot scope](https://vuejs.org/v2/guide/components-slots.html#Scoped-Slots) to access the template element's data.
 
 For instance, you can specify the itemTemplate:
 
@@ -241,8 +241,8 @@ data: function() {
 You can find the full list of component events in each DevExtreme widget API Reference's Events section (for example, [TextBox events](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxTextBox/Events/)).
 
 ### <a name="widget-instance"></a>Getting a Widget Instance ###
-A widget instance is most often necessary when you need to call a widget method. You can get it in the following way:
-1. Assign a unique key to the [`ref` attribute](https://vuejs.org/v2/api/#ref) of the component you're interested in.
+A widget instance is used when calling a widget method. You can get it in the following way:
+1. Assign a unique key to the component's [`ref` attribute](https://vuejs.org/v2/api/#ref).
 1. Use this key to retrieve the component from the [`$refs` property](https://vuejs.org/v2/api/#vm-refs).
 1. Use the component's `instance` property to get the widget instance.
 
@@ -288,7 +288,7 @@ export default {
 ```
 
 ## <a name="type-checks"></a>Type Checks ##
-DevExtreme Vue components provide [Prop Validation and Type Checks](https://vuejs.org/v2/guide/components-props.html#Prop-Validation), which means that you should specify proper values for the components' properties. Otherwise, Vue produces a console warning (if you are using the development build).
+You should specify proper values for the components' properties because DevExtreme Vue components use [Prop Validation and Type Checks](https://vuejs.org/v2/guide/components-props.html#Prop-Validation). Otherwise, Vue produces a console warning (if you are using the development build).
 
 ## <a name="data-layer-and-utils"></a>DevExtreme Data Layer and Utils ##
 The DevExtreme includes a [Data Layer](https://js.devexpress.com/Documentation/Guide/Data_Layer/Data_Layer/) and [Utils](https://js.devexpress.com/Documentation/ApiReference/Common/utils/) that can be helpful in different scenarios.
@@ -296,11 +296,11 @@ The DevExtreme includes a [Data Layer](https://js.devexpress.com/Documentation/G
 
 ## <a name="license"></a>License ##
 
-**DevExtreme Vue components are released as an MIT-licensed (free and open-source) add-on to DevExtreme.**
+**DevExtreme Vue components are released as an MIT-licensed (free and open-source) DevExtreme add-on.**
 
-Familiarize yourself with the [DevExtreme License](https://js.devexpress.com/Licensing/).
+See the [DevExtreme License](https://js.devexpress.com/Licensing/) for more information.
 
-[A free trial is available!](http://js.devexpress.com/Buy/)
+[A free trial is available](http://js.devexpress.com/Buy/)
 
 ## <a name="support-feedback"></a>Support & Feedback ##
 * Check the [Vue Guide](https://vuejs.org/v2/guide/) for general Vue questions
