@@ -58,6 +58,7 @@ const DxComponent: VueConstructor = Vue.extend({
             return {
                 render: (data: any) => {
                     const vm = new Vue({
+                        parent: this,
                         render: () => {
                             return template(data.model);
                         }
