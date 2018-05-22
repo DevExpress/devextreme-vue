@@ -3,6 +3,8 @@ import { VNode, VueConstructor } from "vue";
 
 import * as events from "devextreme/events";
 
+import { camelize } from "./helpers";
+
 const DX_TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper";
 const DX_REMOVE_EVENT = "dxremove";
 
@@ -90,9 +92,10 @@ const DxComponent: VueConstructor = Vue.extend({
         },
 
         $_createEmitters(instance: any): void {
-            Object.keys(this.$listeners).forEach((eventName: string) => {
+            Object.keys(this.$listeners).forEach((listenerName: string) => {
+                const eventName = camelize(listenerName);
                 instance.on(eventName, (e: any) => {
-                    this.$emit(eventName, e);
+                    this.$emit(listenerName, e);
                 });
             });
         }
