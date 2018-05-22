@@ -6,6 +6,6 @@ export function lowercaseFirst(value: string): string {
     return value[0].toLowerCase() + value.substr(1);
 }
 
-export function kebabToLowerCamelCase(value: string): string {
+export function camelize(value: string): string {
     return lowercaseFirst(value.split("-").map((v) => uppercaseFirst(v)).join(""));
 }

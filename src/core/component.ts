@@ -3,7 +3,7 @@ import { VNode, VueConstructor } from "vue";
 
 import * as events from "devextreme/events";
 
-import { kebabToLowerCamelCase } from "./helpers";
+import { camelize } from "./helpers";
 
 const DX_TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper";
 const DX_REMOVE_EVENT = "dxremove";
@@ -93,7 +93,7 @@ const DxComponent: VueConstructor = Vue.extend({
 
         $_createEmitters(instance: any): void {
             Object.keys(this.$listeners).forEach((listenerName: string) => {
-                const eventName = kebabToLowerCamelCase(listenerName);
+                const eventName = camelize(listenerName);
                 instance.on(eventName, (e: any) => {
                     this.$emit(listenerName, e);
                 });
