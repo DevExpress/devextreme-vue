@@ -199,7 +199,7 @@ describe("template", () => {
 
 describe("events emitting", () => {
 
-    it("forwards DevExtreme events", () => {
+    it("forwards DevExtreme events in camelCase", () => {
         const expectedArgs = {};
         const parent = new Vue({
             template: "<TestComponent v-on:testEventName=''></TestComponent>",
@@ -211,6 +211,21 @@ describe("events emitting", () => {
 
         expect($emitSpy).toHaveBeenCalledTimes(1);
         expect($emitSpy.mock.calls[0][0]).toBe("testEventName");
+        expect($emitSpy.mock.calls[0][1]).toBe(expectedArgs);
+    });
+
+    it("forwards DevExtreme events in kebab-case", () => {
+        const expectedArgs = {};
+        const parent = new Vue({
+            template: "<TestComponent v-on:test-event-name=''></TestComponent>",
+            components: { TestComponent }
+        }).$mount();
+        const $emitSpy = jest.spyOn(parent.$children[0], "$emit");
+
+        Widget.fire("testEventName", expectedArgs);
+
+        expect($emitSpy).toHaveBeenCalledTimes(1);
+        expect($emitSpy.mock.calls[0][0]).toBe("test-event-name");
         expect($emitSpy.mock.calls[0][1]).toBe(expectedArgs);
     });
 });

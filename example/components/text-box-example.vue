@@ -13,9 +13,15 @@
         valueChangeEvent="input"
       />
 
-      <h5 class="text-box-label">valueChanged</h5>
+      <h5 class="text-box-label">@valueChanged</h5>
       <dx-text-box
         @valueChanged="text = $event.value"
+        valueChangeEvent="input"
+      />
+
+      <h5 class="text-box-label">@value-changed</h5>
+      <dx-text-box
+        @value-changed="text = $event.value"
         valueChangeEvent="input"
       />
 
