@@ -25,7 +25,7 @@ This project allows you to use [DevExtreme Widgets](http://js.devexpress.com/Dem
 * [License](#license)
 * [Support & Feedback](#support-feedback)
 ## <a name="getting-started"></a>Getting Started ##
-You can try this [live example](https://codesandbox.io/s/4zr81zl1x/) (no need to install anything).
+You can try this [live example](https://codesandbox.io/s/kk5rrm1o2v) (no need to install anything).
 
 See the sections below if you prefer using a local development environment.
 ### <a name="prerequisites"></a>Prerequisites ###
@@ -36,7 +36,7 @@ See the sections below if you prefer using a local development environment.
 Install the **devextreme** and **devextreme-vue** npm packages:
 
 ```console
-npm install --save devextreme@18.1-unstable devextreme-vue
+npm install --save devextreme@18.1 devextreme-vue@18.1
 ```
 
 ### <a name="import_devextreme_modules"></a>Import DevExtreme Modules and Themes  ###
