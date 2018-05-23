@@ -134,6 +134,21 @@ describe("template", () => {
         expect(renderedTemplate.innerHTML).toBe("Template with data");
     });
 
+    it("adds templates as children", () => {
+        const vm = new Vue({
+            template: `<test-component ref="component">
+                            <div slot='item' slot-scope='props'>Template</div>
+                        </test-component>`,
+            components: {
+                TestComponent
+            }
+        }).$mount();
+        renderItemTemplate({});
+
+        const component: any = vm.$refs.component;
+        expect(component.$children.length).toBe(1);
+    });
+
     it("unwraps container", () => {
         new Vue({
             template: `<test-component>
