@@ -36,7 +36,7 @@ See the sections below if you prefer using a local development environment.
 Install the **devextreme** and **devextreme-vue** npm packages:
 
 ```console
-npm install --save devextreme@18.1 devextreme-vue@18.1
+npm install --save devextreme@18.1 devextreme-vue
 ```
 
 ### <a name="import_devextreme_modules"></a>Import DevExtreme Modules and Themes  ###
