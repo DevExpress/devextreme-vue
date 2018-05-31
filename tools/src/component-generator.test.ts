@@ -164,11 +164,17 @@ const DxCLASS_NAME: VueConstructor = Vue.extend({
   props: {
     PROP1: {
       type: TYPE1,
-      validator: (v) => typeof(v) !== "string" || ["VAL1", "VAL2"].indexOf(v) !== -1
+      validator: (v) => typeof(v) !== "string" || [
+        "VAL1",
+        "VAL2"
+      ].indexOf(v) !== -1
     },
     PROP2: {
       type: TYPE2,
-      validator: (v) => typeof(v) !== "TYPE3" || ["VAL1", "VAL2"].indexOf(v) !== -1
+      validator: (v) => typeof(v) !== "TYPE3" || [
+        "VAL1",
+        "VAL2"
+      ].indexOf(v) !== -1
     }
   },
   computed: {
@@ -220,7 +226,10 @@ const DxCLASS_NAME: VueConstructor = Vue.extend({
   props: {
     PROP1: {
       type: TYPE1,
-      validator: (v) => !Array.isArray(v) || v.filter(i => ["VAL1", "VAL2"].indexOf(i) === -1).length === 0
+      validator: (v) => !Array.isArray(v) || v.filter(i => [
+        "VAL1",
+        "VAL2"
+      ].indexOf(i) === -1).length === 0
     }
   },
   computed: {

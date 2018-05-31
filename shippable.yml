@@ -13,6 +13,7 @@ build:
   ci:
     - npm install
     - npm run build
+    - npm run lint
     - npm run test
   cache: true
   cache_dir_list:
