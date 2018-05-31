@@ -75,7 +75,7 @@ const renderSimpleProp: (model: IProp) => string = createTempate(`
 const renderExtendedProp: (model: IProp) => string = createTempate(`
     <#= it.name #>: {<#? it.types #>
       type: <#? it.types.length > 1 #>[<#?#><#= it.types.join(', ') #><#? it.types.length > 1 #>]<#?#><#?#><#? it.acceptableValues #>,
-      validator: (v) => <#? it.isArray #>!Array.isArray(v) || v.filter(i => [<#= it.acceptableValues.join(', ') #>].indexOf(i) === -1).length === 0<#??#>typeof(v) !== <#? it.acceptableValueType #>"<#= it.acceptableValueType #>"<#??#>"string"<#?#> || [<#= it.acceptableValues.join(', ') #>].indexOf(v) !== -1<#?#>
+      validator: (v) => <#? it.isArray #>!Array.isArray(v) || v.filter(i => [\n        <#= it.acceptableValues.join(',\\n        ') #>\n      ].indexOf(i) === -1).length === 0<#??#>typeof(v) !== <#? it.acceptableValueType #>"<#= it.acceptableValueType #>"<#??#>"string"<#?#> || [\n        <#= it.acceptableValues.join(',\\n        ') #>\n      ].indexOf(v) !== -1<#?#>
     <#?#>}
 `.trimRight());
 // tslint:enable:max-line-length

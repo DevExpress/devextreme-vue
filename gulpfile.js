@@ -110,7 +110,7 @@ gulp.task(NPM_BUILD, [NPM_LICENSE, NPM_PACKAGE, NPM_README, GENERATE], () => {
 gulp.task(NPM_PACK, [NPM_BUILD], shell.task(['npm pack'], { cwd: config.npm.dist }));
 
 gulp.task(LINT, () => {
-  return gulp.src([config.src, config.generator.src, config.example.src])
+  return gulp.src([config.src, config.generator.src])
     .pipe(tslint({
         formatter: "verbose"
     }))
