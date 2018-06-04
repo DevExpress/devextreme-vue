@@ -1,12 +1,26 @@
 import { convertTypes } from "./converter";
 
 it("deduplicates", () => {
-    expect(convertTypes(["String", "Number", "String"])).toEqual(["String", "Number"]);
+    expect(convertTypes([
+        { type: "String", isCustomType: false, acceptableValues: [] },
+        { type: "Number", isCustomType: false, acceptableValues: [] },
+        { type: "String", isCustomType: false, acceptableValues: [] }
+    ])).toEqual(["String", "Number"]);
 });
 
 it("returns undefiend if finds Any", () => {
-    expect(convertTypes(["Any"])).toBeUndefined();
-    expect(convertTypes(["String", "Any", "Number"])).toBeUndefined();
+    expect(convertTypes([{ type: "Any", isCustomType: false, acceptableValues: [] }])).toBeUndefined();
+    expect(convertTypes([
+        { type: "String", isCustomType: false, acceptableValues: [] },
+        { type: "Number", isCustomType: false, acceptableValues: [] },
+        { type: "Any", isCustomType: false, acceptableValues: [] }
+    ])).toBeUndefined();
+});
+
+it("returns Object if finds isCustomType", () => {
+    expect(convertTypes([
+        { type: "CustomType", isCustomType: true, acceptableValues: [] }
+    ])).toEqual(["Object"]);
 });
 
 it("returns undefined if array is empty", () => {
