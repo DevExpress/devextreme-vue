@@ -255,12 +255,7 @@ describe("extension component", () => {
     });
 
     it("doesn't render", () => {
-        new Vue({
-            template: `<test-extension-component/>`,
-            components: {
-                TestExtensionComponent
-            }
-        }).$mount();
+        new TestExtensionComponent().$mount();
 
         expect(ExtensionWidgetClass).toHaveBeenCalledTimes(0);
     });
