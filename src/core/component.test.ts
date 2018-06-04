@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { DxComponent, DxExtensionComponent} from "../core/component";
+import { DxComponent, DxExtensionComponent } from "../core/component";
 
 import * as events from "devextreme/events";
 
