@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { DxComponent as BaseComponent} from "../core/component";
+import { DxComponent as BaseComponent, DxExtensionComponent} from "../core/component";
 
 import * as events from "devextreme/events";
 
@@ -242,6 +242,42 @@ describe("events emitting", () => {
         expect($emitSpy).toHaveBeenCalledTimes(1);
         expect($emitSpy.mock.calls[0][0]).toBe("test-event-name");
         expect($emitSpy.mock.calls[0][1]).toBe(expectedArgs);
+    });
+});
+
+describe("extension component", () => {
+    const ExtensionWidgetClass = jest.fn(() => Widget);
+    const TestExtensionComponent = Vue.extend({
+        extends: DxExtensionComponent,
+        beforeCreate() {
+            (this as any).$_WidgetClass = ExtensionWidgetClass;
+        }
+    });
+
+    it("doesn't render", () => {
+        new Vue({
+            template: `<test-extension-component/>`,
+            components: {
+                TestExtensionComponent
+            }
+        }).$mount();
+
+        expect(ExtensionWidgetClass).toHaveBeenCalledTimes(0);
+    });
+
+    it("renders inside component on parent element", () => {
+        new Vue({
+            template: `<test-component>
+                            <test-extension-component/>
+                        </test-component>`,
+            components: {
+                TestComponent,
+                TestExtensionComponent
+            }
+        }).$mount();
+
+        expect(ExtensionWidgetClass).toHaveBeenCalledTimes(1);
+        expect(ExtensionWidgetClass.mock.calls[0][0]).toBe(WidgetClass.mock.calls[0][0]);
     });
 });
 

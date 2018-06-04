@@ -7,6 +7,7 @@ interface IComponent {
     dxExportPath: string;
     props?: IProp[];
     hasModel?: boolean;
+    isExtension?: boolean;
 }
 
 interface IComponentModel {
@@ -15,6 +16,7 @@ interface IComponentModel {
     dxExportPath: string;
     renderedProps?: string[];
     hasModel?: boolean;
+    isExtension?: boolean;
     widgetName: string;
 }
 
@@ -49,7 +51,7 @@ import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import <#= it.widgetName #> from "devextreme/<#= it.dxExportPath #>";
 import { VueConstructor } from "vue";
-import { DxComponent as BaseComponent } from "<#= it.baseComponentPath #>";
+import { <#= it.isExtension ? 'DxExtensionComponent' : 'DxComponent' #> as BaseComponent } from "<#= it.baseComponentPath #>";
 
 const Dx<#= it.name #>: VueConstructor = Vue.extend({
   extends: BaseComponent,<#? it.props #>
