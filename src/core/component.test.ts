@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { DxComponent as BaseComponent, DxExtensionComponent} from "../core/component";
+import { DxComponent, DxExtensionComponent} from "../core/component";
 
 import * as events from "devextreme/events";
 
@@ -20,7 +20,7 @@ const Widget = {
 
 const WidgetClass = jest.fn(() => Widget);
 const TestComponent = Vue.extend({
-    extends: BaseComponent,
+    extends: DxComponent,
     beforeCreate() {
         (this as any).$_WidgetClass = WidgetClass;
     }

@@ -33,7 +33,7 @@ export { DxCLASS_NAME };
     ).toBe(EXPECTED);
 });
 
-it("generates extension components", () => {
+it("generates extension component", () => {
   //#region EXPECTED
   const EXPECTED = `
 import * as VueType from "vue";

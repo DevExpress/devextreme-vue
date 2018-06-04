@@ -9,19 +9,10 @@ const DX_TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper";
 const DX_REMOVE_EVENT = "dxremove";
 
 const Vue = VueType.default || VueType;
-const DxComponent: VueConstructor = Vue.extend({
+const BaseComponent: VueConstructor = Vue.extend({
 
     render(createElement: (...args) => VNode): VNode {
         return createElement("div", this.$slots.default);
-    },
-
-    mounted(): void {
-        this.$_createWidget();
-        this.$children.forEach((child: any) => {
-            if (child.$isExtension) {
-                child.$createInstance(this.$el);
-            }
-        });
     },
 
     beforeDestroy(): void {
@@ -30,10 +21,7 @@ const DxComponent: VueConstructor = Vue.extend({
     },
 
     methods: {
-        $_createWidget(): void {
-            this.$_createWidgetInstance(this.$el);
-        },
-        $_createWidgetInstance(element: any): void {
+        $_createWidget(element: any): void {
             const options: object = {
                 ...this.$_getIntegrationOptions(),
                 ...this.$options.propsData
@@ -113,14 +101,24 @@ const DxComponent: VueConstructor = Vue.extend({
     }
 });
 
-const DxExtensionComponent: VueConstructor = Vue.extend({
-    extends: DxComponent,
+const DxComponent: VueConstructor = BaseComponent.extend({
+    mounted(): void {
+        (this as any).$_createWidget(this.$el);
+        this.$children.forEach((child: any) => {
+            if (child.$_isExtension) {
+                child.instantiate(this.$el);
+            }
+        });
+    }
+});
+
+const DxExtensionComponent: VueConstructor = BaseComponent.extend({
+    created(): void {
+        (this as any).$_isExtension = true;
+    },
     methods: {
-        $_createWidget() {
-            (this as any).$isExtension = true;
-        },
-        $createInstance(element: any) {
-            (this as any).$_createWidgetInstance(element);
+        instantiate(element: any) {
+            (this as any).$_createWidget(element);
         }
     }
 });
