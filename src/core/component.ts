@@ -16,17 +16,12 @@ const DxComponent: VueConstructor = Vue.extend({
     },
 
     mounted(): void {
-        const options: object = {
-            ...this.$_getIntegrationOptions(),
-            ...this.$options.propsData
-        };
-
-        const instance = new (this as any).$_WidgetClass(this.$el, options);
-        (this as any).$_instance = instance;
-
-        instance.on("optionChanged", this.$_handleOptionChanged.bind(this));
-        this.$_watchProps(instance);
-        this.$_createEmitters(instance);
+        this.$_createWidget();
+        this.$children.forEach((child: any) => {
+            if (child.$isExtension) {
+                child.$createInstance(this.$el);
+            }
+        });
     },
 
     beforeDestroy(): void {
@@ -35,7 +30,22 @@ const DxComponent: VueConstructor = Vue.extend({
     },
 
     methods: {
+        $_createWidget(): void {
+            this.$_createWidgetInstance(this.$el);
+        },
+        $_createWidgetInstance(element: any): void {
+            const options: object = {
+                ...this.$_getIntegrationOptions(),
+                ...this.$options.propsData
+            };
 
+            const instance = new (this as any).$_WidgetClass(element, options);
+            (this as any).$_instance = instance;
+
+            instance.on("optionChanged", this.$_handleOptionChanged.bind(this));
+            this.$_watchProps(instance);
+            this.$_createEmitters(instance);
+        },
         $_getIntegrationOptions(): object {
             if (!this.$scopedSlots || !Object.keys(this.$scopedSlots).length) {
                 return {};
@@ -103,4 +113,16 @@ const DxComponent: VueConstructor = Vue.extend({
     }
 });
 
-export default DxComponent;
+const DxExtensionComponent: VueConstructor = Vue.extend({
+    extends: DxComponent,
+    methods: {
+        $_createWidget() {
+            (this as any).$isExtension = true;
+        },
+        $createInstance(element: any) {
+            (this as any).$_createWidgetInstance(element);
+        }
+    }
+});
+
+export { DxComponent, DxExtensionComponent };

@@ -1,5 +1,5 @@
 import Vue from "vue";
-import BaseComponent from "../core/component";
+import { DxComponent as BaseComponent} from "../core/component";
 
 import * as events from "devextreme/events";
 

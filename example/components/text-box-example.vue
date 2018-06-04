@@ -44,22 +44,34 @@
         valueChangeEvent="input"
       />
 
+      <h5 class="text-box-label">Validation (Required)</h5>
+      <dx-text-box value="Required text">
+        <dx-validator :validationRules="rules" />
+      </dx-text-box>
+
   </example-block>
 </template>
 
 <script>
 import ExampleBlock from "./example-block";
 
-import { DxTextBox } from "../../src";
+import { DxTextBox, DxValidator } from "../../src";
 
 export default {
   components: {
     ExampleBlock,
-    DxTextBox
+    DxTextBox, 
+    DxValidator
   },
   data: function() {
     return {
-      text: "text"
+      text: "text",
+      rules: [
+        {
+          type: 'required',
+          message: "this is required"
+        }
+      ]      
     };
   }
 };

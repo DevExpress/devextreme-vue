@@ -7,7 +7,7 @@ import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
-import BaseComponent from "BASE_COMPONENT_PATH";
+import { DxComponent as BaseComponent } from "BASE_COMPONENT_PATH";
 
 const DxCLASS_NAME: VueConstructor = Vue.extend({
   extends: BaseComponent,
@@ -42,7 +42,7 @@ import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
-import BaseComponent from "BASE_COMPONENT_PATH";
+import { DxComponent as BaseComponent } from "BASE_COMPONENT_PATH";
 
 const DxCLASS_NAME: VueConstructor = Vue.extend({
   extends: BaseComponent,
@@ -82,7 +82,7 @@ import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
-import BaseComponent from "BASE_COMPONENT_PATH";
+import { DxComponent as BaseComponent } from "BASE_COMPONENT_PATH";
 
 const DxCLASS_NAME: VueConstructor = Vue.extend({
   extends: BaseComponent,
@@ -119,7 +119,7 @@ import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
-import BaseComponent from "BASE_COMPONENT_PATH";
+import { DxComponent as BaseComponent } from "BASE_COMPONENT_PATH";
 
 const DxCLASS_NAME: VueConstructor = Vue.extend({
   extends: BaseComponent,
@@ -157,7 +157,7 @@ import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
-import BaseComponent from "BASE_COMPONENT_PATH";
+import { DxComponent as BaseComponent } from "BASE_COMPONENT_PATH";
 
 const DxCLASS_NAME: VueConstructor = Vue.extend({
   extends: BaseComponent,
@@ -219,7 +219,7 @@ import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
-import BaseComponent from "BASE_COMPONENT_PATH";
+import { DxComponent as BaseComponent } from "BASE_COMPONENT_PATH";
 
 const DxCLASS_NAME: VueConstructor = Vue.extend({
   extends: BaseComponent,
@@ -270,7 +270,7 @@ import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
-import BaseComponent from "BASE_COMPONENT_PATH";
+import { DxComponent as BaseComponent } from "BASE_COMPONENT_PATH";
 
 const DxCLASS_NAME: VueConstructor = Vue.extend({
   extends: BaseComponent,

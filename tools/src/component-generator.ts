@@ -49,7 +49,7 @@ import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import <#= it.widgetName #> from "devextreme/<#= it.dxExportPath #>";
 import { VueConstructor } from "vue";
-import BaseComponent from "<#= it.baseComponentPath #>";
+import { DxComponent as BaseComponent } from "<#= it.baseComponentPath #>";
 
 const Dx<#= it.name #>: VueConstructor = Vue.extend({
   extends: BaseComponent,<#? it.props #>
