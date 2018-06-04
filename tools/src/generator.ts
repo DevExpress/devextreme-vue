@@ -1,14 +1,14 @@
 import { writeFileSync as writeFile } from "fs";
 import { dirname as getDirName, join as joinPaths, relative as getRelativePath, sep as pathSeparator } from "path";
 
-import { IOption, ITypeDescriptor, IWidget } from "../integration-data-model";
+import { IModel, IProp as IOption, ITypeDescr, IWidget } from "../integration-data-model";
 import generateComponent, { IComponent, IProp } from "./component-generator";
 import { convertTypes } from "./converter";
 import { removeExtension, removePrefix, toKebabCase } from "./helpers";
 import generateIndex from "./index-generator";
 
 function generate(
-  rawData: IWidget[],
+  rawData: IModel,
   baseComponent: string,
   out: {
     componentsDir: string,
@@ -17,7 +17,7 @@ function generate(
 ) {
   const modulePaths: string[] = [];
 
-  rawData.forEach((data) => {
+  rawData.widgets.forEach((data) => {
     const widgetFile = mapWidget(data, baseComponent);
     const widgetFilePath = joinPaths(out.componentsDir, widgetFile.fileName);
     const indexFileDir = getDirName(out.indexFileName);
@@ -47,11 +47,11 @@ function mapWidget(raw: IWidget, baseComponent: string): { fileName: string, com
 }
 
 function mapProp(rawOption: IOption): IProp {
-  const types = convertTypes(rawOption.types.map((t) => t.type));
-  const restrictedTypes: ITypeDescriptor[] = rawOption.types.filter(
+  const types = convertTypes(rawOption.types);
+  const restrictedTypes: ITypeDescr[] = rawOption.types.filter(
     (t) => t.acceptableValues && t.acceptableValues.length > 0
   );
-  const valueRestriction: ITypeDescriptor = restrictedTypes.length > 0 ? restrictedTypes[0] : null;
+  const valueRestriction: ITypeDescr = restrictedTypes.length > 0 ? restrictedTypes[0] : null;
   return {
     name: rawOption.name,
     acceptableValues: valueRestriction && valueRestriction.acceptableValues,
