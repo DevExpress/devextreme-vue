@@ -47,7 +47,7 @@ function mapWidget(raw: IWidget, baseComponent: string): { fileName: string, com
 }
 
 function mapProp(rawOption: IOption): IProp {
-  const types = convertTypes(rawOption.types.map((t) => t.type));
+  const types = convertTypes(rawOption.types);
   const restrictedTypes: ITypeDescr[] = rawOption.types.filter(
     (t) => t.acceptableValues && t.acceptableValues.length > 0
   );

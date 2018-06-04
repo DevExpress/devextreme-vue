@@ -35,6 +35,7 @@ export interface IArrayDescr extends ITypeDescr {
 }
 
 export interface IFunctionDescr extends ITypeDescr {
+  // tslint:disable-next-line:array-type
   params: {
     name: string;
     types: ITypeDescr[];
@@ -43,6 +44,7 @@ export interface IFunctionDescr extends ITypeDescr {
 }
 
 export interface IObjectDescr extends ITypeDescr {
+  // tslint:disable-next-line:array-type
   fields: {
     name: string;
     types: ITypeDescr[];

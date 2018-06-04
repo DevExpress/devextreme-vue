@@ -1,4 +1,6 @@
-function convertTypes(types: string[]): string[] {
+import { ITypeDescr } from "../integration-data-model";
+
+function convertTypes(types: ITypeDescr[]): string[] {
     if (types === undefined || types === null || types.length === 0) {
         return;
     }
@@ -11,15 +13,19 @@ function convertTypes(types: string[]): string[] {
     return Array.from(convertedTypes);
 }
 
-function convertType(type: string): string {
-    switch (type) {
+function convertType(typeDescr: ITypeDescr): string {
+    switch (typeDescr.type) {
         case "String":
         case "Number":
         case "Boolean":
         case "Array":
         case "Object":
         case "Function":
-            return type;
+            return typeDescr.type;
+    }
+
+    if (typeDescr.isCustomType) {
+        return "Object";
     }
 
     return "Any";
