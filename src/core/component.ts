@@ -16,8 +16,11 @@ const BaseComponent: VueConstructor = Vue.extend({
     },
 
     beforeDestroy(): void {
-        events.triggerHandler(this.$el, DX_REMOVE_EVENT);
-        (this as any).$_instance.dispose();
+        const instance = (this as any).$_instance;
+        if (instance) {
+            events.triggerHandler(this.$el, DX_REMOVE_EVENT);
+            instance.dispose();
+        }
     },
 
     methods: {

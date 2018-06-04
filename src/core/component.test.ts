@@ -265,6 +265,12 @@ describe("extension component", () => {
         expect(ExtensionWidgetClass).toHaveBeenCalledTimes(0);
     });
 
+    it("destroys correctly", () => {
+        const component = new TestExtensionComponent().$mount();
+
+        expect(component.$destroy.bind(component)).not.toThrow();
+    });
+
     it("renders inside component on parent element", () => {
         new Vue({
             template: `<test-component>
@@ -299,5 +305,11 @@ describe("disposing", () => {
         component.$destroy();
 
         expect(handleDxRemove).toHaveBeenCalledTimes(1);
+    });
+
+    it("destroys correctly", () => {
+        const component = new TestComponent();
+
+        expect(component.$destroy.bind(component)).not.toThrow();
     });
 });
