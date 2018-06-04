@@ -109,7 +109,7 @@ const DxComponent: VueConstructor = BaseComponent.extend({
         (this as any).$_createWidget(this.$el);
         this.$children.forEach((child: any) => {
             if (child.$_isExtension) {
-                child.instantiate(this.$el);
+                child.attachTo(this.$el);
             }
         });
     }
@@ -120,7 +120,7 @@ const DxExtensionComponent: VueConstructor = BaseComponent.extend({
         (this as any).$_isExtension = true;
     },
     methods: {
-        instantiate(element: any) {
+        attachTo(element: any) {
             (this as any).$_createWidget(element);
         }
     }
