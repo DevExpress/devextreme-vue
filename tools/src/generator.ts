@@ -42,6 +42,7 @@ function mapWidget(raw: IWidget, baseComponent: string): { fileName: string, com
       dxExportPath: raw.exportPath,
       props: raw.options.map(mapProp),
       hasModel: !!raw.isEditor,
+      isExtension: !!raw.isExtension,
     }
   };
 }

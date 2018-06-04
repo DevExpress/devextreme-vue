@@ -1,5 +1,5 @@
 import Vue from "vue";
-import BaseComponent from "../core/component";
+import { DxComponent, DxExtensionComponent } from "../core/component";
 
 import * as events from "devextreme/events";
 
@@ -20,7 +20,7 @@ const Widget = {
 
 const WidgetClass = jest.fn(() => Widget);
 const TestComponent = Vue.extend({
-    extends: BaseComponent,
+    extends: DxComponent,
     beforeCreate() {
         (this as any).$_WidgetClass = WidgetClass;
     }
@@ -245,6 +245,43 @@ describe("events emitting", () => {
     });
 });
 
+describe("extension component", () => {
+    const ExtensionWidgetClass = jest.fn(() => Widget);
+    const TestExtensionComponent = Vue.extend({
+        extends: DxExtensionComponent,
+        beforeCreate() {
+            (this as any).$_WidgetClass = ExtensionWidgetClass;
+        }
+    });
+
+    it("doesn't render", () => {
+        new TestExtensionComponent().$mount();
+
+        expect(ExtensionWidgetClass).toHaveBeenCalledTimes(0);
+    });
+
+    it("destroys correctly", () => {
+        const component = new TestExtensionComponent().$mount();
+
+        expect(component.$destroy.bind(component)).not.toThrow();
+    });
+
+    it("renders inside component on parent element", () => {
+        new Vue({
+            template: `<test-component>
+                            <test-extension-component/>
+                        </test-component>`,
+            components: {
+                TestComponent,
+                TestExtensionComponent
+            }
+        }).$mount();
+
+        expect(ExtensionWidgetClass).toHaveBeenCalledTimes(1);
+        expect(ExtensionWidgetClass.mock.calls[0][0]).toBe(WidgetClass.mock.calls[0][0]);
+    });
+});
+
 describe("disposing", () => {
 
     it("call dispose", () => {
@@ -263,5 +300,11 @@ describe("disposing", () => {
         component.$destroy();
 
         expect(handleDxRemove).toHaveBeenCalledTimes(1);
+    });
+
+    it("destroys correctly", () => {
+        const component = new TestComponent();
+
+        expect(component.$destroy.bind(component)).not.toThrow();
     });
 });

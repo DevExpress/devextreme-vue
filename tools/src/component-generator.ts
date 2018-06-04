@@ -7,11 +7,13 @@ interface IComponent {
     dxExportPath: string;
     props?: IProp[];
     hasModel?: boolean;
+    isExtension?: boolean;
 }
 
 interface IComponentModel {
     name: string;
     baseComponentPath: string;
+    baseComponentName: string;
     dxExportPath: string;
     renderedProps?: string[];
     hasModel?: boolean;
@@ -32,7 +34,8 @@ function generate(component: IComponent): string {
         renderedProps: component.props
             ? component.props.sort(createKeyComparator<IProp>((p) => p.name)).map(createPropModel)
             : undefined,
-        widgetName: `${uppercaseFirst(component.name)}`
+        widgetName: `${uppercaseFirst(component.name)}`,
+        baseComponentName: component.isExtension ? "DxExtensionComponent" : "DxComponent"
     };
 
     return renderComponent(componentModel);
@@ -49,7 +52,7 @@ import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import <#= it.widgetName #> from "devextreme/<#= it.dxExportPath #>";
 import { VueConstructor } from "vue";
-import BaseComponent from "<#= it.baseComponentPath #>";
+import { <#= it.baseComponentName #> as BaseComponent } from "<#= it.baseComponentPath #>";
 
 const Dx<#= it.name #>: VueConstructor = Vue.extend({
   extends: BaseComponent,<#? it.props #>

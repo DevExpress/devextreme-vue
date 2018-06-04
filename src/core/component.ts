@@ -9,33 +9,34 @@ const DX_TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper";
 const DX_REMOVE_EVENT = "dxremove";
 
 const Vue = VueType.default || VueType;
-const DxComponent: VueConstructor = Vue.extend({
+const BaseComponent: VueConstructor = Vue.extend({
 
     render(createElement: (...args) => VNode): VNode {
         return createElement("div", this.$slots.default);
     },
 
-    mounted(): void {
-        const options: object = {
-            ...this.$_getIntegrationOptions(),
-            ...this.$options.propsData
-        };
-
-        const instance = new (this as any).$_WidgetClass(this.$el, options);
-        (this as any).$_instance = instance;
-
-        instance.on("optionChanged", this.$_handleOptionChanged.bind(this));
-        this.$_watchProps(instance);
-        this.$_createEmitters(instance);
-    },
-
     beforeDestroy(): void {
-        events.triggerHandler(this.$el, DX_REMOVE_EVENT);
-        (this as any).$_instance.dispose();
+        const instance = (this as any).$_instance;
+        if (instance) {
+            events.triggerHandler(this.$el, DX_REMOVE_EVENT);
+            instance.dispose();
+        }
     },
 
     methods: {
+        $_createWidget(element: any): void {
+            const options: object = {
+                ...this.$_getIntegrationOptions(),
+                ...this.$options.propsData
+            };
 
+            const instance = new (this as any).$_WidgetClass(element, options);
+            (this as any).$_instance = instance;
+
+            instance.on("optionChanged", this.$_handleOptionChanged.bind(this));
+            this.$_watchProps(instance);
+            this.$_createEmitters(instance);
+        },
         $_getIntegrationOptions(): object {
             if (!this.$scopedSlots || !Object.keys(this.$scopedSlots).length) {
                 return {};
@@ -103,4 +104,26 @@ const DxComponent: VueConstructor = Vue.extend({
     }
 });
 
-export default DxComponent;
+const DxComponent: VueConstructor = BaseComponent.extend({
+    mounted(): void {
+        (this as any).$_createWidget(this.$el);
+        this.$children.forEach((child: any) => {
+            if (child.$_isExtension) {
+                child.attachTo(this.$el);
+            }
+        });
+    }
+});
+
+const DxExtensionComponent: VueConstructor = BaseComponent.extend({
+    created(): void {
+        (this as any).$_isExtension = true;
+    },
+    methods: {
+        attachTo(element: any) {
+            (this as any).$_createWidget(element);
+        }
+    }
+});
+
+export { DxComponent, DxExtensionComponent };
