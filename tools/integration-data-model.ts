@@ -4,6 +4,7 @@ export interface IModel {
 }
 
 export interface IWidget {
+  complexOptions: IComplexProp[];
   exportPath: string;
   isEditor: boolean;
   isExtension: boolean;
@@ -17,6 +18,13 @@ export interface IProp {
   name: string;
   props: IProp[];
   types: ITypeDescr[];
+}
+
+export interface IComplexProp {
+  isCollectionItem: boolean;
+  name: string;
+  owner: string;
+  props: IProp[];
 }
 
 export interface ICustomType {
