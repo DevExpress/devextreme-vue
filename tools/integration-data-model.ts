@@ -23,6 +23,7 @@ export interface IProp {
 export interface IComplexProp {
   isCollectionItem: boolean;
   name: string;
+  optionName: string;
   owner: string;
   props: IProp[];
 }
@@ -30,6 +31,7 @@ export interface IComplexProp {
 export interface ICustomType {
   name: string;
   props: IProp[];
+  types: ITypeDescr[];
 }
 
 export interface ITypeDescr {
