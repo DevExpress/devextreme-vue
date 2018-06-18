@@ -1019,10 +1019,12 @@ export const orangesByDay = [{
   oranges: 6
 }, {
   day: "Saturday",
-  oranges: 11
+  oranges: 11,
+  template: "weekend"
 }, {
   day: "Sunday",
-  oranges: 4
+  oranges: 4,
+  template: "weekend"
 }];
 
 export const appointments = [

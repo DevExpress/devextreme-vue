@@ -1,4 +1,17 @@
-import { ITypeDescr } from "../integration-data-model";
+import { ICustomType, ITypeDescr } from "../integration-data-model";
+
+function discoverTypes(types: ITypeDescr[], customTypes: ICustomType[]): ITypeDescr[] {
+    let aliasedTypes = [];
+    types.forEach((t) => {
+      if (t.isCustomType) {
+        const aliases = customTypes.filter((ct) => ct.name === t.type)[0].types;
+        if (aliases) {
+          aliasedTypes = aliasedTypes.concat(aliases);
+        }
+      }
+    });
+    return aliasedTypes;
+}
 
 function convertTypes(types: ITypeDescr[]): string[] {
     if (types === undefined || types === null || types.length === 0) {
@@ -31,4 +44,4 @@ function convertType(typeDescr: ITypeDescr): string {
     return "Any";
 }
 
-export { convertTypes };
+export { convertTypes, discoverTypes };
