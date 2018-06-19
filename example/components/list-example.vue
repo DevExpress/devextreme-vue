@@ -8,6 +8,9 @@
             <div slot="item" slot-scope="data">
                 <i>{{data.day}}</i>
             </div>
+            <div slot="weekend" slot-scope="data">
+                <i>{{data.day}}</i>
+            </div>
         </dx-list>
         <br/>
         <h4>List with several templates</h4>

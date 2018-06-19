@@ -1,21 +1,12 @@
 import { ICustomType, ITypeDescr } from "../integration-data-model";
 
-function discoverTypes(types: ITypeDescr[], customTypes: ICustomType[]): ITypeDescr[] {
-    let aliasedTypes = [];
-    types.forEach((t) => {
-      if (t.isCustomType) {
-        const aliases = customTypes.filter((ct) => ct.name === t.type)[0].types;
-        if (aliases) {
-          aliasedTypes = aliasedTypes.concat(aliases);
-        }
-      }
-    });
-    return aliasedTypes;
-}
-
-function convertTypes(types: ITypeDescr[]): string[] {
+function convertTypes(types: ITypeDescr[], customTypes?: ICustomType[]): string[] {
     if (types === undefined || types === null || types.length === 0) {
         return;
+    }
+
+    if (customTypes) {
+        types = types.concat(expandTypes(types, customTypes));
     }
 
     const convertedTypes = new Set(types.map(convertType));
@@ -24,6 +15,19 @@ function convertTypes(types: ITypeDescr[]): string[] {
     }
 
     return Array.from(convertedTypes);
+}
+
+function expandTypes(types: ITypeDescr[], customTypes: ICustomType[]): ITypeDescr[] {
+    let expandedTypes = [];
+    types.forEach((t) => {
+      if (t.isCustomType) {
+        const aliases = customTypes.filter((ct) => ct.name === t.type)[0].types;
+        if (aliases) {
+            expandedTypes = expandedTypes.concat(aliases);
+        }
+      }
+    });
+    return expandedTypes;
 }
 
 function convertType(typeDescr: ITypeDescr): string {
@@ -44,4 +48,4 @@ function convertType(typeDescr: ITypeDescr): string {
     return "Any";
 }
 
-export { convertTypes, discoverTypes };
+export { convertTypes };

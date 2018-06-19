@@ -3,7 +3,7 @@ import { dirname as getDirName, join as joinPaths, relative as getRelativePath, 
 
 import { ICustomType, IModel, IProp as IOption, ITypeDescr, IWidget } from "../integration-data-model";
 import generateComponent, { IComponent, IProp } from "./component-generator";
-import { convertTypes, discoverTypes } from "./converter";
+import { convertTypes } from "./converter";
 import { removeExtension, removePrefix, toKebabCase } from "./helpers";
 import generateIndex from "./index-generator";
 
@@ -49,7 +49,7 @@ function mapWidget(raw: IWidget, baseComponent: string, customTypes: ICustomType
 }
 
 function mapProp(rawOption: IOption, customTypes: ICustomType[]): IProp {
-  const types = convertTypes(rawOption.types.concat(discoverTypes(rawOption.types, customTypes)));
+  const types = convertTypes(rawOption.types, customTypes);
   const restrictedTypes: ITypeDescr[] = rawOption.types.filter(
     (t) => t.acceptableValues && t.acceptableValues.length > 0
   );

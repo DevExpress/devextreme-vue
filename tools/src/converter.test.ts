@@ -34,3 +34,16 @@ it("returns undefined if array is undefined", () => {
 it("returns undefined if array is null", () => {
     expect(convertTypes([])).toBeUndefined();
 });
+
+it("expands custom types", () => {
+    expect(convertTypes([
+        { type: "CustomType", isCustomType: true, acceptableValues: [] },
+    ], [{
+        name: "CustomType",
+        types: [
+            { type: "String", isCustomType: false, acceptableValues: []},
+            { type: "Number", isCustomType: false, acceptableValues: []}
+        ],
+        props: []
+    }])).toEqual(["Object", "String", "Number"]);
+});
