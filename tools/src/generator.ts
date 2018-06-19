@@ -31,7 +31,7 @@ function generate(
   writeFile(out.indexFileName, generateIndex(modulePaths), { encoding: "utf8" });
 }
 
-function mapWidget(raw: IWidget, baseComponent: string, customTypes: ICustomType[]): { 
+function mapWidget(raw: IWidget, baseComponent: string, customTypes: ICustomType[]): {
   fileName: string,
   component: IComponent
 } {

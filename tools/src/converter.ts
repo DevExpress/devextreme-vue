@@ -6,7 +6,7 @@ function convertTypes(types: ITypeDescr[], customTypes?: Record<string, ICustomT
     }
 
     if (customTypes) {
-        types.push(...expandTypes(types, customTypes));
+        types = types.concat(expandTypes(types, customTypes));
     }
 
     const convertedTypes = new Set(types.map(convertType));
