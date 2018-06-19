@@ -28,9 +28,24 @@ it("returns undefined if array is empty", () => {
 });
 
 it("returns undefined if array is undefined", () => {
-    expect(convertTypes([])).toBeUndefined();
+    expect(convertTypes(undefined)).toBeUndefined();
 });
 
 it("returns undefined if array is null", () => {
-    expect(convertTypes([])).toBeUndefined();
+    expect(convertTypes(null)).toBeUndefined();
+});
+
+it("expands custom types", () => {
+    expect(convertTypes([
+        { type: "CustomType", isCustomType: true, acceptableValues: [] },
+    ], {
+        CustomType: {
+            name: "CustomType",
+            types: [
+                { type: "String", isCustomType: false, acceptableValues: []},
+                { type: "Number", isCustomType: false, acceptableValues: []}
+            ],
+            props: []
+        }
+})).toEqual(["Object", "String", "Number"]);
 });

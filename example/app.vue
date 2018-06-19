@@ -5,6 +5,7 @@
         <popup-example/>
         <br/>
         <text-box-example/>
+        <number-box-example/>
         <br/>
         <scroll-view-example/>
         <br/>
@@ -28,6 +29,7 @@ import ListExample from "./components/list-example";
 import GridExample from "./components/grid-example";
 import PopupExample from "./components/popup-example";
 import TextBoxExample from "./components/text-box-example";
+import NumberBoxExample from "./components/number-box-example";
 import SchedulerExample from "./components/scheduler-example";
 import ScrollViewExample from "./components/scroll-view-example";
 import ChartExample from "./components/chart-example";
@@ -38,6 +40,7 @@ export default {
         ButtonExample,
         PopupExample,
         TextBoxExample,
+        NumberBoxExample,
         ListExample,
         GridExample,
         SchedulerExample,

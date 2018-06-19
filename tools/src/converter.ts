@@ -1,8 +1,12 @@
-import { ITypeDescr } from "../integration-data-model";
+import { ICustomType, ITypeDescr } from "../integration-data-model";
 
-function convertTypes(types: ITypeDescr[]): string[] {
+function convertTypes(types: ITypeDescr[], customTypes?: Record<string, ICustomType>): string[] {
     if (types === undefined || types === null || types.length === 0) {
         return;
+    }
+
+    if (customTypes) {
+        types = types.concat(expandTypes(types, customTypes));
     }
 
     const convertedTypes = new Set(types.map(convertType));
@@ -13,6 +17,18 @@ function convertTypes(types: ITypeDescr[]): string[] {
     return Array.from(convertedTypes);
 }
 
+function expandTypes(types: ITypeDescr[], customTypes: Record<string, ICustomType>): ITypeDescr[] {
+    const expandedTypes = [];
+    types.forEach((t) => {
+      if (t.isCustomType) {
+        const aliases = customTypes[t.type].types;
+        if (aliases) {
+            expandedTypes.push(...aliases);
+        }
+      }
+    });
+    return expandedTypes;
+}
 function convertType(typeDescr: ITypeDescr): string {
     switch (typeDescr.type) {
         case "String":
