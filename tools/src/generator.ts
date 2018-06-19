@@ -31,9 +31,16 @@ function generate(
   writeFile(out.indexFileName, generateIndex(modulePaths), { encoding: "utf8" });
 }
 
-function mapWidget(raw: IWidget, baseComponent: string, customTypes: ICustomType[]):
- { fileName: string, component: IComponent } {
+function mapWidget(raw: IWidget, baseComponent: string, customTypes: ICustomType[]): { 
+  fileName: string,
+  component: IComponent
+} {
   const name = removePrefix(raw.name, "dx");
+
+  const customTypeHash = customTypes.reduce((result, type) => {
+    result[type.name] = type;
+    return result;
+  }, {});
 
   return {
     fileName: `${toKebabCase(name)}.ts`,
@@ -41,14 +48,14 @@ function mapWidget(raw: IWidget, baseComponent: string, customTypes: ICustomType
       name,
       baseComponentPath: baseComponent,
       dxExportPath: raw.exportPath,
-      props: raw.options.map((o) => mapProp(o, customTypes)),
+      props: raw.options.map((o) => mapProp(o, customTypeHash)),
       hasModel: !!raw.isEditor,
       isExtension: !!raw.isExtension,
     }
   };
 }
 
-function mapProp(rawOption: IOption, customTypes: ICustomType[]): IProp {
+function mapProp(rawOption: IOption, customTypes: Record<string, ICustomType>): IProp {
   const types = convertTypes(rawOption.types, customTypes);
   const restrictedTypes: ITypeDescr[] = rawOption.types.filter(
     (t) => t.acceptableValues && t.acceptableValues.length > 0
