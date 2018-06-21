@@ -22,6 +22,7 @@ This project allows you to use [DevExtreme Widgets](http://js.devexpress.com/Dem
   * [Getting a Widget Instance](#widget-instance)
 * [Type Checks](#type-checks)
 * [DevExtreme Data Layer and Utils](#data-layer-and-utils)
+* [DevExtreme Validation](#validation)
 * [License](#license)
 * [Support & Feedback](#support-feedback)
 ## <a name="getting-started"></a>Getting Started ##
@@ -293,7 +294,55 @@ You should specify proper values for the components' properties because DevExtre
 ## <a name="data-layer-and-utils"></a>DevExtreme Data Layer and Utils ##
 The DevExtreme includes a [Data Layer](https://js.devexpress.com/Documentation/Guide/Data_Layer/Data_Layer/) and [Utils](https://js.devexpress.com/Documentation/ApiReference/Common/utils/) that can be helpful in different scenarios.
 
+## <a name="validation"></a>DevExtreme Validation ##
+DevExtreme Vue editors support built-in [data validation](https://js.devexpress.com/Documentation/Guide/Widgets/Common/UI_Widgets/Data_Validation/).
 
+```html
+<dx-validation-group>
+  <dx-text-box value="email@mail.com">
+    <dx-validator :validationRules="validationRules.email" />
+  </dx-text-box>
+  <dx-text-box value="password">
+    <dx-validator :validationRules="validationRules.password" />
+  </dx-text-box>
+  <dx-validation-summary />
+  <dx-button text="Submit" @click="validate"/>
+</dx-validation-group>
+```
+```js
+import { DxButton, DxTextBox, DxValidator, DxValidationGroup, DxValidationSummary } from "devextreme-vue";
+
+export default {
+  components: {
+    DxButton,
+    DxTextBox, 
+    DxValidator,
+    DxValidationGroup,
+    DxValidationSummary
+  },
+  methods: {
+    validate(params) {
+      const result = params.validationGroup.validate();
+      if (result.isValid) {
+          // form data is valid
+          //params.validationGroup.reset();
+      }     
+    }
+  },
+  data: function() {
+    return {
+      validationRules: {
+        email: [
+            { type: "required", message: "Email is required." },
+            { type: "email", message: "Email is invalid." }
+        ],
+        password: [
+            { type: "required", message: "Password is required." }
+        ]
+    }};
+  }
+};
+```
 ## <a name="license"></a>License ##
 
 **DevExtreme Vue components are released as an MIT-licensed (free and open-source) DevExtreme add-on.**

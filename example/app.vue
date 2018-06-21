@@ -6,6 +6,8 @@
         <br/>
         <text-box-example/>
         <number-box-example/>
+        <br />
+        <validation-example/>
         <br/>
         <scroll-view-example/>
         <br/>
@@ -30,6 +32,7 @@ import GridExample from "./components/grid-example";
 import PopupExample from "./components/popup-example";
 import TextBoxExample from "./components/text-box-example";
 import NumberBoxExample from "./components/number-box-example";
+import ValidationExample from "./components/validation-example";
 import SchedulerExample from "./components/scheduler-example";
 import ScrollViewExample from "./components/scroll-view-example";
 import ChartExample from "./components/chart-example";
@@ -41,6 +44,7 @@ export default {
         PopupExample,
         TextBoxExample,
         NumberBoxExample,
+        ValidationExample,
         ListExample,
         GridExample,
         SchedulerExample,
