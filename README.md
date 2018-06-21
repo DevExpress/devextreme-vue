@@ -295,7 +295,8 @@ You should specify proper values for the components' properties because DevExtre
 The DevExtreme includes a [Data Layer](https://js.devexpress.com/Documentation/Guide/Data_Layer/Data_Layer/) and [Utils](https://js.devexpress.com/Documentation/ApiReference/Common/utils/) that can be helpful in different scenarios.
 
 ## <a name="validation"></a>DevExtreme Validation ##
-You can use the built-in [validation rules](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxValidator/Validation_Rules/), validation summary and other DevExtreme validation features with Vue DevExtreme editors.
+DevExtreme Vue editors support built-in [data validation](https://js.devexpress.com/Documentation/Guide/Widgets/Common/UI_Widgets/Data_Validation/).
+
 ```html
 <dx-validation-group>
   <dx-text-box value="email@mail.com">
