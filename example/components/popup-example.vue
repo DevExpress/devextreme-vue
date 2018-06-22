@@ -14,7 +14,15 @@
           :visible.sync="visible"
           width="600"
           height="400"
-        />
+        >
+          <div slot="content">
+            This is popup content
+            <dx-button
+              text="Close popup"
+              @click="handleClick"
+            />            
+          </div>
+        </dx-popup>
     </example-block>
 </template>
 
@@ -37,7 +45,7 @@ export default {
         this.updateText(e.value);
       },
       handleClick: () => {
-        this.toggle(true);
+        this.toggle(!this.visible);
       },
       visible: false
     };

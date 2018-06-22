@@ -95,17 +95,23 @@ describe("template", () => {
 
     const DX_TEMPLATE_WRAPPER = "dx-template-wrapper";
 
-    function renderItemTemplate(model: object, container: any = null): Element {
+    function renderItemTemplate(model?: object, container?: any): Element {
+        model = model || {};
+        container = container || document.createElement("div");
         const render = WidgetClass.mock.calls[0][1].integrationOptions.templates.item.render;
         return render({
-            container: container || document.createElement("div"),
+            container,
             model
         });
     }
 
     it("passes integrationOptions to widget", () => {
         new Vue({
-            template: "<test-component><div slot='item' slot-scope='data'>1</div></test-component>",
+            template: `<test-component>
+                         <div slot='item' slot-scope='data'>1</div>
+                         <div slot='content'>1</div>
+                         <div>1</div>
+                       </test-component>`,
             components: {
                 TestComponent
             }
@@ -114,11 +120,33 @@ describe("template", () => {
 
         expect(integrationOptions).toBeDefined();
         expect(integrationOptions.templates).toBeDefined();
+
         expect(integrationOptions.templates.item).toBeDefined();
         expect(typeof integrationOptions.templates.item.render).toBe("function");
+
+        expect(integrationOptions.templates.content).toBeDefined();
+        expect(typeof integrationOptions.templates.content.render).toBe("function");
+
+        expect(integrationOptions.templates.default).toBeUndefined();
     });
 
     it("renders", () => {
+        new Vue({
+            template: `<test-component>
+                            <div slot='item'>Template</div>
+                        </test-component>`,
+            components: {
+                TestComponent
+            }
+        }).$mount();
+        const renderedTemplate = renderItemTemplate();
+
+        expect(renderedTemplate.nodeName).toBe("DIV");
+        expect(renderedTemplate.className).toBe(DX_TEMPLATE_WRAPPER);
+        expect(renderedTemplate.innerHTML).toBe("Template");
+    });
+
+    it("renders scoped slot", () => {
         new Vue({
             template: `<test-component>
                             <div slot='item' slot-scope='props'>Template {{props.text}}</div>
@@ -128,9 +156,6 @@ describe("template", () => {
             }
         }).$mount();
         const renderedTemplate = renderItemTemplate({ text: "with data" });
-
-        expect(renderedTemplate.nodeName).toBe("DIV");
-        expect(renderedTemplate.className).toBe(DX_TEMPLATE_WRAPPER);
         expect(renderedTemplate.innerHTML).toBe("Template with data");
     });
 
