@@ -8,6 +8,7 @@
 
 ### Description
 <!-- Specify what exactly the issue is related to (e.g. a component name) -->
+The issue is related to ...
 
 #### Steps to Reproduce
 <!-- If the current behavior is a bug, please provide the steps to reproduce -->
