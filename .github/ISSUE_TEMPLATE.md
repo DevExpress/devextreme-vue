@@ -28,5 +28,5 @@ The issue is related to ...
 Specify DevExtreme version, DevExtreme Vue Components version, Vue version and other environment details or notes you consider important.
 -->
 - devextreme version:
-- devextreme-react version:
+- devextreme-vue version:
 - vue version:
