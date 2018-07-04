@@ -26,11 +26,13 @@ export interface IComplexProp {
   optionName: string;
   owner: string;
   props: IProp[];
+  templates: string[];
 }
 
 export interface ICustomType {
   name: string;
   props: IProp[];
+  templates: string[];
   types: ITypeDescr[];
 }
 
