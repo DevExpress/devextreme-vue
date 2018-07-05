@@ -51,7 +51,7 @@ const BaseComponent: VueConstructor = Vue.extend({
             const templates: Record<string, any> = {};
 
             Object.keys(slots).forEach((name: string) => {
-                templates[name] = this.$_fillTemplate(slots[name]);
+                templates[name] = this.$_fillTemplate(slots, name);
             });
 
             return {
@@ -61,12 +61,14 @@ const BaseComponent: VueConstructor = Vue.extend({
             };
         },
 
-        $_fillTemplate(template: any): object {
+        $_fillTemplate(slots: Record<string, any>, name: string): object {
             return {
                 render: (data: any) => {
                     const vm = new Vue({
+                        name,
                         parent: this,
                         render: () => {
+                            const template = slots[name];
                             return typeof template === "function" ? template(data.model) : template[0];
                         }
                     }).$mount();
