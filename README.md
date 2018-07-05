@@ -26,7 +26,7 @@ This project allows you to use [DevExtreme Widgets](http://js.devexpress.com/Dem
 * [License](#license)
 * [Support & Feedback](#support-feedback)
 ## <a name="getting-started"></a>Getting Started ##
-You can try this [live example](https://codesandbox.io/s/kk5rrm1o2v) (no need to install anything).
+You can try this [live example](https://codesandbox.io/s/github/lukyanovas/devextreme-vue-example) (no need to install anything).
 
 See the sections below if you prefer using a local development environment.
 ### <a name="prerequisites"></a>Prerequisites ###
