@@ -39,6 +39,12 @@ Install the **devextreme** and **devextreme-vue** npm packages:
 ```console
 npm install --save devextreme@18.1 devextreme-vue
 ```
+#### <a name="additional-configuration"></a>Additional Configuration ####
+
+The further configuration steps depend on which build tool, bundler or module loader you are using. Please choose the one you need:
+
+* [Configuring Webpack](https://github.com/DevExpress/devextreme-vue/blob/master/docs/using-webpack.md)
+* [Configuring Vue CLI](https://github.com/DevExpress/devextreme-vue/blob/master/docs/using-vue-cli.md)
 
 ### <a name="import_devextreme_modules"></a>Import DevExtreme Modules and Themes  ###
 
