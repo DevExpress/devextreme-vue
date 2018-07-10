@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { DxComponent, DxExtensionComponent } from "../core/component";
+import { DxComponent, DxExtensionComponent, DxOption } from "../core/component";
 
 import * as events from "devextreme/events";
 
@@ -26,6 +26,18 @@ const TestComponent = Vue.extend({
     }
 });
 
+const TestNestedComponent = Vue.extend({
+    extends: DxOption,
+    props: {
+        prop1: Number,
+        prop2: String
+    },
+    beforeMount() {
+        (this as any).$_initOption("nestedOption");
+    }
+});
+
+jest.setTimeout(1000);
 beforeEach(() => {
     jest.clearAllMocks();
 });
@@ -55,7 +67,7 @@ describe("component rendering", () => {
     });
 });
 
-describe("option processing", () => {
+describe("options", () => {
     it("pass props to option on mounting", () => {
         const vm = new TestComponent({
             propsData: {
@@ -89,6 +101,67 @@ describe("option processing", () => {
             done();
         });
     });
+});
+
+describe("nested options", () => {
+
+    it("pulls initital values on mounting (render function + createElement)", () => {
+        const widget = new TestComponent({
+            render(createElement) {
+                return createElement(TestNestedComponent, { props: { prop1: 456 } });
+            }
+        }).$mount();
+
+        expect(WidgetClass).toHaveBeenCalledWith(widget.$el, {
+            nestedOption: {
+                prop1: 456
+            }
+        });
+    });
+
+    it("pulls initital values on mounting (manual mounting)", () => {
+        const widget = new TestComponent();
+        const option = new TestNestedComponent({
+            propsData: {
+                prop1: 456
+            },
+            parent: widget
+        });
+
+        option.$mount();
+        widget.$mount();
+
+        expect(WidgetClass).toHaveBeenCalledWith(widget.$el, {
+            nestedOption: {
+                prop1: 456
+            }
+        });
+    });
+
+    it("watches nested option changes", (done) => {
+        const vm = new Vue({
+            render(createElement) {
+                return createElement(
+                    TestComponent,
+                    undefined,
+                    [createElement(TestNestedComponent, { props: { prop1: this.value, prop2: "abc" } })]
+                );
+            },
+            props: ["value"],
+            propsData: {
+                value: 123
+            }
+        }).$mount();
+
+        vm.$props.value = 456;
+
+        Vue.nextTick(() => {
+            expect(Widget.option).toHaveBeenCalledTimes(1);
+            expect(Widget.option).toHaveBeenCalledWith("nestedOption.prop1", 456);
+            done();
+        });
+    });
+
 });
 
 describe("template", () => {
