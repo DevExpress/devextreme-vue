@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { DxComponent, DxExtensionComponent, DxOption } from "../core/component";
+import { DxComponent, DxConfiguration, DxExtensionComponent } from "../core/component";
 
 import * as events from "devextreme/events";
 
@@ -27,7 +27,7 @@ const TestComponent = Vue.extend({
 });
 
 const TestNestedComponent = Vue.extend({
-    extends: DxOption,
+    extends: DxConfiguration,
     props: {
         prop1: Number,
         prop2: String

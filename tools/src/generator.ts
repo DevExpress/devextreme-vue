@@ -1,10 +1,10 @@
 import { writeFileSync as writeFile } from "fs";
 import { dirname as getDirName, join as joinPaths, relative as getRelativePath, sep as pathSeparator } from "path";
 
-import { ICustomType, IModel, IProp as IOption, ITypeDescr, IWidget } from "../integration-data-model";
-import generateComponent, { IComponent, IProp } from "./component-generator";
+import { IComplexProp, ICustomType, IModel, IProp as IOption, ITypeDescr, IWidget } from "../integration-data-model";
+import generateComponent, { IComponent, INestedComponent, IProp } from "./component-generator";
 import { convertTypes } from "./converter";
-import { removeExtension, removePrefix, toKebabCase } from "./helpers";
+import { removeExtension, removePrefix, toKebabCase, uppercaseFirst } from "./helpers";
 import generateIndex from "./index-generator";
 
 function generate(
@@ -51,7 +51,18 @@ function mapWidget(raw: IWidget, baseComponent: string, customTypes: ICustomType
       props: raw.options.map((o) => mapProp(o, customTypeHash)),
       hasModel: !!raw.isEditor,
       isExtension: !!raw.isExtension,
+      nestedComponents: raw.complexOptions
+        ? raw.complexOptions.map((o) => mapNestedComponent(o, customTypeHash))
+        : undefined
     }
+  };
+}
+
+function mapNestedComponent(complexOption: IComplexProp, customTypes: Record<string, ICustomType>): INestedComponent {
+  return {
+    name: uppercaseFirst(complexOption.name),
+    optionName: complexOption.optionName,
+    props: complexOption.props.map((o) => mapProp(o, customTypes))
   };
 }
 

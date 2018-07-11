@@ -13,6 +13,12 @@ const settings = {
     varname: "it"
 };
 
-const createTempate = (templateStr: string): ((model: any) => string) => template(templateStr, settings);
+const createTempate = (templateStr: string): ((model: any) => string) => {
+    const templateFunc = template(templateStr, settings);
+
+    return (model: any) => (templateFunc(model) as string)
+        .replace(/.{1}\x08{1}|.{2}\x08{2}|.{3}\x08{3}/gs, "")
+        .replace(/\x08/, "");
+};
 
 export default createTempate;

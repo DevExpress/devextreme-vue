@@ -23,6 +23,7 @@
           :selectedRowKeys="selectedRowKeys"
           :columns="columns"
       >
+        <pager :visible="true" :showPageSizeSelector="true" />
         <dx-button slot="cell-city" slot-scope="data" :text="data.text" />
       </dx-data-grid>
     </example-block>
@@ -31,7 +32,7 @@
 <script>
 import ExampleBlock from "./example-block";
 import { sales } from "../data";
-import { DxDataGrid, DxButton, DxCheckBox } from "../../src";
+import { DxDataGrid, DxButton, DxCheckBox, Pager } from "../../src";
 import Vue from "vue";
 
 const selectedKeys = [10273, 10277, 10292, 10295, 10300, 10302, 10305, 10308, 10312, 
@@ -43,7 +44,8 @@ export default {
     ExampleBlock,
     DxDataGrid,
     DxButton,
-    DxCheckBox
+    DxCheckBox,
+    Pager
   },
   computed: {
     filterRow() {

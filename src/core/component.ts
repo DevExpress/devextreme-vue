@@ -139,7 +139,7 @@ const DxExtensionComponent: VueConstructor = BaseComponent.extend({
     }
 });
 
-const DxOption: VueConstructor = Vue.extend({
+const DxConfiguration: VueConstructor = Vue.extend({
 
     render(createElement: (...args) => VNode): VNode {
         return createElement();
@@ -161,4 +161,4 @@ const DxOption: VueConstructor = Vue.extend({
     }
 });
 
-export { DxComponent, DxExtensionComponent, DxOption };
+export { DxComponent, DxExtensionComponent, DxConfiguration };
