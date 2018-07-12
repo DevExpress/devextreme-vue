@@ -21,7 +21,6 @@ interface IComponentModel {
     hasModel?: boolean;
     widgetName: string;
     nestedComponents?: INestedComponentModel[];
-    defaultExport: string;
     namedExports: string[];
 }
 
@@ -66,8 +65,6 @@ function generate(component: IComponent): string {
             : undefined,
 
         nestedComponents,
-
-        defaultExport: component.name,
         namedExports
     };
 
@@ -144,7 +141,6 @@ L1 + `extends: BaseComponent,` +
 `<#?#>` +
 
 `\n` +
-`export default <#= it.defaultExport #>;` + `\n` +
 `export {` + `\n` +
     `<#~ it.namedExports :namedExport #>` +
     tab(1) + `<#= namedExport #>,` + `\n` +

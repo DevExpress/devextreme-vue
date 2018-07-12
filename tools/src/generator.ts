@@ -5,7 +5,7 @@ import { IComplexProp, ICustomType, IModel, IProp as IOption, ITypeDescr, IWidge
 import generateComponent, { IComponent, INestedComponent, IProp } from "./component-generator";
 import { convertTypes } from "./converter";
 import { removeExtension, removePrefix, toKebabCase, uppercaseFirst } from "./helpers";
-import generateIndex from "./index-generator";
+import generateIndex, { IReExport } from "./index-generator";
 
 function generate(
   rawData: IModel,
@@ -15,7 +15,7 @@ function generate(
     indexFileName: string
   }
 ) {
-  const modulePaths: string[] = [];
+  const modulePaths: IReExport[] = [];
 
   rawData.widgets.forEach((data) => {
     const widgetFile = mapWidget(data, baseComponent, rawData.customTypes);
@@ -23,9 +23,10 @@ function generate(
     const indexFileDir = getDirName(out.indexFileName);
 
     writeFile(widgetFilePath, generateComponent(widgetFile.component), { encoding: "utf8" });
-    modulePaths.push(
-      "./" + removeExtension(getRelativePath(indexFileDir, widgetFilePath)).replace(pathSeparator, "/")
-    );
+    modulePaths.push({
+      name: widgetFile.component.name,
+      path: "./" + removeExtension(getRelativePath(indexFileDir, widgetFilePath)).replace(pathSeparator, "/")
+    });
   });
 
   writeFile(out.indexFileName, generateIndex(modulePaths), { encoding: "utf8" });

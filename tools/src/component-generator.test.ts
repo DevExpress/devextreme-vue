@@ -21,7 +21,6 @@ const COMPONENT: VueConstructor = Vue.extend({
   }
 });
 
-export default COMPONENT;
 export {
   COMPONENT
 };
@@ -59,7 +58,6 @@ const COMPONENT: VueConstructor = Vue.extend({
   }
 });
 
-export default COMPONENT;
 export {
   COMPONENT
 };
@@ -99,7 +97,6 @@ const COMPONENT: VueConstructor = Vue.extend({
   }
 });
 
-export default COMPONENT;
 export {
   COMPONENT
 };
@@ -144,7 +141,6 @@ const COMPONENT: VueConstructor = Vue.extend({
   }
 });
 
-export default COMPONENT;
 export {
   COMPONENT
 };
@@ -193,7 +189,6 @@ const NESTED_COMPONENT = Vue.extend({
   }
 });
 
-export default COMPONENT;
 export {
   COMPONENT,
   NESTED_COMPONENT
