@@ -75,7 +75,7 @@ export {
   ).toBe(EXPECTED);
 });
 
-it("generates class with model", () => {
+it("generates component with model", () => {
     //#region EXPECTED
     const EXPECTED = `
 import * as VueType from "vue";
@@ -114,7 +114,7 @@ export {
     ).toBe(EXPECTED);
 });
 
-it("renders options in alphabetic order", () => {
+it("generates options in alphabetic order", () => {
     //#region EXPECTED
     const EXPECTED = `
 import * as VueType from "vue";
@@ -158,7 +158,7 @@ export {
     ).toBe(EXPECTED);
 });
 
-it("renders nested options props in alphabetic order", () => {
+it("generates nested option", () => {
     //#region EXPECTED
     const EXPECTED = `
 import * as VueType from "vue";
@@ -208,7 +208,66 @@ export {
                 optionName: "NESTED_OPTION_NAME",
                 props: [
                   { name: "PROP" }
-                ]
+                ],
+                isCollectionItem: false
+              }
+            ]
+        })
+    ).toBe(EXPECTED);
+});
+
+it("generates nested option", () => {
+    //#region EXPECTED
+    const EXPECTED = `
+import * as VueType from "vue";
+const Vue = VueType.default || VueType;
+import WIDGET from "devextreme/DX/WIDGET/PATH";
+import { VueConstructor } from "vue";
+import { DxComponent as BaseComponent, DxConfiguration } from "BASE_COMPONENT_PATH";
+
+const COMPONENT: VueConstructor = Vue.extend({
+  extends: BaseComponent,
+  computed: {
+    instance(): WIDGET {
+      return (this as any).$_instance;
+    }
+  },
+  beforeCreate() {
+    (this as any).$_WidgetClass = WIDGET;
+  }
+});
+
+const NESTED_COMPONENT = Vue.extend({
+  extends: DxConfiguration,
+  props: {
+    PROP: {}
+  },
+  beforeMount() {
+    (this as any).$_initCollectionOption("NESTED_OPTION_NAME");
+  }
+});
+
+export {
+  COMPONENT,
+  NESTED_COMPONENT
+};
+`.trimLeft();
+        //#endregion
+
+    expect(
+        generate({
+            name: "COMPONENT",
+            widgetName: "WIDGET",
+            baseComponentPath: "BASE_COMPONENT_PATH",
+            dxExportPath: "DX/WIDGET/PATH",
+            nestedComponents: [
+              {
+                name: "NESTED_COMPONENT",
+                optionName: "NESTED_OPTION_NAME",
+                props: [
+                  { name: "PROP" }
+                ],
+                isCollectionItem: true
               }
             ]
         })

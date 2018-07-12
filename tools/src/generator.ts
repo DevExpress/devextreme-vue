@@ -64,7 +64,8 @@ function mapNestedComponent(complexOption: IComplexProp, customTypes: Record<str
   return {
     name: `Dx${uppercaseFirst(complexOption.name)}`,
     optionName: complexOption.optionName,
-    props: complexOption.props.map((o) => mapProp(o, customTypes))
+    props: complexOption.props.map((o) => mapProp(o, customTypes)),
+    isCollectionItem: complexOption.isCollectionItem
   };
 }
 

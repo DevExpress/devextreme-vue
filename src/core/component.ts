@@ -158,6 +158,10 @@ const DxConfiguration: VueConstructor = Vue.extend({
             (this as any as IConfigurable).$_config = option;
 
             bindOptionWatchers(option, this);
+        },
+
+        $_initCollectionOption(name: string): void {
+            this.$_initOption(name, true);
         }
     }
 });

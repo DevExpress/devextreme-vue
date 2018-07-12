@@ -28,12 +28,14 @@ interface INestedComponent {
     name: string;
     optionName: string;
     props: IProp[];
+    isCollectionItem: boolean;
 }
 
 interface INestedComponentModel {
     name: string;
     optionName: string;
     renderedProps: string;
+    isCollectionItem: boolean;
 }
 
 interface IProp {
@@ -78,6 +80,7 @@ function createNestedComponentModel(component: INestedComponent): INestedCompone
         renderedProps: component.props
             ? renderProps(component.props.sort(createKeyComparator<IProp>((p) => p.name)))
             : undefined,
+        isCollectionItem: component.isCollectionItem
     };
 }
 
@@ -134,7 +137,15 @@ L1 + `extends: BaseComponent,` +
         `<#= nested.renderedProps #>` +
         L1 + `},` +
         L1 + `beforeMount() {` +
-        L2 + `(this as any).$_initOption("<#= nested.optionName #>");` +
+        L2 + `(this as any).` +
+
+        `<#? nested.isCollectionItem #>` +
+            `$_initCollectionOption` +
+        `<#??#>` +
+            `$_initOption` +
+        `<#?#>` +
+
+        `("<#= nested.optionName #>");` +
         L1 + `}` + `\n` +
         `});` + `\n` +
     `<#~#>` +
