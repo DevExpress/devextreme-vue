@@ -10,6 +10,8 @@ class Configuration {
 
     private readonly _nestedConfigurations: Configuration[];
     private readonly _name: string | null;
+    private readonly _isCollectionItem: boolean;
+    private readonly _collectionItemIndex: number | undefined;
     private readonly _options: string[];
     private readonly _initialValues: Record<string, any>;
     private readonly _updateFunc: UpdateFunc;
@@ -18,13 +20,17 @@ class Configuration {
         updateFunc: UpdateFunc,
         name: string | null,
         options: string[],
-        initialValues: Record<string, any>
+        initialValues: Record<string, any>,
+        isCollectionItem?: boolean,
+        collectionItemIndex?: number
     ) {
-        this._name = name;
         this._updateFunc = updateFunc;
+        this._name = name;
         this._options = options ? options : [];
         this._initialValues = initialValues ? initialValues : {};
         this._nestedConfigurations = [];
+        this._isCollectionItem = !!isCollectionItem;
+        this._collectionItemIndex = collectionItemIndex;
 
         this.updateValue = this.updateValue.bind(this);
     }
@@ -32,15 +38,31 @@ class Configuration {
     public createNested(
         name: string,
         options: string[],
-        initialValues: Record<string, any>
+        initialValues: Record<string, any>,
+        isCollectionItem?: boolean
     ): Configuration {
-        const configuration = new Configuration(this.updateValue, name, options, initialValues);
+        let collectionItemIndex = -1;
+        if (isCollectionItem && name) {
+            collectionItemIndex = this._nestedConfigurations.filter((c) => c._name && c._name === name).length;
+        }
+
+        const configuration = new Configuration(
+            this.updateValue,
+            name,
+            options,
+            initialValues,
+            isCollectionItem,
+            collectionItemIndex
+        );
+
         this._nestedConfigurations.push(configuration);
+
         return configuration;
     }
 
     public updateValue(nestedName: string, value: any): void {
-        const fullName = [this._name, nestedName].filter((n) => n).join(".");
+        const name = this._isCollectionItem ? `${this._name}[${this._collectionItemIndex}]` : this._name;
+        const fullName = [name, nestedName].filter((n) => n).join(".");
         this._updateFunc(fullName, value);
     }
 
@@ -50,11 +72,21 @@ class Configuration {
         };
 
         this._nestedConfigurations.forEach((o) => {
-            if (o._name) {
-                const nestedValue = o.getInitialValues();
-                if (nestedValue) {
-                    values[o._name] = nestedValue;
+            if (!o._name) { return; }
+
+            const nestedValue = o.getInitialValues();
+            if (!nestedValue) { return; }
+
+            if (!o._isCollectionItem) {
+                values[o._name] = nestedValue;
+            } else {
+                let arr = values[o._name];
+                if (!arr || !Array.isArray(arr)) {
+                    arr = [];
+                    values[o._name] = arr;
                 }
+
+                arr.push(nestedValue);
             }
         });
 
