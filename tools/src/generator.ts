@@ -45,7 +45,8 @@ function mapWidget(raw: IWidget, baseComponent: string, customTypes: ICustomType
   return {
     fileName: `${toKebabCase(name)}.ts`,
     component: {
-      name,
+      name: `Dx${name}`,
+      widgetName: name,
       baseComponentPath: baseComponent,
       dxExportPath: raw.exportPath,
       props: raw.options.map((o) => mapProp(o, customTypeHash)),
@@ -60,7 +61,7 @@ function mapWidget(raw: IWidget, baseComponent: string, customTypes: ICustomType
 
 function mapNestedComponent(complexOption: IComplexProp, customTypes: Record<string, ICustomType>): INestedComponent {
   return {
-    name: uppercaseFirst(complexOption.name),
+    name: `Dx${uppercaseFirst(complexOption.name)}`,
     optionName: complexOption.optionName,
     props: complexOption.props.map((o) => mapProp(o, customTypes))
   };

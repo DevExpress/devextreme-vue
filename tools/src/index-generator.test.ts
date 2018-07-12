@@ -5,6 +5,6 @@ it("generates", () => {
 });
 //#region EXPECTED_GENERATES
 const EXPECTED_GENERATES = `
-export * from "./path";
-export * from "./another/path";
+export default from "./path";
+export default from "./another/path";
 `.trimLeft();

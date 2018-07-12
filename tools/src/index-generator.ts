@@ -5,7 +5,7 @@ function generate(paths: string[]): string {
 }
 
 const render: (model: string[]) => string = createTempate(`
-<#~ it :modulePath #>export * from "<#= modulePath #>";
+<#~ it :modulePath #>export default from "<#= modulePath #>";
 <#~#>
 `.trim());
 

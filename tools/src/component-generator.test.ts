@@ -5,30 +5,33 @@ it("generates", () => {
     const EXPECTED = `
 import * as VueType from "vue";
 const Vue = VueType.default || VueType;
-import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
+import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
 import { DxComponent as BaseComponent } from "BASE_COMPONENT_PATH";
 
-const DxCLASS_NAME: VueConstructor = Vue.extend({
+const COMPONENT: VueConstructor = Vue.extend({
   extends: BaseComponent,
   computed: {
-    instance(): CLASS_NAME {
+    instance(): WIDGET {
       return (this as any).$_instance;
     }
   },
   beforeCreate() {
-    (this as any).$_WidgetClass = CLASS_NAME;
+    (this as any).$_WidgetClass = WIDGET;
   }
 });
+
+export default COMPONENT;
 export {
-  DxCLASS_NAME
+  COMPONENT
 };
 `.trimLeft();
     //#endregion
 
     expect(
         generate({
-            name: "CLASS_NAME",
+            name: "COMPONENT",
+            widgetName: "WIDGET",
             baseComponentPath: "BASE_COMPONENT_PATH",
             dxExportPath: "DX/WIDGET/PATH"
         })
@@ -40,30 +43,33 @@ it("generates extension component", () => {
   const EXPECTED = `
 import * as VueType from "vue";
 const Vue = VueType.default || VueType;
-import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
+import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
 import { DxExtensionComponent as BaseComponent } from "BASE_COMPONENT_PATH";
 
-const DxCLASS_NAME: VueConstructor = Vue.extend({
+const COMPONENT: VueConstructor = Vue.extend({
   extends: BaseComponent,
   computed: {
-    instance(): CLASS_NAME {
+    instance(): WIDGET {
       return (this as any).$_instance;
     }
   },
   beforeCreate() {
-    (this as any).$_WidgetClass = CLASS_NAME;
+    (this as any).$_WidgetClass = WIDGET;
   }
 });
+
+export default COMPONENT;
 export {
-  DxCLASS_NAME
+  COMPONENT
 };
 `.trimLeft();
   //#endregion
 
   expect(
       generate({
-          name: "CLASS_NAME",
+          name: "COMPONENT",
+          widgetName: "WIDGET",
           baseComponentPath: "BASE_COMPONENT_PATH",
           dxExportPath: "DX/WIDGET/PATH",
           isExtension: true
@@ -76,31 +82,34 @@ it("generates class with model", () => {
     const EXPECTED = `
 import * as VueType from "vue";
 const Vue = VueType.default || VueType;
-import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
+import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
 import { DxComponent as BaseComponent } from "BASE_COMPONENT_PATH";
 
-const DxCLASS_NAME: VueConstructor = Vue.extend({
+const COMPONENT: VueConstructor = Vue.extend({
   extends: BaseComponent,
   model: { prop: "value", event: "update:value" },
   computed: {
-    instance(): CLASS_NAME {
+    instance(): WIDGET {
       return (this as any).$_instance;
     }
   },
   beforeCreate() {
-    (this as any).$_WidgetClass = CLASS_NAME;
+    (this as any).$_WidgetClass = WIDGET;
   }
 });
+
+export default COMPONENT;
 export {
-  DxCLASS_NAME
+  COMPONENT
 };
 `.trimLeft();
     //#endregion
 
     expect(
         generate({
-            name: "CLASS_NAME",
+            name: "COMPONENT",
+            widgetName: "WIDGET",
             baseComponentPath: "BASE_COMPONENT_PATH",
             dxExportPath: "DX/WIDGET/PATH",
             hasModel: true
@@ -113,11 +122,11 @@ it("renders options in alphabetic order", () => {
     const EXPECTED = `
 import * as VueType from "vue";
 const Vue = VueType.default || VueType;
-import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
+import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
 import { DxComponent as BaseComponent } from "BASE_COMPONENT_PATH";
 
-const DxCLASS_NAME: VueConstructor = Vue.extend({
+const COMPONENT: VueConstructor = Vue.extend({
   extends: BaseComponent,
   props: {
     --PROP: {},
@@ -126,23 +135,26 @@ const DxCLASS_NAME: VueConstructor = Vue.extend({
     b-PROP: {}
   },
   computed: {
-    instance(): CLASS_NAME {
+    instance(): WIDGET {
       return (this as any).$_instance;
     }
   },
   beforeCreate() {
-    (this as any).$_WidgetClass = CLASS_NAME;
+    (this as any).$_WidgetClass = WIDGET;
   }
 });
+
+export default COMPONENT;
 export {
-  DxCLASS_NAME
+  COMPONENT
 };
 `.trimLeft();
     //#endregion
 
     expect(
         generate({
-            name: "CLASS_NAME",
+            name: "COMPONENT",
+            widgetName: "WIDGET",
             baseComponentPath: "BASE_COMPONENT_PATH",
             dxExportPath: "DX/WIDGET/PATH",
             props: [{ name: "B-PROP" }, { name: "b-PROP" }, { name: "a-PROP" }, { name: "--PROP" }]
@@ -155,19 +167,19 @@ it("renders nested options props in alphabetic order", () => {
     const EXPECTED = `
 import * as VueType from "vue";
 const Vue = VueType.default || VueType;
-import CLASS_NAME from "devextreme/DX/WIDGET/PATH";
+import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
 import { DxComponent as BaseComponent, DxConfiguration } from "BASE_COMPONENT_PATH";
 
-const DxCLASS_NAME: VueConstructor = Vue.extend({
+const COMPONENT: VueConstructor = Vue.extend({
   extends: BaseComponent,
   computed: {
-    instance(): CLASS_NAME {
+    instance(): WIDGET {
       return (this as any).$_instance;
     }
   },
   beforeCreate() {
-    (this as any).$_WidgetClass = CLASS_NAME;
+    (this as any).$_WidgetClass = WIDGET;
   }
 });
 
@@ -181,8 +193,9 @@ const NESTED_COMPONENT = Vue.extend({
   }
 });
 
+export default COMPONENT;
 export {
-  DxCLASS_NAME,
+  COMPONENT,
   NESTED_COMPONENT
 };
 `.trimLeft();
@@ -190,7 +203,8 @@ export {
 
     expect(
         generate({
-            name: "CLASS_NAME",
+            name: "COMPONENT",
+            widgetName: "WIDGET",
             baseComponentPath: "BASE_COMPONENT_PATH",
             dxExportPath: "DX/WIDGET/PATH",
             nestedComponents: [

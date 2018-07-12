@@ -3,6 +3,7 @@ import createTempate from "./template";
 
 interface IComponent {
     name: string;
+    widgetName: string;
     baseComponentPath: string;
     dxExportPath: string;
     props?: IProp[];
@@ -20,6 +21,7 @@ interface IComponentModel {
     hasModel?: boolean;
     widgetName: string;
     nestedComponents?: INestedComponentModel[];
+    defaultExport: string;
     namedExports: string[];
 }
 
@@ -48,17 +50,15 @@ function generate(component: IComponent): string {
         ? component.nestedComponents.map(createNestedComponentModel)
         : undefined;
 
-    const componentName = `Dx${component.name}`;
-
-    const namedExports: string[] = [ componentName ];
+    const namedExports: string[] = [ component.name ];
     if (nestedComponents && nestedComponents.length) {
         namedExports.push(...nestedComponents.map((c) => c.name));
     }
 
     const componentModel = {
         ...component,
-        componentName,
-        widgetName: `${uppercaseFirst(component.name)}`,
+        componentName: component.name,
+        widgetName: component.widgetName,
         baseComponentName: component.isExtension ? "DxExtensionComponent" : "DxComponent",
 
         renderedProps: component.props
@@ -67,6 +67,7 @@ function generate(component: IComponent): string {
 
         nestedComponents,
 
+        defaultExport: component.name,
         namedExports
     };
 
@@ -103,7 +104,7 @@ import { <#= it.baseComponentName #> as BaseComponent` +
 
 ` } from "<#= it.baseComponentPath #>";` + `\n` + `\n` +
 
-`const <#= it.componentName #>: VueConstructor = Vue.extend({` + 
+`const <#= it.componentName #>: VueConstructor = Vue.extend({` +
 L1 + `extends: BaseComponent,` +
 
 `<#? it.props #>` +
@@ -140,9 +141,10 @@ L1 + `extends: BaseComponent,` +
         L1 + `}` + `\n` +
         `});` + `\n` +
     `<#~#>` +
-    `\n` +
 `<#?#>` +
 
+`\n` +
+`export default <#= it.defaultExport #>;` + `\n` +
 `export {` + `\n` +
     `<#~ it.namedExports :namedExport #>` +
     tab(1) + `<#= namedExport #>,` + `\n` +
