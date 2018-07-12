@@ -68,6 +68,7 @@ describe("component rendering", () => {
 });
 
 describe("options", () => {
+
     it("pass props to option on mounting", () => {
         const vm = new TestComponent({
             propsData: {
@@ -105,16 +106,35 @@ describe("options", () => {
 
 describe("nested options", () => {
 
+    it("pulls initital values on mounting (template)", () => {
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <test-nested-component :prop1="123" />` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                TestNestedComponent
+            }
+        }).$mount();
+
+        expect(WidgetClass).toHaveBeenCalledWith(vm.$children[0].$el, {
+            nestedOption: {
+                prop1: 123
+            }
+        });
+    });
+
     it("pulls initital values on mounting (render function + createElement)", () => {
         const widget = new TestComponent({
             render(createElement) {
-                return createElement(TestNestedComponent, { props: { prop1: 456 } });
+                return createElement(TestNestedComponent, { props: { prop1: 123 } });
             }
         }).$mount();
 
         expect(WidgetClass).toHaveBeenCalledWith(widget.$el, {
             nestedOption: {
-                prop1: 456
+                prop1: 123
             }
         });
     });
@@ -123,7 +143,7 @@ describe("nested options", () => {
         const widget = new TestComponent();
         const option = new TestNestedComponent({
             propsData: {
-                prop1: 456
+                prop1: 123
             },
             parent: widget
         });
@@ -133,19 +153,20 @@ describe("nested options", () => {
 
         expect(WidgetClass).toHaveBeenCalledWith(widget.$el, {
             nestedOption: {
-                prop1: 456
+                prop1: 123
             }
         });
     });
 
     it("watches nested option changes", (done) => {
         const vm = new Vue({
-            render(createElement) {
-                return createElement(
-                    TestComponent,
-                    undefined,
-                    [createElement(TestNestedComponent, { props: { prop1: this.value, prop2: "abc" } })]
-                );
+            template:
+                `<test-component>` +
+                `  <test-nested-component :prop1="value" />` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                TestNestedComponent
             },
             props: ["value"],
             propsData: {
