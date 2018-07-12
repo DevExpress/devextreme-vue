@@ -1,4 +1,4 @@
-import Configuration, { UpdateFunc } from "./option";
+import Configuration, { UpdateFunc } from "./configuration";
 
 function createRootConfig(updateFunc: UpdateFunc): Configuration {
     return new Configuration(updateFunc, null, [], {});

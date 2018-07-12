@@ -3,8 +3,8 @@ import { VNode, VueConstructor } from "vue";
 
 import * as events from "devextreme/events";
 
+import Configuration, { bindOptionWatchers, IConfigurable } from "./configuration";
 import { camelize } from "./helpers";
-import Configuration, { bindOptionWatchers, IConfigurable } from "./option";
 
 interface IWidgetComponent extends IConfigurable {
     $_instance: any;
