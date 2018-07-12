@@ -10,7 +10,6 @@ it("generates", () => {
 });
 //#region EXPECTED_GENERATES
 const EXPECTED_GENERATES = `
-export { Template } from "./core/template";
 export { widget } from "./path";
 export { anotherWidget } from "./another/path";
 `.trimLeft();
