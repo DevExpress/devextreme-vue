@@ -1,4 +1,4 @@
-import { createKeyComparator, uppercaseFirst } from "./helpers";
+import { compareStrings } from "./helpers";
 import createTempate from "./template";
 
 interface IComponent {
@@ -63,7 +63,7 @@ function generate(component: IComponent): string {
         baseComponentName: component.isExtension ? "DxExtensionComponent" : "DxComponent",
 
         renderedProps: component.props
-            ? renderProps(component.props.sort(createKeyComparator<IProp>((p) => p.name)))
+            ? renderProps(component.props)
             : undefined,
 
         nestedComponents,
@@ -78,7 +78,7 @@ function createNestedComponentModel(component: INestedComponent): INestedCompone
         name: component.name,
         optionName: component.optionName,
         renderedProps: component.props
-            ? renderProps(component.props.sort(createKeyComparator<IProp>((p) => p.name)))
+            ? renderProps(component.props)
             : undefined,
         isCollectionItem: component.isCollectionItem
     };
@@ -159,28 +159,35 @@ L1 + `extends: BaseComponent,` +
 `};` + `\n`
 );
 
-const renderProps: (props: IProp[]) => string = createTempate(
+function renderProps(props: IProp[]): string {
+    return renderPropsTemplate(props.sort(compareProps));
+}
+const compareProps = (a: IProp, b: IProp) => compareStrings(a.name, b.name);
+const renderPropsTemplate: (props: IProp[]) => string = createTempate(
 `<#~ it :prop #>` +
 
     tab(2) +
 
     `<#? prop.types && prop.types.length > 0 && !prop.acceptableValues #>` +
-        `<#= prop.name #>: <#? prop.types.length > 1 #>[<#?#><#= prop.types.join(', ') #><#? prop.types.length > 1 #>]<#?#>` +
+        `<#= prop.name #>: ` +
+
+        `<#? prop.types.length > 1 #>` + `[` + `<#?#>` +
+
+        `<#= prop.types.join(', ') #>` +
+
+        `<#? prop.types.length > 1 #>` + `]` + `<#?#>` +
+
     `<#??#>` +
         `<#= prop.name #>: {` +
 
         `<#? prop.types #>` +
             L3 + `type: ` +
 
-            `<#? prop.types.length > 1 #>` +
-                `[` +
-            `<#?#>` +
+            `<#? prop.types.length > 1 #>` + `[` + `<#?#>` +
 
             `<#= prop.types.join(', ') #>` +
 
-            `<#? prop.types.length > 1 #>` +
-                `]` +
-            `<#?#>` +
+            `<#? prop.types.length > 1 #>` + `]` + `<#?#>` +
 
         `<#?#>` +
 

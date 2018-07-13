@@ -114,7 +114,7 @@ export {
     ).toBe(EXPECTED);
 });
 
-it("generates options in alphabetic order", () => {
+it("generates option", () => {
     //#region EXPECTED
     const EXPECTED = `
 import * as VueType from "vue";
@@ -126,10 +126,7 @@ import { DxComponent as BaseComponent } from "BASE_COMPONENT_PATH";
 const COMPONENT: VueConstructor = Vue.extend({
   extends: BaseComponent,
   props: {
-    --PROP: {},
-    a-PROP: {},
-    B-PROP: {},
-    b-PROP: {}
+    PROP: {}
   },
   computed: {
     instance(): WIDGET {
@@ -153,12 +150,12 @@ export {
             widgetName: "WIDGET",
             baseComponentPath: "BASE_COMPONENT_PATH",
             dxExportPath: "DX/WIDGET/PATH",
-            props: [{ name: "B-PROP" }, { name: "b-PROP" }, { name: "a-PROP" }, { name: "--PROP" }]
+            props: [{ name: "PROP" }]
         })
     ).toBe(EXPECTED);
 });
 
-it("generates nested option", () => {
+it("generates nested option component", () => {
     //#region EXPECTED
     const EXPECTED = `
 import * as VueType from "vue";
@@ -216,7 +213,7 @@ export {
     ).toBe(EXPECTED);
 });
 
-it("generates nested option", () => {
+it("generates nested collection option component", () => {
     //#region EXPECTED
     const EXPECTED = `
 import * as VueType from "vue";
@@ -274,9 +271,28 @@ export {
     ).toBe(EXPECTED);
 });
 
-describe("options generation", () => {
+describe("props generation", () => {
 
-    it("renders option without type", () => {
+    it("generates props in alphabetic order", () => {
+        //#region EXPECTED
+        const EXPECTED =
+        `    --PROP: {},` + `\n` +
+        `    a-PROP: {},` + `\n` +
+        `    B-PROP: {},` + `\n` +
+        `    b-PROP: {}`;
+        //#endregion
+
+        expect(
+          renderProps([
+            { name: "B-PROP" },
+            { name: "b-PROP" },
+            { name: "a-PROP" },
+            { name: "--PROP" }
+          ])
+        ).toBe(EXPECTED);
+    });
+
+    it("renders props without type", () => {
         const EXPECTED =
         `    PROP1: {}`;
 
@@ -285,7 +301,7 @@ describe("options generation", () => {
         ).toBe(EXPECTED);
     });
 
-    it("renders options with type", () => {
+    it("renders props with type", () => {
 
       const EXPECTED =
         `    PROP1: TYPE1,` + `\n` +
@@ -297,7 +313,7 @@ describe("options generation", () => {
 
     });
 
-    it("renders options with acceptable values", () => {
+    it("renders props with acceptable values", () => {
         //#region EXPECTED
         const EXPECTED =
 `    PROP1: {
@@ -333,7 +349,7 @@ describe("options generation", () => {
         ).toBe(EXPECTED);
     });
 
-    it("renders options with array of acceptable values", () => {
+    it("renders props with array of acceptable values", () => {
         //#region EXPECTED
         const EXPECTED =
 `    PROP1: {

@@ -24,7 +24,3 @@ export function lowercaseFirst(value: string): string {
 export function compareStrings(a: string, b: string) {
     return a.localeCompare(b, undefined, { caseFirst: "upper" });
 }
-
-export function createKeyComparator<T>(keyGetter: (x: T) => string) {
-    return (a: T, b: T) => compareStrings(keyGetter(a), keyGetter(b));
-}

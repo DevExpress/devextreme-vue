@@ -149,15 +149,15 @@ const DxConfiguration: VueConstructor = Vue.extend({
         $_initOption(name: string, isCollectionItem?: boolean): void {
             const options = Object.keys(this.$props);
             const initialValues = { ...this.$options.propsData };
-            const option = (this.$parent as IConfigurable).$_config.createNested(
+            const config = (this.$parent as IConfigurable).$_config.createNested(
                 name,
                 options,
                 initialValues,
                 isCollectionItem
             );
-            (this as any as IConfigurable).$_config = option;
+            (this as any as IConfigurable).$_config = config;
 
-            bindOptionWatchers(option, this);
+            bindOptionWatchers(config, this);
         },
 
         $_initCollectionOption(name: string): void {
