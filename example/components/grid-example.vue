@@ -13,28 +13,76 @@
       <dx-data-grid 
           :dataSource="sales"
           keyExpr="orderId"
-          :rowAlternationEnabled="alternateRowColors"
           :allowColumnReordering="true"
-          :grouping="grouping"
-          :groupPanel="groupPanel"
-          :paging="paging"
-          :selection="selection"
-          :filterRow="filterRow"
+          :rowAlternationEnabled="alternateRowColors"
           :selectedRowKeys="selectedRowKeys"
-          :columns="columns"
       >
+
+        <dx-filter-row :visible="filterRowVisible" />
+        <dx-group-panel :visible="true" />
+        <dx-grouping :autoExpandAll="true" />
+        <dx-selection mode="multiple" />
+
+        <dx-column
+          dataField="orderId"
+          caption="Order ID"
+          :allowSorting="false"
+          :allowFiltering="false"
+          :allowGrouping="false"
+          :allowReordering="false"
+          :width="100"
+        />
+        <dx-column
+          dataField="city"
+          cellTemplate="cell-city"
+        />
+        <dx-column
+          dataField="country"
+          sortOrder="asc"
+        />
+        <dx-column
+          dataField="region"
+          :groupIndex="0"
+        />
+        <dx-column
+          dataField="date"
+          dataType="date"
+          selectedFilterOperation=">="
+          filterValue="2013/04/01"
+          :width="150"
+        />
+        <dx-column
+          dataField="amount"
+          format="currency"
+          selectedFilterOperation=">="
+          :filterValue="1000"
+          :width="100"
+        />
+
         <dx-pager :visible="true" :showPageSizeSelector="true" />
+        <dx-paging :pageSize="10"/>
+
         <dx-button slot="cell-city" slot-scope="data" :text="data.text" />
       </dx-data-grid>
     </example-block>
 </template>
 
 <script>
-import ExampleBlock from "./example-block";
-import { sales } from "../data";
-import { DxDataGrid, DxButton, DxCheckBox } from "../../src";
-import { DxPager } from "../../src/ui/data-grid";
 import Vue from "vue";
+
+import ExampleBlock from "./example-block";
+import { DxDataGrid, DxButton, DxCheckBox } from "../../src";
+import {
+  DxColumn,
+  DxFilterRow,
+  DxGrouping,
+  DxGroupPanel,
+  DxPager,
+  DxPaging,
+  DxSelection
+} from "../../src/ui/data-grid";
+
+import { sales } from "../data";
 
 const selectedKeys = [10273, 10277, 10292, 10295, 10300, 10302, 10305, 10308, 10312, 
 10319, 10321, 10323, 10326, 10328, 10331, 10334, 10335, 10341, 10351, 10353, 10356, 
@@ -46,60 +94,20 @@ export default {
     DxDataGrid,
     DxButton,
     DxCheckBox,
-    DxPager
-  },
-  computed: {
-    filterRow() {
-      return { visible: this.filterRowVisible };
-    }
+    DxColumn,
+    DxFilterRow,
+    DxGrouping,
+    DxGroupPanel,
+    DxPager,
+    DxPaging,
+    DxSelection
   },
   data: function() {
     return {
       sales: sales,
-      alternateRowColors: true,
       selectedRowKeys: selectedKeys,
-      grouping: { autoExpandAll: true },
-      filterRowVisible: true,
-      groupPanel: { visible: true },
-      paging: { pageSize: 10 },
-      selection: { mode: 'multiple' },
-      columns: [
-        {
-          dataField: "orderId",
-          caption: "Order ID",
-          allowSorting: false,
-          allowFiltering: false,
-          allowGrouping: false,
-          allowReordering: false,
-          width: 100
-        },
-        {
-          dataField: "city",
-          cellTemplate: "cell-city"
-        },
-        {
-          dataField: "country",
-          sortOrder: "asc"
-        },
-        {
-          dataField: "region",
-          groupIndex: 0
-        },
-        {
-          dataField: "date",
-          dataType: "date",
-          selectedFilterOperation: ">=",
-          filterValue: "2013/04/01",
-          width: 150
-        },
-        {
-          dataField: "amount",
-          format: "currency",
-          selectedFilterOperation: ">=",
-          filterValue: 1000,
-          width: 100
-        }
-      ]
+      alternateRowColors: true,
+      filterRowVisible: true
     };
   }
 };
