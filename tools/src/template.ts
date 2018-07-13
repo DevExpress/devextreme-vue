@@ -17,7 +17,7 @@ const createTempate = (templateStr: string): ((model: any) => string) => {
     const templateFunc = template(templateStr, settings);
 
     return (model: any) => (templateFunc(model) as string)
-        .replace(/.{1}\x08{1}|.{2}\x08{2}|.{3}\x08{3}/gs, "")
+        .replace(/[\s\S]{1}\x08{1}|[\s\S]{2}\x08{2}|[\s\S]{3}\x08{3}/g, "")
         .replace(/\x08/, "");
 };
 
