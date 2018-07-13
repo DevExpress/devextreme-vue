@@ -55,7 +55,6 @@ function mapWidget(raw: IWidget, baseComponentPath: string, customTypes: ICustom
       dxExportPath: raw.exportPath,
       props: raw.options.map((o) => mapProp(o, customTypeHash)),
       hasModel: !!raw.isEditor,
-      isExtension: !!raw.isExtension,
       nestedComponents: raw.complexOptions
         ? raw.complexOptions.map((o) => mapNestedComponent(o, customTypeHash))
         : undefined

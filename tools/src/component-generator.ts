@@ -11,7 +11,6 @@ interface IComponent {
     dxExportPath: string;
     props?: IProp[];
     hasModel?: boolean;
-    isExtension?: boolean;
     nestedComponents?: INestedComponent[];
 }
 
