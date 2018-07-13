@@ -10,6 +10,14 @@
           text="Filter Row Visible"
         />
       </div>
+      <div>
+        Country Sort Order:&nbsp;
+        <dx-switch
+          :value.sync="countrySortOrderVal"
+          offText="desc"
+          onText="asc"
+        />
+      </div>
       <dx-data-grid 
           :dataSource="sales"
           keyExpr="orderId"
@@ -38,7 +46,7 @@
         />
         <dx-column
           dataField="country"
-          sortOrder="asc"
+          :sortOrder="countrySortOrder"
         />
         <dx-column
           dataField="region"
@@ -71,7 +79,7 @@
 import Vue from "vue";
 
 import ExampleBlock from "./example-block";
-import { DxDataGrid, DxButton, DxCheckBox } from "../../src";
+import { DxButton, DxCheckBox, DxDataGrid, DxSwitch } from "../../src";
 import {
   DxColumn,
   DxFilterRow,
@@ -91,9 +99,10 @@ const selectedKeys = [10273, 10277, 10292, 10295, 10300, 10302, 10305, 10308, 10
 export default {
   components: {
     ExampleBlock,
-    DxDataGrid,
     DxButton,
     DxCheckBox,
+    DxDataGrid,
+    DxSwitch,
     DxColumn,
     DxFilterRow,
     DxGrouping,
@@ -102,12 +111,19 @@ export default {
     DxPaging,
     DxSelection
   },
+  computed: {
+    countrySortOrder() {
+      console.log(this.countrySortOrderVal);
+      return this.countrySortOrderVal ? "asc" : "desc";
+    }
+  },
   data: function() {
     return {
       sales: sales,
       selectedRowKeys: selectedKeys,
       alternateRowColors: true,
-      filterRowVisible: true
+      filterRowVisible: true,
+      countrySortOrderVal: true
     };
   }
 };
