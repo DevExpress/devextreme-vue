@@ -9,7 +9,7 @@ import generateIndex, { IReExport } from "./index-generator";
 
 function generate(
   rawData: IModel,
-  baseComponent: string,
+  baseComponentPath: string,
   out: {
     componentsDir: string,
     indexFileName: string
@@ -18,7 +18,7 @@ function generate(
   const modulePaths: IReExport[] = [];
 
   rawData.widgets.forEach((data) => {
-    const widgetFile = mapWidget(data, baseComponent, rawData.customTypes);
+    const widgetFile = mapWidget(data, baseComponentPath, rawData.customTypes);
     const widgetFilePath = joinPaths(out.componentsDir, widgetFile.fileName);
     const indexFileDir = getDirName(out.indexFileName);
 
@@ -32,7 +32,7 @@ function generate(
   writeFile(out.indexFileName, generateIndex(modulePaths), { encoding: "utf8" });
 }
 
-function mapWidget(raw: IWidget, baseComponent: string, customTypes: ICustomType[]): {
+function mapWidget(raw: IWidget, baseComponentPath: string, customTypes: ICustomType[]): {
   fileName: string,
   component: IComponent
 } {
@@ -48,7 +48,10 @@ function mapWidget(raw: IWidget, baseComponent: string, customTypes: ICustomType
     component: {
       name: `Dx${name}`,
       widgetName: name,
-      baseComponentPath: baseComponent,
+      base: {
+        name: raw.isExtension ? "DxExtensionComponent" : "DxComponent",
+        path: baseComponentPath
+      },
       dxExportPath: raw.exportPath,
       props: raw.options.map((o) => mapProp(o, customTypeHash)),
       hasModel: !!raw.isEditor,

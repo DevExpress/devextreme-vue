@@ -4,7 +4,10 @@ import createTempate from "./template";
 interface IComponent {
     name: string;
     widgetName: string;
-    baseComponentPath: string;
+    base: {
+        name: string;
+        path: string;
+    };
     dxExportPath: string;
     props?: IProp[];
     hasModel?: boolean;
@@ -12,8 +15,14 @@ interface IComponent {
     nestedComponents?: INestedComponent[];
 }
 
+interface IFileImport {
+    path: string;
+    namedImports: string[];
+}
+
 interface IComponentModel {
     componentName: string;
+    baseImport: IFileImport;
     baseComponentPath: string;
     baseComponentName: string;
     dxExportPath: string;
@@ -52,15 +61,24 @@ function generate(component: IComponent): string {
         : undefined;
 
     const namedExports: string[] = [ component.name ];
+    const baseImport: IFileImport = {
+        path: component.base.path,
+        namedImports: [ `${component.base.name} as BaseComponent` ]
+    };
+
     if (nestedComponents && nestedComponents.length) {
         namedExports.push(...nestedComponents.map((c) => c.name));
+        baseImport.namedImports.push("DxConfiguration");
     }
+    baseImport.namedImports = baseImport.namedImports.sort();
 
     const componentModel = {
         ...component,
+        baseImport,
         componentName: component.name,
         widgetName: component.widgetName,
-        baseComponentName: component.isExtension ? "DxExtensionComponent" : "DxComponent",
+        baseComponentName: component.base.name,
+        baseComponentPath: component.base.path,
 
         renderedProps: component.props
             ? renderProps(component.props)
@@ -96,11 +114,11 @@ const renderComponent: (model: IComponentModel) => string = createTempate(
 const Vue = VueType.default || VueType;
 import <#= it.widgetName #> from "devextreme/<#= it.dxExportPath #>";
 import { VueConstructor } from "vue";
-import { <#= it.baseComponentName #> as BaseComponent` +
+import { ` +
 
-`<#? it.nestedComponents #>` +
-    `, DxConfiguration` +
-`<#?#>` +
+`<#~ it.baseImport.namedImports :namedImport #>` +
+    `<#= namedImport #>` + `, ` +
+`<#~#>` + `\b\b` +
 
 ` } from "<#= it.baseComponentPath #>";` + `\n` + `\n` +
 
