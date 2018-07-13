@@ -1,12 +1,20 @@
 import createTempate from "./template";
 
-function generate(paths: string[]): string {
+interface IReExport {
+  name: string;
+  path: string;
+}
+
+function generate(paths: IReExport[]): string {
   return render(paths);
 }
 
-const render: (model: string[]) => string = createTempate(`
-<#~ it :modulePath #>export * from "<#= modulePath #>";
+const render: (model: IReExport[]) => string = createTempate(`
+<#~ it :reExport #>export { <#= reExport.name #> } from "<#= reExport.path #>";
 <#~#>
 `.trim());
 
 export default generate;
+export {
+  IReExport
+};

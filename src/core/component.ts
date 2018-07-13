@@ -3,12 +3,18 @@ import { VNode, VueConstructor } from "vue";
 
 import * as events from "devextreme/events";
 
+import Configuration, { bindOptionWatchers, IConfigurable } from "./configuration";
 import { camelize } from "./helpers";
+
+interface IWidgetComponent extends IConfigurable {
+    $_instance: any;
+}
+
+const Vue = VueType.default || VueType;
 
 const DX_TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper";
 const DX_REMOVE_EVENT = "dxremove";
 
-const Vue = VueType.default || VueType;
 const BaseComponent: VueConstructor = Vue.extend({
 
     render(createElement: (...args) => VNode): VNode {
@@ -16,25 +22,36 @@ const BaseComponent: VueConstructor = Vue.extend({
     },
 
     beforeDestroy(): void {
-        const instance = (this as any).$_instance;
+        const instance = (this as any as IWidgetComponent).$_instance;
         if (instance) {
             events.triggerHandler(this.$el, DX_REMOVE_EVENT);
             instance.dispose();
         }
     },
 
+    created(): void {
+        (this as any as IWidgetComponent).$_config = new Configuration(
+            (n: string, v: any) => (this as any as IWidgetComponent).$_instance.option(n, v),
+            null,
+            this.$props && Object.keys(this.$props),
+            this.$options.propsData && { ...this.$options.propsData }
+        );
+    },
+
     methods: {
         $_createWidget(element: any): void {
+            const widgetComponent = this as any as IWidgetComponent;
             const options: object = {
                 ...this.$_getIntegrationOptions(),
-                ...this.$options.propsData
+                ...this.$options.propsData,
+                ...widgetComponent.$_config.getInitialValues()
             };
 
             const instance = new (this as any).$_WidgetClass(element, options);
-            (this as any).$_instance = instance;
+            (this as any as IWidgetComponent).$_instance = instance;
 
             instance.on("optionChanged", this.$_handleOptionChanged.bind(this));
-            this.$_watchProps(instance);
+            bindOptionWatchers(widgetComponent.$_config, this);
             this.$_createEmitters(instance);
         },
         $_getIntegrationOptions(): object {
@@ -88,17 +105,6 @@ const BaseComponent: VueConstructor = Vue.extend({
             this.$emit("update:" + args.name, args.value);
         },
 
-        $_watchProps(instance: any): void {
-            if (!this.$props) {
-                return;
-            }
-            Object.keys(this.$props).forEach((prop: string) => {
-                this.$watch(prop, (value) => {
-                    instance.option(prop, value);
-                });
-            });
-        },
-
         $_createEmitters(instance: any): void {
             Object.keys(this.$listeners).forEach((listenerName: string) => {
                 const eventName = camelize(listenerName);
@@ -125,6 +131,7 @@ const DxExtensionComponent: VueConstructor = BaseComponent.extend({
     created(): void {
         (this as any).$_isExtension = true;
     },
+
     methods: {
         attachTo(element: any) {
             (this as any).$_createWidget(element);
@@ -132,4 +139,31 @@ const DxExtensionComponent: VueConstructor = BaseComponent.extend({
     }
 });
 
-export { DxComponent, DxExtensionComponent };
+const DxConfiguration: VueConstructor = Vue.extend({
+
+    render(createElement: (...args) => VNode): VNode {
+        return createElement();
+    },
+
+    methods: {
+        $_initOption(name: string, isCollectionItem?: boolean): void {
+            const options = Object.keys(this.$props);
+            const initialValues = { ...this.$options.propsData };
+            const config = (this.$parent as IConfigurable).$_config.createNested(
+                name,
+                options,
+                initialValues,
+                isCollectionItem
+            );
+            (this as any as IConfigurable).$_config = config;
+
+            bindOptionWatchers(config, this);
+        },
+
+        $_initCollectionOption(name: string): void {
+            this.$_initOption(name, true);
+        }
+    }
+});
+
+export { DxComponent, DxExtensionComponent, DxConfiguration };

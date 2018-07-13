@@ -1,37 +1,38 @@
 import { writeFileSync as writeFile } from "fs";
 import { dirname as getDirName, join as joinPaths, relative as getRelativePath, sep as pathSeparator } from "path";
 
-import { ICustomType, IModel, IProp as IOption, ITypeDescr, IWidget } from "../integration-data-model";
-import generateComponent, { IComponent, IProp } from "./component-generator";
+import { IComplexProp, ICustomType, IModel, IProp as IOption, ITypeDescr, IWidget } from "../integration-data-model";
+import generateComponent, { IComponent, INestedComponent, IProp } from "./component-generator";
 import { convertTypes } from "./converter";
-import { removeExtension, removePrefix, toKebabCase } from "./helpers";
-import generateIndex from "./index-generator";
+import { removeExtension, removePrefix, toKebabCase, uppercaseFirst } from "./helpers";
+import generateIndex, { IReExport } from "./index-generator";
 
 function generate(
   rawData: IModel,
-  baseComponent: string,
+  baseComponentPath: string,
   out: {
     componentsDir: string,
     indexFileName: string
   }
 ) {
-  const modulePaths: string[] = [];
+  const modulePaths: IReExport[] = [];
 
   rawData.widgets.forEach((data) => {
-    const widgetFile = mapWidget(data, baseComponent, rawData.customTypes);
+    const widgetFile = mapWidget(data, baseComponentPath, rawData.customTypes);
     const widgetFilePath = joinPaths(out.componentsDir, widgetFile.fileName);
     const indexFileDir = getDirName(out.indexFileName);
 
     writeFile(widgetFilePath, generateComponent(widgetFile.component), { encoding: "utf8" });
-    modulePaths.push(
-      "./" + removeExtension(getRelativePath(indexFileDir, widgetFilePath)).replace(pathSeparator, "/")
-    );
+    modulePaths.push({
+      name: widgetFile.component.name,
+      path: "./" + removeExtension(getRelativePath(indexFileDir, widgetFilePath)).replace(pathSeparator, "/")
+    });
   });
 
   writeFile(out.indexFileName, generateIndex(modulePaths), { encoding: "utf8" });
 }
 
-function mapWidget(raw: IWidget, baseComponent: string, customTypes: ICustomType[]): {
+function mapWidget(raw: IWidget, baseComponentPath: string, customTypes: ICustomType[]): {
   fileName: string,
   component: IComponent
 } {
@@ -45,13 +46,28 @@ function mapWidget(raw: IWidget, baseComponent: string, customTypes: ICustomType
   return {
     fileName: `${toKebabCase(name)}.ts`,
     component: {
-      name,
-      baseComponentPath: baseComponent,
+      name: `Dx${name}`,
+      widgetName: name,
+      base: {
+        name: raw.isExtension ? "DxExtensionComponent" : "DxComponent",
+        path: baseComponentPath
+      },
       dxExportPath: raw.exportPath,
       props: raw.options.map((o) => mapProp(o, customTypeHash)),
       hasModel: !!raw.isEditor,
-      isExtension: !!raw.isExtension,
+      nestedComponents: raw.complexOptions
+        ? raw.complexOptions.map((o) => mapNestedComponent(o, customTypeHash))
+        : undefined
     }
+  };
+}
+
+function mapNestedComponent(complexOption: IComplexProp, customTypes: Record<string, ICustomType>): INestedComponent {
+  return {
+    name: `Dx${uppercaseFirst(complexOption.name)}`,
+    optionName: complexOption.optionName,
+    props: complexOption.props.map((o) => mapProp(o, customTypes)),
+    isCollectionItem: complexOption.isCollectionItem
   };
 }
 
