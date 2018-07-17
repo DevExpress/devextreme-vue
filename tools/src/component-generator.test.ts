@@ -7,10 +7,10 @@ import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
-import { BASE_COMPONENT as BaseComponent } from "BASE_COMPONENT_PATH";
+import { BASE_COMPONENT } from "BASE_COMPONENT_PATH";
 
 const COMPONENT: VueConstructor = Vue.extend({
-  extends: BaseComponent,
+  extends: BASE_COMPONENT,
   computed: {
     instance(): WIDGET {
       return (this as any).$_instance;
@@ -49,10 +49,10 @@ import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
-import { BASE_COMPONENT as BaseComponent } from "BASE_COMPONENT_PATH";
+import { BASE_COMPONENT } from "BASE_COMPONENT_PATH";
 
 const COMPONENT: VueConstructor = Vue.extend({
-  extends: BaseComponent,
+  extends: BASE_COMPONENT,
   model: { prop: "value", event: "update:value" },
   computed: {
     instance(): WIDGET {
@@ -93,10 +93,10 @@ import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
-import { BASE_COMPONENT as BaseComponent } from "BASE_COMPONENT_PATH";
+import { BASE_COMPONENT } from "BASE_COMPONENT_PATH";
 
 const COMPONENT: VueConstructor = Vue.extend({
-  extends: BaseComponent,
+  extends: BASE_COMPONENT,
   props: {
     PROP: {}
   },
@@ -139,10 +139,10 @@ import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
-import { BASE_COMPONENT as BaseComponent, DxConfiguration } from "BASE_COMPONENT_PATH";
+import { BASE_COMPONENT, DxConfiguration } from "BASE_COMPONENT_PATH";
 
 const COMPONENT: VueConstructor = Vue.extend({
-  extends: BaseComponent,
+  extends: BASE_COMPONENT,
   computed: {
     instance(): WIDGET {
       return (this as any).$_instance;
@@ -202,10 +202,10 @@ import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
-import { BASE_COMPONENT as BaseComponent, DxConfiguration } from "BASE_COMPONENT_PATH";
+import { BASE_COMPONENT, DxConfiguration } from "BASE_COMPONENT_PATH";
 
 const COMPONENT: VueConstructor = Vue.extend({
-  extends: BaseComponent,
+  extends: BASE_COMPONENT,
   computed: {
     instance(): WIDGET {
       return (this as any).$_instance;

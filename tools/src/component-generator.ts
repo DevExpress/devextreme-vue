@@ -21,7 +21,8 @@ interface IFileImport {
 }
 
 interface IComponentModel {
-    componentName: string;
+    component: string;
+    baseComponent: string;
     baseImport: IFileImport;
     widgetImport: INamedImport;
     renderedProps?: string;
@@ -60,7 +61,7 @@ function generate(component: IComponent): string {
     const namedExports: string[] = [ component.name ];
     const baseImport: IFileImport = {
         path: component.base.path,
-        namedImports: [ `${component.base.name} as BaseComponent` ]
+        namedImports: [ component.base.name ]
     };
 
     if (nestedComponents && nestedComponents.length) {
@@ -73,7 +74,8 @@ function generate(component: IComponent): string {
         ...component,
         widgetImport: component.widget,
         baseImport,
-        componentName: component.name,
+        component: component.name,
+        baseComponent: component.base.name,
 
         renderedProps: component.props
             ? renderProps(component.props)
@@ -117,8 +119,8 @@ import { ` +
 
 ` } from "<#= it.baseImport.path #>";` + `\n` + `\n` +
 
-`const <#= it.componentName #>: VueConstructor = Vue.extend({` +
-L1 + `extends: BaseComponent,` +
+`const <#= it.component #>: VueConstructor = Vue.extend({` +
+L1 + `extends: <#= it.baseComponent #>,` +
 
 `<#? it.props #>` +
     L1 + `props: {` + `\n` +
