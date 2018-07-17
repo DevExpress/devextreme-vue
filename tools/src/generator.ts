@@ -47,12 +47,14 @@ function mapWidget(raw: IWidget, baseComponentPath: string, customTypes: ICustom
     fileName: `${toKebabCase(name)}.ts`,
     component: {
       name: `Dx${name}`,
-      widgetName: name,
+      widget: {
+        name,
+        path: raw.exportPath
+      },
       base: {
         name: raw.isExtension ? "DxExtensionComponent" : "DxComponent",
         path: baseComponentPath
       },
-      dxExportPath: raw.exportPath,
       props: raw.options.map((o) => mapProp(o, customTypeHash)),
       hasModel: !!raw.isEditor,
       nestedComponents: raw.complexOptions
