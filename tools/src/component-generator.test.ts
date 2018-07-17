@@ -30,12 +30,14 @@ export {
     expect(
         generate({
             name: "COMPONENT",
-            widgetName: "WIDGET",
+            widget: {
+              name: "WIDGET",
+              path: "DX/WIDGET/PATH"
+            },
             base: {
                 name: "BASE_COMPONENT",
                 path: "BASE_COMPONENT_PATH"
-            },
-            dxExportPath: "DX/WIDGET/PATH"
+            }
         })
     ).toBe(EXPECTED);
 });
@@ -71,12 +73,14 @@ export {
     expect(
         generate({
             name: "COMPONENT",
-            widgetName: "WIDGET",
+            widget: {
+              name: "WIDGET",
+              path: "DX/WIDGET/PATH"
+            },
             base: {
                 name: "BASE_COMPONENT",
                 path: "BASE_COMPONENT_PATH"
             },
-            dxExportPath: "DX/WIDGET/PATH",
             hasModel: true
         })
     ).toBe(EXPECTED);
@@ -115,12 +119,14 @@ export {
     expect(
         generate({
             name: "COMPONENT",
-            widgetName: "WIDGET",
+            widget: {
+              name: "WIDGET",
+              path: "DX/WIDGET/PATH"
+            },
             base: {
                 name: "BASE_COMPONENT",
                 path: "BASE_COMPONENT_PATH"
             },
-            dxExportPath: "DX/WIDGET/PATH",
             props: [{ name: "PROP" }]
         })
     ).toBe(EXPECTED);
@@ -167,12 +173,14 @@ export {
     expect(
         generate({
             name: "COMPONENT",
-            widgetName: "WIDGET",
+            widget: {
+              name: "WIDGET",
+              path: "DX/WIDGET/PATH"
+            },
             base: {
                 name: "BASE_COMPONENT",
                 path: "BASE_COMPONENT_PATH"
             },
-            dxExportPath: "DX/WIDGET/PATH",
             nestedComponents: [
               {
                 name: "NESTED_COMPONENT",
@@ -228,12 +236,14 @@ export {
     expect(
         generate({
             name: "COMPONENT",
-            widgetName: "WIDGET",
+            widget: {
+              name: "WIDGET",
+              path: "DX/WIDGET/PATH"
+            },
             base: {
                 name: "BASE_COMPONENT",
                 path: "BASE_COMPONENT_PATH"
             },
-            dxExportPath: "DX/WIDGET/PATH",
             nestedComponents: [
               {
                 name: "NESTED_COMPONENT",
