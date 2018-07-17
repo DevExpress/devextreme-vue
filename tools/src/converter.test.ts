@@ -45,7 +45,8 @@ it("expands custom types", () => {
                 { type: "String", isCustomType: false, acceptableValues: []},
                 { type: "Number", isCustomType: false, acceptableValues: []}
             ],
-            props: []
+            props: [],
+            templates: []
         }
 })).toEqual(["Object", "String", "Number"]);
 });
