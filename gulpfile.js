@@ -69,6 +69,8 @@ gulp.task(GEN_RUN, (done) => {
   generateSync(
     JSON.parse(fs.readFileSync(config.metadataPath).toString()),
     config.baseComponent,
+    config.configComponent,
+    config.extensionComponent,
     {
       componentsDir: config.componentFolder,
       indexFileName: config.indexFileName
