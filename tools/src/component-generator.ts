@@ -69,6 +69,7 @@ function generate(component: IComponent): string {
         namedImports.push(component.configComponent);
     }
 
+    namedImports.sort(compareImports);
     const componentModel = {
         ...component,
 
@@ -171,10 +172,20 @@ L1 + `extends: <#= it.baseComponent #>,` +
 `};\n`
 );
 
+function compareProps(a: IProp, b: IProp): number {
+    return compareStrings(a.name, b.name);
+}
+function compareImports(a: IImport, b: IImport): number {
+    if (a.path.startsWith(".") && !b.path.startsWith(".")) { return 1; }
+
+    if (!a.path.startsWith(".") && b.path.startsWith(".")) { return -1; }
+
+    return compareStrings(a.path, b.path);
+}
+
 function renderProps(props: IProp[]): string {
     return renderPropsTemplate(props.sort(compareProps));
 }
-const compareProps = (a: IProp, b: IProp) => compareStrings(a.name, b.name);
 const renderPropsTemplate: (props: IProp[]) => string = createTempate(
 `<#~ it :prop #>` +
 

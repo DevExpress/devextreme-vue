@@ -7,7 +7,7 @@ import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
-import { BASE_COMPONENT } from "BASE_COMPONENT_PATH";
+import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 
 const COMPONENT: VueConstructor = Vue.extend({
   extends: BASE_COMPONENT,
@@ -36,11 +36,11 @@ export {
             },
             configComponent: {
                 name: "CONFIG_COMPONENT",
-                path: "CONFIG_COMPONENT_PATH"
+                path: "./CONFIG_COMPONENT_PATH"
             },
             baseComponent: {
                 name: "BASE_COMPONENT",
-                path: "BASE_COMPONENT_PATH"
+                path: "./BASE_COMPONENT_PATH"
             }
         })
     ).toBe(EXPECTED);
@@ -53,7 +53,7 @@ import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
-import { BASE_COMPONENT } from "BASE_COMPONENT_PATH";
+import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 
 const COMPONENT: VueConstructor = Vue.extend({
   extends: BASE_COMPONENT,
@@ -83,11 +83,11 @@ export {
             },
             baseComponent: {
                 name: "BASE_COMPONENT",
-                path: "BASE_COMPONENT_PATH"
+                path: "./BASE_COMPONENT_PATH"
             },
             configComponent: {
                 name: "CONFIG_COMPONENT",
-                path: "CONFIG_COMPONENT_PATH"
+                path: "./CONFIG_COMPONENT_PATH"
             },
             hasModel: true
         })
@@ -101,7 +101,7 @@ import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
-import { BASE_COMPONENT } from "BASE_COMPONENT_PATH";
+import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 
 const COMPONENT: VueConstructor = Vue.extend({
   extends: BASE_COMPONENT,
@@ -133,11 +133,11 @@ export {
             },
             baseComponent: {
                 name: "BASE_COMPONENT",
-                path: "BASE_COMPONENT_PATH"
+                path: "./BASE_COMPONENT_PATH"
             },
             configComponent: {
                 name: "CONFIG_COMPONENT",
-                path: "CONFIG_COMPONENT_PATH"
+                path: "./CONFIG_COMPONENT_PATH"
             },
             props: [{ name: "PROP" }]
         })
@@ -151,8 +151,8 @@ import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
-import { BASE_COMPONENT } from "BASE_COMPONENT_PATH";
-import { CONFIG_COMPONENT } from "CONFIG_COMPONENT_PATH";
+import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
+import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
 
 const COMPONENT: VueConstructor = Vue.extend({
   extends: BASE_COMPONENT,
@@ -192,11 +192,11 @@ export {
             },
             baseComponent: {
                 name: "BASE_COMPONENT",
-                path: "BASE_COMPONENT_PATH"
+                path: "./BASE_COMPONENT_PATH"
             },
             configComponent: {
                 name: "CONFIG_COMPONENT",
-                path: "CONFIG_COMPONENT_PATH"
+                path: "./CONFIG_COMPONENT_PATH"
             },
             nestedComponents: [
               {
@@ -219,8 +219,8 @@ import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
-import { BASE_COMPONENT } from "BASE_COMPONENT_PATH";
-import { CONFIG_COMPONENT } from "CONFIG_COMPONENT_PATH";
+import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
+import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
 
 const COMPONENT: VueConstructor = Vue.extend({
   extends: BASE_COMPONENT,
@@ -260,11 +260,11 @@ export {
             },
             baseComponent: {
                 name: "BASE_COMPONENT",
-                path: "BASE_COMPONENT_PATH"
+                path: "./BASE_COMPONENT_PATH"
             },
             configComponent: {
                 name: "CONFIG_COMPONENT",
-                path: "CONFIG_COMPONENT_PATH"
+                path: "./CONFIG_COMPONENT_PATH"
             },
             nestedComponents: [
               {
