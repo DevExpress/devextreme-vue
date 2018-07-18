@@ -111,4 +111,4 @@ function bindOptionWatchers(config: Configuration, vueInstance: Pick<Vue, "$watc
 }
 
 export default Configuration;
-export { bindOptionWatchers, IConfigurable };
+export { bindOptionWatchers, IConfigurable, UpdateFunc };

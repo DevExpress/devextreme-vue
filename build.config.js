@@ -20,5 +20,6 @@ module.exports = {
   componentFolder: './src/ui',
   indexFileName: './src/index.ts',
   baseComponent: '../core/component',
-  configComponent: '../core/configuration-component'
+  configComponent: '../core/configuration-component',
+  extensionComponent: '../core/extension-component'
 };

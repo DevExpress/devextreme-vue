@@ -128,16 +128,4 @@ const DxComponent: VueConstructor = BaseComponent.extend({
     }
 });
 
-const DxExtensionComponent: VueConstructor = BaseComponent.extend({
-    created(): void {
-        (this as any).$_isExtension = true;
-    },
-
-    methods: {
-        attachTo(element: any) {
-            (this as any).$_createWidget(element);
-        }
-    }
-});
-
-export { DxComponent, DxExtensionComponent };
+export { DxComponent, BaseComponent };
