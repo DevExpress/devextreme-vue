@@ -1,14 +1,15 @@
 import { compareStrings } from "./helpers";
 import createTempate from "./template";
 
+interface INamedImport {
+    name: string;
+    path: string;
+}
+
 interface IComponent {
     name: string;
-    widgetName: string;
-    base: {
-        name: string;
-        path: string;
-    };
-    dxExportPath: string;
+    widget: INamedImport;
+    base: INamedImport;
     props?: IProp[];
     hasModel?: boolean;
     nestedComponents?: INestedComponent[];
@@ -20,14 +21,12 @@ interface IFileImport {
 }
 
 interface IComponentModel {
-    componentName: string;
+    component: string;
+    baseComponent: string;
     baseImport: IFileImport;
-    baseComponentPath: string;
-    baseComponentName: string;
-    dxExportPath: string;
+    widgetImport: INamedImport;
     renderedProps?: string;
     hasModel?: boolean;
-    widgetName: string;
     nestedComponents?: INestedComponentModel[];
     namedExports: string[];
 }
@@ -62,7 +61,7 @@ function generate(component: IComponent): string {
     const namedExports: string[] = [ component.name ];
     const baseImport: IFileImport = {
         path: component.base.path,
-        namedImports: [ `${component.base.name} as BaseComponent` ]
+        namedImports: [ component.base.name ]
     };
 
     if (nestedComponents && nestedComponents.length) {
@@ -73,11 +72,10 @@ function generate(component: IComponent): string {
 
     const componentModel = {
         ...component,
+        widgetImport: component.widget,
         baseImport,
-        componentName: component.name,
-        widgetName: component.widgetName,
-        baseComponentName: component.base.name,
-        baseComponentPath: component.base.path,
+        component: component.name,
+        baseComponent: component.base.name,
 
         renderedProps: component.props
             ? renderProps(component.props)
@@ -111,7 +109,7 @@ const L4: string = `\n` + tab(4);
 const renderComponent: (model: IComponentModel) => string = createTempate(
 `import * as VueType from "vue";
 const Vue = VueType.default || VueType;
-import <#= it.widgetName #> from "devextreme/<#= it.dxExportPath #>";
+import <#= it.widgetImport.name #> from "devextreme/<#= it.widgetImport.path #>";
 import { VueConstructor } from "vue";
 import { ` +
 
@@ -119,10 +117,10 @@ import { ` +
     `<#= namedImport #>` + `, ` +
 `<#~#>` + `\b\b` +
 
-` } from "<#= it.baseComponentPath #>";` + `\n` + `\n` +
+` } from "<#= it.baseImport.path #>";` + `\n` + `\n` +
 
-`const <#= it.componentName #>: VueConstructor = Vue.extend({` +
-L1 + `extends: BaseComponent,` +
+`const <#= it.component #>: VueConstructor = Vue.extend({` +
+L1 + `extends: <#= it.baseComponent #>,` +
 
 `<#? it.props #>` +
     L1 + `props: {` + `\n` +
@@ -135,13 +133,13 @@ L1 + `extends: BaseComponent,` +
 `<#?#>` +
 
   L1 + `computed: {
-    instance(): <#= it.widgetName #> {
+    instance(): <#= it.widgetImport.name #> {
       return (this as any).$_instance;
     }
   },` +
 
   L1 + `beforeCreate() {
-    (this as any).$_WidgetClass = <#= it.widgetName #>;
+    (this as any).$_WidgetClass = <#= it.widgetImport.name #>;
   }
 });` + `\n` +
 

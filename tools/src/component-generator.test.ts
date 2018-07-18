@@ -7,10 +7,10 @@ import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
-import { BASE_COMPONENT as BaseComponent } from "BASE_COMPONENT_PATH";
+import { BASE_COMPONENT } from "BASE_COMPONENT_PATH";
 
 const COMPONENT: VueConstructor = Vue.extend({
-  extends: BaseComponent,
+  extends: BASE_COMPONENT,
   computed: {
     instance(): WIDGET {
       return (this as any).$_instance;
@@ -30,12 +30,14 @@ export {
     expect(
         generate({
             name: "COMPONENT",
-            widgetName: "WIDGET",
+            widget: {
+              name: "WIDGET",
+              path: "DX/WIDGET/PATH"
+            },
             base: {
                 name: "BASE_COMPONENT",
                 path: "BASE_COMPONENT_PATH"
-            },
-            dxExportPath: "DX/WIDGET/PATH"
+            }
         })
     ).toBe(EXPECTED);
 });
@@ -47,10 +49,10 @@ import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
-import { BASE_COMPONENT as BaseComponent } from "BASE_COMPONENT_PATH";
+import { BASE_COMPONENT } from "BASE_COMPONENT_PATH";
 
 const COMPONENT: VueConstructor = Vue.extend({
-  extends: BaseComponent,
+  extends: BASE_COMPONENT,
   model: { prop: "value", event: "update:value" },
   computed: {
     instance(): WIDGET {
@@ -71,12 +73,14 @@ export {
     expect(
         generate({
             name: "COMPONENT",
-            widgetName: "WIDGET",
+            widget: {
+              name: "WIDGET",
+              path: "DX/WIDGET/PATH"
+            },
             base: {
                 name: "BASE_COMPONENT",
                 path: "BASE_COMPONENT_PATH"
             },
-            dxExportPath: "DX/WIDGET/PATH",
             hasModel: true
         })
     ).toBe(EXPECTED);
@@ -89,10 +93,10 @@ import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
-import { BASE_COMPONENT as BaseComponent } from "BASE_COMPONENT_PATH";
+import { BASE_COMPONENT } from "BASE_COMPONENT_PATH";
 
 const COMPONENT: VueConstructor = Vue.extend({
-  extends: BaseComponent,
+  extends: BASE_COMPONENT,
   props: {
     PROP: {}
   },
@@ -115,12 +119,14 @@ export {
     expect(
         generate({
             name: "COMPONENT",
-            widgetName: "WIDGET",
+            widget: {
+              name: "WIDGET",
+              path: "DX/WIDGET/PATH"
+            },
             base: {
                 name: "BASE_COMPONENT",
                 path: "BASE_COMPONENT_PATH"
             },
-            dxExportPath: "DX/WIDGET/PATH",
             props: [{ name: "PROP" }]
         })
     ).toBe(EXPECTED);
@@ -133,10 +139,10 @@ import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
-import { BASE_COMPONENT as BaseComponent, DxConfiguration } from "BASE_COMPONENT_PATH";
+import { BASE_COMPONENT, DxConfiguration } from "BASE_COMPONENT_PATH";
 
 const COMPONENT: VueConstructor = Vue.extend({
-  extends: BaseComponent,
+  extends: BASE_COMPONENT,
   computed: {
     instance(): WIDGET {
       return (this as any).$_instance;
@@ -167,12 +173,14 @@ export {
     expect(
         generate({
             name: "COMPONENT",
-            widgetName: "WIDGET",
+            widget: {
+              name: "WIDGET",
+              path: "DX/WIDGET/PATH"
+            },
             base: {
                 name: "BASE_COMPONENT",
                 path: "BASE_COMPONENT_PATH"
             },
-            dxExportPath: "DX/WIDGET/PATH",
             nestedComponents: [
               {
                 name: "NESTED_COMPONENT",
@@ -194,10 +202,10 @@ import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { VueConstructor } from "vue";
-import { BASE_COMPONENT as BaseComponent, DxConfiguration } from "BASE_COMPONENT_PATH";
+import { BASE_COMPONENT, DxConfiguration } from "BASE_COMPONENT_PATH";
 
 const COMPONENT: VueConstructor = Vue.extend({
-  extends: BaseComponent,
+  extends: BASE_COMPONENT,
   computed: {
     instance(): WIDGET {
       return (this as any).$_instance;
@@ -228,12 +236,14 @@ export {
     expect(
         generate({
             name: "COMPONENT",
-            widgetName: "WIDGET",
+            widget: {
+              name: "WIDGET",
+              path: "DX/WIDGET/PATH"
+            },
             base: {
                 name: "BASE_COMPONENT",
                 path: "BASE_COMPONENT_PATH"
             },
-            dxExportPath: "DX/WIDGET/PATH",
             nestedComponents: [
               {
                 name: "NESTED_COMPONENT",
