@@ -1,5 +1,6 @@
 import Vue from "vue";
-import { DxComponent, DxConfiguration, DxExtensionComponent } from "../core/component";
+import { DxComponent, DxExtensionComponent } from "../core/component";
+import { DxConfiguration } from "../core/configuration-component";
 
 import * as events from "devextreme/events";
 

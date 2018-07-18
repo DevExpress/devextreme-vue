@@ -10,6 +10,7 @@ import generateIndex, { IReExport } from "./index-generator";
 function generate(
   rawData: IModel,
   baseComponentPath: string,
+  configComponentPath: string,
   out: {
     componentsDir: string,
     indexFileName: string
@@ -18,7 +19,7 @@ function generate(
   const modulePaths: IReExport[] = [];
 
   rawData.widgets.forEach((data) => {
-    const widgetFile = mapWidget(data, baseComponentPath, rawData.customTypes);
+    const widgetFile = mapWidget(data, baseComponentPath, configComponentPath, rawData.customTypes);
     const widgetFilePath = joinPaths(out.componentsDir, widgetFile.fileName);
     const indexFileDir = getDirName(out.indexFileName);
 
@@ -32,7 +33,12 @@ function generate(
   writeFile(out.indexFileName, generateIndex(modulePaths), { encoding: "utf8" });
 }
 
-function mapWidget(raw: IWidget, baseComponentPath: string, customTypes: ICustomType[]): {
+function mapWidget(
+  raw: IWidget,
+  baseComponentPath: string,
+  configComponentPath: string,
+  customTypes: ICustomType[]
+): {
   fileName: string,
   component: IComponent
 } {
@@ -47,13 +53,17 @@ function mapWidget(raw: IWidget, baseComponentPath: string, customTypes: ICustom
     fileName: `${toKebabCase(name)}.ts`,
     component: {
       name: `Dx${name}`,
-      widget: {
+      widgetComponent: {
         name,
         path: raw.exportPath
       },
-      base: {
+      baseComponent: {
         name: raw.isExtension ? "DxExtensionComponent" : "DxComponent",
         path: baseComponentPath
+      },
+      configComponent: {
+        name: "DxConfiguration",
+        path: configComponentPath
       },
       props: raw.options.map((o) => mapProp(o, customTypeHash)),
       hasModel: !!raw.isEditor,

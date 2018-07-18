@@ -19,5 +19,6 @@ module.exports = {
   metadataPath: './tools/integration-data.json',
   componentFolder: './src/ui',
   indexFileName: './src/index.ts',
-  baseComponent: '../core/component'
+  baseComponent: '../core/component',
+  configComponent: '../core/configuration-component'
 };
