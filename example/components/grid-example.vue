@@ -113,7 +113,6 @@ export default {
   },
   computed: {
     countrySortOrder() {
-      console.log(this.countrySortOrderVal);
       return this.countrySortOrderVal ? "asc" : "desc";
     }
   },
