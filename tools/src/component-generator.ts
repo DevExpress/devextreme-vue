@@ -1,30 +1,27 @@
 import { compareStrings } from "./helpers";
 import createTempate from "./template";
 
-interface INamedImport {
+interface IImport {
     name: string;
     path: string;
 }
 
 interface IComponent {
     name: string;
-    widget: INamedImport;
-    base: INamedImport;
+    widgetComponent: IImport;
+    baseComponent: IImport;
+    configComponent: IImport;
     props?: IProp[];
     hasModel?: boolean;
     nestedComponents?: INestedComponent[];
 }
 
-interface IFileImport {
-    path: string;
-    namedImports: string[];
-}
-
 interface IComponentModel {
     component: string;
+    widgetImport: IImport;
+    namedImports: IImport[];
     baseComponent: string;
-    baseImport: IFileImport;
-    widgetImport: INamedImport;
+    configComponent: string;
     renderedProps?: string;
     hasModel?: boolean;
     nestedComponents?: INestedComponentModel[];
@@ -58,24 +55,28 @@ function generate(component: IComponent): string {
         ? component.nestedComponents.map(createNestedComponentModel)
         : undefined;
 
-    const namedExports: string[] = [ component.name ];
-    const baseImport: IFileImport = {
-        path: component.base.path,
-        namedImports: [ component.base.name ]
-    };
+    const namedExports: string[] = [component.name];
+    const namedImports = [
+        {
+            name: "VueConstructor",
+            path: "vue"
+        },
+        component.baseComponent
+    ];
 
     if (nestedComponents && nestedComponents.length) {
         namedExports.push(...nestedComponents.map((c) => c.name));
-        baseImport.namedImports.push("DxConfiguration");
+        namedImports.push(component.configComponent);
     }
-    baseImport.namedImports = baseImport.namedImports.sort();
 
     const componentModel = {
         ...component,
-        widgetImport: component.widget,
-        baseImport,
+
+        namedImports,
+        widgetImport: component.widgetComponent,
         component: component.name,
-        baseComponent: component.base.name,
+        baseComponent: component.baseComponent.name,
+        configComponent: component.configComponent.name,
 
         renderedProps: component.props
             ? renderProps(component.props)
@@ -107,23 +108,19 @@ const L3: string = `\n` + tab(3);
 const L4: string = `\n` + tab(4);
 
 const renderComponent: (model: IComponentModel) => string = createTempate(
-`import * as VueType from "vue";
-const Vue = VueType.default || VueType;
-import <#= it.widgetImport.name #> from "devextreme/<#= it.widgetImport.path #>";
-import { VueConstructor } from "vue";
-import { ` +
+`import * as VueType from "vue";\n` +
+`const Vue = VueType.default || VueType;\n` +
+`import <#= it.widgetImport.name #> from "devextreme/<#= it.widgetImport.path #>";\n` +
 
-`<#~ it.baseImport.namedImports :namedImport #>` +
-    `<#= namedImport #>` + `, ` +
-`<#~#>` + `\b\b` +
-
-` } from "<#= it.baseImport.path #>";` + `\n` + `\n` +
+`<#~ it.namedImports :namedImport #>` +
+`import { <#= namedImport.name #> } from "<#= namedImport.path #>";\n` +
+`<#~#>` + `\n` +
 
 `const <#= it.component #>: VueConstructor = Vue.extend({` +
 L1 + `extends: <#= it.baseComponent #>,` +
 
 `<#? it.props #>` +
-    L1 + `props: {` + `\n` +
+    L1 + `props: {\n` +
     `<#= it.renderedProps #>` +
     L1 + `},` +
 `<#?#>` +
@@ -141,14 +138,14 @@ L1 + `extends: <#= it.baseComponent #>,` +
   L1 + `beforeCreate() {
     (this as any).$_WidgetClass = <#= it.widgetImport.name #>;
   }
-});` + `\n` +
+});\n` +
 
 `<#? it.nestedComponents #>` +
     `\n` +
     `<#~ it.nestedComponents : nested #>` +
         `const <#= nested.name #> = Vue.extend({` +
-        L1 + `extends: DxConfiguration,` +
-        L1 + `props: {` + `\n` +
+        L1 + `extends: <#= it.configComponent #>,` +
+        L1 + `props: {\n` +
         `<#= nested.renderedProps #>` +
         L1 + `},` +
         L1 + `beforeMount() {` +
@@ -161,17 +158,17 @@ L1 + `extends: <#= it.baseComponent #>,` +
         `<#?#>` +
 
         `("<#= nested.optionName #>");` +
-        L1 + `}` + `\n` +
-        `});` + `\n` +
+        L1 + `}\n` +
+        `});\n` +
     `<#~#>` +
 `<#?#>` +
 
 `\n` +
-`export {` + `\n` +
+`export {\n` +
     `<#~ it.namedExports :namedExport #>` +
-    tab(1) + `<#= namedExport #>,` + `\n` +
-    `<#~#>` + `\b` + `\b` + `\n` +
-`};` + `\n`
+    tab(1) + `<#= namedExport #>,\n` +
+    `<#~#>` + `\b\b` + `\n` +
+`};\n`
 );
 
 function renderProps(props: IProp[]): string {
@@ -244,9 +241,9 @@ const renderPropsTemplate: (props: IProp[]) => string = createTempate(
 
          `}` +
 
-    `<#?#>,` + `\n` +
+    `<#?#>,\n` +
 
-`<#~#>` + `\b` + `\b`
+`<#~#>` + `\b\b`
 );
 
 function tab(i: number): string {
