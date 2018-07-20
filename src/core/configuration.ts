@@ -30,6 +30,34 @@ class Configuration {
         this.updateValue = this.updateValue.bind(this);
     }
 
+    public get name(): string | null {
+        return this._name;
+    }
+
+    public get options(): string[] {
+        return this._options;
+    }
+
+    public get initialValues(): Record<string, any> {
+        return this._initialValues;
+    }
+
+    public get nested(): Configuration[] {
+        return this._nestedConfigurations;
+    }
+
+    public get collectionItemIndex(): number | undefined {
+        return this._collectionItemIndex;
+    }
+
+    public get isCollectionItem(): boolean {
+        return this._isCollectionItem;
+    }
+
+    public get updateFunc(): UpdateFunc {
+        return this._updateFunc;
+    }
+
     public init(options: string[]): void {
         this._options = options ? options : [];
     }

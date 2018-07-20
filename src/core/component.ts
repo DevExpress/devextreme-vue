@@ -167,4 +167,4 @@ function pullConfigurations(children: VNode[], nodes: VNode[], ownerConfig: Conf
     });
 }
 
-export { DxComponent, BaseComponent };
+export { DxComponent, BaseComponent, IWidgetComponent };

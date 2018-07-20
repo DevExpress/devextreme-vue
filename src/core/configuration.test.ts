@@ -1,4 +1,4 @@
-import Configuration, { UpdateFunc } from "./configuration";
+import Configuration, { bindOptionWatchers, UpdateFunc } from "./configuration";
 
 function createRootConfig(updateFunc: UpdateFunc): Configuration {
     return new Configuration(updateFunc, null, {});
@@ -75,6 +75,30 @@ it("calls update from nested collectionItem (the only)", () => {
 
     expect(callback).toHaveBeenCalledTimes(1);
     expect(callback).toHaveBeenCalledWith("option[0].prop", 123);
+});
+
+it("binds option watchers", () => {
+    const updateValueFunc = jest.fn();
+    const $watchFunc = jest.fn();
+
+    bindOptionWatchers(
+        {
+            updateValue: updateValueFunc,
+            getOptionsToWatch: () => ["prop1"],
+        } as any,
+        {
+            $watch: $watchFunc
+        }
+    );
+
+    expect($watchFunc.mock.calls[0][0]).toBe("prop1");
+
+    const value = {};
+    $watchFunc.mock.calls[0][1](value);
+
+    expect(updateValueFunc).toHaveBeenCalledTimes(1);
+    expect(updateValueFunc.mock.calls[0][0]).toBe("prop1");
+    expect(updateValueFunc.mock.calls[0][1]).toBe(value);
 });
 
 describe("initial configuration", () => {
