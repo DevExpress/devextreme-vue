@@ -1,4 +1,4 @@
-import Vue from "vue";
+import Vue, { VueConstructor } from "vue";
 import { DxComponent } from "../core/component";
 import { DxConfiguration, IConfigurationCtor } from "../core/configuration-component";
 import { DxExtensionComponent } from "../core/extension-component";
@@ -28,23 +28,15 @@ const TestComponent = Vue.extend({
     }
 });
 
-const TestNestedComponent: any = Vue.extend({
-    extends: DxConfiguration,
-    props: {
-        prop1: Number,
-        prop2: String
-    }
-});
-(TestNestedComponent as IConfigurationCtor).$_optionName = "nestedOption";
-
-const TestSubNestedComponent: any = Vue.extend({
-    extends: DxConfiguration,
-    props: {
-        prop1: Number,
-        prop2: String
-    }
-});
-(TestSubNestedComponent as IConfigurationCtor).$_optionName = "subNestedOption";
+function buildTestComponentCtor(): VueConstructor {
+    return Vue.extend({
+        extends: DxConfiguration,
+        props: {
+            prop1: Number,
+            prop2: String
+        }
+    });
+}
 
 jest.setTimeout(1000);
 beforeEach(() => {
@@ -115,15 +107,18 @@ describe("options", () => {
 
 describe("nested options", () => {
 
+    const Nested = buildTestComponentCtor();
+    (Nested as any as IConfigurationCtor).$_optionName = "nestedOption";
+
     it("pulls initital values", () => {
         const vm = new Vue({
             template:
                 `<test-component>` +
-                `  <test-nested-component :prop1="123" />` +
+                `  <nested :prop1="123" />` +
                 `</test-component>`,
             components: {
                 TestComponent,
-                TestNestedComponent
+                Nested
             }
         }).$mount();
 
@@ -134,18 +129,44 @@ describe("nested options", () => {
         });
     });
 
-    it("pulls initital values (subnested)", () => {
+    it("pulls initital values (collectionItem)", () => {
+        const nestedCollectionItem = buildTestComponentCtor();
+        (nestedCollectionItem as any as IConfigurationCtor).$_optionName = "nestedOption";
+        (nestedCollectionItem as any as IConfigurationCtor).$_isCollectionItem = true;
+
         const vm = new Vue({
             template:
                 `<test-component>` +
-                `  <test-nested-component :prop1="123">` +
-                `    <test-sub-nested-component prop2="abc"/>` +
-                `  </test-nested-component>` +
+                `  <nested-collection-item :prop1="123" />` +
                 `</test-component>`,
             components: {
                 TestComponent,
-                TestNestedComponent,
-                TestSubNestedComponent
+                nestedCollectionItem
+            }
+        }).$mount();
+
+        expect(WidgetClass).toHaveBeenCalledWith(vm.$children[0].$el, {
+            nestedOption: [{
+                prop1: 123
+            }]
+        });
+    });
+
+    it("pulls initital values (subnested)", () => {
+        const subNested = buildTestComponentCtor();
+        (subNested as any as IConfigurationCtor).$_optionName = "subNestedOption";
+
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <nested :prop1="123">` +
+                `    <sub-nested prop2="abc"/>` +
+                `  </nested>` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                Nested,
+                subNested
             }
         }).$mount();
 
@@ -159,15 +180,44 @@ describe("nested options", () => {
         });
     });
 
+    it("pulls initital values (subnested collectionItem)", () => {
+        const nestedCollectionItem = buildTestComponentCtor();
+        (nestedCollectionItem as any as IConfigurationCtor).$_optionName = "subNestedOption";
+        (nestedCollectionItem as any as IConfigurationCtor).$_isCollectionItem = true;
+
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <nested :prop1="123">` +
+                `    <nested-collection-item prop2="abc"/>` +
+                `  </nested>` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                Nested,
+                nestedCollectionItem
+            }
+        }).$mount();
+
+        expect(WidgetClass).toHaveBeenCalledWith(vm.$children[0].$el, {
+            nestedOption: {
+                prop1: 123,
+                subNestedOption: [{
+                    prop2: "abc"
+                }]
+            }
+        });
+    });
+
     it("watches option changes", (done) => {
         const vm = new Vue({
             template:
                 `<test-component>` +
-                `  <test-nested-component :prop1="value" />` +
+                `  <nested :prop1="value" />` +
                 `</test-component>`,
             components: {
                 TestComponent,
-                TestNestedComponent
+                Nested
             },
             props: ["value"],
             propsData: {
@@ -184,18 +234,50 @@ describe("nested options", () => {
         });
     });
 
-    it("watches option changes (subnested)", (done) => {
+    it("watches option changes (collectionItem)", (done) => {
+        const nestedCollectionItem = buildTestComponentCtor();
+        (nestedCollectionItem as any as IConfigurationCtor).$_optionName = "nestedOption";
+        (nestedCollectionItem as any as IConfigurationCtor).$_isCollectionItem = true;
+
         const vm = new Vue({
             template:
                 `<test-component>` +
-                `  <test-nested-component>` +
-                `    <test-sub-nested-component :prop1="value"/>` +
-                `  </test-nested-component>` +
+                `  <nested-collection-item :prop1="value" />` +
                 `</test-component>`,
             components: {
                 TestComponent,
-                TestNestedComponent,
-                TestSubNestedComponent
+                nestedCollectionItem
+            },
+            props: ["value"],
+            propsData: {
+                value: 123
+            }
+        }).$mount();
+
+        vm.$props.value = 456;
+
+        Vue.nextTick(() => {
+            expect(Widget.option).toHaveBeenCalledTimes(1);
+            expect(Widget.option).toHaveBeenCalledWith("nestedOption[0].prop1", 456);
+            done();
+        });
+    });
+
+    it("watches option changes (subnested)", (done) => {
+        const subNested = buildTestComponentCtor();
+        (subNested as any as IConfigurationCtor).$_optionName = "subNestedOption";
+
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <nested>` +
+                `    <sub-nested :prop1="value"/>` +
+                `  </nested>` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                Nested,
+                subNested
             },
             props: ["value"],
             propsData: {
@@ -208,6 +290,38 @@ describe("nested options", () => {
         Vue.nextTick(() => {
             expect(Widget.option).toHaveBeenCalledTimes(1);
             expect(Widget.option).toHaveBeenCalledWith("nestedOption.subNestedOption.prop1", 456);
+            done();
+        });
+    });
+
+    it("watches option changes (subnested collectionItem)", (done) => {
+        const subNestedCollectionItem = buildTestComponentCtor();
+        (subNestedCollectionItem as any as IConfigurationCtor).$_optionName = "subNestedOption";
+        (subNestedCollectionItem as any as IConfigurationCtor).$_isCollectionItem = true;
+
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <nested>` +
+                `    <sub-nested-collection-item :prop1="value"/>` +
+                `  </nested>` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                Nested,
+                subNestedCollectionItem
+            },
+            props: ["value"],
+            propsData: {
+                value: 123
+            }
+        }).$mount();
+
+        vm.$props.value = 456;
+
+        Vue.nextTick(() => {
+            expect(Widget.option).toHaveBeenCalledTimes(1);
+            expect(Widget.option).toHaveBeenCalledWith("nestedOption.subNestedOption[0].prop1", 456);
             done();
         });
     });
