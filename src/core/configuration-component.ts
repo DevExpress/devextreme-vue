@@ -7,7 +7,7 @@ import Configuration, { bindOptionWatchers } from "./configuration";
 
 interface IConfigurationCtor {
     $_optionName: string;
-    $_isCollecitonItem: boolean;
+    $_isCollectionItem: boolean;
 }
 
 interface IConfigurable {

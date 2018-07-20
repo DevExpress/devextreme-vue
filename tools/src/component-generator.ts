@@ -144,23 +144,18 @@ L1 + `extends: <#= it.baseComponent #>,` +
 `<#? it.nestedComponents #>` +
     `\n` +
     `<#~ it.nestedComponents : nested #>` +
-        `const <#= nested.name #> = Vue.extend({` +
+        `const <#= nested.name #>: any = Vue.extend({` +
         L1 + `extends: <#= it.configComponent #>,` +
         L1 + `props: {\n` +
         `<#= nested.renderedProps #>` +
-        L1 + `},` +
-        L1 + `beforeMount() {` +
-        L2 + `(this as any).` +
-
-        `<#? nested.isCollectionItem #>` +
-            `$_initCollectionOption` +
-        `<#??#>` +
-            `$_initOption` +
-        `<#?#>` +
-
-        `("<#= nested.optionName #>");` +
         L1 + `}\n` +
         `});\n` +
+        `(<#= nested.name #> as any).$_optionName = "<#= nested.optionName #>";\n` +
+
+        `<#? nested.isCollectionItem #>` +
+            `(<#= nested.name #> as any).$_isCollectionItem = true;\n` +
+        `<#?#>` +
+
     `<#~#>` +
 `<#?#>` +
 

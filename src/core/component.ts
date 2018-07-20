@@ -155,7 +155,7 @@ function pullConfigurations(children: VNode[], nodes: VNode[], ownerConfig: Conf
             const config = ownerConfig.createNested(
                 (node.componentOptions.Ctor as any as IConfigurationCtor).$_optionName,
                 initialValues,
-                (node.componentOptions.Ctor as any as IConfigurationCtor).$_isCollecitonItem
+                (node.componentOptions.Ctor as any as IConfigurationCtor).$_isCollectionItem
             );
 
             (node.componentOptions as any as IConfigurable).$_config = config;

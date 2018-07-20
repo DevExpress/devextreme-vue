@@ -166,15 +166,13 @@ const COMPONENT: VueConstructor = Vue.extend({
   }
 });
 
-const NESTED_COMPONENT = Vue.extend({
+const NESTED_COMPONENT: any = Vue.extend({
   extends: CONFIG_COMPONENT,
   props: {
     PROP: {}
-  },
-  beforeMount() {
-    (this as any).$_initOption("NESTED_OPTION_NAME");
   }
 });
+(NESTED_COMPONENT as any).$_optionName = "NESTED_OPTION_NAME";
 
 export {
   COMPONENT,
@@ -234,15 +232,14 @@ const COMPONENT: VueConstructor = Vue.extend({
   }
 });
 
-const NESTED_COMPONENT = Vue.extend({
+const NESTED_COMPONENT: any = Vue.extend({
   extends: CONFIG_COMPONENT,
   props: {
     PROP: {}
-  },
-  beforeMount() {
-    (this as any).$_initCollectionOption("NESTED_OPTION_NAME");
   }
 });
+(NESTED_COMPONENT as any).$_optionName = "NESTED_OPTION_NAME";
+(NESTED_COMPONENT as any).$_isCollectionItem = true;
 
 export {
   COMPONENT,
