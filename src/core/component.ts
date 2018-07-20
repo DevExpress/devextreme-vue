@@ -3,7 +3,8 @@ import { VNode, VueConstructor } from "vue";
 
 import * as events from "devextreme/events";
 
-import Configuration, { bindOptionWatchers, IConfigurable } from "./configuration";
+import Configuration, { bindOptionWatchers } from "./configuration";
+import { IConfigurable, IConfigurationCtor } from "./configuration-component";
 import { camelize } from "./helpers";
 
 interface IWidgetComponent extends IConfigurable {
@@ -18,7 +19,10 @@ const DX_REMOVE_EVENT = "dxremove";
 const BaseComponent: VueConstructor = Vue.extend({
 
     render(createElement: (...args) => VNode): VNode {
-        return createElement("div", this.$slots.default);
+        return createElement(
+            "div",
+            extractChildren(this.$slots.default, (this as any as IWidgetComponent).$_config)
+        );
     },
 
     beforeDestroy(): void {
@@ -30,28 +34,29 @@ const BaseComponent: VueConstructor = Vue.extend({
     },
 
     created(): void {
+
         (this as any as IWidgetComponent).$_config = new Configuration(
             (n: string, v: any) => (this as any as IWidgetComponent).$_instance.option(n, v),
             null,
-            this.$props && Object.keys(this.$props),
             this.$options.propsData && { ...this.$options.propsData }
         );
+
+        (this as any as IWidgetComponent).$_config.init(this.$props && Object.keys(this.$props));
     },
 
     methods: {
         $_createWidget(element: any): void {
-            const widgetComponent = this as any as IWidgetComponent;
             const options: object = {
                 ...this.$_getIntegrationOptions(),
                 ...this.$options.propsData,
-                ...widgetComponent.$_config.getInitialValues()
+                ...(this as any as IWidgetComponent).$_config.getInitialValues()
             };
 
             const instance = new (this as any).$_WidgetClass(element, options);
             (this as any as IWidgetComponent).$_instance = instance;
 
             instance.on("optionChanged", this.$_handleOptionChanged.bind(this));
-            bindOptionWatchers(widgetComponent.$_config, this);
+            bindOptionWatchers((this as any as IWidgetComponent).$_config, this);
             this.$_createEmitters(instance);
         },
         $_getIntegrationOptions(): object {
@@ -127,5 +132,39 @@ const DxComponent: VueConstructor = BaseComponent.extend({
         });
     }
 });
+
+function extractChildren(children: VNode[], config: Configuration): VNode[] {
+    if (!children || children.length === 0) { return children; }
+
+    const nodes: VNode[] = [];
+    pullConfigurations(children, nodes, config);
+
+    return nodes;
+}
+
+function pullConfigurations(children: VNode[], nodes: VNode[], ownerConfig: Configuration): void {
+
+    children.forEach((node) => {
+        nodes.push(node);
+
+        if (
+            node.componentOptions &&
+            (node.componentOptions.Ctor as any as IConfigurationCtor).$_optionName
+        ) {
+            const initialValues = { ...node.componentOptions.propsData };
+            const config = ownerConfig.createNested(
+                (node.componentOptions.Ctor as any as IConfigurationCtor).$_optionName,
+                initialValues,
+                (node.componentOptions.Ctor as any as IConfigurationCtor).$_isCollecitonItem
+            );
+
+            (node.componentOptions as any as IConfigurable).$_config = config;
+
+            if (node.componentOptions.children) {
+                pullConfigurations(node.componentOptions.children as VNode[], nodes, config);
+            }
+        }
+    });
+}
 
 export { DxComponent, BaseComponent };

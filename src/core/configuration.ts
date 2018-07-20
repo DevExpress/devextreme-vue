@@ -2,31 +2,26 @@ import { Vue } from "vue/types/vue";
 
 type UpdateFunc = (name: string, value: any) => void;
 
-interface IConfigurable {
-    $_config: Configuration;
-}
-
 class Configuration {
 
     private readonly _nestedConfigurations: Configuration[];
     private readonly _name: string | null;
     private readonly _isCollectionItem: boolean;
     private readonly _collectionItemIndex: number | undefined;
-    private readonly _options: string[];
     private readonly _initialValues: Record<string, any>;
     private readonly _updateFunc: UpdateFunc;
+
+    private _options: string[];
 
     constructor(
         updateFunc: UpdateFunc,
         name: string | null,
-        options: string[],
         initialValues: Record<string, any>,
         isCollectionItem?: boolean,
         collectionItemIndex?: number
     ) {
         this._updateFunc = updateFunc;
         this._name = name;
-        this._options = options ? options : [];
         this._initialValues = initialValues ? initialValues : {};
         this._nestedConfigurations = [];
         this._isCollectionItem = !!isCollectionItem;
@@ -35,9 +30,12 @@ class Configuration {
         this.updateValue = this.updateValue.bind(this);
     }
 
+    public init(options: string[]): void {
+        this._options = options ? options : [];
+    }
+
     public createNested(
         name: string,
-        options: string[],
         initialValues: Record<string, any>,
         isCollectionItem?: boolean
     ): Configuration {
@@ -49,7 +47,6 @@ class Configuration {
         const configuration = new Configuration(
             this.updateValue,
             name,
-            options,
             initialValues,
             isCollectionItem,
             collectionItemIndex
@@ -101,7 +98,7 @@ class Configuration {
     }
 }
 
-function bindOptionWatchers(config: Configuration, vueInstance: Pick<Vue, "$watch" | "$props">): void {
+function bindOptionWatchers(config: Configuration, vueInstance: Pick<Vue, "$watch">): void {
     const targets = config.getOptionsToWatch();
     if (targets) {
         targets.forEach((optionName: string) => {
@@ -111,4 +108,4 @@ function bindOptionWatchers(config: Configuration, vueInstance: Pick<Vue, "$watc
 }
 
 export default Configuration;
-export { bindOptionWatchers, IConfigurable, UpdateFunc };
+export { bindOptionWatchers, UpdateFunc };
