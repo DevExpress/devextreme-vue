@@ -3,33 +3,27 @@ import { VNode, VueConstructor } from "vue";
 
 const Vue = VueType.default || VueType;
 
-import { bindOptionWatchers, IConfigurable } from "./configuration";
+import Configuration, { bindOptionWatchers } from "./configuration";
+
+interface IConfigurationComponent {
+    $_optionName: string;
+    $_isCollectionItem: boolean;
+}
+
+interface IConfigurable {
+    $_config: Configuration;
+}
 
 const DxConfiguration: VueConstructor = Vue.extend({
 
-    render(createElement: (...args) => VNode): VNode {
-        return createElement();
+    beforeMount() {
+        (this.$vnode.componentOptions as any as IConfigurable).$_config.init(Object.keys(this.$props));
+        bindOptionWatchers((this.$vnode.componentOptions as any as IConfigurable).$_config, this);
     },
 
-    methods: {
-        $_initOption(name: string, isCollectionItem?: boolean): void {
-            const options = Object.keys(this.$props);
-            const initialValues = { ...this.$options.propsData };
-            const config = (this.$parent as IConfigurable).$_config.createNested(
-                name,
-                options,
-                initialValues,
-                isCollectionItem
-            );
-            (this as any as IConfigurable).$_config = config;
-
-            bindOptionWatchers(config, this);
-        },
-
-        $_initCollectionOption(name: string): void {
-            this.$_initOption(name, true);
-        }
+    render(createElement: (...args) => VNode): VNode {
+        return createElement();
     }
 });
 
-export { DxConfiguration };
+export { DxConfiguration, IConfigurable, IConfigurationComponent };
