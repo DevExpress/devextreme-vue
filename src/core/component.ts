@@ -4,7 +4,7 @@ import { VNode, VueConstructor } from "vue";
 import * as events from "devextreme/events";
 
 import Configuration, { bindOptionWatchers } from "./configuration";
-import { IConfigurable, IConfigurationCtor } from "./configuration-component";
+import { IConfigurable, IConfigurationComponent } from "./configuration-component";
 import { camelize } from "./helpers";
 
 interface IWidgetComponent extends IConfigurable {
@@ -149,13 +149,13 @@ function pullConfigurations(children: VNode[], nodes: VNode[], ownerConfig: Conf
 
         if (
             node.componentOptions &&
-            (node.componentOptions.Ctor as any as IConfigurationCtor).$_optionName
+            (node.componentOptions.Ctor as any as IConfigurationComponent).$_optionName
         ) {
             const initialValues = { ...node.componentOptions.propsData };
             const config = ownerConfig.createNested(
-                (node.componentOptions.Ctor as any as IConfigurationCtor).$_optionName,
+                (node.componentOptions.Ctor as any as IConfigurationComponent).$_optionName,
                 initialValues,
-                (node.componentOptions.Ctor as any as IConfigurationCtor).$_isCollectionItem
+                (node.componentOptions.Ctor as any as IConfigurationComponent).$_isCollectionItem
             );
 
             (node.componentOptions as any as IConfigurable).$_config = config;

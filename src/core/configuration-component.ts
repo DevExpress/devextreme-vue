@@ -5,7 +5,7 @@ const Vue = VueType.default || VueType;
 
 import Configuration, { bindOptionWatchers } from "./configuration";
 
-interface IConfigurationCtor {
+interface IConfigurationComponent {
     $_optionName: string;
     $_isCollectionItem: boolean;
 }
@@ -26,4 +26,4 @@ const DxConfiguration: VueConstructor = Vue.extend({
     }
 });
 
-export { DxConfiguration, IConfigurable, IConfigurationCtor };
+export { DxConfiguration, IConfigurable, IConfigurationComponent };
