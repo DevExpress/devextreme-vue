@@ -16,18 +16,6 @@ interface IComponent {
     nestedComponents?: INestedComponent[];
 }
 
-interface IComponentModel {
-    component: string;
-    widgetImport: IImport;
-    namedImports: IImport[];
-    baseComponent: string;
-    configComponent: string;
-    renderedProps?: string;
-    hasModel?: boolean;
-    nestedComponents?: INestedComponentModel[];
-    namedExports: string[];
-}
-
 interface INestedComponent {
     name: string;
     optionName: string;
@@ -84,6 +72,7 @@ function generate(component: IComponent): string {
             : undefined,
 
         nestedComponents,
+        defaultExport: component.name,
         namedExports
     };
 
@@ -108,7 +97,18 @@ const L2: string = `\n` + tab(2);
 const L3: string = `\n` + tab(3);
 const L4: string = `\n` + tab(4);
 
-const renderComponent: (model: IComponentModel) => string = createTempate(
+const renderComponent: (model: {
+    component: string;
+    widgetImport: IImport;
+    namedImports: IImport[];
+    baseComponent: string;
+    configComponent: string;
+    renderedProps?: string;
+    hasModel?: boolean;
+    nestedComponents?: INestedComponentModel[];
+    defaultExport: string;
+    namedExports: string[];
+}) => string = createTempate(
 `import * as VueType from "vue";\n` +
 `const Vue = VueType.default || VueType;\n` +
 `import <#= it.widgetImport.name #> from "devextreme/<#= it.widgetImport.path #>";\n` +
@@ -158,8 +158,12 @@ L1 + `extends: <#= it.baseComponent #>,` +
 
     `<#~#>` +
 `<#?#>` +
-
 `\n` +
+
+`<#? it.defaultExport #>` +
+    `export default <#= it.defaultExport #>;\n` +
+`<#?#>` +
+
 `export {\n` +
     `<#~ it.namedExports :namedExport #>` +
     tab(1) + `<#= namedExport #>,\n` +
