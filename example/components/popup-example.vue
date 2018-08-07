@@ -15,13 +15,15 @@
           width="600"
           height="400"
         >
-          <div slot="content">
-            This is popup content
-            <dx-button
-              text="Close popup"
-              @click="handleClick"
-            />            
-          </div>
+          This is popup content
+          <dx-text-box
+            v-model="text"
+            valueChangeEvent="input"
+          />
+          <dx-button
+            text="Close popup"
+            @click="handleClick"
+          />
         </dx-popup>
     </example-block>
 </template>
