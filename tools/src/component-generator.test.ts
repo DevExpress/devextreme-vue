@@ -21,6 +21,7 @@ const COMPONENT: VueConstructor = Vue.extend({
   }
 });
 
+export default COMPONENT;
 export {
   COMPONENT
 };
@@ -68,6 +69,7 @@ const COMPONENT: VueConstructor = Vue.extend({
   }
 });
 
+export default COMPONENT;
 export {
   COMPONENT
 };
@@ -118,6 +120,7 @@ const COMPONENT: VueConstructor = Vue.extend({
   }
 });
 
+export default COMPONENT;
 export {
   COMPONENT
 };
@@ -174,6 +177,7 @@ const NESTED_COMPONENT: any = Vue.extend({
 });
 (NESTED_COMPONENT as any).$_optionName = "NESTED_OPTION_NAME";
 
+export default COMPONENT;
 export {
   COMPONENT,
   NESTED_COMPONENT
@@ -241,6 +245,7 @@ const NESTED_COMPONENT: any = Vue.extend({
 (NESTED_COMPONENT as any).$_optionName = "NESTED_OPTION_NAME";
 (NESTED_COMPONENT as any).$_isCollectionItem = true;
 
+export default COMPONENT;
 export {
   COMPONENT,
   NESTED_COMPONENT
