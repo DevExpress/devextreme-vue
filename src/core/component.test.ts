@@ -594,7 +594,7 @@ describe("template", () => {
         new Vue({
             template: `<test-component>
                          <div slot='item' slot-scope='data'>1</div>
-                         <div slot='content'>1</div>
+                         <div slot='content' slot-scope='_'>1</div>
                          <div>1</div>
                        </test-component>`,
             components: {
@@ -618,7 +618,7 @@ describe("template", () => {
     it("renders", () => {
         new Vue({
             template: `<test-component>
-                            <div slot='item'>Template</div>
+                            <div slot='item' slot-scope='_'>Template</div>
                         </test-component>`,
             components: {
                 TestComponent

@@ -60,20 +60,14 @@ const BaseComponent: VueConstructor = Vue.extend({
             this.$_createEmitters(instance);
         },
         $_getIntegrationOptions(): object {
-            const slots: Record<string, any> = {
-                ...this.$scopedSlots,
-                ...this.$slots
-            };
-            delete slots.default;
-
-            if (!Object.keys(slots).length) {
+            if (!this.$scopedSlots || !Object.keys(this.$scopedSlots).length) {
                 return {};
             }
 
             const templates: Record<string, any> = {};
 
-            Object.keys(slots).forEach((name: string) => {
-                templates[name] = this.$_fillTemplate(slots[name], name);
+            Object.keys(this.$scopedSlots).forEach((name: string) => {
+                templates[name] = this.$_fillTemplate(this.$scopedSlots[name], name);
             });
 
             return {
@@ -89,9 +83,7 @@ const BaseComponent: VueConstructor = Vue.extend({
                     const vm = new Vue({
                         name,
                         parent: this,
-                        render: () => {
-                            return typeof template === "function" ? template(data.model) : template[0];
-                        }
+                        render: () => template(data.model)
                     }).$mount();
 
                     const element = vm.$el;
