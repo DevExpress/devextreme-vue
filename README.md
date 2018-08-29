@@ -37,7 +37,7 @@ See the sections below if you prefer using a local development environment.
 Install the **devextreme** and **devextreme-vue** npm packages:
 
 ```console
-npm install --save devextreme@18.1 devextreme-vue
+npm install --save devextreme@18.1 devextreme-vue@18.1-unstable
 ```
 #### <a name="additional-configuration"></a>Additional Configuration ####
 
