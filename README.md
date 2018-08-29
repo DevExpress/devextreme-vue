@@ -1,6 +1,6 @@
 # DevExtreme Vue UI and Visualization Components #
 
-[![Build Status](https://img.shields.io/shippable/5444c5ecb904a4b21567b0ff/master.svg?maxAge=43200)](https://app.shippable.com/github/DevExpress/devextreme-vue)
+[![Build Status](https://img.shields.io/shippable/5444c5ecb904a4b21567b0ff/18.2.svg?maxAge=43200)](https://app.shippable.com/github/DevExpress/devextreme-vue)
 ![Project Status](https://img.shields.io/badge/Project%20Status-alpha-orange.svg?maxAge=43200)
 [![NPM](https://img.shields.io/npm/v/devextreme-vue.svg?maxAge=43200)](https://www.npmjs.com/package/devextreme-vue)
 
@@ -37,7 +37,7 @@ See the sections below if you prefer using a local development environment.
 Install the **devextreme** and **devextreme-vue** npm packages:
 
 ```console
-npm install --save devextreme@18.1 devextreme-vue
+npm install --save devextreme@18.2 devextreme-vue@18.2-unstable
 ```
 #### <a name="additional-configuration"></a>Additional Configuration ####
 
