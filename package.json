@@ -35,7 +35,7 @@
     "@types/node": "^9.6.30",
     "css-loader": "^0.28.11",
     "dasherize": "^2.0.0",
-    "devextreme": "^18.2.1-pre-18239",
+    "devextreme": "^18.2.1-pre-18254",
     "dot": "^1.1.2",
     "gulp": "^3.9.1",
     "gulp-clean": "^0.4.0",
