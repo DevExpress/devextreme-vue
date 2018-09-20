@@ -27,7 +27,7 @@
   "author": "Developer Express Inc.",
   "license": "MIT",
   "peerDependencies": {
-    "devextreme": "^18.2.1-pre-18239",
+    "devextreme": "^18.2.1-pre-18254",
     "vue": "^2.5.16"
   },
   "devDependencies": {
