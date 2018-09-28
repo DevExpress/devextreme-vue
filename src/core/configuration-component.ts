@@ -8,6 +8,7 @@ import Configuration, { bindOptionWatchers, subscribeOnUpdates } from "./configu
 interface IConfigurationComponent {
     $_optionName: string;
     $_isCollectionItem: boolean;
+    $_predefinedProps: Record<string, any>;
 }
 
 interface IConfigurable {

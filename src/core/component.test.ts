@@ -243,6 +243,32 @@ describe("configuration", () => {
         expect(config.nested[2].collectionItemIndex).toBe(2);
     });
 
+    it("initializes nested config predefined prop", () => {
+        const predefinedValue = {};
+        const NestedWithPredefined = buildTestComponentCtor();
+        (NestedWithPredefined as any as IConfigurationComponent).$_optionName = "nestedOption";
+        (NestedWithPredefined as any as IConfigurationComponent).$_predefinedProps = {
+            predefinedProp: predefinedValue
+        };
+
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <nested-with-predefined />` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                NestedWithPredefined
+            }
+        }).$mount();
+
+        const config = (vm.$children[0] as any as IConfigurable).$_config;
+        const initialValues = config.getInitialValues();
+        expect(initialValues).toHaveProperty("nestedOption");
+        expect(initialValues!.nestedOption).toHaveProperty("predefinedProp");
+        expect(initialValues!.nestedOption!.predefinedProp).toBe(predefinedValue);
+    });
+
     it("initializes sub-nested config", () => {
         const subNested = buildTestComponentCtor();
         (subNested as any as IConfigurationComponent).$_optionName = "subNestedOption";
