@@ -56,7 +56,7 @@
           dataField="date"
           dataType="date"
           selectedFilterOperation=">="
-          filterValue="2013/04/01"
+          :filterValue.sync="dateFilter"
           :width="150"
         />
         <dx-column
@@ -72,6 +72,7 @@
 
         <dx-button slot="cell-city" slot-scope="data" :text="data.text" />
       </dx-data-grid>
+      {{dateFilter}}
     </example-block>
 </template>
 
@@ -118,6 +119,7 @@ export default {
   },
   data: function() {
     return {
+      dateFilter: "2013/04/01",
       sales: sales,
       selectedRowKeys: selectedKeys,
       alternateRowColors: true,

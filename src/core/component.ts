@@ -3,7 +3,7 @@ import { VNode, VueConstructor } from "vue";
 
 import * as events from "devextreme/events";
 
-import Configuration, { bindOptionWatchers } from "./configuration";
+import Configuration, { bindOptionWatchers, subscribeOnUpdates } from "./configuration";
 import { IConfigurable, IConfigurationComponent } from "./configuration-component";
 import { camelize } from "./helpers";
 
@@ -46,19 +46,22 @@ const BaseComponent: VueConstructor = Vue.extend({
 
     methods: {
         $_createWidget(element: any): void {
+            const config = (this as any as IWidgetComponent).$_config;
             const options: object = {
                 ...this.$_getIntegrationOptions(),
                 ...this.$options.propsData,
-                ...(this as any as IWidgetComponent).$_config.getInitialValues()
+                ...config.getInitialValues()
             };
 
             const instance = new (this as any).$_WidgetClass(element, options);
             (this as any as IWidgetComponent).$_instance = instance;
 
-            instance.on("optionChanged", this.$_handleOptionChanged.bind(this));
-            bindOptionWatchers((this as any as IWidgetComponent).$_config, this);
+            instance.on("optionChanged", (args) => config.onOptionChanged(args));
+            subscribeOnUpdates(config, this);
+            bindOptionWatchers(config, this);
             this.$_createEmitters(instance);
         },
+
         $_getIntegrationOptions(): object {
             if (!this.$scopedSlots || !Object.keys(this.$scopedSlots).length) {
                 return {};
@@ -97,10 +100,6 @@ const BaseComponent: VueConstructor = Vue.extend({
                     return element;
                 }
             };
-        },
-
-        $_handleOptionChanged(args: any): void {
-            this.$emit("update:" + args.name, args.value);
         },
 
         $_createEmitters(instance: any): void {

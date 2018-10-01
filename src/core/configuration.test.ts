@@ -1,4 +1,4 @@
-import Configuration, { bindOptionWatchers, UpdateFunc } from "./configuration";
+import Configuration, { bindOptionWatchers, subscribeOnUpdates, UpdateFunc } from "./configuration";
 
 function createRootConfig(updateFunc: UpdateFunc): Configuration {
     return new Configuration(updateFunc, null, {});
@@ -99,6 +99,27 @@ it("binds option watchers", () => {
     expect(updateValueFunc).toHaveBeenCalledTimes(1);
     expect(updateValueFunc.mock.calls[0][0]).toBe("prop1");
     expect(updateValueFunc.mock.calls[0][1]).toBe(value);
+});
+
+it("subscribes on updates", () => {
+    const $emitFunc = jest.fn();
+
+    const config: any = {
+        name: "option1",
+        fullOptionPath: "option1"
+    };
+
+    subscribeOnUpdates(
+        config,
+        {
+            $emit: $emitFunc
+        }
+    );
+    config.optionChangedFunc({name: "option1", fullName: "option1", value: "value"});
+    expect($emitFunc.mock.calls[0][0]).toBe("option1");
+    expect($emitFunc.mock.calls[0][1]).toBe("value");
+
+    expect($emitFunc.mock).toHaveBeenCalledTimes(1);
 });
 
 describe("initial configuration", () => {
