@@ -1,20 +1,22 @@
 <template>
     <example-block title="dxDataGrid">
       <div class="flex-container">
-        <dx-check-box 
-          v-model="alternateRowColors" 
-          text="Alternate Row Colors"
+        <span class="label">Date Filter:</span>
+        <dx-date-box 
+          v-model="dateFilter"
         />
+        <span class="label">Alternate Row Colors:</span>
         <dx-check-box 
-          v-model="filterRowVisible" 
-          text="Filter Row Visible"
+          v-model="alternateRowColors"
         />
-      </div>
-      <div>
-        Country Sort Order:&nbsp;
+        <span class="label">Filter Row Visible:</span>
+        <dx-check-box 
+          v-model="filterRowVisible"
+        />
+        <span class="label">Country Sort Order:</span>
         <dx-switch
           :value.sync="countrySortOrderVal"
-          offText="desc"
+          offText="des"
           onText="asc"
         />
       </div>
@@ -46,7 +48,7 @@
         />
         <dx-column
           dataField="country"
-          :sortOrder="countrySortOrder"
+          :sortOrder.sync="countrySortOrder"
         />
         <dx-column
           dataField="region"
@@ -72,7 +74,6 @@
 
         <dx-button slot="cell-city" slot-scope="data" :text="data.text" />
       </dx-data-grid>
-      {{dateFilter}}
     </example-block>
 </template>
 
@@ -80,7 +81,7 @@
 import Vue from "vue";
 
 import ExampleBlock from "./example-block";
-import { DxButton, DxCheckBox, DxDataGrid, DxSwitch } from "../../src";
+import { DxButton, DxCheckBox, DxDataGrid, DxDateBox, DxSwitch } from "../../src";
 import {
   DxColumn,
   DxFilterRow,
@@ -103,6 +104,7 @@ export default {
     DxButton,
     DxCheckBox,
     DxDataGrid,
+    DxDateBox,
     DxSwitch,
     DxColumn,
     DxFilterRow,
@@ -113,8 +115,13 @@ export default {
     DxSelection
   },
   computed: {
-    countrySortOrder() {
-      return this.countrySortOrderVal ? "asc" : "desc";
+    countrySortOrder: {
+      get() {
+        return this.countrySortOrderVal ? "asc" : "desc";
+      },
+      set(newValue) {
+        this.countrySortOrderVal = newValue === "asc";
+      }
     }
   },
   data: function() {
@@ -134,5 +141,15 @@ export default {
   .flex-container {
     display: flex;
     flex-direction: row;
+  }
+  .label {
+    color: black;
+    padding-top: 0.6em;
+  }
+  .dx-checkbox {
+    padding-top: .4em;
+  }
+  .dx-switch {
+    padding-top: .2em;
   }
 </style>
