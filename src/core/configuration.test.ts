@@ -105,8 +105,7 @@ it("subscribes on updates", () => {
     const $emitFunc = jest.fn();
 
     const config: any = {
-        name: "option1",
-        fullOptionPath: "option1"
+        name: null
     };
 
     subscribeOnUpdates(
@@ -116,10 +115,31 @@ it("subscribes on updates", () => {
         }
     );
     config.optionChangedFunc({name: "option1", fullName: "option1", value: "value"});
-    expect($emitFunc.mock.calls[0][0]).toBe("option1");
+    expect($emitFunc.mock.calls[0][0]).toBe("update:option1");
     expect($emitFunc.mock.calls[0][1]).toBe("value");
 
-    expect($emitFunc.mock).toHaveBeenCalledTimes(1);
+    expect($emitFunc).toHaveBeenCalledTimes(1);
+});
+
+it("subscribes on updates of nested options", () => {
+    const $emitFunc = jest.fn();
+
+    const config: any = {
+        name: "widgetOption",
+        fullPath: "widgetOption[1]"
+    };
+
+    subscribeOnUpdates(
+        config,
+        {
+            $emit: $emitFunc
+        }
+    );
+    config.optionChangedFunc({name: "widgetOption", fullName: "widgetOption[1].option1", value: "value"});
+    expect($emitFunc.mock.calls[0][0]).toBe("update:option1");
+    expect($emitFunc.mock.calls[0][1]).toBe("value");
+
+    expect($emitFunc).toHaveBeenCalledTimes(1);
 });
 
 describe("initial configuration", () => {
