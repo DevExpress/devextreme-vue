@@ -104,8 +104,7 @@ class Configuration {
     }
 
     public updateValue(nestedName: string, value: any): void {
-        const name = this.fullPath;
-        const fullName = [name, nestedName].filter((n) => n).join(".");
+        const fullName = [this.fullPath, nestedName].filter((n) => n).join(".");
         this._updateFunc(fullName, value);
     }
 
@@ -156,13 +155,11 @@ function bindOptionWatchers(config: Configuration, vueInstance: Pick<Vue, "$watc
 function subscribeOnUpdates(config: Configuration, vueInstance: Pick<Vue, "$emit">): void {
     config.optionChangedFunc = (args: any) => {
         let optionName = args.name;
-        if (config.name) {
-            const fullOptionPath = config.fullPath + ".";
-            if (config.name === args.name && args.fullName.indexOf(fullOptionPath) === 0) {
-                optionName = args.fullName.slice(fullOptionPath.length);
-            }
+        const fullOptionPath = config.fullPath + ".";
+        if (config.name && config.name === args.name && args.fullName.indexOf(fullOptionPath) === 0) {
+            optionName = args.fullName.slice(fullOptionPath.length);
         }
-
+        
         vueInstance.$emit("update:" + optionName, args.value);
     };
 }
