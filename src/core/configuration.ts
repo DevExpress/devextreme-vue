@@ -10,6 +10,7 @@ class Configuration {
     private readonly _collectionItemIndex: number | undefined;
     private readonly _initialValues: Record<string, any>;
     private readonly _updateFunc: UpdateFunc;
+    private _optionChangedFunc: any;
 
     private _options: string[];
 
@@ -32,6 +33,10 @@ class Configuration {
 
     public get name(): string | null {
         return this._name;
+    }
+
+    public get fullPath(): string | null {
+        return this._isCollectionItem ? `${this._name}[${this._collectionItemIndex}]` : this._name;
     }
 
     public get options(): string[] {
@@ -62,6 +67,19 @@ class Configuration {
         this._options = options ? options : [];
     }
 
+    public set optionChangedFunc(handler: any) {
+        this._optionChangedFunc = handler;
+    }
+
+    public onOptionChanged(args: {name: string, fullName: string, value: any}): void {
+        if (this._optionChangedFunc) {
+            this._optionChangedFunc(args);
+        }
+        this._nestedConfigurations.forEach((nestedConfig) => {
+            nestedConfig.onOptionChanged(args);
+        });
+    }
+
     public createNested(
         name: string,
         initialValues: Record<string, any>,
@@ -86,8 +104,7 @@ class Configuration {
     }
 
     public updateValue(nestedName: string, value: any): void {
-        const name = this._isCollectionItem ? `${this._name}[${this._collectionItemIndex}]` : this._name;
-        const fullName = [name, nestedName].filter((n) => n).join(".");
+        const fullName = [this.fullPath, nestedName].filter((n) => n).join(".");
         this._updateFunc(fullName, value);
     }
 
@@ -135,5 +152,16 @@ function bindOptionWatchers(config: Configuration, vueInstance: Pick<Vue, "$watc
     }
 }
 
+function subscribeOnUpdates(config: Configuration, vueInstance: Pick<Vue, "$emit">): void {
+    config.optionChangedFunc = (args: any) => {
+        let optionName = args.name;
+        const fullOptionPath = config.fullPath + ".";
+        if (config.name && config.name === args.name && args.fullName.indexOf(fullOptionPath) === 0) {
+            optionName = args.fullName.slice(fullOptionPath.length);
+        }
+        vueInstance.$emit("update:" + optionName, args.value);
+    };
+}
+
 export default Configuration;
-export { bindOptionWatchers, UpdateFunc };
+export { bindOptionWatchers, subscribeOnUpdates, UpdateFunc };
