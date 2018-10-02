@@ -159,7 +159,6 @@ function subscribeOnUpdates(config: Configuration, vueInstance: Pick<Vue, "$emit
         if (config.name && config.name === args.name && args.fullName.indexOf(fullOptionPath) === 0) {
             optionName = args.fullName.slice(fullOptionPath.length);
         }
-        
         vueInstance.$emit("update:" + optionName, args.value);
     };
 }
