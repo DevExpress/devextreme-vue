@@ -164,7 +164,6 @@ function subscribeOnUpdates(config: Configuration, vueInstance: Pick<Vue, "$emit
         }
 
         vueInstance.$emit("update:" + optionName, args.value);
-        
     };
 }
 
