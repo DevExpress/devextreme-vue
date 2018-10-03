@@ -303,7 +303,7 @@ describe("props generation", () => {
         ).toBe(EXPECTED);
     });
 
-    it("renders props without type", () => {
+    it("generates props without type", () => {
         const EXPECTED =
         `    PROP1: {}`;
 
@@ -312,7 +312,7 @@ describe("props generation", () => {
         ).toBe(EXPECTED);
     });
 
-    it("renders props with type", () => {
+    it("generates props with type", () => {
 
       const EXPECTED =
         `    PROP1: TYPE1,` + `\n` +
@@ -324,7 +324,7 @@ describe("props generation", () => {
 
     });
 
-    it("renders props with acceptable values", () => {
+    it("generates props with acceptable values", () => {
         //#region EXPECTED
         const EXPECTED =
 `    PROP1: {
@@ -381,6 +381,154 @@ describe("props generation", () => {
                     isArray: true
                 }
             ])
+        ).toBe(EXPECTED);
+    });
+
+    it("generates nested component with predefined value", () => {
+        //#region EXPECTED
+        const EXPECTED = `
+import * as VueType from "vue";
+const Vue = VueType.default || VueType;
+import WIDGET from "devextreme/DX/WIDGET/PATH";
+import { VueConstructor } from "vue";
+import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
+import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
+
+const COMPONENT: VueConstructor = Vue.extend({
+  extends: BASE_COMPONENT,
+  computed: {
+    instance(): WIDGET {
+      return (this as any).$_instance;
+    }
+  },
+  beforeCreate() {
+    (this as any).$_WidgetClass = WIDGET;
+  }
+});
+
+const NESTED_COMPONENT: any = Vue.extend({
+  extends: CONFIG_COMPONENT,
+  props: {
+    PROP: {}
+  }
+});
+(NESTED_COMPONENT as any).$_optionName = "NESTED_OPTION_NAME";
+(NESTED_COMPONENT as any).$_predefinedProps = {
+  PROP_1: "PREDEFINED_VALUE"
+};
+
+export default COMPONENT;
+export {
+  COMPONENT,
+  NESTED_COMPONENT
+};
+`.trimLeft();
+        //#endregion
+
+        expect(
+            generate({
+                name: "COMPONENT",
+                widgetComponent: {
+                  name: "WIDGET",
+                  path: "DX/WIDGET/PATH"
+                },
+                baseComponent: {
+                    name: "BASE_COMPONENT",
+                    path: "./BASE_COMPONENT_PATH"
+                },
+                configComponent: {
+                    name: "CONFIG_COMPONENT",
+                    path: "./CONFIG_COMPONENT_PATH"
+                },
+                nestedComponents: [
+                  {
+                    name: "NESTED_COMPONENT",
+                    optionName: "NESTED_OPTION_NAME",
+                    props: [
+                      { name: "PROP" }
+                    ],
+                    isCollectionItem: false,
+                    predefinedProps: {
+                      PROP_1: "PREDEFINED_VALUE"
+                    }
+                  }
+                ]
+            })
+        ).toBe(EXPECTED);
+    });
+
+    it("generates nested component with several predefined values", () => {
+        //#region EXPECTED
+        const EXPECTED = `
+import * as VueType from "vue";
+const Vue = VueType.default || VueType;
+import WIDGET from "devextreme/DX/WIDGET/PATH";
+import { VueConstructor } from "vue";
+import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
+import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
+
+const COMPONENT: VueConstructor = Vue.extend({
+  extends: BASE_COMPONENT,
+  computed: {
+    instance(): WIDGET {
+      return (this as any).$_instance;
+    }
+  },
+  beforeCreate() {
+    (this as any).$_WidgetClass = WIDGET;
+  }
+});
+
+const NESTED_COMPONENT: any = Vue.extend({
+  extends: CONFIG_COMPONENT,
+  props: {
+    PROP: {}
+  }
+});
+(NESTED_COMPONENT as any).$_optionName = "NESTED_OPTION_NAME";
+(NESTED_COMPONENT as any).$_predefinedProps = {
+  PROP_1: "PREDEFINED_VALUE_1",
+  PROP_2: "PREDEFINED_VALUE_2"
+};
+
+export default COMPONENT;
+export {
+  COMPONENT,
+  NESTED_COMPONENT
+};
+`.trimLeft();
+        //#endregion
+
+        expect(
+            generate({
+                name: "COMPONENT",
+                widgetComponent: {
+                  name: "WIDGET",
+                  path: "DX/WIDGET/PATH"
+                },
+                baseComponent: {
+                    name: "BASE_COMPONENT",
+                    path: "./BASE_COMPONENT_PATH"
+                },
+                configComponent: {
+                    name: "CONFIG_COMPONENT",
+                    path: "./CONFIG_COMPONENT_PATH"
+                },
+                nestedComponents: [
+                  {
+                    name: "NESTED_COMPONENT",
+                    optionName: "NESTED_OPTION_NAME",
+                    props: [
+                      { name: "PROP" }
+                    ],
+                    isCollectionItem: false,
+                    predefinedProps: {
+                      PROP_1: "PREDEFINED_VALUE_1",
+                      PROP_2: "PREDEFINED_VALUE_2"
+                    }
+                  }
+                ]
+            })
         ).toBe(EXPECTED);
     });
 });

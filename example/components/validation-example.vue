@@ -2,11 +2,16 @@
   <example-block title="Validation" :state="$data">
     <dx-validation-group>
       <dx-text-box value="email@mail.com">
-        <dx-validator :validationRules="validationRules.email" />
+        <dx-validator>
+          <dx-required-rule message="Email is required." />
+          <dx-email-rule message="Email is invalid." />
+        </dx-validator>
       </dx-text-box>
       <br />
       <dx-text-box value="password">
-        <dx-validator :validationRules="validationRules.password" />
+        <dx-validator>
+          <dx-required-rule message="Password is required." />
+        </dx-validator>
       </dx-text-box>
       <br />
       <dx-validation-summary />
@@ -18,7 +23,8 @@
 <script>
 import ExampleBlock from "./example-block";
 
-import { DxButton, DxTextBox, DxValidator, DxValidationGroup, DxValidationSummary } from "../../src";
+import { DxButton, DxTextBox, DxValidationGroup, DxValidationSummary } from "../../src";
+import { DxValidator, DxEmailRule, DxRequiredRule} from "../../src/ui/validator";
 
 export default {
   components: {
@@ -26,6 +32,8 @@ export default {
     DxButton,
     DxTextBox, 
     DxValidator,
+    DxEmailRule,
+    DxRequiredRule,
     DxValidationGroup,
     DxValidationSummary
   },
@@ -35,20 +43,8 @@ export default {
       if (result.isValid) {
           // form data is valid
           params.validationGroup.reset();
-      }     
+      }
     }
-  },
-  data: function() {
-    return {
-      validationRules: {
-        email: [
-            { type: "required", message: "Email is required." },
-            { type: "email", message: "Email is invalid." }
-        ],
-        password: [
-            { type: "required", message: "Password is required." }
-        ]
-    }};
   }
 };
 </script>
