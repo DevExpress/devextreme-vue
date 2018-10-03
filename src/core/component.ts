@@ -142,7 +142,11 @@ function pullConfigurations(children: VNode[], nodes: VNode[], ownerConfig: Conf
             node.componentOptions &&
             (node.componentOptions.Ctor as any as IConfigurationComponent).$_optionName
         ) {
-            const initialValues = { ...node.componentOptions.propsData };
+            const initialValues = {
+                ...(node.componentOptions.Ctor as any as IConfigurationComponent).$_predefinedProps,
+                ...node.componentOptions.propsData
+            };
+
             const config = ownerConfig.createNested(
                 (node.componentOptions.Ctor as any as IConfigurationComponent).$_optionName,
                 initialValues,

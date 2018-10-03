@@ -21,6 +21,7 @@ interface INestedComponent {
     optionName: string;
     props: IProp[];
     isCollectionItem: boolean;
+    predefinedProps?: Record<string, any>;
 }
 
 interface INestedComponentModel {
@@ -28,6 +29,10 @@ interface INestedComponentModel {
     optionName: string;
     renderedProps: string;
     isCollectionItem: boolean;
+    predefinedProps: Array<{
+        name: string;
+        value: any;
+    }>;
 }
 
 interface IProp {
@@ -80,13 +85,23 @@ function generate(component: IComponent): string {
 }
 
 function createNestedComponentModel(component: INestedComponent): INestedComponentModel {
+    let predefinedProps;
+
+    if (component.predefinedProps) {
+        predefinedProps = Object.keys(component.predefinedProps).map((name) => ({
+            name,
+            value: component.predefinedProps[name]
+        }));
+    }
+
     return {
         name: component.name,
         optionName: component.optionName,
         renderedProps: component.props
             ? renderProps(component.props)
             : undefined,
-        isCollectionItem: component.isCollectionItem
+        isCollectionItem: component.isCollectionItem,
+        predefinedProps
     };
 }
 
@@ -156,6 +171,14 @@ L1 + `extends: <#= it.baseComponent #>,` +
             `(<#= nested.name #> as any).$_isCollectionItem = true;\n` +
         `<#?#>` +
 
+        `<#? nested.predefinedProps #>` +
+            `(<#= nested.name #> as any).$_predefinedProps = {` +
+            `<#~ nested.predefinedProps : prop #>` +
+                L1 + `<#= prop.name #>: "<#= prop.value #>",` +
+            `<#~#>` + `\b` + `\n` +
+            `};\n` +
+        `<#?#>` +
+
     `<#~#>` +
 `<#?#>` +
 `\n` +
@@ -164,10 +187,10 @@ L1 + `extends: <#= it.baseComponent #>,` +
     `export default <#= it.defaultExport #>;\n` +
 `<#?#>` +
 
-`export {\n` +
+`export {` +
     `<#~ it.namedExports :namedExport #>` +
-    tab(1) + `<#= namedExport #>,\n` +
-    `<#~#>` + `\b\b` + `\n` +
+        L1 + `<#= namedExport #>,` +
+    `<#~#>` + `\b` + `\n` +
 `};\n`
 );
 

@@ -25,6 +25,7 @@ export interface IComplexProp {
   name: string;
   optionName: string;
   owner: string;
+  predefinedProps: Record<string, any>;
   props: IProp[];
   templates: string[];
 }
