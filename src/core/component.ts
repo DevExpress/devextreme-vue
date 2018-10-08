@@ -76,7 +76,11 @@ const BaseComponent: VueConstructor = Vue.extend({
             return result;
         },
 
-        $_getWatchMethod(): (valueGetter: any, valueChangeCallback: any, options: any) => any  {
+        $_getWatchMethod(): (
+            valueGetter: () => any,
+            valueChangeCallback: (value: any) => void,
+            options: { deep: boolean, skipImmediate: boolean }
+        ) => any {
             return (valueGetter, valueChangeCallback, options) => {
                 options = options || {};
                 if (!options.skipImmediate) {
