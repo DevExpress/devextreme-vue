@@ -122,20 +122,50 @@ describe("options", () => {
         WidgetClass.mock.calls[0][1].integrationOptions.watchMethod(() => {
             return arrayValue[0].text;
         }, valueChangedCallback);
+
         expect(valueChangedCallback).toHaveBeenCalledTimes(1);
         expect(valueChangedCallback.mock.calls[0][0]).toBe("text");
 
+        arrayValue[0].text = "changedText";
         Vue.nextTick(() => {
-            arrayValue[0].text = "changedText";
+            expect(valueChangedCallback).toHaveBeenCalledTimes(2);
+            expect(valueChangedCallback.mock.calls[1][0]).toBe("changedText");
+            done();
+        });
+    });
+
+    it("watch array prop changing with Date", (done) => {
+        const date = new Date(2018, 11, 11);
+        const arrayValue = [{ date }];
+        new TestComponent({
+            props: ["sampleProp"],
+            propsData: {
+                sampleProp: arrayValue
+            }
+        }).$mount();
+        const valueChangedCallback = jest.fn();
+        WidgetClass.mock.calls[0][1].integrationOptions.watchMethod(() => {
+            return arrayValue[0].date;
+        }, valueChangedCallback);
+
+        expect(valueChangedCallback).toHaveBeenCalledTimes(1);
+        expect(valueChangedCallback.mock.calls[0][0]).toBe(date);
+
+        arrayValue[0].date = new Date(2018, 11, 11);
+        Vue.nextTick(() => {
+            expect(valueChangedCallback).toHaveBeenCalledTimes(1);
+            expect(valueChangedCallback.mock.calls[0][0]).toBe(date);
+
+            arrayValue[0].date = new Date(2018, 11, 12);
             Vue.nextTick(() => {
                 expect(valueChangedCallback).toHaveBeenCalledTimes(2);
-                expect(valueChangedCallback.mock.calls[1][0]).toBe("changedText");
+                expect(valueChangedCallback.mock.calls[1][0]).toBe(new Date(2018, 11, 12).valueOf());
                 done();
             });
         });
     });
 
-    it("watch array prop changing(deep with skipImmediate - Grid scenario)", (done) => {
+    it("watch array prop changing (deep)", (done) => {
         const arrayValue = [{
             data: {
                 text: "text"
@@ -151,16 +181,43 @@ describe("options", () => {
         WidgetClass.mock.calls[0][1].integrationOptions.watchMethod(() => {
             return arrayValue[0].data;
         }, valueChangedCallback, {
-            deep: true,
-            skipImmediate: true
+            deep: true
         });
-        expect(valueChangedCallback).toHaveBeenCalledTimes(0);
+        expect(valueChangedCallback).toHaveBeenCalledTimes(1);
+        expect(valueChangedCallback.mock.calls[0][0]).toEqual({ text: "text" });
 
         arrayValue[0].data.text = "changedText";
 
         Vue.nextTick(() => {
-            expect(valueChangedCallback).toHaveBeenCalledTimes(1);
+            expect(valueChangedCallback).toHaveBeenCalledTimes(2);
             expect(valueChangedCallback.mock.calls[0][0]).toEqual({ text: "changedText" });
+            done();
+        });
+    });
+
+    it("watch array prop changing (skipImmediate)", (done) => {
+        const arrayValue = [{
+            text: "text"
+        }];
+        new TestComponent({
+            props: ["sampleProp"],
+            propsData: {
+                sampleProp: arrayValue
+            }
+        }).$mount();
+        const valueChangedCallback = jest.fn();
+        WidgetClass.mock.calls[0][1].integrationOptions.watchMethod(() => {
+            return arrayValue[0].text;
+        }, valueChangedCallback, {
+            skipImmediate: true
+        });
+        expect(valueChangedCallback).toHaveBeenCalledTimes(0);
+
+        arrayValue[0].text = "changedText";
+
+        Vue.nextTick(() => {
+            expect(valueChangedCallback).toHaveBeenCalledTimes(1);
+            expect(valueChangedCallback.mock.calls[0][0]).toEqual("changedText");
             done();
         });
     });

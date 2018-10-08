@@ -94,8 +94,7 @@ const BaseComponent: VueConstructor = Vue.extend({
                     }
                     return value;
                 }, (newValue, oldValue) => {
-                    const isSameValue = oldValue === newValue;
-                    if (!isSameValue || isSameValue && options.deep) {
+                    if (oldValue !== newValue || options.deep) {
                         valueChangeCallback(newValue);
                     }
                 }, {
