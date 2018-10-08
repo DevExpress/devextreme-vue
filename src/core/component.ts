@@ -60,51 +60,43 @@ const BaseComponent: VueConstructor = Vue.extend({
         },
 
         $_getIntegrationOptions(): object {
-            const templates: Record<string, any> = {};
+            const result: Record<string, any> = {
+                integrationOptions:  {
+                    watchMethod: this.$_getWatchMethod(),
+                }
+            };
 
             if (this.$scopedSlots && Object.keys(this.$scopedSlots).length) {
+                result.integrationOptions.templates = {};
                 Object.keys(this.$scopedSlots).forEach((name: string) => {
-                    templates[name] = this.$_fillTemplate(this.$scopedSlots[name], name);
+                    result.integrationOptions.templates[name] = this.$_fillTemplate(this.$scopedSlots[name], name);
                 });
             }
 
-            return {
-                integrationOptions: {
-                    templates,
-                    ...this.$_getWatchMethod(),
-                }
-            };
+            return result;
         },
 
-        $_getWatchMethod(): { watchMethod: (valueGetter: any, valueChangeCallback: any, options: any) => any } {
-            return {
-                watchMethod: (valueGetter, valueChangeCallback, options) => {
-                    options = options || {};
-                    let immediateValue;
-                    let skipCallback = options.skipImmediate;
-                    if (!skipCallback) {
-                        immediateValue = valueGetter();
-                        valueChangeCallback(immediateValue);
-                    }
-                    const watcher = this.$watch(() => {
-                        let value = valueGetter();
-                        if (value instanceof Date) {
-                            value = value.valueOf();
-                        }
-                        return value;
-                    }, (newValue) => {
-                        const isSameValue = immediateValue === newValue;
-                        if (!skipCallback && (!isSameValue || isSameValue && options.deep)) {
-                            immediateValue = newValue;
-                            valueChangeCallback(newValue);
-                        }
-                        skipCallback = false;
-                    }, {
-                        deep: options.deep
-                    });
-
-                    return watcher;
+        $_getWatchMethod(): (valueGetter: any, valueChangeCallback: any, options: any) => any  {
+            return (valueGetter, valueChangeCallback, options) => {
+                options = options || {};
+                if (!options.skipImmediate) {
+                    valueChangeCallback(valueGetter());
                 }
+
+                return this.$watch(() => {
+                    let value = valueGetter();
+                    if (value instanceof Date) {
+                        value = value.valueOf();
+                    }
+                    return value;
+                }, (newValue, oldValue) => {
+                    const isSameValue = oldValue === newValue;
+                    if (!isSameValue || isSameValue && options.deep) {
+                        valueChangeCallback(newValue);
+                    }
+                }, {
+                    deep: options.deep
+                });
             };
         },
 
