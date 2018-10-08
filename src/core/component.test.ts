@@ -134,37 +134,6 @@ describe("options", () => {
         });
     });
 
-    it("watch array prop changing with Date", (done) => {
-        const date = new Date(2018, 11, 11);
-        const arrayValue = [{ date }];
-        new TestComponent({
-            props: ["sampleProp"],
-            propsData: {
-                sampleProp: arrayValue
-            }
-        }).$mount();
-        const valueChangedCallback = jest.fn();
-        WidgetClass.mock.calls[0][1].integrationOptions.watchMethod(() => {
-            return arrayValue[0].date;
-        }, valueChangedCallback);
-
-        expect(valueChangedCallback).toHaveBeenCalledTimes(1);
-        expect(valueChangedCallback.mock.calls[0][0]).toBe(date);
-
-        arrayValue[0].date = new Date(2018, 11, 11);
-        Vue.nextTick(() => {
-            expect(valueChangedCallback).toHaveBeenCalledTimes(1);
-            expect(valueChangedCallback.mock.calls[0][0]).toBe(date);
-
-            arrayValue[0].date = new Date(2018, 11, 12);
-            Vue.nextTick(() => {
-                expect(valueChangedCallback).toHaveBeenCalledTimes(2);
-                expect(valueChangedCallback.mock.calls[1][0]).toBe(new Date(2018, 11, 12).valueOf());
-                done();
-            });
-        });
-    });
-
     it("watch array prop changing (deep)", (done) => {
         const arrayValue = [{
             data: {
