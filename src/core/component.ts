@@ -5,7 +5,7 @@ import * as events from "devextreme/events";
 
 import Configuration, { bindOptionWatchers } from "./configuration";
 import { IConfigurable, IConfigurationComponent } from "./configuration-component";
-import { camelize } from "./helpers";
+import { camelize, toComparable } from "./helpers";
 
 interface IWidgetComponent extends IConfigurable {
     $_instance: any;
@@ -88,13 +88,9 @@ const BaseComponent: VueConstructor = Vue.extend({
                 }
 
                 return this.$watch(() => {
-                    let value = valueGetter();
-                    if (value instanceof Date) {
-                        value = value.valueOf();
-                    }
-                    return value;
+                    return valueGetter();
                 }, (newValue, oldValue) => {
-                    if (oldValue !== newValue || options.deep) {
+                    if (toComparable(oldValue) !== toComparable(newValue) || options.deep) {
                         valueChangeCallback(newValue);
                     }
                 }, {

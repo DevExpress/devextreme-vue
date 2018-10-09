@@ -159,7 +159,7 @@ describe("options", () => {
             arrayValue[0].date = new Date(2018, 11, 12);
             Vue.nextTick(() => {
                 expect(valueChangedCallback).toHaveBeenCalledTimes(2);
-                expect(valueChangedCallback.mock.calls[1][0]).toBe(new Date(2018, 11, 12).valueOf());
+                expect(valueChangedCallback.mock.calls[1][0]).toEqual(new Date(2018, 11, 12));
                 done();
             });
         });

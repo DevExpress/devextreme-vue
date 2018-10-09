@@ -9,3 +9,7 @@ export function lowercaseFirst(value: string): string {
 export function camelize(value: string): string {
     return lowercaseFirst(value.split("-").map((v) => uppercaseFirst(v)).join(""));
 }
+
+export function toComparable(value: any): any {
+    return value instanceof Date ? value.getTime() : value;
+}
