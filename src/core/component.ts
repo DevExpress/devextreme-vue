@@ -88,7 +88,11 @@ const BaseComponent: VueConstructor = Vue.extend({
                 }
 
                 return this.$watch(() => {
-                    return valueGetter();
+                    let value = valueGetter();
+                    if (value instanceof Date) {
+                        value = value.valueOf();
+                    }
+                    return value;
                 }, (newValue, oldValue) => {
                     if (oldValue !== newValue || options.deep) {
                         valueChangeCallback(newValue);
