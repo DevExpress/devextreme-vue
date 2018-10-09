@@ -1,5 +1,5 @@
 import { compareStrings } from "./helpers";
-import createTempate from "./template";
+import { createTempate, L1, L2, L3, L4, TAB2 } from "./template";
 
 interface IImport {
     name: string;
@@ -107,11 +107,6 @@ function createNestedComponentModel(component: INestedComponent): INestedCompone
 
 // tslint:disable:max-line-length
 
-const L1: string = `\n` + tab(1);
-const L2: string = `\n` + tab(2);
-const L3: string = `\n` + tab(3);
-const L4: string = `\n` + tab(4);
-
 const renderComponent: (model: {
     component: string;
     widgetImport: IImport;
@@ -211,7 +206,7 @@ function renderProps(props: IProp[]): string {
 const renderPropsTemplate: (props: IProp[]) => string = createTempate(
 `<#~ it :prop #>` +
 
-    tab(2) +
+    TAB2 +
 
     `<#? prop.types && prop.types.length > 0 && !prop.acceptableValues #>` +
         `<#= prop.name #>: ` +
@@ -278,10 +273,6 @@ const renderPropsTemplate: (props: IProp[]) => string = createTempate(
 
 `<#~#>` + `\b\b`
 );
-
-function tab(i: number): string {
-    return Array(i * 2 + 1).join(" ");
-}
 
 export default generate;
 export { IComponent, INestedComponent, IProp, renderProps };
