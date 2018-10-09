@@ -5,6 +5,7 @@ const path = require('path');
 const gulp = require('gulp');
 const clean = require('gulp-clean');
 const shell = require('gulp-shell');
+const header = require('gulp-header');
 const ts = require('gulp-typescript');
 const tslint = require("gulp-tslint");
 const runSequence = require('run-sequence');
@@ -26,6 +27,7 @@ const
   NPM_CLEAN = 'npm.clean',
   NPM_PACKAGE = 'npm.package',
   NPM_LICENSE = 'npm.license',
+  NPM_LICENSE_HEADERS = 'npm.license-headers',
   NPM_README = 'npm.readme',
   NPM_BUILD = 'npm.build',
   NPM_PACK = 'npm.pack';
@@ -80,6 +82,7 @@ gulp.task(GEN_RUN, (done) => {
   done();
 });
 
+
 gulp.task(NPM_CLEAN, () =>
   gulp.src(config.npm.dist, { read: false })
     .pipe(clean())
@@ -109,7 +112,37 @@ gulp.task(NPM_BUILD, [NPM_LICENSE, NPM_PACKAGE, NPM_README, GENERATE], () => {
     .pipe(gulp.dest(config.npm.dist))
 });
 
-gulp.task(NPM_PACK, [NPM_BUILD], shell.task(['npm pack'], { cwd: config.npm.dist }));
+gulp.task(NPM_LICENSE_HEADERS, [NPM_BUILD], function() {
+  const pkg = require('./package.json'),
+      now = new Date(),
+      data = {
+          pkg: pkg,
+          date: now.toDateString(),
+          year: now.getFullYear()
+      };
+
+  var banner = [
+      '/*!',
+      ' * <%= pkg.name %>',
+      ' * Version: <%= pkg.version %>',
+      ' * Build date: <%= date %>',
+      ' *',
+      ' * Copyright (c) 2012 - <%= year %> Developer Express Inc. ALL RIGHTS RESERVED',
+      ' *',
+      ' * This software may be modified and distributed under the terms',
+      ' * of the MIT license. See the LICENSE file in the root of the project for details.',
+      ' *',
+      ' * https://github.com/DevExpress/devextreme-vue',
+      ' */',
+      '\n'
+      ].join('\n');
+
+  return gulp.src(path.join(config.npm.dist, config.npm.pattern))
+      .pipe(header(banner, data))
+      .pipe(gulp.dest(config.npm.dist));
+});
+
+gulp.task(NPM_PACK, [NPM_LICENSE_HEADERS], shell.task(['npm pack'], { cwd: config.npm.dist }));
 
 gulp.task(LINT, () => {
   return gulp.src([config.src, config.generator.src])

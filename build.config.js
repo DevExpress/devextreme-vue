@@ -12,6 +12,7 @@ module.exports = {
   },
   npm: {
     dist: './npm/',
+    pattern: '**/*.{ts,js}',
     package: 'package.json',
     license: 'LICENSE',
     readme: 'README.md'
