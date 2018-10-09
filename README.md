@@ -399,15 +399,15 @@ The following example demonstrates how to configure the [columns](https://js.dev
 ```html
 <dx-data-grid :data-source="dataSource">
   <dx-column data-field="firstName"/>
-  <dx-column data-field="lastName" caption="Last Name" :visible="showLastName"/>
+  <dx-column data-field="lastName" caption="Last Name" :visible.sync="showLastName"/>
 </dx-data-grid>
 
-<dx-button text="Toggle the 'Last Name' column" @click="toggleLastName"/>
+<dx-check-box text="Show the 'Last Name' column" v-model="showLastName"/>
 ```
 
 ```js
 import DxDataGrid, { DxColumn } from "devextreme-vue/ui/data-grid"; 
-import DxButton from "devextreme-vue/ui/button"; 
+import DxCheckBox from "devextreme-vue/ui/check-box"; 
 
 import { data } from './data.js';
 
@@ -415,18 +415,13 @@ export default {
   components: {
     DxDataGrid,
     DxColumn,
-    DxButton
+    DxCheckBox
   },
   data() {
     return {
       dataSource: data,
       showLastName: true
     };
-  },
-  methods: {
-    toggleLastName() {
-      this.showLastName = !this.showLastName;
-    }
   }
 };
 ```
