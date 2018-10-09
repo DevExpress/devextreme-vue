@@ -18,6 +18,8 @@ const DX_REMOVE_EVENT = "dxremove";
 
 const BaseComponent: VueConstructor = Vue.extend({
 
+    inheritAttrs: false,
+
     render(createElement: (...args) => VNode): VNode {
         return createElement(
             "div",
