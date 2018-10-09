@@ -55,7 +55,7 @@ describe("component rendering", () => {
         expect(WidgetClass).toHaveBeenCalledTimes(1);
     });
 
-    it("component has disables inheritAttrs", () => {
+    it("component has disabled inheritAttrs", () => {
         const component = new TestComponent();
         expect(component.$options.inheritAttrs).toBe(false);
     });
