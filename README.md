@@ -23,6 +23,7 @@ This project allows you to use [DevExtreme Widgets](http://js.devexpress.com/Dem
 * [Type Checks](#type-checks)
 * [DevExtreme Data Layer and Utils](#data-layer-and-utils)
 * [DevExtreme Validation](#validation)
+* [Configuration components](#configuration-components)
 * [License](#license)
 * [Support & Feedback](#support-feedback)
 ## <a name="getting-started"></a>Getting Started ##
@@ -349,6 +350,90 @@ export default {
   }
 };
 ```
+
+## <a name="configuration-components"></a>Configuration Components ###
+
+You can use special components to configure complex nested options for widgets. Each widget that have complex nested option has corresponding configuration component in DevExtreme Vue Components. Use named import to get a required configuration component.
+
+The following example demonstrates how to configure the [tooltip](https://js.devexpress.com/Documentation/ApiReference/Data_Visualization_Widgets/dxChart/Configuration/tooltip/) option of the dxChart widget:
+
+```html
+<dx-chart
+  :data-source="dataSource"
+  title="Pizza Shop Complaints">
+  <dx-tooltip :enabled="showTooltip"/>
+</dx-chart>
+
+<dx-button text="Toggle tooltip" @click="toggleTooltip"/>
+```
+
+```js
+import DxChart, { DxTooltip } from "devextreme-vue/ui/chart"; 
+import DxButton from "devextreme-vue/ui/button"; 
+
+import { complaintsData } from './data.js';
+
+export default {
+  components: {
+    DxChart,
+    DxTooltip,
+    DxButton
+  },
+  data() {
+    return {
+      dataSource: complaintsData,
+      showTooltip: false
+    };
+  },
+  methods: {
+    toggleTooltip() {
+      this.showTooltip = !this.showTooltip;
+    }
+  }
+};
+```
+
+You can also use configuration components for complex collection options.
+The following example demonstrates how to configure the [columns](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/columns/) option of the dxDataGrid widget:
+
+```html
+<dx-data-grid :data-source="dataSource">
+  <dx-column data-field="firstName"/>
+  <dx-column data-field="lastName" caption="Last Name" :visible="showLastName"/>
+</dx-data-grid>
+
+<dx-button text="Toggle the 'Last Name' column" @click="toggleLastName"/>
+```
+
+```js
+import DxDataGrid, { DxColumn } from "devextreme-vue/ui/data-grid"; 
+import DxButton from "devextreme-vue/ui/button"; 
+
+import { data } from './data.js';
+
+export default {
+  components: {
+    DxDataGrid,
+    DxColumn,
+    DxButton
+  },
+  data() {
+    return {
+      dataSource: data,
+      showLastName: true
+    };
+  },
+  methods: {
+    toggleLastName() {
+      this.showLastName = !this.showLastName;
+    }
+  }
+};
+```
+
+Note that some options with an object type are not implemented as nested components - for example,
+[editorOptions of dxDataGrid](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/columns/#editorOptions), [editorOptions of dxForm](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxForm/Item_Types/SimpleItem/#editorOptions), [the widget option of dxToolbar](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxToolbar/Default_Item_Template/#options).
+
 ## <a name="license"></a>License ##
 
 **DevExtreme Vue components are released as an MIT-licensed (free and open-source) DevExtreme add-on.**
