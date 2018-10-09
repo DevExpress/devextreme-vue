@@ -1018,10 +1018,12 @@ export const orangesByDay = [{
   day: "Friday",
   oranges: 6
 }, {
+  disabled: false,
   day: "Saturday",
   oranges: 11,
   template: "weekend"
 }, {
+  disabled: false,
   day: "Sunday",
   oranges: 4,
   template: "weekend"

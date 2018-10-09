@@ -5,7 +5,7 @@ import * as events from "devextreme/events";
 
 import Configuration, { bindOptionWatchers, subscribeOnUpdates } from "./configuration";
 import { IConfigurable, IConfigurationComponent } from "./configuration-component";
-import { camelize } from "./helpers";
+import { camelize, toComparable } from "./helpers";
 
 interface IWidgetComponent extends IConfigurable {
     $_instance: any;
@@ -52,7 +52,6 @@ const BaseComponent: VueConstructor = Vue.extend({
                 ...this.$options.propsData,
                 ...config.getInitialValues()
             };
-
             const instance = new (this as any).$_WidgetClass(element, options);
             (this as any as IWidgetComponent).$_instance = instance;
 
@@ -63,20 +62,42 @@ const BaseComponent: VueConstructor = Vue.extend({
         },
 
         $_getIntegrationOptions(): object {
-            if (!this.$scopedSlots || !Object.keys(this.$scopedSlots).length) {
-                return {};
+            const result: Record<string, any> = {
+                integrationOptions:  {
+                    watchMethod: this.$_getWatchMethod(),
+                }
+            };
+
+            if (this.$scopedSlots && Object.keys(this.$scopedSlots).length) {
+                result.integrationOptions.templates = {};
+                Object.keys(this.$scopedSlots).forEach((name: string) => {
+                    result.integrationOptions.templates[name] = this.$_fillTemplate(this.$scopedSlots[name], name);
+                });
             }
 
-            const templates: Record<string, any> = {};
+            return result;
+        },
 
-            Object.keys(this.$scopedSlots).forEach((name: string) => {
-                templates[name] = this.$_fillTemplate(this.$scopedSlots[name], name);
-            });
-
-            return {
-                integrationOptions: {
-                    templates
+        $_getWatchMethod(): (
+            valueGetter: () => any,
+            valueChangeCallback: (value: any) => void,
+            options: { deep: boolean, skipImmediate: boolean }
+        ) => any {
+            return (valueGetter, valueChangeCallback, options) => {
+                options = options || {};
+                if (!options.skipImmediate) {
+                    valueChangeCallback(valueGetter());
                 }
+
+                return this.$watch(() => {
+                    return valueGetter();
+                }, (newValue, oldValue) => {
+                    if (toComparable(oldValue) !== toComparable(newValue) || options.deep) {
+                        valueChangeCallback(newValue);
+                    }
+                }, {
+                    deep: options.deep
+                });
             };
         },
 
