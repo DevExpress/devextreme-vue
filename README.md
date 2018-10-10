@@ -19,11 +19,13 @@ This project allows you to use [DevExtreme Widgets](http://js.devexpress.com/Dem
   * [Custom Templates](#custom-templates)
   * [Components with Transcluded Content](#components-with-transcluded-content)
   * [Event Handling](#event-handling)
+  * [Configuration Components](#configuration-components)
+    * [Basic usage](#configuration-components-basic)
+    * [Collection Options](#configuration-components-collection)
   * [Getting a Widget Instance](#widget-instance)
 * [Type Checks](#type-checks)
 * [DevExtreme Data Layer and Utils](#data-layer-and-utils)
 * [DevExtreme Validation](#validation)
-* [Configuration components](#configuration-components)
 * [License](#license)
 * [Support & Feedback](#support-feedback)
 ## <a name="getting-started"></a>Getting Started ##
@@ -351,10 +353,15 @@ export default {
 };
 ```
 
-## <a name="configuration-components"></a>Configuration Components ###
+## <a name="configuration-components"></a>Configuration Components ##
+You can use special components to configure complex nested options for widgets. Each widget that have complex nested option has corresponding configuration component in DevExtreme Vue Components. 
+Use named import to get a required configuration component.
+```js
+import DxChart, { DxTooltip } from "devextreme-vue/ui/chart"; 
+```
+You can use all data-bind features (such as `.sync` modifier) in your nested configuration components.
 
-You can use special components to configure complex nested options for widgets. Each widget that have complex nested option has corresponding configuration component in DevExtreme Vue Components. Use named import to get a required configuration component.
-
+### <a name="configuration-components-basic"></a>Basic Usage ###
 The following example demonstrates how to configure the [tooltip](https://js.devexpress.com/Documentation/ApiReference/Data_Visualization_Widgets/dxChart/Configuration/tooltip/) option of the dxChart widget:
 
 ```html
@@ -393,6 +400,7 @@ export default {
 };
 ```
 
+### <a name="configuration-components-collection"></a>Collection Options ###
 You can also use configuration components for complex collection options.
 The following example demonstrates how to configure the [columns](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/columns/) option of the dxDataGrid widget:
 
