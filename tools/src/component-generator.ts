@@ -128,11 +128,13 @@ const renderComponent: (model: {
 `<#~#>` + `\n` +
 
 `<#? it.props #>` +
-`type AccessibleOptions = Pick<IOptions,` +
+    `type AccessibleOptions = Pick<IOptions,` +
     `<#~ it.props: prop #>` +
-    L1 + `"<#= prop.name #>" |` +
-    `<#~#>` + `\b\b` + `\n>;\n` +
-`\n` + `<#?#>` +
+        L1 + `"<#= prop.name #>" |` +
+    `<#~#>` +
+    `\b\b` + `\n>;\n` +
+    `\n` +
+`<#?#>` +
 
 `interface <#= it.component #> extends VueConstructor<#? it.props #>, AccessibleOptions<#?#> {` +
     L1 + `readonly instance?: <#= it.widgetImport.name #>;` + `\n` +
