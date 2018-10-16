@@ -121,13 +121,26 @@ const renderComponent: (model: {
 }) => string = createTempate(
 `import * as VueType from "vue";\n` +
 `const Vue = VueType.default || VueType;\n` +
-`import <#= it.widgetImport.name #> from "devextreme/<#= it.widgetImport.path #>";\n` +
+`import <#= it.widgetImport.name #><#? it.props #>, { IOptions }<#?#> from "devextreme/<#= it.widgetImport.path #>";\n` +
 
 `<#~ it.namedImports :namedImport #>` +
 `import { <#= namedImport.name #> } from "<#= namedImport.path #>";\n` +
 `<#~#>` + `\n` +
 
-`const <#= it.component #>: VueConstructor = Vue.extend({` +
+`<#? it.props #>` +
+    `type AccessibleOptions = Pick<IOptions,` +
+    `<#~ it.props: prop #>` +
+        L1 + `"<#= prop.name #>" |` +
+    `<#~#>` +
+    `\b\b` + `\n>;\n` +
+    `\n` +
+`<#?#>` +
+
+`interface <#= it.component #> extends VueConstructor<#? it.props #>, AccessibleOptions<#?#> {` +
+    L1 + `readonly instance?: <#= it.widgetImport.name #>;` + `\n` +
+`}` + `\n` +
+
+`const <#= it.component #>: <#= it.component #> = Vue.extend({` +
 L1 + `extends: <#= it.baseComponent #>,` +
 
 `<#? it.props #>` +
