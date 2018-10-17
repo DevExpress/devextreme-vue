@@ -26,11 +26,12 @@
           :allowColumnReordering="true"
           :rowAlternationEnabled="alternateRowColors"
           :selectedRowKeys="selectedRowKeys"
+          @toolbarPreparing="toolbarPreparing"
       >
 
         <dx-filter-row :visible="filterRowVisible" />
         <dx-group-panel :visible="true" />
-        <dx-grouping :autoExpandAll="true" />
+        <dx-grouping :autoExpandAll="autoExpandAll" />
         <dx-selection mode="multiple" />
 
         <dx-column
@@ -124,6 +125,21 @@ export default {
       }
     }
   },
+  methods:{
+    toolbarPreparing(e) {
+      e.toolbarOptions.items.unshift({
+          location: "after",
+          widget: "dxButton",
+          options: {
+              icon: "chevronup",
+              onClick: (e) => {
+                this.autoExpandAll = e.component.option("icon") === "chevrondown";
+                e.component.option("icon", this.autoExpandAll ? "chevronup" : "chevrondown");
+              }
+          }
+      })
+    }
+  },
   data: function() {
     return {
       dateFilter: "2013/04/01",
@@ -131,7 +147,8 @@ export default {
       selectedRowKeys: selectedKeys,
       alternateRowColors: true,
       filterRowVisible: true,
-      countrySortOrderVal: true
+      countrySortOrderVal: true,
+      autoExpandAll: true
     };
   }
 };
