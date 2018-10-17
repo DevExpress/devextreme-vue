@@ -67,7 +67,8 @@ const BaseComponent: VueConstructor = Vue.extend({
             const result: Record<string, any> = {
                 integrationOptions:  {
                     watchMethod: this.$_getWatchMethod(),
-                }
+                },
+                ...this.$_getOnInitializingCallback(),
             };
 
             if (this.$scopedSlots && Object.keys(this.$scopedSlots).length) {
@@ -101,6 +102,10 @@ const BaseComponent: VueConstructor = Vue.extend({
                     deep: options.deep
                 });
             };
+        },
+
+        $_getOnInitializingCallback(): object {
+            return {};
         },
 
         $_fillTemplate(template: any, name: string): object {
@@ -137,8 +142,19 @@ const BaseComponent: VueConstructor = Vue.extend({
 });
 
 const DxComponent: VueConstructor = BaseComponent.extend({
+    methods: {
+        $_getOnInitializingCallback(): object {
+            return {
+                onInitializing() {
+                    (this as any).beginUpdate();
+                }
+            };
+        }
+    },
+
     mounted(): void {
         (this as any).$_createWidget(this.$el);
+        (this as any as IWidgetComponent).$_instance.endUpdate();
         this.$children.forEach((child: any) => {
             if (child.$_isExtension) {
                 child.attachTo(this.$el);

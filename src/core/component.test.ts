@@ -17,16 +17,33 @@ const Widget = {
             throw new Error(`no handler registered for '${event}'`);
         }
         eventHandlers[event](args);
-    }
+    },
+    beginUpdate: jest.fn(),
+    endUpdate: jest.fn(),
 };
 
-const WidgetClass = jest.fn(() => Widget);
+function createWidget(_, options) {
+    if (options.onInitializing) {
+        options.onInitializing.call(Widget);
+    }
+    return Widget;
+}
+const WidgetClass = jest.fn(createWidget);
 const TestComponent = Vue.extend({
     extends: DxComponent,
     beforeCreate() {
         (this as any).$_WidgetClass = WidgetClass;
     }
 });
+
+function skipIntegrationOptions(options: {
+    integrationOptions: object,
+    onInitializing: () => void
+}): Record<string, any> {
+    delete options.integrationOptions;
+    delete options.onInitializing;
+    return options;
+}
 
 function buildTestComponentCtor(): VueConstructor {
     return Vue.extend({
@@ -53,6 +70,8 @@ describe("component rendering", () => {
     it("calls widget creation", () => {
         new TestComponent().$mount();
         expect(WidgetClass).toHaveBeenCalledTimes(1);
+        expect(Widget.beginUpdate).toHaveBeenCalledTimes(1);
+        expect(Widget.endUpdate).toHaveBeenCalledTimes(1);
     });
 
     it("component has disabled inheritAttrs", () => {
@@ -84,9 +103,7 @@ describe("options", () => {
 
         expect(WidgetClass.mock.calls[0][0]).toBe(vm.$el);
 
-        const options = WidgetClass.mock.calls[0][1];
-        delete options.integrationOptions;
-        expect(options).toEqual({
+        expect(skipIntegrationOptions(WidgetClass.mock.calls[0][1])).toEqual({
             sampleProp: "default"
         });
     });
@@ -521,9 +538,7 @@ describe("nested options", () => {
 
         expect(WidgetClass.mock.calls[0][0]).toBe(vm.$children[0].$el);
 
-        const options = WidgetClass.mock.calls[0][1];
-        delete options.integrationOptions;
-        expect(options).toEqual({
+        expect(skipIntegrationOptions(WidgetClass.mock.calls[0][1])).toEqual({
             nestedOption: {
                 prop1: 123
             }
@@ -548,9 +563,7 @@ describe("nested options", () => {
 
         expect(WidgetClass.mock.calls[0][0]).toBe(vm.$children[0].$el);
 
-        const options = WidgetClass.mock.calls[0][1];
-        delete options.integrationOptions;
-        expect(options).toEqual({
+        expect(skipIntegrationOptions(WidgetClass.mock.calls[0][1])).toEqual({
             nestedOption: [{
                 prop1: 123
             }]
@@ -577,9 +590,7 @@ describe("nested options", () => {
 
         expect(WidgetClass.mock.calls[0][0]).toBe(vm.$children[0].$el);
 
-        const options = WidgetClass.mock.calls[0][1];
-        delete options.integrationOptions;
-        expect(options).toEqual({
+        expect(skipIntegrationOptions(WidgetClass.mock.calls[0][1])).toEqual({
             nestedOption: {
                 prop1: 123,
                 subNestedOption: {
@@ -610,9 +621,7 @@ describe("nested options", () => {
 
         expect(WidgetClass.mock.calls[0][0]).toBe(vm.$children[0].$el);
 
-        const options = WidgetClass.mock.calls[0][1];
-        delete options.integrationOptions;
-        expect(options).toEqual({
+        expect(skipIntegrationOptions(WidgetClass.mock.calls[0][1])).toEqual({
             nestedOption: {
                 prop1: 123,
                 subNestedOption: [{
@@ -921,7 +930,7 @@ describe("events emitting", () => {
 });
 
 describe("extension component", () => {
-    const ExtensionWidgetClass = jest.fn(() => Widget);
+    const ExtensionWidgetClass = jest.fn(createWidget);
     const TestExtensionComponent = Vue.extend({
         extends: DxExtensionComponent,
         beforeCreate() {
@@ -933,6 +942,9 @@ describe("extension component", () => {
         new TestExtensionComponent().$mount();
 
         expect(ExtensionWidgetClass).toHaveBeenCalledTimes(0);
+
+        expect(Widget.beginUpdate).toHaveBeenCalledTimes(0);
+        expect(Widget.endUpdate).toHaveBeenCalledTimes(0);
     });
 
     it("destroys correctly", () => {
