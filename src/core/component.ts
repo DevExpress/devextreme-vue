@@ -68,7 +68,7 @@ const BaseComponent: VueConstructor = Vue.extend({
                 integrationOptions:  {
                     watchMethod: this.$_getWatchMethod(),
                 },
-                ...this.$_getOnInitializingCallback(),
+                ...this.$_getExtraIntegrationOptions(),
             };
 
             if (this.$scopedSlots && Object.keys(this.$scopedSlots).length) {
@@ -104,7 +104,7 @@ const BaseComponent: VueConstructor = Vue.extend({
             };
         },
 
-        $_getOnInitializingCallback(): object {
+        $_getExtraIntegrationOptions(): object {
             return {};
         },
 
@@ -143,7 +143,7 @@ const BaseComponent: VueConstructor = Vue.extend({
 
 const DxComponent: VueConstructor = BaseComponent.extend({
     methods: {
-        $_getOnInitializingCallback(): object {
+        $_getExtraIntegrationOptions(): object {
             return {
                 onInitializing() {
                     (this as any).beginUpdate();

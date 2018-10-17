@@ -40,9 +40,10 @@ function skipIntegrationOptions(options: {
     integrationOptions: object,
     onInitializing: () => void
 }): Record<string, any> {
-    delete options.integrationOptions;
-    delete options.onInitializing;
-    return options;
+    const result = {...options };
+    delete result.integrationOptions;
+    delete result.onInitializing;
+    return result;
 }
 
 function buildTestComponentCtor(): VueConstructor {
