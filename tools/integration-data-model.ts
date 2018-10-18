@@ -24,7 +24,7 @@ export interface IComplexProp {
   isCollectionItem: boolean;
   name: string;
   optionName: string;
-  owner: string;
+  owners: string[];
   predefinedProps: Record<string, any>;
   props: IProp[];
   templates: string[];
