@@ -1,20 +1,22 @@
 <template>
     <example-block title="dxDataGrid">
       <div class="flex-container">
-        <dx-check-box 
-          v-model="alternateRowColors" 
-          text="Alternate Row Colors"
+        <span class="label">Date Filter:</span>
+        <dx-date-box 
+          v-model="dateFilter"
         />
+        <span class="label">Alternate Row Colors:</span>
         <dx-check-box 
-          v-model="filterRowVisible" 
-          text="Filter Row Visible"
+          v-model="alternateRowColors"
         />
-      </div>
-      <div>
-        Country Sort Order:&nbsp;
+        <span class="label">Filter Row Visible:</span>
+        <dx-check-box 
+          v-model="filterRowVisible"
+        />
+        <span class="label">Country Sort Order:</span>
         <dx-switch
           :value.sync="countrySortOrderVal"
-          offText="desc"
+          offText="des"
           onText="asc"
         />
       </div>
@@ -24,11 +26,12 @@
           :allowColumnReordering="true"
           :rowAlternationEnabled="alternateRowColors"
           :selectedRowKeys="selectedRowKeys"
+          @toolbarPreparing="toolbarPreparing"
       >
 
         <dx-filter-row :visible="filterRowVisible" />
         <dx-group-panel :visible="true" />
-        <dx-grouping :autoExpandAll="true" />
+        <dx-grouping :autoExpandAll="autoExpandAll" />
         <dx-selection mode="multiple" />
 
         <dx-column
@@ -46,7 +49,7 @@
         />
         <dx-column
           dataField="country"
-          :sortOrder="countrySortOrder"
+          :sortOrder.sync="countrySortOrder"
         />
         <dx-column
           dataField="region"
@@ -56,7 +59,7 @@
           dataField="date"
           dataType="date"
           selectedFilterOperation=">="
-          filterValue="2013/04/01"
+          :filterValue.sync="dateFilter"
           :width="150"
         />
         <dx-column
@@ -79,7 +82,7 @@
 import Vue from "vue";
 
 import ExampleBlock from "./example-block";
-import { DxButton, DxCheckBox, DxDataGrid, DxSwitch } from "../../src";
+import { DxButton, DxCheckBox, DxDataGrid, DxDateBox, DxSwitch } from "../../src";
 import {
   DxColumn,
   DxFilterRow,
@@ -102,6 +105,7 @@ export default {
     DxButton,
     DxCheckBox,
     DxDataGrid,
+    DxDateBox,
     DxSwitch,
     DxColumn,
     DxFilterRow,
@@ -112,17 +116,39 @@ export default {
     DxSelection
   },
   computed: {
-    countrySortOrder() {
-      return this.countrySortOrderVal ? "asc" : "desc";
+    countrySortOrder: {
+      get() {
+        return this.countrySortOrderVal ? "asc" : "desc";
+      },
+      set(newValue) {
+        this.countrySortOrderVal = newValue === "asc";
+      }
+    }
+  },
+  methods:{
+    toolbarPreparing(e) {
+      e.toolbarOptions.items.unshift({
+          location: "after",
+          widget: "dxButton",
+          options: {
+              icon: "chevronup",
+              onClick: (e) => {
+                this.autoExpandAll = e.component.option("icon") === "chevrondown";
+                e.component.option("icon", this.autoExpandAll ? "chevronup" : "chevrondown");
+              }
+          }
+      })
     }
   },
   data: function() {
     return {
+      dateFilter: "2013/04/01",
       sales: sales,
       selectedRowKeys: selectedKeys,
       alternateRowColors: true,
       filterRowVisible: true,
-      countrySortOrderVal: true
+      countrySortOrderVal: true,
+      autoExpandAll: true
     };
   }
 };
@@ -132,5 +158,15 @@ export default {
   .flex-container {
     display: flex;
     flex-direction: row;
+  }
+  .label {
+    color: black;
+    padding-top: 0.6em;
+  }
+  .dx-checkbox {
+    padding-top: .4em;
+  }
+  .dx-switch {
+    padding-top: .2em;
   }
 </style>

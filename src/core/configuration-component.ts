@@ -3,11 +3,12 @@ import { VNode, VueConstructor } from "vue";
 
 const Vue = VueType.default || VueType;
 
-import Configuration, { bindOptionWatchers } from "./configuration";
+import Configuration, { bindOptionWatchers, subscribeOnUpdates } from "./configuration";
 
 interface IConfigurationComponent {
     $_optionName: string;
     $_isCollectionItem: boolean;
+    $_predefinedProps: Record<string, any>;
 }
 
 interface IConfigurable {
@@ -17,8 +18,11 @@ interface IConfigurable {
 const DxConfiguration: VueConstructor = Vue.extend({
 
     beforeMount() {
-        (this.$vnode.componentOptions as any as IConfigurable).$_config.init(Object.keys(this.$props));
-        bindOptionWatchers((this.$vnode.componentOptions as any as IConfigurable).$_config, this);
+        const config = (this.$vnode.componentOptions as any as IConfigurable).$_config;
+
+        config.init(Object.keys(this.$props));
+        bindOptionWatchers(config, this);
+        subscribeOnUpdates(config, this);
     },
 
     render(createElement: (...args) => VNode): VNode {

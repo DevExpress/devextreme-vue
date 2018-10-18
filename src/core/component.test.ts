@@ -17,16 +17,34 @@ const Widget = {
             throw new Error(`no handler registered for '${event}'`);
         }
         eventHandlers[event](args);
-    }
+    },
+    beginUpdate: jest.fn(),
+    endUpdate: jest.fn(),
 };
 
-const WidgetClass = jest.fn(() => Widget);
+function createWidget(_, options) {
+    if (options.onInitializing) {
+        options.onInitializing.call(Widget);
+    }
+    return Widget;
+}
+const WidgetClass = jest.fn(createWidget);
 const TestComponent = Vue.extend({
     extends: DxComponent,
     beforeCreate() {
         (this as any).$_WidgetClass = WidgetClass;
     }
 });
+
+function skipIntegrationOptions(options: {
+    integrationOptions: object,
+    onInitializing: () => void
+}): Record<string, any> {
+    const result = {...options };
+    delete result.integrationOptions;
+    delete result.onInitializing;
+    return result;
+}
 
 function buildTestComponentCtor(): VueConstructor {
     return Vue.extend({
@@ -53,6 +71,8 @@ describe("component rendering", () => {
     it("calls widget creation", () => {
         new TestComponent().$mount();
         expect(WidgetClass).toHaveBeenCalledTimes(1);
+        expect(Widget.beginUpdate).toHaveBeenCalledTimes(1);
+        expect(Widget.endUpdate).toHaveBeenCalledTimes(1);
     });
 
     it("creates nested component", () => {
@@ -76,7 +96,10 @@ describe("options", () => {
                 sampleProp: "default"
             }
         }).$mount();
-        expect(WidgetClass).toHaveBeenCalledWith(vm.$el, {
+
+        expect(WidgetClass.mock.calls[0][0]).toBe(vm.$el);
+
+        expect(skipIntegrationOptions(WidgetClass.mock.calls[0][1])).toEqual({
             sampleProp: "default"
         });
     });
@@ -100,6 +123,119 @@ describe("options", () => {
         vm.$props.sampleProp = "new";
         Vue.nextTick(() => {
             expect(Widget.option).toHaveBeenCalledTimes(1);
+            expect(Widget.option).toHaveBeenCalledWith("sampleProp", "new");
+            done();
+        });
+    });
+
+    it("watch array prop changing", (done) => {
+        const arrayValue = [{ text: "text" }];
+        new TestComponent({
+            props: ["sampleProp"],
+            propsData: {
+                sampleProp: arrayValue
+            }
+        }).$mount();
+        const valueChangedCallback = jest.fn();
+        WidgetClass.mock.calls[0][1].integrationOptions.watchMethod(() => {
+            return arrayValue[0].text;
+        }, valueChangedCallback);
+
+        expect(valueChangedCallback).toHaveBeenCalledTimes(1);
+        expect(valueChangedCallback.mock.calls[0][0]).toBe("text");
+
+        arrayValue[0].text = "changedText";
+        Vue.nextTick(() => {
+            expect(valueChangedCallback).toHaveBeenCalledTimes(2);
+            expect(valueChangedCallback.mock.calls[1][0]).toBe("changedText");
+            done();
+        });
+    });
+
+    it("watch array prop changing with Date", (done) => {
+        const date = new Date(2018, 11, 11);
+        const arrayValue = [{ date }];
+        new TestComponent({
+            props: ["sampleProp"],
+            propsData: {
+                sampleProp: arrayValue
+            }
+        }).$mount();
+        const valueChangedCallback = jest.fn();
+        WidgetClass.mock.calls[0][1].integrationOptions.watchMethod(() => {
+            return arrayValue[0].date;
+        }, valueChangedCallback);
+
+        expect(valueChangedCallback).toHaveBeenCalledTimes(1);
+        expect(valueChangedCallback.mock.calls[0][0]).toBe(date);
+
+        arrayValue[0].date = new Date(2018, 11, 11);
+        Vue.nextTick(() => {
+            expect(valueChangedCallback).toHaveBeenCalledTimes(1);
+            expect(valueChangedCallback.mock.calls[0][0]).toBe(date);
+
+            arrayValue[0].date = new Date(2018, 11, 12);
+            Vue.nextTick(() => {
+                expect(valueChangedCallback).toHaveBeenCalledTimes(2);
+                expect(valueChangedCallback.mock.calls[1][0]).toEqual(new Date(2018, 11, 12));
+                done();
+            });
+        });
+    });
+
+    it("watch array prop changing (deep)", (done) => {
+        const arrayValue = [{
+            data: {
+                text: "text"
+            }
+        }];
+        new TestComponent({
+            props: ["sampleProp"],
+            propsData: {
+                sampleProp: arrayValue
+            }
+        }).$mount();
+        const valueChangedCallback = jest.fn();
+        WidgetClass.mock.calls[0][1].integrationOptions.watchMethod(() => {
+            return arrayValue[0].data;
+        }, valueChangedCallback, {
+            deep: true
+        });
+        expect(valueChangedCallback).toHaveBeenCalledTimes(1);
+        expect(valueChangedCallback.mock.calls[0][0]).toEqual({ text: "text" });
+
+        arrayValue[0].data.text = "changedText";
+
+        Vue.nextTick(() => {
+            expect(valueChangedCallback).toHaveBeenCalledTimes(2);
+            expect(valueChangedCallback.mock.calls[0][0]).toEqual({ text: "changedText" });
+            done();
+        });
+    });
+
+    it("watch array prop changing (skipImmediate)", (done) => {
+        const arrayValue = [{
+            text: "text"
+        }];
+        new TestComponent({
+            props: ["sampleProp"],
+            propsData: {
+                sampleProp: arrayValue
+            }
+        }).$mount();
+        const valueChangedCallback = jest.fn();
+        WidgetClass.mock.calls[0][1].integrationOptions.watchMethod(() => {
+            return arrayValue[0].text;
+        }, valueChangedCallback, {
+            skipImmediate: true
+        });
+        expect(valueChangedCallback).toHaveBeenCalledTimes(0);
+
+        arrayValue[0].text = "changedText";
+
+        Vue.nextTick(() => {
+            expect(valueChangedCallback).toHaveBeenCalledTimes(1);
+            expect(valueChangedCallback.mock.calls[0][0]).toEqual("changedText");
             done();
         });
     });
@@ -243,6 +379,32 @@ describe("configuration", () => {
         expect(config.nested[2].collectionItemIndex).toBe(2);
     });
 
+    it("initializes nested config predefined prop", () => {
+        const predefinedValue = {};
+        const NestedWithPredefined = buildTestComponentCtor();
+        (NestedWithPredefined as any as IConfigurationComponent).$_optionName = "nestedOption";
+        (NestedWithPredefined as any as IConfigurationComponent).$_predefinedProps = {
+            predefinedProp: predefinedValue
+        };
+
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <nested-with-predefined />` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                NestedWithPredefined
+            }
+        }).$mount();
+
+        const config = (vm.$children[0] as any as IConfigurable).$_config;
+        const initialValues = config.getInitialValues();
+        expect(initialValues).toHaveProperty("nestedOption");
+        expect(initialValues!.nestedOption).toHaveProperty("predefinedProp");
+        expect(initialValues!.nestedOption!.predefinedProp).toBe(predefinedValue);
+    });
+
     it("initializes sub-nested config", () => {
         const subNested = buildTestComponentCtor();
         (subNested as any as IConfigurationComponent).$_optionName = "subNestedOption";
@@ -370,7 +532,9 @@ describe("nested options", () => {
             }
         }).$mount();
 
-        expect(WidgetClass).toHaveBeenCalledWith(vm.$children[0].$el, {
+        expect(WidgetClass.mock.calls[0][0]).toBe(vm.$children[0].$el);
+
+        expect(skipIntegrationOptions(WidgetClass.mock.calls[0][1])).toEqual({
             nestedOption: {
                 prop1: 123
             }
@@ -393,7 +557,9 @@ describe("nested options", () => {
             }
         }).$mount();
 
-        expect(WidgetClass).toHaveBeenCalledWith(vm.$children[0].$el, {
+        expect(WidgetClass.mock.calls[0][0]).toBe(vm.$children[0].$el);
+
+        expect(skipIntegrationOptions(WidgetClass.mock.calls[0][1])).toEqual({
             nestedOption: [{
                 prop1: 123
             }]
@@ -418,7 +584,9 @@ describe("nested options", () => {
             }
         }).$mount();
 
-        expect(WidgetClass).toHaveBeenCalledWith(vm.$children[0].$el, {
+        expect(WidgetClass.mock.calls[0][0]).toBe(vm.$children[0].$el);
+
+        expect(skipIntegrationOptions(WidgetClass.mock.calls[0][1])).toEqual({
             nestedOption: {
                 prop1: 123,
                 subNestedOption: {
@@ -447,7 +615,9 @@ describe("nested options", () => {
             }
         }).$mount();
 
-        expect(WidgetClass).toHaveBeenCalledWith(vm.$children[0].$el, {
+        expect(WidgetClass.mock.calls[0][0]).toBe(vm.$children[0].$el);
+
+        expect(skipIntegrationOptions(WidgetClass.mock.calls[0][1])).toEqual({
             nestedOption: {
                 prop1: 123,
                 subNestedOption: [{
@@ -756,7 +926,7 @@ describe("events emitting", () => {
 });
 
 describe("extension component", () => {
-    const ExtensionWidgetClass = jest.fn(() => Widget);
+    const ExtensionWidgetClass = jest.fn(createWidget);
     const TestExtensionComponent = Vue.extend({
         extends: DxExtensionComponent,
         beforeCreate() {
@@ -768,6 +938,9 @@ describe("extension component", () => {
         new TestExtensionComponent().$mount();
 
         expect(ExtensionWidgetClass).toHaveBeenCalledTimes(0);
+
+        expect(Widget.beginUpdate).toHaveBeenCalledTimes(0);
+        expect(Widget.endUpdate).toHaveBeenCalledTimes(0);
     });
 
     it("destroys correctly", () => {

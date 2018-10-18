@@ -3,9 +3,9 @@ import { VNode, VueConstructor } from "vue";
 
 import * as events from "devextreme/events";
 
-import Configuration, { bindOptionWatchers } from "./configuration";
+import Configuration, { bindOptionWatchers, subscribeOnUpdates } from "./configuration";
 import { IConfigurable, IConfigurationComponent } from "./configuration-component";
-import { camelize } from "./helpers";
+import { camelize, toComparable } from "./helpers";
 
 interface IWidgetComponent extends IConfigurable {
     $_instance: any;
@@ -46,35 +46,64 @@ const BaseComponent: VueConstructor = Vue.extend({
 
     methods: {
         $_createWidget(element: any): void {
+            const config = (this as any as IWidgetComponent).$_config;
             const options: object = {
                 ...this.$_getIntegrationOptions(),
                 ...this.$options.propsData,
-                ...(this as any as IWidgetComponent).$_config.getInitialValues()
+                ...config.getInitialValues()
             };
-
             const instance = new (this as any).$_WidgetClass(element, options);
             (this as any as IWidgetComponent).$_instance = instance;
 
-            instance.on("optionChanged", this.$_handleOptionChanged.bind(this));
-            bindOptionWatchers((this as any as IWidgetComponent).$_config, this);
+            instance.on("optionChanged", (args) => config.onOptionChanged(args));
+            subscribeOnUpdates(config, this);
+            bindOptionWatchers(config, this);
             this.$_createEmitters(instance);
         },
+
         $_getIntegrationOptions(): object {
-            if (!this.$scopedSlots || !Object.keys(this.$scopedSlots).length) {
-                return {};
+            const result: Record<string, any> = {
+                integrationOptions:  {
+                    watchMethod: this.$_getWatchMethod(),
+                },
+                ...this.$_getExtraIntegrationOptions(),
+            };
+
+            if (this.$scopedSlots && Object.keys(this.$scopedSlots).length) {
+                result.integrationOptions.templates = {};
+                Object.keys(this.$scopedSlots).forEach((name: string) => {
+                    result.integrationOptions.templates[name] = this.$_fillTemplate(this.$scopedSlots[name], name);
+                });
             }
 
-            const templates: Record<string, any> = {};
+            return result;
+        },
 
-            Object.keys(this.$scopedSlots).forEach((name: string) => {
-                templates[name] = this.$_fillTemplate(this.$scopedSlots[name], name);
-            });
-
-            return {
-                integrationOptions: {
-                    templates
+        $_getWatchMethod(): (
+            valueGetter: () => any,
+            valueChangeCallback: (value: any) => void,
+            options: { deep: boolean, skipImmediate: boolean }
+        ) => any {
+            return (valueGetter, valueChangeCallback, options) => {
+                options = options || {};
+                if (!options.skipImmediate) {
+                    valueChangeCallback(valueGetter());
                 }
+
+                return this.$watch(() => {
+                    return valueGetter();
+                }, (newValue, oldValue) => {
+                    if (toComparable(oldValue) !== toComparable(newValue) || options.deep) {
+                        valueChangeCallback(newValue);
+                    }
+                }, {
+                    deep: options.deep
+                });
             };
+        },
+
+        $_getExtraIntegrationOptions(): object {
+            return {};
         },
 
         $_fillTemplate(template: any, name: string): object {
@@ -99,10 +128,6 @@ const BaseComponent: VueConstructor = Vue.extend({
             };
         },
 
-        $_handleOptionChanged(args: any): void {
-            this.$emit("update:" + args.name, args.value);
-        },
-
         $_createEmitters(instance: any): void {
             Object.keys(this.$listeners).forEach((listenerName: string) => {
                 const eventName = camelize(listenerName);
@@ -115,8 +140,19 @@ const BaseComponent: VueConstructor = Vue.extend({
 });
 
 const DxComponent: VueConstructor = BaseComponent.extend({
+    methods: {
+        $_getExtraIntegrationOptions(): object {
+            return {
+                onInitializing() {
+                    (this as any).beginUpdate();
+                }
+            };
+        }
+    },
+
     mounted(): void {
         (this as any).$_createWidget(this.$el);
+        (this as any as IWidgetComponent).$_instance.endUpdate();
         this.$children.forEach((child: any) => {
             if (child.$_isExtension) {
                 child.attachTo(this.$el);
@@ -143,7 +179,11 @@ function pullConfigurations(children: VNode[], nodes: VNode[], ownerConfig: Conf
             node.componentOptions &&
             (node.componentOptions.Ctor as any as IConfigurationComponent).$_optionName
         ) {
-            const initialValues = { ...node.componentOptions.propsData };
+            const initialValues = {
+                ...(node.componentOptions.Ctor as any as IConfigurationComponent).$_predefinedProps,
+                ...node.componentOptions.propsData
+            };
+
             const config = ownerConfig.createNested(
                 (node.componentOptions.Ctor as any as IConfigurationComponent).$_optionName,
                 initialValues,

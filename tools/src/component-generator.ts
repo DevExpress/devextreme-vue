@@ -1,5 +1,5 @@
 import { compareStrings } from "./helpers";
-import createTempate from "./template";
+import { createTempate, L1, L2, L3, L4, TAB2 } from "./template";
 
 interface IImport {
     name: string;
@@ -21,6 +21,7 @@ interface INestedComponent {
     optionName: string;
     props: IProp[];
     isCollectionItem: boolean;
+    predefinedProps?: Record<string, any>;
 }
 
 interface INestedComponentModel {
@@ -28,6 +29,10 @@ interface INestedComponentModel {
     optionName: string;
     renderedProps: string;
     isCollectionItem: boolean;
+    predefinedProps: Array<{
+        name: string;
+        value: any;
+    }>;
 }
 
 interface IProp {
@@ -80,22 +85,27 @@ function generate(component: IComponent): string {
 }
 
 function createNestedComponentModel(component: INestedComponent): INestedComponentModel {
+    let predefinedProps;
+
+    if (component.predefinedProps) {
+        predefinedProps = Object.keys(component.predefinedProps).map((name) => ({
+            name,
+            value: component.predefinedProps[name]
+        }));
+    }
+
     return {
         name: component.name,
         optionName: component.optionName,
         renderedProps: component.props
             ? renderProps(component.props)
             : undefined,
-        isCollectionItem: component.isCollectionItem
+        isCollectionItem: component.isCollectionItem,
+        predefinedProps
     };
 }
 
 // tslint:disable:max-line-length
-
-const L1: string = `\n` + tab(1);
-const L2: string = `\n` + tab(2);
-const L3: string = `\n` + tab(3);
-const L4: string = `\n` + tab(4);
 
 const renderComponent: (model: {
     component: string;
@@ -111,13 +121,26 @@ const renderComponent: (model: {
 }) => string = createTempate(
 `import * as VueType from "vue";\n` +
 `const Vue = VueType.default || VueType;\n` +
-`import <#= it.widgetImport.name #> from "devextreme/<#= it.widgetImport.path #>";\n` +
+`import <#= it.widgetImport.name #><#? it.props #>, { IOptions }<#?#> from "devextreme/<#= it.widgetImport.path #>";\n` +
 
 `<#~ it.namedImports :namedImport #>` +
 `import { <#= namedImport.name #> } from "<#= namedImport.path #>";\n` +
 `<#~#>` + `\n` +
 
-`const <#= it.component #>: VueConstructor = Vue.extend({` +
+`<#? it.props #>` +
+    `type AccessibleOptions = Pick<IOptions,` +
+    `<#~ it.props: prop #>` +
+        L1 + `"<#= prop.name #>" |` +
+    `<#~#>` +
+    `\b\b` + `\n>;\n` +
+    `\n` +
+`<#?#>` +
+
+`interface <#= it.component #> extends VueConstructor<#? it.props #>, AccessibleOptions<#?#> {` +
+    L1 + `readonly instance?: <#= it.widgetImport.name #>;` + `\n` +
+`}` + `\n` +
+
+`const <#= it.component #>: <#= it.component #> = Vue.extend({` +
 L1 + `extends: <#= it.baseComponent #>,` +
 
 `<#? it.props #>` +
@@ -156,6 +179,14 @@ L1 + `extends: <#= it.baseComponent #>,` +
             `(<#= nested.name #> as any).$_isCollectionItem = true;\n` +
         `<#?#>` +
 
+        `<#? nested.predefinedProps #>` +
+            `(<#= nested.name #> as any).$_predefinedProps = {` +
+            `<#~ nested.predefinedProps : prop #>` +
+                L1 + `<#= prop.name #>: "<#= prop.value #>",` +
+            `<#~#>` + `\b` + `\n` +
+            `};\n` +
+        `<#?#>` +
+
     `<#~#>` +
 `<#?#>` +
 `\n` +
@@ -164,10 +195,10 @@ L1 + `extends: <#= it.baseComponent #>,` +
     `export default <#= it.defaultExport #>;\n` +
 `<#?#>` +
 
-`export {\n` +
+`export {` +
     `<#~ it.namedExports :namedExport #>` +
-    tab(1) + `<#= namedExport #>,\n` +
-    `<#~#>` + `\b\b` + `\n` +
+        L1 + `<#= namedExport #>,` +
+    `<#~#>` + `\b` + `\n` +
 `};\n`
 );
 
@@ -188,7 +219,7 @@ function renderProps(props: IProp[]): string {
 const renderPropsTemplate: (props: IProp[]) => string = createTempate(
 `<#~ it :prop #>` +
 
-    tab(2) +
+    TAB2 +
 
     `<#? prop.types && prop.types.length > 0 && !prop.acceptableValues #>` +
         `<#= prop.name #>: ` +
@@ -255,10 +286,6 @@ const renderPropsTemplate: (props: IProp[]) => string = createTempate(
 
 `<#~#>` + `\b\b`
 );
-
-function tab(i: number): string {
-    return Array(i * 2 + 1).join(" ");
-}
 
 export default generate;
 export { IComponent, INestedComponent, IProp, renderProps };

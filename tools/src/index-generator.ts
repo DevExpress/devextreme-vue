@@ -1,4 +1,4 @@
-import createTempate from "./template";
+import { createTempate } from "./template";
 
 interface IReExport {
   name: string;
