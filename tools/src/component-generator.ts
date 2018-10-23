@@ -43,11 +43,12 @@ interface IProp {
     isArray?: boolean;
 }
 
-function generateReExport(path: string): string {
-    return renderReExport({ path });
+function generateReExport(path: string, fileName: string): string {
+    return renderReExport({ path, fileName });
 }
 
-const renderReExport: (model: {path: string}) => string = createTempate(
+const renderReExport: (model: {path: string, fileName: string}) => string = createTempate(
+`/** @deprecated Use 'devextreme-vue/<#= it.fileName #>' file instead */\n` +
 `export * from "<#= it.path #>";\n` +
 `export { default } from "<#= it.path #>";\n`
 );

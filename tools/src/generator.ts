@@ -1,5 +1,11 @@
 import { writeFileSync as writeFile } from "fs";
-import { dirname as getDirName, join as joinPaths, relative as getRelativePath, sep as pathSeparator } from "path";
+import {
+  dirname as getDirName,
+  join as joinPaths,
+  normalize as normalizePath,
+  relative as getRelativePath,
+  sep as pathSeparator
+} from "path";
 
 import { IComplexProp, ICustomType, IModel, IProp as IOption, ITypeDescr, IWidget } from "../integration-data-model";
 import generateComponent, { generateReExport, IComponent, INestedComponent, IProp } from "./component-generator";
@@ -36,10 +42,13 @@ function generate(
       name: widgetFile.component.name,
       path: "./" + removeExtension(getRelativePath(indexFileDir, widgetFilePath)).replace(pathSeparator, "/")
     });
+
     writeFile(
       joinPaths(out.oldComponentsDir, widgetFile.fileName),
       generateReExport(
-        "./" + removeExtension(getRelativePath(out.oldComponentsDir, widgetFilePath)).replace(pathSeparator, "/")
+        normalizePath("./" + removeExtension(getRelativePath(out.oldComponentsDir, widgetFilePath)))
+          .replace(pathSeparator, "/"),
+        removeExtension(widgetFile.fileName)
       )
     );
   });
