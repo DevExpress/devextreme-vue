@@ -24,7 +24,7 @@
 import ExampleBlock from "./example-block";
 
 import { DxButton, DxTextBox, DxValidationGroup, DxValidationSummary } from "../../src";
-import { DxValidator, DxEmailRule, DxRequiredRule} from "../../src/ui/validator";
+import { DxValidator, DxEmailRule, DxRequiredRule} from "../../src/validator";
 
 export default {
   components: {

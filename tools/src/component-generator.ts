@@ -43,6 +43,15 @@ interface IProp {
     isArray?: boolean;
 }
 
+function generateReExport(path: string): string {
+    return renderReExport({ path });
+}
+
+const renderReExport: (model: {path: string}) => string = createTempate(
+`export * from "<#= it.path #>";\n` +
+`export { default } from "<#= it.path #>";\n`
+);
+
 function generate(component: IComponent): string {
     const nestedComponents = component.nestedComponents
         ? component.nestedComponents.map(createNestedComponentModel)
@@ -288,4 +297,4 @@ const renderPropsTemplate: (props: IProp[]) => string = createTempate(
 );
 
 export default generate;
-export { IComponent, INestedComponent, IProp, renderProps };
+export { IComponent, INestedComponent, IProp, renderProps, generateReExport };
