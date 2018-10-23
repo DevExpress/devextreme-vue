@@ -23,7 +23,7 @@ This project allows you to use [DevExtreme Widgets](http://js.devexpress.com/Dem
     * [Basic usage](#configuration-components-basic)
     * [Collection Options](#configuration-components-collection)
   * [Getting a Widget Instance](#widget-instance)
-* [Type Checks](#type-checks)
+* [Type Checks and TypeScript Support](#type-checks)
 * [DevExtreme Data Layer and Utils](#data-layer-and-utils)
 * [DevExtreme Validation](#validation)
 * [License](#license)
@@ -296,8 +296,12 @@ export default {
 </script>
 ```
 
-## <a name="type-checks"></a>Type Checks ##
+## <a name="type-checks"></a>Type Checks and TypeScript Support ##
 You should specify proper values for the components' properties because DevExtreme Vue components use [Prop Validation and Type Checks](https://vuejs.org/v2/guide/components-props.html#Prop-Validation). Otherwise, Vue produces a console warning (if you are using the development build).
+
+We also provide TypeScript declarations for DevExtreme Components. Strict typing allows you to catch many bugs and improve your workflow by adding features like auto-completion and automated refactoring.
+
+[This](https://github.com/DevExpress/devextreme-examples/tree/18_1/webpack-vue-typescript) example demonstrates how to use DevExtreme Vue components with TypeScript.
 
 ## <a name="data-layer-and-utils"></a>DevExtreme Data Layer and Utils ##
 The DevExtreme includes a [Data Layer](https://js.devexpress.com/Documentation/Guide/Data_Layer/Data_Layer/) and [Utils](https://js.devexpress.com/Documentation/ApiReference/Common/utils/) that can be helpful in different scenarios.
