@@ -299,7 +299,7 @@ You should specify proper values for the components' properties because DevExtre
 
 We also provide TypeScript declarations for DevExtreme Components. Strict typing allows you to catch many bugs and improve your workflow by adding features like auto-completion and automated refactoring.
 
-[Here](https://github.com/DevExpress/devextreme-examples/tree/18_1/webpack-vue-typescript) you can find a simple example of using DevExtreme Vue components with TypeScript.
+[This](https://github.com/DevExpress/devextreme-examples/tree/18_1/webpack-vue-typescript) example demonstrates how to use DevExtreme Vue components with TypeScript.
 
 ## <a name="data-layer-and-utils"></a>DevExtreme Data Layer and Utils ##
 The DevExtreme includes a [Data Layer](https://js.devexpress.com/Documentation/Guide/Data_Layer/Data_Layer/) and [Utils](https://js.devexpress.com/Documentation/ApiReference/Common/utils/) that can be helpful in different scenarios.
