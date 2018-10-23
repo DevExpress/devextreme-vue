@@ -39,7 +39,6 @@
     "devextreme": "^18.1.7-pre-18291",
     "dot": "^1.1.2",
     "gulp": "^3.9.1",
-    "gulp-clean": "^0.4.0",
     "gulp-header": "^2.0.5",
     "gulp-shell": "^0.6.5",
     "gulp-tslint": "^8.1.3",
