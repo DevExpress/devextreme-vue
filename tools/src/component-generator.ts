@@ -43,6 +43,16 @@ interface IProp {
     isArray?: boolean;
 }
 
+function generateReExport(path: string, fileName: string): string {
+    return renderReExport({ path, fileName });
+}
+
+const renderReExport: (model: {path: string, fileName: string}) => string = createTempate(
+`/** @deprecated Use 'devextreme-vue/<#= it.fileName #>' file instead */\n` +
+`export * from "<#= it.path #>";\n` +
+`export { default } from "<#= it.path #>";\n`
+);
+
 function generate(component: IComponent): string {
     const nestedComponents = component.nestedComponents
         ? component.nestedComponents.map(createNestedComponentModel)
@@ -288,4 +298,4 @@ const renderPropsTemplate: (props: IProp[]) => string = createTempate(
 );
 
 export default generate;
-export { IComponent, INestedComponent, IProp, renderProps };
+export { IComponent, INestedComponent, IProp, renderProps, generateReExport };

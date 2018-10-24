@@ -18,9 +18,11 @@ module.exports = {
     readme: 'README.md'
   },
   metadataPath: './tools/integration-data.json',
-  componentFolder: './src/ui',
+  generatedComponentsDir: './src',
+  oldComponentsDir: './src/ui',
+  coreComponentsDir: './src/core',
   indexFileName: './src/index.ts',
-  baseComponent: '../core/component',
-  configComponent: '../core/configuration-component',
-  extensionComponent: '../core/extension-component'
+  baseComponent: './core/component',
+  configComponent: './core/configuration-component',
+  extensionComponent: './core/extension-component'
 };
