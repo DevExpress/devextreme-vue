@@ -1,6 +1,7 @@
 .vscode/launch.json
 node_modules/
 npm/
-src/ui/
+src/*
+!src/core
 src/index.ts
 tools/bin/

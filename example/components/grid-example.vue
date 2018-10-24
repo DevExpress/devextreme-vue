@@ -91,7 +91,7 @@ import {
   DxPager,
   DxPaging,
   DxSelection
-} from "../../src/ui/data-grid";
+} from "../../src/data-grid";
 
 import { sales } from "../data";
 
