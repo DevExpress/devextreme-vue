@@ -1,9 +1,9 @@
 const mkdir = require('mkdirp');
 const fs = require('fs');
 const path = require('path');
+const del = require('del');
 
 const gulp = require('gulp');
-const clean = require('gulp-clean');
 const shell = require('gulp-shell');
 const header = require('gulp-header');
 const ts = require('gulp-typescript');
@@ -17,7 +17,7 @@ const
   CLEAN = 'clean',
 
   OUTPUTDIR_CLEAN = 'output-dir.clean',
-  OUTPUTDIR_CREATE = 'output-dir.create',
+  OLD_OUTPUTDIR_CREATE = 'output-dir.create',
   GEN_COMPILE = 'generator.compile',
   GEN_CLEAN = 'generator.clean',
   GEN_RUN = 'generator.run',
@@ -27,7 +27,7 @@ const
   NPM_CLEAN = 'npm.clean',
   NPM_PACKAGE = 'npm.package',
   NPM_LICENSE = 'npm.license',
-  NPM_LICENSE_HEADERS = 'npm.license-headers',
+  NPM_BUILD_WITH_HEADERS = 'npm.license-headers',
   NPM_README = 'npm.readme',
   NPM_BUILD = 'npm.build',
   NPM_PACK = 'npm.pack';
@@ -35,26 +35,24 @@ const
 gulp.task(GENERATE, (done) =>
   runSequence(
     CLEAN,
-    [OUTPUTDIR_CREATE, GEN_COMPILE],
+    [OLD_OUTPUTDIR_CREATE, GEN_COMPILE],
     GEN_RUN,
     done
   )
 );
 
-gulp.task(CLEAN, [OUTPUTDIR_CLEAN, GEN_CLEAN]);
+gulp.task(CLEAN, [OUTPUTDIR_CLEAN, GEN_CLEAN, NPM_CLEAN]);
 
-gulp.task(OUTPUTDIR_CLEAN, () =>
-  gulp.src([config.componentFolder, config.indexFileName], { read: false })
-    .pipe(clean())
+gulp.task(OUTPUTDIR_CLEAN, (c) =>
+  del([`${config.generatedComponentsDir}\\*`, `!${config.coreComponentsDir}`], c)
 );
 
-gulp.task(GEN_CLEAN, () =>
-  gulp.src(config.generator.binDir, { read: false })
-    .pipe(clean())
+gulp.task(GEN_CLEAN, (c) =>
+  del([config.generator.binDir], c)
 );
 
-gulp.task(OUTPUTDIR_CREATE, (done) =>
-  mkdir(config.componentFolder, {}, done)
+gulp.task(OLD_OUTPUTDIR_CREATE, (done) =>
+  mkdir(config.oldComponentsDir, {}, done)
 );
 
 gulp.task(GEN_COMPILE, [GEN_CLEAN], () =>
@@ -74,7 +72,8 @@ gulp.task(GEN_RUN, (done) => {
     config.configComponent,
     config.extensionComponent,
     {
-      componentsDir: config.componentFolder,
+      componentsDir: config.generatedComponentsDir,
+      oldComponentsDir: config.oldComponentsDir,
       indexFileName: config.indexFileName
     }
   );
@@ -83,9 +82,8 @@ gulp.task(GEN_RUN, (done) => {
 });
 
 
-gulp.task(NPM_CLEAN, () =>
-  gulp.src(config.npm.dist, { read: false })
-    .pipe(clean())
+gulp.task(NPM_CLEAN, (c) =>
+  del(config.npm.dist, c)
 );
 
 gulp.task(NPM_PACKAGE, [NPM_CLEAN], () =>
@@ -112,7 +110,7 @@ gulp.task(NPM_BUILD, [NPM_LICENSE, NPM_PACKAGE, NPM_README, GENERATE], () => {
     .pipe(gulp.dest(config.npm.dist))
 });
 
-gulp.task(NPM_LICENSE_HEADERS, [NPM_BUILD], function() {
+gulp.task(NPM_BUILD_WITH_HEADERS, [NPM_BUILD], function() {
   const pkg = require('./package.json'),
       now = new Date(),
       data = {
@@ -142,7 +140,7 @@ gulp.task(NPM_LICENSE_HEADERS, [NPM_BUILD], function() {
       .pipe(gulp.dest(config.npm.dist));
 });
 
-gulp.task(NPM_PACK, [NPM_LICENSE_HEADERS], shell.task(['npm pack'], { cwd: config.npm.dist }));
+gulp.task(NPM_PACK, [NPM_BUILD_WITH_HEADERS], shell.task(['npm pack'], { cwd: config.npm.dist }));
 
 gulp.task(LINT, () => {
   return gulp.src([config.src, config.generator.src])
