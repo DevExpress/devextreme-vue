@@ -1,6 +1,6 @@
 {
   "name": "devextreme-vue",
-  "version": "18.1.6-alpha.9",
+  "version": "18.1.7-alpha.10",
   "description": "DevExtreme Vue UI and Visualization Components",
   "repository": {
     "type": "git",
@@ -27,7 +27,7 @@
   "author": "Developer Express Inc.",
   "license": "MIT",
   "peerDependencies": {
-    "devextreme": "^18.1.6",
+    "devextreme": "^18.1.7-pre-18291",
     "vue": "^2.5.16"
   },
   "devDependencies": {
