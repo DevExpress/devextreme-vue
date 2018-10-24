@@ -19,16 +19,18 @@ This project allows you to use [DevExtreme Widgets](http://js.devexpress.com/Dem
   * [Custom Templates](#custom-templates)
   * [Components with Transcluded Content](#components-with-transcluded-content)
   * [Event Handling](#event-handling)
+  * [Configuration Components](#configuration-components)
+    * [Basic usage](#configuration-components-basic)
+    * [Collection Options](#configuration-components-collection)
   * [Getting a Widget Instance](#widget-instance)
-* [Type Checks](#type-checks)
+* [Type Checks and TypeScript Support](#type-checks)
 * [DevExtreme Data Layer and Utils](#data-layer-and-utils)
 * [DevExtreme Validation](#validation)
 * [License](#license)
 * [Support & Feedback](#support-feedback)
 ## <a name="getting-started"></a>Getting Started ##
-You can try this [live example](https://codesandbox.io/s/github/lukyanovas/devextreme-vue-example) (no need to install anything).
+You can try this [live example](https://codesandbox.io/s/github/lukyanovas/devextreme-vue-example) or configure a local development environment as described below.
 
-See the sections below if you prefer using a local development environment.
 ### <a name="prerequisites"></a>Prerequisites ###
 [Node.js and npm](https://docs.npmjs.com/getting-started/installing-node) are required
 
@@ -41,7 +43,7 @@ npm install --save devextreme@18.2 devextreme-vue@18.2-unstable
 ```
 #### <a name="additional-configuration"></a>Additional Configuration ####
 
-The further configuration steps depend on which build tool, bundler or module loader you are using. Please choose the one you need:
+The further configuration steps depend on which build tool, bundler or module loader you are using:
 
 * [Configuring Webpack](https://github.com/DevExpress/devextreme-vue/blob/master/docs/using-webpack.md)
 * [Configuring Vue CLI](https://github.com/DevExpress/devextreme-vue/blob/master/docs/using-vue-cli.md)
@@ -66,7 +68,7 @@ See the [Predefined Themes](https://js.devexpress.com/Documentation/Guide/Themes
 
 ### <a name="use-components"></a>Use DevExtreme Components  ###
 
-You can use DevExtreme components in a [single file component](https://vuejs.org/v2/guide/single-file-components.html)...
+You can use DevExtreme components in a [single file component](https://vuejs.org/v2/guide/single-file-components.html),
 
 ```html
 <template>
@@ -89,7 +91,7 @@ export default {
 </script>
 ```
 
-... in a [jsx](https://vuejs.org/v2/guide/render-function.html#JSX) render function
+... in a [jsx](https://vuejs.org/v2/guide/render-function.html#JSX) render function,
 
 ```jsx
 import Vue from 'vue';
@@ -112,7 +114,7 @@ new Vue({
 
 ```
 
-... or directly in a vue template
+... or directly in a vue template.
 
 ```js
 new Vue({
@@ -130,11 +132,12 @@ new Vue({
 
 ## <a name="api-reference"></a>API Reference ##
 
-DevExtreme Vue components are similar to the [DevExtreme JavaScript API](http://js.devexpress.com/Documentation/ApiReference/) but use Vue syntax for specifying widget options, subscribing to events and custom template declaration.
+The complete list of components and their APIs are described in the [DevExtreme API Reference](http://js.devexpress.com/Documentation/ApiReference/).
 
 ## <a name="component-configuration"></a>Component Configuration ##
 
 ###  <a name="component-option"></a>Set Component Option ### 
+
 - A constant string value (for example, the Button [text](http://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxButton/Configuration/#text)):
 
  ```html
@@ -172,7 +175,7 @@ The DevExtreme Vue editors also support [`v-model`](https://vuejs.org/v2/guide/f
 ### <a name="custom-templates"></a>Custom Templates ###
 You can customize widget elements' appearance via the corresponding template properties. 
 
-To specify a DevExtreme Vue Component template, use a [named slot](https://vuejs.org/v2/guide/components-slots.html#Named-Slots) to specify a template's markup. You also should specify a [slot scope](https://vuejs.org/v2/guide/components-slots.html#Scoped-Slots) to access the template element's data.
+To specify a DevExtreme Vue Component template's markup, use a [named slot](https://vuejs.org/v2/guide/components-slots.html#Named-Slots). You should also specify a [slot scope](https://vuejs.org/v2/guide/components-slots.html#Scoped-Slots) to access the template element's data.
 
 For instance, you can specify the itemTemplate:
 
@@ -202,7 +205,7 @@ new Vue({
 
 ```
 
-`item` is the default template name of the dxList widget's `itemTemplate` option. You can specify a custom name for the `itemTemplate` option and for your `slot`:
+`item` is the default name of the dxList widget's item template. You can specify a custom name for the template and for your `slot`:
 
 ```html
 <div id="app">
@@ -216,11 +219,13 @@ new Vue({
 
 ### <a name="components-with-transcluded-content"></a>Components with Transcluded Content ##
 
-In addition to using templates, you can put the following widgets' content directly into the markup:
-[Resizable](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxResizable/),
-[ScrollView](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxScrollView/),
-[ValidationGroup](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxValidationGroup/).
-For instance, you can specify the [ScrollView](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxScrollView/) widget's content as follows:
+The following widgets support putting a content directly to the widget's container:
+
+- [Resizable](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxResizable/)  
+- [ScrollView](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxScrollView/)  
+- [ValidationGroup](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxValidationGroup/)  
+
+For example, you can specify the [ScrollView](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxScrollView/) widget's content as follows:
 
 ```html
 <dx-scroll-view>
@@ -229,7 +234,7 @@ For instance, you can specify the [ScrollView](https://js.devexpress.com/Documen
 ```
 
 ### <a name="event-handling"></a>Event Handling ###
-You can subscribe to DevExtreme Component Events using the Vue's [`v-on` directive](https://vuejs.org/v2/guide/events.html) (or `@` shorthand)
+You can subscribe to DevExtreme Component events using the Vue's [`v-on` directive](https://vuejs.org/v2/guide/events.html) (or `@` shorthand)
 
 ```html
 <dx-text-box v-model="text" @focusIn="handleFocusIn'" />
@@ -248,10 +253,7 @@ data: function() {
 You can find the full list of component events in each DevExtreme widget API Reference's Events section (for example, [TextBox events](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxTextBox/Events/)).
 
 ### <a name="widget-instance"></a>Getting a Widget Instance ###
-A widget instance is used when calling a widget method. You can get it in the following way:
-1. Assign a unique key to the component's [`ref` attribute](https://vuejs.org/v2/api/#ref).
-1. Use this key to retrieve the component from the [`$refs` property](https://vuejs.org/v2/api/#vm-refs).
-1. Use the component's `instance` property to get the widget instance.
+A widget instance is required to call methods. Pass a component key to the [`$refs` property](https://vuejs.org/v2/api/#vm-refs) property to get a component whose `instance` field stores the widget instance. The component's key is defined in the component's [`ref` attribute](https://vuejs.org/v2/api/#ref).
 
 ```html
 <template>
@@ -294,8 +296,12 @@ export default {
 </script>
 ```
 
-## <a name="type-checks"></a>Type Checks ##
+## <a name="type-checks"></a>Type Checks and TypeScript Support ##
 You should specify proper values for the components' properties because DevExtreme Vue components use [Prop Validation and Type Checks](https://vuejs.org/v2/guide/components-props.html#Prop-Validation). Otherwise, Vue produces a console warning (if you are using the development build).
+
+We also provide TypeScript declarations for DevExtreme Components. Strict typing allows you to catch many bugs and improve your workflow by adding features like auto-completion and automated refactoring.
+
+[This](https://github.com/DevExpress/devextreme-examples/tree/18_1/webpack-vue-typescript) example demonstrates how to use DevExtreme Vue components with TypeScript.
 
 ## <a name="data-layer-and-utils"></a>DevExtreme Data Layer and Utils ##
 The DevExtreme includes a [Data Layer](https://js.devexpress.com/Documentation/Guide/Data_Layer/Data_Layer/) and [Utils](https://js.devexpress.com/Documentation/ApiReference/Common/utils/) that can be helpful in different scenarios.
@@ -349,6 +355,93 @@ export default {
   }
 };
 ```
+
+## <a name="configuration-components"></a>Configuration Components ##
+
+DevExtreme Vue Components provide configuration components for the underlying widget's complex nested options.
+
+Use a named import to get a configuration component.
+```js
+import DxChart, { DxTooltip } from "devextreme-vue/ui/chart"; 
+```
+You can use all data-bind features (such as `.sync` modifier) in your nested configuration components.
+
+### <a name="configuration-components-basic"></a>Basic Usage ###
+The following example demonstrates how to configure the dxChart widget's [tooltip](https://js.devexpress.com/Documentation/ApiReference/Data_Visualization_Widgets/dxChart/Configuration/tooltip/) option:
+
+```html
+<dx-chart
+  :data-source="dataSource"
+  title="Pizza Shop Complaints">
+  <dx-tooltip :enabled="showTooltip"/>
+</dx-chart>
+
+<dx-button text="Toggle tooltip" @click="toggleTooltip"/>
+```
+
+```js
+import DxChart, { DxTooltip } from "devextreme-vue/ui/chart"; 
+import DxButton from "devextreme-vue/ui/button"; 
+
+import { complaintsData } from './data.js';
+
+export default {
+  components: {
+    DxChart,
+    DxTooltip,
+    DxButton
+  },
+  data() {
+    return {
+      dataSource: complaintsData,
+      showTooltip: false
+    };
+  },
+  methods: {
+    toggleTooltip() {
+      this.showTooltip = !this.showTooltip;
+    }
+  }
+};
+```
+
+### <a name="configuration-components-collection"></a>Collection Options ###
+You can also use configuration components for complex collection options.
+The following example demonstrates how to configure the dxDataGrid widget's [columns](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/columns/) option:
+
+```html
+<dx-data-grid :data-source="dataSource">
+  <dx-column data-field="firstName"/>
+  <dx-column data-field="lastName" caption="Last Name" :visible.sync="showLastName"/>
+</dx-data-grid>
+
+<dx-check-box text="Show the 'Last Name' column" v-model="showLastName"/>
+```
+
+```js
+import DxDataGrid, { DxColumn } from "devextreme-vue/ui/data-grid"; 
+import DxCheckBox from "devextreme-vue/ui/check-box"; 
+
+import { data } from './data.js';
+
+export default {
+  components: {
+    DxDataGrid,
+    DxColumn,
+    DxCheckBox
+  },
+  data() {
+    return {
+      dataSource: data,
+      showLastName: true
+    };
+  }
+};
+```
+
+Note that configuration components are not provided for options that accept a type that depends on another option's value. For example,
+the DataGrid's [editorOptions](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/columns/#editorOptions), Form's [editorOptions](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxForm/Item_Types/SimpleItem/#editorOptions), Toolbar's [widget](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxToolbar/Default_Item_Template/#options) options.
+
 ## <a name="license"></a>License ##
 
 **DevExtreme Vue components are released as an MIT-licensed (free and open-source) DevExtreme add-on.**

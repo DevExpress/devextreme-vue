@@ -75,6 +75,11 @@ describe("component rendering", () => {
         expect(Widget.endUpdate).toHaveBeenCalledTimes(1);
     });
 
+    it("component has disabled inheritAttrs", () => {
+        const component = new TestComponent();
+        expect(component.$options.inheritAttrs).toBe(false);
+    });
+
     it("creates nested component", () => {
         new Vue({
             template: "<test-component><test-component/></test-component>",
