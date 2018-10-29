@@ -344,7 +344,7 @@ describe("configuration", () => {
         expect(config.nested[0].collectionItemIndex).toBe(0);
     });
 
-    it("initializes nested config (several collectionItems)", () => {
+    it("initializes nested config (multiple collectionItems)", () => {
         const nestedCollectionItem = buildTestComponentCtor();
         (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
         (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
@@ -472,7 +472,7 @@ describe("configuration", () => {
         expect(nestedConfig.nested[0].collectionItemIndex).toBe(0);
     });
 
-    it("initializes sub-nested config (collectionItem)", () => {
+    it("initializes sub-nested config (multiple collectionItems)", () => {
         const nestedCollectionItem = buildTestComponentCtor();
         (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "subNestedOption";
         (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
