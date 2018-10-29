@@ -518,6 +518,31 @@ describe("configuration", () => {
         expect(nestedConfig.nested[2].collectionItemIndex).toBe(2);
     });
 
+    it("doesn't add duplicate nested config on render", (cb) => {
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <nested :prop1="123" />` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                Nested
+            }
+        }).$mount();
+        const config = (vm.$children[0] as any as IConfigurable).$_config;
+
+        vm.$forceUpdate();
+
+        Vue.nextTick(() => {
+            try {
+                expect(config.nested).toHaveLength(1);
+            } catch (e) {
+                cb.fail(e);
+            }
+            cb();
+        });
+    });
+
 });
 
 describe("nested options", () => {
