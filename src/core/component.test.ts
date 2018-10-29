@@ -344,7 +344,7 @@ describe("configuration", () => {
         expect(config.nested[0].collectionItemIndex).toBe(0);
     });
 
-    it("initializes nested config (several collectionItems)", () => {
+    it("initializes nested config (multiple collectionItems)", () => {
         const nestedCollectionItem = buildTestComponentCtor();
         (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
         (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
@@ -472,7 +472,7 @@ describe("configuration", () => {
         expect(nestedConfig.nested[0].collectionItemIndex).toBe(0);
     });
 
-    it("initializes sub-nested config (collectionItem)", () => {
+    it("initializes sub-nested config (multiple collectionItems)", () => {
         const nestedCollectionItem = buildTestComponentCtor();
         (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "subNestedOption";
         (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
@@ -516,6 +516,31 @@ describe("configuration", () => {
         expect(nestedConfig.nested[2].initialValues).toEqual({ prop2: "def" });
         expect(nestedConfig.nested[2].isCollectionItem).toBeTruthy();
         expect(nestedConfig.nested[2].collectionItemIndex).toBe(2);
+    });
+
+    it("doesn't add duplicate nested config on render", (cb) => {
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <nested :prop1="123" />` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                Nested
+            }
+        }).$mount();
+        const config = (vm.$children[0] as any as IConfigurable).$_config;
+
+        vm.$forceUpdate();
+
+        Vue.nextTick(() => {
+            try {
+                expect(config.nested).toHaveLength(1);
+            } catch (e) {
+                cb.fail(e);
+            }
+            cb();
+        });
     });
 
 });
