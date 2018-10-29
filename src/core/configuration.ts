@@ -4,12 +4,12 @@ type UpdateFunc = (name: string, value: any) => void;
 
 class Configuration {
 
-    private readonly _nestedConfigurations: Configuration[];
     private readonly _name: string | null;
     private readonly _isCollectionItem: boolean;
     private readonly _collectionItemIndex: number | undefined;
     private readonly _initialValues: Record<string, any>;
     private readonly _updateFunc: UpdateFunc;
+    private _nestedConfigurations: Configuration[];
     private _optionChangedFunc: any;
 
     private _options: string[];
@@ -78,6 +78,10 @@ class Configuration {
         this._nestedConfigurations.forEach((nestedConfig) => {
             nestedConfig.onOptionChanged(args);
         });
+    }
+
+    public cleanNested() {
+        this._nestedConfigurations = [];
     }
 
     public createNested(

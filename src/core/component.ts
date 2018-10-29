@@ -167,12 +167,13 @@ function extractChildren(children: VNode[], config: Configuration): VNode[] {
     if (!children || children.length === 0) { return children; }
 
     const nodes: VNode[] = [];
-    pullConfigurations(children, nodes, config);
+    config.cleanNested();
+    pullConfigComponents(children, nodes, config);
 
     return nodes;
 }
 
-function pullConfigurations(children: VNode[], nodes: VNode[], ownerConfig: Configuration): void {
+function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Configuration): void {
 
     children.forEach((node) => {
         nodes.push(node);
@@ -195,7 +196,7 @@ function pullConfigurations(children: VNode[], nodes: VNode[], ownerConfig: Conf
             (node.componentOptions as any as IConfigurable).$_config = config;
 
             if (node.componentOptions.children) {
-                pullConfigurations(node.componentOptions.children as VNode[], nodes, config);
+                pullConfigComponents(node.componentOptions.children as VNode[], nodes, config);
             }
         }
     });
