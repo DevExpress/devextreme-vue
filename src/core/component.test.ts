@@ -80,6 +80,17 @@ describe("component rendering", () => {
         expect(component.$options.inheritAttrs).toBe(false);
     });
 
+    it("passes id to element", () => {
+        const vm = new Vue({
+            template: "<test-component id='my-id'/>",
+            components: {
+                TestComponent
+            }
+        }).$mount();
+
+        expect(vm.$el.id).toBe("my-id");
+    });
+
     it("creates nested component", () => {
         new Vue({
             template: "<test-component><test-component/></test-component>",
