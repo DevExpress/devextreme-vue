@@ -21,9 +21,11 @@ const BaseComponent: VueConstructor = Vue.extend({
     inheritAttrs: false,
 
     render(createElement: (...args) => VNode): VNode {
-        return createElement(
-            "div",
-            extractChildren(this.$slots.default, (this as any as IWidgetComponent).$_config)
+        return createElement("div", {
+                attrs: {
+                    id: this.$attrs.id
+                }
+            }, extractChildren(this.$slots.default, (this as any as IWidgetComponent).$_config)
         );
     },
 
