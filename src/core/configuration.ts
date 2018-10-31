@@ -159,11 +159,15 @@ function bindOptionWatchers(config: Configuration, vueInstance: Pick<Vue, "$watc
 function subscribeOnUpdates(config: Configuration, vueInstance: Pick<Vue, "$emit">): void {
     config.optionChangedFunc = (args: any) => {
         let optionName = args.name;
+        let value = args.value;
         const fullOptionPath = config.fullPath + ".";
+
         if (config.name && config.name === args.name && args.fullName.indexOf(fullOptionPath) === 0) {
             optionName = args.fullName.slice(fullOptionPath.length);
+        } else if (args.fullName !== args.name) {
+            value = args.component.option(optionName);
         }
-        vueInstance.$emit("update:" + optionName, args.value);
+        vueInstance.$emit("update:" + optionName, value);
     };
 }
 

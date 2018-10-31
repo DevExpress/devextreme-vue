@@ -142,6 +142,34 @@ it("subscribes on updates of nested options", () => {
     expect($emitFunc).toHaveBeenCalledTimes(1);
 });
 
+it("subscribes on nested updates in root component", () => {
+    const $emitFunc = jest.fn();
+
+    const config: any = {
+        name: "widgetOption",
+        fullPath: "widgetOption"
+    };
+
+    subscribeOnUpdates(
+        config,
+        {
+            $emit: $emitFunc
+        }
+    );
+    config.optionChangedFunc({
+        name: "widgetOption",
+        fullName: "widgetOption[1].option1",
+        value: "value",
+        component: {
+            option: (name: string) => name === "widgetOption" && "widgetOption"
+        }
+    });
+    expect($emitFunc.mock.calls[0][0]).toBe("update:widgetOption");
+    expect($emitFunc.mock.calls[0][1]).toBe("widgetOption");
+
+    expect($emitFunc).toHaveBeenCalledTimes(1);
+});
+
 describe("initial configuration", () => {
 
     it("pulls value from nested", () => {
