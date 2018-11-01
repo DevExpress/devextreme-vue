@@ -102,7 +102,7 @@ it("binds option watchers", () => {
 });
 
 it("subscribes on updates", () => {
-    const $emitFunc = jest.fn();
+    const emitStub = jest.fn();
 
     const config: any = {
         name: null
@@ -111,18 +111,17 @@ it("subscribes on updates", () => {
     subscribeOnUpdates(
         config,
         {
-            $emit: $emitFunc
+            $emit: emitStub
         }
     );
     config.optionChangedFunc({name: "option1", fullName: "option1", value: "value"});
-    expect($emitFunc.mock.calls[0][0]).toBe("update:option1");
-    expect($emitFunc.mock.calls[0][1]).toBe("value");
 
-    expect($emitFunc).toHaveBeenCalledTimes(1);
+    expect(emitStub).toHaveBeenCalledTimes(1);
+    expect(emitStub).toHaveBeenCalledWith("update:option1", "value");
 });
 
 it("subscribes on updates of nested options", () => {
-    const $emitFunc = jest.fn();
+    const emitStub = jest.fn();
 
     const config: any = {
         name: "widgetOption",
@@ -132,14 +131,39 @@ it("subscribes on updates of nested options", () => {
     subscribeOnUpdates(
         config,
         {
-            $emit: $emitFunc
+            $emit: emitStub
         }
     );
     config.optionChangedFunc({name: "widgetOption", fullName: "widgetOption[1].option1", value: "value"});
-    expect($emitFunc.mock.calls[0][0]).toBe("update:option1");
-    expect($emitFunc.mock.calls[0][1]).toBe("value");
 
-    expect($emitFunc).toHaveBeenCalledTimes(1);
+    expect(emitStub).toHaveBeenCalledTimes(1);
+    expect(emitStub).toHaveBeenCalledWith("update:option1", "value");
+});
+
+it("subscribes on nested updates in root component", () => {
+    const emitStub = jest.fn();
+
+    const config: any = {
+        name: null
+    };
+
+    subscribeOnUpdates(
+        config,
+        {
+            $emit: emitStub
+        }
+    );
+    config.optionChangedFunc({
+        name: "widgetOption",
+        fullName: "widgetOption[1].option1",
+        value: "value",
+        component: {
+            option: (name: string) => name === "widgetOption" && "widgetOptionValue"
+        }
+    });
+
+    expect(emitStub).toHaveBeenCalledTimes(1);
+    expect(emitStub).toHaveBeenCalledWith("update:widgetOption", "widgetOptionValue");
 });
 
 describe("initial configuration", () => {
