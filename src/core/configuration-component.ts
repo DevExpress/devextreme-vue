@@ -3,15 +3,19 @@ import { VNode, VueConstructor } from "vue";
 
 const Vue = VueType.default || VueType;
 
-import Configuration, { bindOptionWatchers, subscribeOnUpdates } from "./configuration";
+import Configuration, { bindOptionWatchers, ExpectedChild, subscribeOnUpdates } from "./configuration";
 
-interface IConfigurationComponent {
+interface IConfigurationOwner {
+    $_expectedChildren: Record<string, ExpectedChild>;
+}
+
+interface IConfigurationComponent extends IConfigurationOwner {
     $_optionName: string;
     $_isCollectionItem: boolean;
     $_predefinedProps: Record<string, any>;
 }
 
-interface IConfigurable {
+interface IConfigurable extends IConfigurationOwner {
     $_config: Configuration;
 }
 

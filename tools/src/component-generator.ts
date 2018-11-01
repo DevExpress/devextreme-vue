@@ -1,9 +1,13 @@
 import { compareStrings } from "./helpers";
-import { createTempate, L1, L2, L3, L4, TAB2 } from "./template";
+import { createTempate, L0, L1, L2, L3, L4, TAB2 } from "./template";
 
 interface IImport {
     name: string;
     path: string;
+}
+
+interface IExpectedChild {
+    isCollectionItem: boolean;
 }
 
 interface IComponent {
@@ -14,6 +18,7 @@ interface IComponent {
     props?: IProp[];
     hasModel?: boolean;
     nestedComponents?: INestedComponent[];
+    expectedChildren: Record<string, IExpectedChild>;
 }
 
 interface INestedComponent {
@@ -21,6 +26,7 @@ interface INestedComponent {
     optionName: string;
     props: IProp[];
     isCollectionItem: boolean;
+    expectedChildren: Record<string, IExpectedChild>;
     predefinedProps?: Record<string, any>;
 }
 
@@ -32,6 +38,10 @@ interface INestedComponentModel {
     predefinedProps: Array<{
         name: string;
         value: any;
+    }>;
+    expectedChildren: Array<{
+        name: string;
+        isCollectionItem: boolean;
     }>;
 }
 
@@ -72,6 +82,14 @@ function generate(component: IComponent): string {
         namedImports.push(component.configComponent);
     }
 
+    let expectedChildren;
+    if (component.expectedChildren) {
+        expectedChildren = Object.keys(component.expectedChildren).map((name) => ({
+            name,
+            isCollectionItem: component.expectedChildren[name].isCollectionItem
+        }));
+    }
+
     namedImports.sort(compareImports);
     const componentModel = {
         ...component,
@@ -88,7 +106,8 @@ function generate(component: IComponent): string {
 
         nestedComponents,
         defaultExport: component.name,
-        namedExports
+        namedExports,
+        expectedChildren
     };
 
     return renderComponent(componentModel);
@@ -104,6 +123,14 @@ function createNestedComponentModel(component: INestedComponent): INestedCompone
         }));
     }
 
+    let expectedChildren;
+    if (component.expectedChildren) {
+        expectedChildren = Object.keys(component.expectedChildren).map((name) => ({
+            name,
+            isCollectionItem: component.expectedChildren[name].isCollectionItem
+        }));
+    }
+
     return {
         name: component.name,
         optionName: component.optionName,
@@ -111,6 +138,7 @@ function createNestedComponentModel(component: INestedComponent): INestedCompone
             ? renderProps(component.props)
             : undefined,
         isCollectionItem: component.isCollectionItem,
+        expectedChildren,
         predefinedProps
     };
 }
@@ -126,6 +154,10 @@ const renderComponent: (model: {
     renderedProps?: string;
     hasModel?: boolean;
     nestedComponents?: INestedComponentModel[];
+    expectedChildren: Array<{
+        name: string;
+        isCollectionItem: boolean;
+    }>;
     defaultExport: string;
     namedExports: string[];
 }) => string = createTempate(
@@ -163,16 +195,26 @@ L1 + `extends: <#= it.baseComponent #>,` +
   L1 + `model: { prop: "value", event: "update:value" },` +
 `<#?#>` +
 
-  L1 + `computed: {
-    instance(): <#= it.widgetImport.name #> {
-      return (this as any).$_instance;
-    }
-  },` +
+L1 + `computed: {` +
+    L2 + `instance(): <#= it.widgetImport.name #> {` +
+        L3 + `return (this as any).$_instance;` +
+    L2 + `}` +
+L1 + `},` +
 
-  L1 + `beforeCreate() {
-    (this as any).$_WidgetClass = <#= it.widgetImport.name #>;
-  }
-});\n` +
+L1 + `beforeCreate() {` +
+    L2 + `(this as any).$_WidgetClass = <#= it.widgetImport.name #>;` +
+
+    `<#? it.expectedChildren #>` +
+    L2 + `(this as any).$_expectedChildren = {` +
+    `<#~ it.expectedChildren : child #>` +
+        L3 + `<#= child.name #>: { isCollectionItem: <#= child.isCollectionItem #> },` +
+    `<#~#>` + `\b` +
+    L2 + `};` +
+    `<#?#>` +
+
+L1 + `}` +
+
+L0 + `});\n` +
 
 `<#? it.nestedComponents #>` +
     `\n` +
@@ -193,7 +235,15 @@ L1 + `extends: <#= it.baseComponent #>,` +
             `(<#= nested.name #> as any).$_predefinedProps = {` +
             `<#~ nested.predefinedProps : prop #>` +
                 L1 + `<#= prop.name #>: "<#= prop.value #>",` +
-            `<#~#>` + `\b` + `\n` +
+            `<#~#>` + `\b\n` +
+            `};\n` +
+        `<#?#>` +
+
+        `<#? nested.expectedChildren #>` +
+            `(<#= nested.name #> as any).$_expectedChildren = {` +
+            `<#~ nested.expectedChildren : child #>` +
+                L1 + `<#= child.name #>: { isCollectionItem: <#= child.isCollectionItem #> },` +
+            `<#~#>` + `\b\n` +
             `};\n` +
         `<#?#>` +
 

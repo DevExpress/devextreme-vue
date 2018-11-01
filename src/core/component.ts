@@ -9,6 +9,7 @@ import { camelize, toComparable } from "./helpers";
 
 interface IWidgetComponent extends IConfigurable {
     $_instance: any;
+    $_WidgetClass: any;
 }
 
 const Vue = VueType.default || VueType;
@@ -42,7 +43,8 @@ const BaseComponent: VueConstructor = Vue.extend({
         (this as any as IWidgetComponent).$_config = new Configuration(
             (n: string, v: any) => (this as any as IWidgetComponent).$_instance.option(n, v),
             null,
-            this.$options.propsData && { ...this.$options.propsData }
+            this.$options.propsData && { ...this.$options.propsData },
+            (this as any as IWidgetComponent).$_expectedChildren
         );
 
         (this as any as IWidgetComponent).$_config.init(this.$props && Object.keys(this.$props));
@@ -56,7 +58,7 @@ const BaseComponent: VueConstructor = Vue.extend({
                 ...this.$options.propsData,
                 ...config.getInitialValues()
             };
-            const instance = new (this as any).$_WidgetClass(element, options);
+            const instance = new (this as any as IWidgetComponent).$_WidgetClass(element, options);
             (this as any as IWidgetComponent).$_instance = instance;
 
             instance.on("optionChanged", (args) => config.onOptionChanged(args));
@@ -192,7 +194,8 @@ function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Co
             const config = ownerConfig.createNested(
                 (node.componentOptions.Ctor as any as IConfigurationComponent).$_optionName,
                 initialValues,
-                (node.componentOptions.Ctor as any as IConfigurationComponent).$_isCollectionItem
+                (node.componentOptions.Ctor as any as IConfigurationComponent).$_isCollectionItem,
+                (node.componentOptions.Ctor as any as IConfigurationComponent).$_expectedChildren
             );
 
             (node.componentOptions as any as IConfigurable).$_config = config;

@@ -23,11 +23,17 @@ export interface IProp {
 export interface IComplexProp {
   isCollectionItem: boolean;
   name: string;
+  nesteds: IComplexOptionRef[];
   optionName: string;
   owners: string[];
   predefinedProps: Record<string, any>;
   props: IProp[];
   templates: string[];
+}
+
+export interface IComplexOptionRef {
+  isCollectionItem: boolean;
+  optionName: string;
 }
 
 export interface ICustomType {
