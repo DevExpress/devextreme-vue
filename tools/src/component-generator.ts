@@ -348,4 +348,11 @@ const renderPropsTemplate: (props: IProp[]) => string = createTempate(
 );
 
 export default generate;
-export { IComponent, INestedComponent, IProp, renderProps, generateReExport };
+export {
+    IComponent,
+    IExpectedChild,
+    INestedComponent,
+    IProp,
+    renderProps,
+    generateReExport
+};

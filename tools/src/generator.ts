@@ -7,8 +7,24 @@ import {
   sep as pathSeparator
 } from "path";
 
-import { IComplexProp, ICustomType, IModel, IProp as IOption, ITypeDescr, IWidget } from "../integration-data-model";
-import generateComponent, { generateReExport, IComponent, INestedComponent, IProp } from "./component-generator";
+import {
+  IComplexProp,
+  IComplexPropRef,
+  ICustomType,
+  IModel,
+  IProp as IOption,
+  ITypeDescr,
+  IWidget
+} from "../integration-data-model";
+
+import generateComponent, {
+  generateReExport,
+  IComponent,
+  IExpectedChild,
+  INestedComponent,
+  IProp
+} from "./component-generator";
+
 import { convertTypes } from "./converter";
 import { removeExtension, removePrefix, toKebabCase, uppercaseFirst } from "./helpers";
 import generateIndex, { IReExport } from "./index-generator";
@@ -93,18 +109,23 @@ function mapWidget(
       hasModel: !!raw.isEditor,
       nestedComponents: raw.complexOptions
         ? raw.complexOptions.map((o) => mapNestedComponent(o, customTypeHash))
-        : undefined
+        : undefined,
+        expectedChildren: mapExpectedChildren(raw.nesteds)
     }
   };
 }
 
-function mapNestedComponent(complexOption: IComplexProp, customTypes: Record<string, ICustomType>): INestedComponent {
+function mapNestedComponent(
+  complexOption: IComplexProp,
+  customTypes: Record<string, ICustomType>
+): INestedComponent {
   return {
     name: `Dx${uppercaseFirst(complexOption.name)}`,
     optionName: complexOption.optionName,
     props: complexOption.props.map((o) => mapProp(o, customTypes)),
     isCollectionItem: complexOption.isCollectionItem,
-    predefinedProps: complexOption.predefinedProps
+    predefinedProps: complexOption.predefinedProps,
+    expectedChildren: mapExpectedChildren(complexOption.nesteds)
   };
 }
 
@@ -121,6 +142,21 @@ function mapProp(rawOption: IOption, customTypes: Record<string, ICustomType>): 
     isArray: types && types.length === 1 && types[0] === "Array",
     acceptableValueType: valueRestriction && valueRestriction.type.toLowerCase()
   };
+}
+
+function mapExpectedChildren(nesteds: IComplexPropRef[]): Record<string, IExpectedChild> {
+  if (!nesteds || nesteds.length === 0) {
+    return undefined;
+  }
+
+  const expectedChildren = {};
+  nesteds.forEach((n) => {
+    expectedChildren[n.optionName] = {
+      isCollectionItem: !!n.isCollectionItem
+    };
+  });
+
+  return expectedChildren;
 }
 
 export default generate;
