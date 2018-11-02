@@ -4,6 +4,7 @@ type UpdateFunc = (name: string, value: any) => void;
 
 interface ExpectedChild {
     isCollectionItem: boolean;
+    optionName: string;
 }
 
 class Configuration {
@@ -101,18 +102,25 @@ class Configuration {
         isCollectionItem?: boolean,
         expectedChildren?: Record<string, ExpectedChild>
     ): Configuration {
-        const actualIsCollectionItem = this._expectedChildren[name]
-            ? this._expectedChildren[name].isCollectionItem
-            : isCollectionItem;
+
+        const expected = this._expectedChildren[name];
+        let actualName = name;
+        let actualIsCollectionItem = isCollectionItem;
+        if (expected) {
+            actualIsCollectionItem = expected.isCollectionItem;
+            if (expected.optionName) {
+                actualName = expected.optionName;
+            }
+        }
 
         let collectionItemIndex = -1;
-        if (actualIsCollectionItem && name) {
-            collectionItemIndex = this._nestedConfigurations.filter((c) => c._name && c._name === name).length;
+        if (actualIsCollectionItem && actualName) {
+            collectionItemIndex = this._nestedConfigurations.filter((c) => c._name && c._name === actualName).length;
         }
 
         const configuration = new Configuration(
             this.updateValue,
-            name,
+            actualName,
             initialValues,
             expectedChildren,
             actualIsCollectionItem,

@@ -8,6 +8,7 @@ interface IImport {
 
 interface IExpectedChild {
     isCollectionItem: boolean;
+    optionName: string;
 }
 
 interface IComponent {
@@ -43,6 +44,12 @@ interface INestedComponentModel {
         name: string;
         isCollectionItem: boolean;
     }>;
+}
+
+interface IExpectedChildModel {
+    name: string;
+    isCollectionItem: boolean;
+    optionName: string;
 }
 
 interface IProp {
@@ -82,14 +89,6 @@ function generate(component: IComponent): string {
         namedImports.push(component.configComponent);
     }
 
-    let expectedChildren;
-    if (component.expectedChildren) {
-        expectedChildren = Object.keys(component.expectedChildren).map((name) => ({
-            name,
-            isCollectionItem: component.expectedChildren[name].isCollectionItem
-        }));
-    }
-
     namedImports.sort(compareImports);
     const componentModel = {
         ...component,
@@ -107,7 +106,7 @@ function generate(component: IComponent): string {
         nestedComponents,
         defaultExport: component.name,
         namedExports,
-        expectedChildren
+        expectedChildren: formatExpectedChildren(component.expectedChildren),
     };
 
     return renderComponent(componentModel);
@@ -123,14 +122,6 @@ function createNestedComponentModel(component: INestedComponent): INestedCompone
         }));
     }
 
-    let expectedChildren;
-    if (component.expectedChildren) {
-        expectedChildren = Object.keys(component.expectedChildren).map((name) => ({
-            name,
-            isCollectionItem: component.expectedChildren[name].isCollectionItem
-        }));
-    }
-
     return {
         name: component.name,
         optionName: component.optionName,
@@ -138,9 +129,19 @@ function createNestedComponentModel(component: INestedComponent): INestedCompone
             ? renderProps(component.props)
             : undefined,
         isCollectionItem: component.isCollectionItem,
-        expectedChildren,
+        expectedChildren: formatExpectedChildren(component.expectedChildren),
         predefinedProps
     };
+}
+
+function formatExpectedChildren(dict: Record<string, IExpectedChild>): IExpectedChildModel[] {
+    if (!dict) { return undefined; }
+
+    return Object.keys(dict).map((name) => ({
+        name,
+        isCollectionItem: dict[name].isCollectionItem,
+        optionName: dict[name].optionName
+    }));
 }
 
 // tslint:disable:max-line-length
@@ -154,10 +155,7 @@ const renderComponent: (model: {
     renderedProps?: string;
     hasModel?: boolean;
     nestedComponents?: INestedComponentModel[];
-    expectedChildren: Array<{
-        name: string;
-        isCollectionItem: boolean;
-    }>;
+    expectedChildren: IExpectedChildModel[];
     defaultExport: string;
     namedExports: string[];
 }) => string = createTempate(
@@ -207,7 +205,7 @@ L1 + `beforeCreate() {` +
     `<#? it.expectedChildren #>` +
     L2 + `(this as any).$_expectedChildren = {` +
     `<#~ it.expectedChildren : child #>` +
-        L3 + `<#= child.name #>: { isCollectionItem: <#= child.isCollectionItem #> },` +
+        L3 + `<#= child.name #>: { isCollectionItem: <#= child.isCollectionItem #>, optionName: "<#= child.optionName #>" },` +
     `<#~#>` + `\b` +
     L2 + `};` +
     `<#?#>` +
@@ -242,7 +240,7 @@ L0 + `});\n` +
         `<#? nested.expectedChildren #>` +
             `(<#= nested.name #> as any).$_expectedChildren = {` +
             `<#~ nested.expectedChildren : child #>` +
-                L1 + `<#= child.name #>: { isCollectionItem: <#= child.isCollectionItem #> },` +
+                L1 + `<#= child.name #>: { isCollectionItem: <#= child.isCollectionItem #>, optionName: "<#= child.optionName #>" },` +
             `<#~#>` + `\b\n` +
             `};\n` +
         `<#?#>` +

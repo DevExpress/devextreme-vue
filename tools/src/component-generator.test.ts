@@ -331,8 +331,8 @@ const COMPONENT: COMPONENT = Vue.extend({
   beforeCreate() {
     (this as any).$_WidgetClass = WIDGET;
     (this as any).$_expectedChildren = {
-      EXPECTED_1: { isCollectionItem: true },
-      EXPECTED_2: { isCollectionItem: false }
+      EXPECTED_1: { isCollectionItem: true, optionName: "abc" },
+      EXPECTED_2: { isCollectionItem: false, optionName: "def" }
     };
   }
 });
@@ -345,8 +345,8 @@ const NESTED_COMPONENT: any = Vue.extend({
 });
 (NESTED_COMPONENT as any).$_optionName = "NESTED_OPTION_NAME";
 (NESTED_COMPONENT as any).$_expectedChildren = {
-  EXPECTED_3: { isCollectionItem: true },
-  EXPECTED_4: { isCollectionItem: false }
+  EXPECTED_3: { isCollectionItem: true, optionName: "ghi" },
+  EXPECTED_4: { isCollectionItem: false, optionName: "jkl" }
 };
 
 export default COMPONENT;
@@ -381,14 +381,14 @@ export {
                 ],
                 isCollectionItem: false,
                 expectedChildren: {
-                  EXPECTED_3: { isCollectionItem: true },
-                  EXPECTED_4: { isCollectionItem: false }
+                  EXPECTED_3: { isCollectionItem: true, optionName: "ghi" },
+                  EXPECTED_4: { isCollectionItem: false, optionName: "jkl" }
                 }
               }
             ],
             expectedChildren: {
-              EXPECTED_1: { isCollectionItem: true },
-              EXPECTED_2: { isCollectionItem: false }
+              EXPECTED_1: { isCollectionItem: true, optionName: "abc" },
+              EXPECTED_2: { isCollectionItem: false, optionName: "def" }
             }
         })
     ).toBe(EXPECTED);
