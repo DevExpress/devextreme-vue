@@ -342,7 +342,7 @@ describe("collection items creation", () => {
     describe("expected as collection item .isCollectionItem prop", () => {
 
         it("is true if isCollection arg is true", () => {
-            const owner = createConfigWithExpectedChildren({ abc: { isCollectionItem: false } });
+            const owner = createConfigWithExpectedChildren({ abc: { isCollectionItem: false, optionName: "def" } });
 
             const nested = owner.createNested("abc", {}, true);
 
@@ -350,7 +350,7 @@ describe("collection items creation", () => {
         });
 
         it("is true if isCollection arg is false", () => {
-            const owner = createConfigWithExpectedChildren({ abc: { isCollectionItem: false } });
+            const owner = createConfigWithExpectedChildren({ abc: { isCollectionItem: false, optionName: "def" } });
 
             const nested = owner.createNested("abc", {}, false);
 
@@ -358,11 +358,12 @@ describe("collection items creation", () => {
         });
 
         it("is true if isCollection arg is undefined", () => {
-            const owner = createConfigWithExpectedChildren({ abc: { isCollectionItem: false } });
+            const owner = createConfigWithExpectedChildren({ abc: { isCollectionItem: false, optionName: "def" } });
 
             const nested = owner.createNested("abc", {});
 
             expect(nested.isCollectionItem).toBeFalsy();
+            expect(nested.name).toBe("def");
         });
     });
 
