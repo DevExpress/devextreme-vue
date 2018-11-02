@@ -9,7 +9,7 @@ import {
 
 import {
   IComplexProp,
-  IComplexPropRef,
+  IComponentRef,
   ICustomType,
   IModel,
   IProp as IOption,
@@ -144,15 +144,16 @@ function mapProp(rawOption: IOption, customTypes: Record<string, ICustomType>): 
   };
 }
 
-function mapExpectedChildren(nesteds: IComplexPropRef[]): Record<string, IExpectedChild> {
+function mapExpectedChildren(nesteds: IComponentRef[]): Record<string, IExpectedChild> {
   if (!nesteds || nesteds.length === 0) {
     return undefined;
   }
 
   const expectedChildren = {};
   nesteds.forEach((n) => {
-    expectedChildren[n.optionName] = {
-      isCollectionItem: !!n.isCollectionItem
+    expectedChildren[n.componentName] = {
+      isCollectionItem: !!n.isCollectionItem,
+      optionName: n.optionName
     };
   });
 
