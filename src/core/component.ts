@@ -3,8 +3,9 @@ import { VNode, VueConstructor } from "vue";
 
 import * as events from "devextreme/events";
 
+import { pullAllChildren } from "./children-processing";
 import Configuration, { bindOptionWatchers, subscribeOnUpdates } from "./configuration";
-import { IConfigurable, IConfigurationComponent } from "./configuration-component";
+import { IConfigurable } from "./configuration-component";
 import { camelize, toComparable } from "./helpers";
 
 interface IWidgetComponent extends IConfigurable {
@@ -22,11 +23,15 @@ const BaseComponent: VueConstructor = Vue.extend({
     inheritAttrs: false,
 
     render(createElement: (...args) => VNode): VNode {
-        return createElement("div", {
-                attrs: {
-                    id: this.$attrs.id
-                }
-            }, extractChildren(this.$slots.default, (this as any as IWidgetComponent).$_config)
+        const children: VNode[] = [];
+        pullAllChildren(this.$slots.default, children, (this as any as IWidgetComponent).$_config);
+
+        return createElement(
+            "div",
+            {
+                attrs: { id: this.$attrs.id }
+            },
+            children
         );
     },
 
@@ -166,45 +171,5 @@ const DxComponent: VueConstructor = BaseComponent.extend({
         });
     }
 });
-
-function extractChildren(children: VNode[], config: Configuration): VNode[] {
-    if (!children || children.length === 0) { return children; }
-
-    const nodes: VNode[] = [];
-    config.cleanNested();
-    pullConfigComponents(children, nodes, config);
-
-    return nodes;
-}
-
-function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Configuration): void {
-
-    children.forEach((node) => {
-        nodes.push(node);
-
-        if (
-            node.componentOptions &&
-            (node.componentOptions.Ctor as any as IConfigurationComponent).$_optionName
-        ) {
-            const initialValues = {
-                ...(node.componentOptions.Ctor as any as IConfigurationComponent).$_predefinedProps,
-                ...node.componentOptions.propsData
-            };
-
-            const config = ownerConfig.createNested(
-                (node.componentOptions.Ctor as any as IConfigurationComponent).$_optionName,
-                initialValues,
-                (node.componentOptions.Ctor as any as IConfigurationComponent).$_isCollectionItem,
-                (node.componentOptions.Ctor as any as IConfigurationComponent).$_expectedChildren
-            );
-
-            (node.componentOptions as any as IConfigurable).$_config = config;
-
-            if (node.componentOptions.children) {
-                pullConfigComponents(node.componentOptions.children as VNode[], nodes, config);
-            }
-        }
-    });
-}
 
 export { DxComponent, BaseComponent, IWidgetComponent };
