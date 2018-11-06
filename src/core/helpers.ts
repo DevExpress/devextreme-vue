@@ -13,3 +13,15 @@ export function camelize(value: string): string {
 export function toComparable(value: any): any {
     return value instanceof Date ? value.getTime() : value;
 }
+
+export function isEqual(value1, value2) {
+    if (toComparable(value1) === toComparable(value2)) {
+        return true;
+    }
+
+    if (Array.isArray(value1)) {
+        return value1.length === 0 && value2.length === 0;
+    }
+
+    return false;
+}

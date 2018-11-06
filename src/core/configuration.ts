@@ -1,4 +1,5 @@
 import { Vue } from "vue/types/vue";
+import { isEqual } from "./helpers";
 
 type UpdateFunc = (name: string, value: any) => void;
 
@@ -192,7 +193,9 @@ function subscribeOnUpdates(config: Configuration, vueInstance: Pick<Vue, "$emit
         } else if (args.fullName !== args.name) {
             optionValue = args.component.option(optionName);
         }
-        vueInstance.$emit("update:" + optionName, optionValue);
+        if (!isEqual(args.value, args.previousValue)) {
+            vueInstance.$emit("update:" + optionName, optionValue);
+        }
     };
 }
 
