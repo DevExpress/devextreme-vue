@@ -237,7 +237,7 @@ For example, you can specify the [ScrollView](https://js.devexpress.com/Document
 You can subscribe to DevExtreme Component events using the Vue's [`v-on` directive](https://vuejs.org/v2/guide/events.html) (or `@` shorthand)
 
 ```html
-<dx-text-box v-model="text" @focusIn="handleFocusIn'" />
+<dx-text-box v-model="text" @focusIn="handleFocusIn" />
 ```
 ```js
 data: function() {
