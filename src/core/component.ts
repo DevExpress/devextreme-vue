@@ -3,12 +3,14 @@ import { VNode, VueConstructor } from "vue";
 
 import * as events from "devextreme/events";
 
+import { pullAllChildren } from "./children-processing";
 import Configuration, { bindOptionWatchers, subscribeOnUpdates } from "./configuration";
-import { IConfigurable, IConfigurationComponent } from "./configuration-component";
+import { IConfigurable } from "./configuration-component";
 import { camelize, toComparable } from "./helpers";
 
 interface IWidgetComponent extends IConfigurable {
     $_instance: any;
+    $_WidgetClass: any;
 }
 
 const Vue = VueType.default || VueType;
@@ -21,11 +23,15 @@ const BaseComponent: VueConstructor = Vue.extend({
     inheritAttrs: false,
 
     render(createElement: (...args) => VNode): VNode {
-        return createElement("div", {
-                attrs: {
-                    id: this.$attrs.id
-                }
-            }, extractChildren(this.$slots.default, (this as any as IWidgetComponent).$_config)
+        const children: VNode[] = [];
+        pullAllChildren(this.$slots.default, children, (this as any as IWidgetComponent).$_config);
+
+        return createElement(
+            "div",
+            {
+                attrs: { id: this.$attrs.id }
+            },
+            children
         );
     },
 
@@ -42,7 +48,8 @@ const BaseComponent: VueConstructor = Vue.extend({
         (this as any as IWidgetComponent).$_config = new Configuration(
             (n: string, v: any) => (this as any as IWidgetComponent).$_instance.option(n, v),
             null,
-            this.$options.propsData && { ...this.$options.propsData }
+            this.$options.propsData && { ...this.$options.propsData },
+            (this as any as IWidgetComponent).$_expectedChildren
         );
 
         (this as any as IWidgetComponent).$_config.init(this.$props && Object.keys(this.$props));
@@ -56,7 +63,7 @@ const BaseComponent: VueConstructor = Vue.extend({
                 ...this.$options.propsData,
                 ...config.getInitialValues()
             };
-            const instance = new (this as any).$_WidgetClass(element, options);
+            const instance = new (this as any as IWidgetComponent).$_WidgetClass(element, options);
             (this as any as IWidgetComponent).$_instance = instance;
 
             instance.on("optionChanged", (args) => config.onOptionChanged(args));
@@ -164,44 +171,5 @@ const DxComponent: VueConstructor = BaseComponent.extend({
         });
     }
 });
-
-function extractChildren(children: VNode[], config: Configuration): VNode[] {
-    if (!children || children.length === 0) { return children; }
-
-    const nodes: VNode[] = [];
-    config.cleanNested();
-    pullConfigComponents(children, nodes, config);
-
-    return nodes;
-}
-
-function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Configuration): void {
-
-    children.forEach((node) => {
-        nodes.push(node);
-
-        if (
-            node.componentOptions &&
-            (node.componentOptions.Ctor as any as IConfigurationComponent).$_optionName
-        ) {
-            const initialValues = {
-                ...(node.componentOptions.Ctor as any as IConfigurationComponent).$_predefinedProps,
-                ...node.componentOptions.propsData
-            };
-
-            const config = ownerConfig.createNested(
-                (node.componentOptions.Ctor as any as IConfigurationComponent).$_optionName,
-                initialValues,
-                (node.componentOptions.Ctor as any as IConfigurationComponent).$_isCollectionItem
-            );
-
-            (node.componentOptions as any as IConfigurable).$_config = config;
-
-            if (node.componentOptions.children) {
-                pullConfigComponents(node.componentOptions.children as VNode[], nodes, config);
-            }
-        }
-    });
-}
 
 export { DxComponent, BaseComponent, IWidgetComponent };

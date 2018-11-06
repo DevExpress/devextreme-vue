@@ -20,6 +20,8 @@
         <chart-example/>
         <br/>
         <accessing-instance-example/>
+        <br/>
+        <map-example/>
     </div>
 </template>
 
@@ -31,6 +33,7 @@ import ListExample from "./components/list-example";
 import GridExample from "./components/grid-example";
 import PopupExample from "./components/popup-example";
 import TextBoxExample from "./components/text-box-example";
+import MapExample from "./components/map-example";
 import NumberBoxExample from "./components/number-box-example";
 import ValidationExample from "./components/validation-example";
 import SchedulerExample from "./components/scheduler-example";
@@ -43,6 +46,7 @@ export default {
         ButtonExample,
         PopupExample,
         TextBoxExample,
+        MapExample,
         NumberBoxExample,
         ValidationExample,
         ListExample,

@@ -2,12 +2,18 @@ import { Vue } from "vue/types/vue";
 
 type UpdateFunc = (name: string, value: any) => void;
 
+interface ExpectedChild {
+    isCollectionItem: boolean;
+    optionName: string;
+}
+
 class Configuration {
 
     private readonly _name: string | null;
     private readonly _isCollectionItem: boolean;
     private readonly _collectionItemIndex: number | undefined;
     private readonly _initialValues: Record<string, any>;
+    private readonly _expectedChildren: Record<string, ExpectedChild>;
     private readonly _updateFunc: UpdateFunc;
     private _nestedConfigurations: Configuration[];
     private _optionChangedFunc: any;
@@ -18,8 +24,9 @@ class Configuration {
         updateFunc: UpdateFunc,
         name: string | null,
         initialValues: Record<string, any>,
+        expectedChildren?: Record<string, ExpectedChild>,
         isCollectionItem?: boolean,
-        collectionItemIndex?: number
+        collectionItemIndex?: number,
     ) {
         this._updateFunc = updateFunc;
         this._name = name;
@@ -27,6 +34,7 @@ class Configuration {
         this._nestedConfigurations = [];
         this._isCollectionItem = !!isCollectionItem;
         this._collectionItemIndex = collectionItemIndex;
+        this._expectedChildren = expectedChildren || {};
 
         this.updateValue = this.updateValue.bind(this);
     }
@@ -45,6 +53,10 @@ class Configuration {
 
     public get initialValues(): Record<string, any> {
         return this._initialValues;
+    }
+
+    public get expectedChildren(): Record<string, ExpectedChild> {
+        return this._expectedChildren;
     }
 
     public get nested(): Configuration[] {
@@ -87,18 +99,31 @@ class Configuration {
     public createNested(
         name: string,
         initialValues: Record<string, any>,
-        isCollectionItem?: boolean
+        isCollectionItem?: boolean,
+        expectedChildren?: Record<string, ExpectedChild>
     ): Configuration {
+
+        const expected = this._expectedChildren[name];
+        let actualName = name;
+        let actualIsCollectionItem = isCollectionItem;
+        if (expected) {
+            actualIsCollectionItem = expected.isCollectionItem;
+            if (expected.optionName) {
+                actualName = expected.optionName;
+            }
+        }
+
         let collectionItemIndex = -1;
-        if (isCollectionItem && name) {
-            collectionItemIndex = this._nestedConfigurations.filter((c) => c._name && c._name === name).length;
+        if (actualIsCollectionItem && actualName) {
+            collectionItemIndex = this._nestedConfigurations.filter((c) => c._name && c._name === actualName).length;
         }
 
         const configuration = new Configuration(
             this.updateValue,
-            name,
+            actualName,
             initialValues,
-            isCollectionItem,
+            expectedChildren,
+            actualIsCollectionItem,
             collectionItemIndex
         );
 
@@ -172,4 +197,4 @@ function subscribeOnUpdates(config: Configuration, vueInstance: Pick<Vue, "$emit
 }
 
 export default Configuration;
-export { bindOptionWatchers, subscribeOnUpdates, UpdateFunc };
+export { bindOptionWatchers, subscribeOnUpdates, UpdateFunc, ExpectedChild };

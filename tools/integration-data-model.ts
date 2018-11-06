@@ -9,6 +9,7 @@ export interface IWidget {
   isEditor: boolean;
   isExtension: boolean;
   name: string;
+  nesteds: IComponentRef[];
   options: IProp[];
   templates: string[];
 }
@@ -23,11 +24,18 @@ export interface IProp {
 export interface IComplexProp {
   isCollectionItem: boolean;
   name: string;
+  nesteds: IComponentRef[];
   optionName: string;
   owners: string[];
   predefinedProps: Record<string, any>;
   props: IProp[];
   templates: string[];
+}
+
+export interface IComponentRef {
+  componentName: string;
+  isCollectionItem: boolean;
+  optionName: string;
 }
 
 export interface ICustomType {

@@ -45,7 +45,8 @@ export {
             baseComponent: {
                 name: "BASE_COMPONENT",
                 path: "./BASE_COMPONENT_PATH"
-            }
+            },
+            expectedChildren: undefined
         })
     ).toBe(EXPECTED);
 });
@@ -97,7 +98,8 @@ export {
                 name: "CONFIG_COMPONENT",
                 path: "./CONFIG_COMPONENT_PATH"
             },
-            hasModel: true
+            hasModel: true,
+            expectedChildren: undefined
         })
     ).toBe(EXPECTED);
 });
@@ -155,7 +157,8 @@ export {
                 name: "CONFIG_COMPONENT",
                 path: "./CONFIG_COMPONENT_PATH"
             },
-            props: [{ name: "PROP" }]
+            props: [{ name: "PROP" }],
+            expectedChildren: undefined
         })
     ).toBe(EXPECTED);
 });
@@ -223,9 +226,11 @@ export {
                 props: [
                   { name: "PROP" }
                 ],
-                isCollectionItem: false
+                isCollectionItem: false,
+                expectedChildren: undefined
               }
-            ]
+            ],
+            expectedChildren: undefined
         })
     ).toBe(EXPECTED);
 });
@@ -294,9 +299,97 @@ export {
                 props: [
                   { name: "PROP" }
                 ],
-                isCollectionItem: true
+                isCollectionItem: true,
+                expectedChildren: undefined
               }
-            ]
+            ],
+            expectedChildren: undefined
+        })
+    ).toBe(EXPECTED);
+});
+
+it("generates expectedChildren info", () => {
+    //#region EXPECTED
+    const EXPECTED = `
+import * as VueType from "vue";
+const Vue = VueType.default || VueType;
+import WIDGET from "devextreme/DX/WIDGET/PATH";
+import { VueConstructor } from "vue";
+import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
+import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
+
+interface COMPONENT extends VueConstructor {
+  readonly instance?: WIDGET;
+}
+const COMPONENT: COMPONENT = Vue.extend({
+  extends: BASE_COMPONENT,
+  computed: {
+    instance(): WIDGET {
+      return (this as any).$_instance;
+    }
+  },
+  beforeCreate() {
+    (this as any).$_WidgetClass = WIDGET;
+    (this as any).$_expectedChildren = {
+      EXPECTED_1: { isCollectionItem: true, optionName: "abc" },
+      EXPECTED_2: { isCollectionItem: false, optionName: "def" }
+    };
+  }
+});
+
+const NESTED_COMPONENT: any = Vue.extend({
+  extends: CONFIG_COMPONENT,
+  props: {
+    PROP: {}
+  }
+});
+(NESTED_COMPONENT as any).$_optionName = "NESTED_OPTION_NAME";
+(NESTED_COMPONENT as any).$_expectedChildren = {
+  EXPECTED_3: { isCollectionItem: true, optionName: "ghi" },
+  EXPECTED_4: { isCollectionItem: false, optionName: "jkl" }
+};
+
+export default COMPONENT;
+export {
+  COMPONENT,
+  NESTED_COMPONENT
+};
+`.trimLeft();
+        //#endregion
+
+    expect(
+        generate({
+            name: "COMPONENT",
+            widgetComponent: {
+              name: "WIDGET",
+              path: "DX/WIDGET/PATH"
+            },
+            baseComponent: {
+                name: "BASE_COMPONENT",
+                path: "./BASE_COMPONENT_PATH"
+            },
+            configComponent: {
+                name: "CONFIG_COMPONENT",
+                path: "./CONFIG_COMPONENT_PATH"
+            },
+            nestedComponents: [
+              {
+                name: "NESTED_COMPONENT",
+                optionName: "NESTED_OPTION_NAME",
+                props: [
+                  { name: "PROP" }
+                ],
+                isCollectionItem: false,
+                expectedChildren: {
+                  EXPECTED_3: { isCollectionItem: true, optionName: "ghi" },
+                  EXPECTED_4: { isCollectionItem: false, optionName: "jkl" }
+                }
+              }
+            ],
+            expectedChildren: {
+              EXPECTED_1: { isCollectionItem: true, optionName: "abc" },
+              EXPECTED_2: { isCollectionItem: false, optionName: "def" }
+            }
         })
     ).toBe(EXPECTED);
 });
@@ -472,9 +565,11 @@ export {
                     isCollectionItem: false,
                     predefinedProps: {
                       PROP_1: "PREDEFINED_VALUE"
-                    }
+                    },
+                    expectedChildren: undefined
                   }
-                ]
+                ],
+                expectedChildren: undefined
             })
         ).toBe(EXPECTED);
     });
@@ -550,9 +645,11 @@ export {
                     predefinedProps: {
                       PROP_1: "PREDEFINED_VALUE_1",
                       PROP_2: "PREDEFINED_VALUE_2"
-                    }
+                    },
+                    expectedChildren: undefined
                   }
-                ]
+                ],
+                expectedChildren: undefined
             })
         ).toBe(EXPECTED);
     });
