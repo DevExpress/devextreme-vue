@@ -485,7 +485,7 @@ describe("configuration", () => {
     });
 
     it("initializes sub-nested config (collectionItem)", () => {
-        const nestedCollectionItem = buildTestComponentCtor();
+        const nestedCollectionItem = buildTestConfigCtor();
         (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "subNestedOption";
         (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
