@@ -1,9 +1,14 @@
 import { compareStrings } from "./helpers";
-import { createTempate, L1, L2, L3, L4, TAB2 } from "./template";
+import { createTempate, L0, L1, L2, L3, L4, TAB2 } from "./template";
 
 interface IImport {
     name: string;
     path: string;
+}
+
+interface IExpectedChild {
+    isCollectionItem: boolean;
+    optionName: string;
 }
 
 interface IComponent {
@@ -14,6 +19,7 @@ interface IComponent {
     props?: IProp[];
     hasModel?: boolean;
     nestedComponents?: INestedComponent[];
+    expectedChildren: Record<string, IExpectedChild>;
 }
 
 interface INestedComponent {
@@ -21,6 +27,7 @@ interface INestedComponent {
     optionName: string;
     props: IProp[];
     isCollectionItem: boolean;
+    expectedChildren: Record<string, IExpectedChild>;
     predefinedProps?: Record<string, any>;
 }
 
@@ -33,6 +40,16 @@ interface INestedComponentModel {
         name: string;
         value: any;
     }>;
+    expectedChildren: Array<{
+        name: string;
+        isCollectionItem: boolean;
+    }>;
+}
+
+interface IExpectedChildModel {
+    name: string;
+    isCollectionItem: boolean;
+    optionName: string;
 }
 
 interface IProp {
@@ -88,7 +105,8 @@ function generate(component: IComponent): string {
 
         nestedComponents,
         defaultExport: component.name,
-        namedExports
+        namedExports,
+        expectedChildren: formatExpectedChildren(component.expectedChildren),
     };
 
     return renderComponent(componentModel);
@@ -111,8 +129,19 @@ function createNestedComponentModel(component: INestedComponent): INestedCompone
             ? renderProps(component.props)
             : undefined,
         isCollectionItem: component.isCollectionItem,
+        expectedChildren: formatExpectedChildren(component.expectedChildren),
         predefinedProps
     };
+}
+
+function formatExpectedChildren(dict: Record<string, IExpectedChild>): IExpectedChildModel[] {
+    if (!dict) { return undefined; }
+
+    return Object.keys(dict).map((name) => ({
+        name,
+        isCollectionItem: dict[name].isCollectionItem,
+        optionName: dict[name].optionName
+    }));
 }
 
 // tslint:disable:max-line-length
@@ -126,6 +155,7 @@ const renderComponent: (model: {
     renderedProps?: string;
     hasModel?: boolean;
     nestedComponents?: INestedComponentModel[];
+    expectedChildren: IExpectedChildModel[];
     defaultExport: string;
     namedExports: string[];
 }) => string = createTempate(
@@ -163,16 +193,26 @@ L1 + `extends: <#= it.baseComponent #>,` +
   L1 + `model: { prop: "value", event: "update:value" },` +
 `<#?#>` +
 
-  L1 + `computed: {
-    instance(): <#= it.widgetImport.name #> {
-      return (this as any).$_instance;
-    }
-  },` +
+L1 + `computed: {` +
+    L2 + `instance(): <#= it.widgetImport.name #> {` +
+        L3 + `return (this as any).$_instance;` +
+    L2 + `}` +
+L1 + `},` +
 
-  L1 + `beforeCreate() {
-    (this as any).$_WidgetClass = <#= it.widgetImport.name #>;
-  }
-});\n` +
+L1 + `beforeCreate() {` +
+    L2 + `(this as any).$_WidgetClass = <#= it.widgetImport.name #>;` +
+
+    `<#? it.expectedChildren #>` +
+    L2 + `(this as any).$_expectedChildren = {` +
+    `<#~ it.expectedChildren : child #>` +
+        L3 + `<#= child.name #>: { isCollectionItem: <#= child.isCollectionItem #>, optionName: "<#= child.optionName #>" },` +
+    `<#~#>` + `\b` +
+    L2 + `};` +
+    `<#?#>` +
+
+L1 + `}` +
+
+L0 + `});\n` +
 
 `<#? it.nestedComponents #>` +
     `\n` +
@@ -193,7 +233,15 @@ L1 + `extends: <#= it.baseComponent #>,` +
             `(<#= nested.name #> as any).$_predefinedProps = {` +
             `<#~ nested.predefinedProps : prop #>` +
                 L1 + `<#= prop.name #>: "<#= prop.value #>",` +
-            `<#~#>` + `\b` + `\n` +
+            `<#~#>` + `\b\n` +
+            `};\n` +
+        `<#?#>` +
+
+        `<#? nested.expectedChildren #>` +
+            `(<#= nested.name #> as any).$_expectedChildren = {` +
+            `<#~ nested.expectedChildren : child #>` +
+                L1 + `<#= child.name #>: { isCollectionItem: <#= child.isCollectionItem #>, optionName: "<#= child.optionName #>" },` +
+            `<#~#>` + `\b\n` +
             `};\n` +
         `<#?#>` +
 
@@ -298,4 +346,11 @@ const renderPropsTemplate: (props: IProp[]) => string = createTempate(
 );
 
 export default generate;
-export { IComponent, INestedComponent, IProp, renderProps, generateReExport };
+export {
+    IComponent,
+    IExpectedChild,
+    INestedComponent,
+    IProp,
+    renderProps,
+    generateReExport
+};
