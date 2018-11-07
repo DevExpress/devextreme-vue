@@ -175,6 +175,24 @@ it("subscribes on nested updates in root component", () => {
     expect(emitStub).toHaveBeenCalledWith("update:widgetOption", "widgetOptionValue");
 });
 
+it("subscribeOnUpdates does'not call update with empty array change", () => {
+    const emitStub = jest.fn();
+
+    const config: any = {
+        name: null
+    };
+
+    subscribeOnUpdates(
+        config,
+        {
+            $emit: emitStub
+        }
+    );
+    config.optionChangedFunc({name: "option1", fullName: "option1", value: [], previousValue: []});
+
+    expect(emitStub).toHaveBeenCalledTimes(0);
+});
+
 describe("initial configuration", () => {
 
     it("pulls value from nested", () => {
