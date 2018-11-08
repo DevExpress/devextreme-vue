@@ -1,10 +1,9 @@
 # DevExtreme Vue UI and Visualization Components #
 
 [![Build Status](https://img.shields.io/shippable/5444c5ecb904a4b21567b0ff/master.svg?maxAge=43200)](https://app.shippable.com/github/DevExpress/devextreme-vue)
-![Project Status](https://img.shields.io/badge/Project%20Status-beta-orange.svg?maxAge=43200)
 [![NPM](https://img.shields.io/npm/v/devextreme-vue.svg?maxAge=43200)](https://www.npmjs.com/package/devextreme-vue)
 
-This project allows you to use [DevExtreme Widgets](http://js.devexpress.com/Demos/WidgetsGallery/) as [Vue](https://vuejs.org) Components.
+This project allows you to use [DevExtreme](http://js.devexpress.com) [Vue](https://vuejs.org) Components.
 
 
 * [Getting Started](#getting-started)
@@ -29,7 +28,7 @@ This project allows you to use [DevExtreme Widgets](http://js.devexpress.com/Dem
 * [License](#license)
 * [Support & Feedback](#support-feedback)
 ## <a name="getting-started"></a>Getting Started ##
-You can try this [live example](https://codesandbox.io/s/github/lukyanovas/devextreme-vue-example) or configure a local development environment as described below.
+You can try this [live example](https://codesandbox.io/s/github/lukyanovas/devextreme-vue-example), [feature-based examples](https://js.devexpress.com/Demos/WidgetsGallery/Demo/Data_Grid/LocalDataSource/Vue/Light/) or configure local development environment as described below.
 
 ### <a name="prerequisites"></a>Prerequisites ###
 [Node.js and npm](https://docs.npmjs.com/getting-started/installing-node) are required
@@ -39,7 +38,7 @@ You can try this [live example](https://codesandbox.io/s/github/lukyanovas/devex
 Install the **devextreme** and **devextreme-vue** npm packages:
 
 ```console
-npm install --save devextreme@18.2-unstable devextreme-vue@18.2-unstable
+npm install --save devextreme devextreme-vue
 ```
 #### <a name="additional-configuration"></a>Additional Configuration ####
 
@@ -338,7 +337,7 @@ export default {
       if (result.isValid) {
           // form data is valid
           //params.validationGroup.reset();
-      }     
+      }
     }
   },
   data: function() {
