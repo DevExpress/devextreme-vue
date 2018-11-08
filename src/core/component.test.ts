@@ -802,7 +802,7 @@ describe("nested option", () => {
         });
     });
 
-    it("is not duplicated on rerender", (cb) => {
+    it.skip("is not duplicated on rerender", (cb) => {
         const vm = new Vue({
             template:
                 `<test-component>` +
