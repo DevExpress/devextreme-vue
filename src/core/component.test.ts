@@ -819,8 +819,7 @@ describe("nested option", () => {
 
         Vue.nextTick(() => {
             try {
-                // TODO: should be 1
-                expect(config.nested).toHaveLength(2);
+                expect(config.nested).toHaveLength(1);
             } catch (e) {
                 cb.fail(e);
             }
