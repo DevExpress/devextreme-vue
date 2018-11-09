@@ -5,7 +5,6 @@ import { IConfigurable, IConfigurationComponent } from "./configuration-componen
 function pullAllChildren(directChildren: VNode[], allChildren: VNode[], config: Configuration): void {
     if (!directChildren || directChildren.length === 0) { return; }
 
-    config.cleanNested();
     pullConfigComponents(directChildren, allChildren, config);
 }
 
