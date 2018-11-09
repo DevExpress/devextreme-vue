@@ -1,10 +1,9 @@
 # DevExtreme Vue UI and Visualization Components #
 
 [![Build Status](https://img.shields.io/shippable/5444c5ecb904a4b21567b0ff/master.svg?maxAge=43200)](https://app.shippable.com/github/DevExpress/devextreme-vue)
-![Project Status](https://img.shields.io/badge/Project%20Status-beta-orange.svg?maxAge=43200)
 [![NPM](https://img.shields.io/npm/v/devextreme-vue.svg?maxAge=43200)](https://www.npmjs.com/package/devextreme-vue)
 
-This project allows you to use [DevExtreme Widgets](http://js.devexpress.com/Demos/WidgetsGallery/) as [Vue](https://vuejs.org) Components.
+This project allows you to use [DevExtreme](http://js.devexpress.com) [Vue](https://vuejs.org) Components.
 
 
 * [Getting Started](#getting-started)
@@ -29,7 +28,7 @@ This project allows you to use [DevExtreme Widgets](http://js.devexpress.com/Dem
 * [License](#license)
 * [Support & Feedback](#support-feedback)
 ## <a name="getting-started"></a>Getting Started ##
-You can try this [live example](https://codesandbox.io/s/github/lukyanovas/devextreme-vue-example) or configure a local development environment as described below.
+You can try this [live example](https://codesandbox.io/s/github/lukyanovas/devextreme-vue-example), [feature-based examples](https://js.devexpress.com/Demos/WidgetsGallery/Demo/Data_Grid/LocalDataSource/Vue/Light/) or configure local development environment as described below.
 
 ### <a name="prerequisites"></a>Prerequisites ###
 [Node.js and npm](https://docs.npmjs.com/getting-started/installing-node) are required
@@ -39,7 +38,7 @@ You can try this [live example](https://codesandbox.io/s/github/lukyanovas/devex
 Install the **devextreme** and **devextreme-vue** npm packages:
 
 ```console
-npm install --save devextreme@18.1 devextreme-vue@18.1-unstable
+npm install --save devextreme devextreme-vue
 ```
 #### <a name="additional-configuration"></a>Additional Configuration ####
 
@@ -53,7 +52,7 @@ The further configuration steps depend on which build tool, bundler or module lo
 Import DevExtreme modules in a DevExtreme component's file.
 
 ```js
-import { DxButton } from 'devextreme-vue';
+import DxButton from 'devextreme-vue/button';
 ```
 
 DevExtreme themes can be imported only once in your application's main file:
@@ -76,7 +75,7 @@ You can use DevExtreme components in a [single file component](https://vuejs.org
 </template>
 
 <script>
-import { DxButton } from 'devextreme-vue';
+import DxButton from 'devextreme-vue/button';
 export default {
   name: 'HelloWorld',
   data() {
@@ -191,7 +190,7 @@ For instance, you can specify the itemTemplate:
 
 ```js
 import Vue from 'vue';
-import { DxList } from 'devextreme-vue';
+import DxList from 'devextreme-vue/list';
 
 new Vue({
   el: '#app',
@@ -338,7 +337,7 @@ export default {
       if (result.isValid) {
           // form data is valid
           //params.validationGroup.reset();
-      }     
+      }
     }
   },
   data: function() {
@@ -362,7 +361,7 @@ DevExtreme Vue Components provide configuration components for the underlying wi
 
 Use a named import to get a configuration component.
 ```js
-import DxChart, { DxTooltip } from "devextreme-vue/ui/chart"; 
+import DxChart, { DxTooltip } from "devextreme-vue/chart"; 
 ```
 You can use all data-bind features (such as `.sync` modifier) in your nested configuration components.
 
@@ -380,8 +379,8 @@ The following example demonstrates how to configure the dxChart widget's [toolti
 ```
 
 ```js
-import DxChart, { DxTooltip } from "devextreme-vue/ui/chart"; 
-import DxButton from "devextreme-vue/ui/button"; 
+import DxChart, { DxTooltip } from "devextreme-vue/chart"; 
+import DxButton from "devextreme-vue/button"; 
 
 import { complaintsData } from './data.js';
 
@@ -419,8 +418,8 @@ The following example demonstrates how to configure the dxDataGrid widget's [col
 ```
 
 ```js
-import DxDataGrid, { DxColumn } from "devextreme-vue/ui/data-grid"; 
-import DxCheckBox from "devextreme-vue/ui/check-box"; 
+import DxDataGrid, { DxColumn } from "devextreme-vue/data-grid"; 
+import DxCheckBox from "devextreme-vue/check-box"; 
 
 import { data } from './data.js';
 

@@ -224,7 +224,7 @@ describe("initial configuration", () => {
         });
     });
 
-    it("pulls array of values from a coollectionItem nested (multiple values)", () => {
+    it("pulls array of values from a coollectionItem nested (several values)", () => {
         const root = createRootConfig(jest.fn());
 
         root.createNested("options", { propA: 123 }, true);
