@@ -28,4 +28,17 @@ describe("isEqual", () => {
         const testArray2 = [];
         expect(isEqual(testArray1, testArray2)).toBe(true);
     });
+
+    it("Empty Array and null", () => {
+        const testArray1 = [];
+        const testArray2 = null;
+        expect(isEqual(testArray1, testArray2)).toBe(false);
+        expect(isEqual(testArray2, testArray1)).toBe(false);
+    });
+
+    it("Date", () => {
+        const testDate1 = new Date(2018, 9, 9);
+        const testDate2 = new Date(2018, 9, 9);
+        expect(isEqual(testDate1, testDate2)).toBe(true);
+    });
 });
