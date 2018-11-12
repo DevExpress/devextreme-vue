@@ -19,7 +19,7 @@ export function isEqual(value1, value2) {
         return true;
     }
 
-    if (Array.isArray(value1)) {
+    if (Array.isArray(value1) && Array.isArray(value2)) {
         return value1.length === 0 && value2.length === 0;
     }
 
