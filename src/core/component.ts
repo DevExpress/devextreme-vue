@@ -6,6 +6,7 @@ import * as events from "devextreme/events";
 import { pullAllChildren } from "./children-processing";
 import Configuration, { bindOptionWatchers, subscribeOnUpdates } from "./configuration";
 import { IConfigurable } from "./configuration-component";
+import { IExtension, IExtensionTarget } from "./extension-component";
 import { camelize, toComparable } from "./helpers";
 
 interface IWidgetComponent extends IConfigurable {
@@ -161,10 +162,14 @@ const DxComponent: VueConstructor = BaseComponent.extend({
         }
     },
 
+    beforeMount() {
+        (this as any as IExtensionTarget).$_isExtensionTarget = true;
+    },
+
     mounted(): void {
         (this as any).$_createWidget(this.$el);
         (this as any as IWidgetComponent).$_instance.endUpdate();
-        this.$children.forEach((child: any) => {
+        this.$children.forEach((child: IExtension) => {
             if (child.$_isExtension) {
                 child.attachTo(this.$el);
             }

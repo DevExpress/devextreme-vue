@@ -17,14 +17,30 @@
       <dx-validation-summary />
       <dx-button text="Submit" @click="validate"/>
     </dx-validation-group>
+    <br/>
+    <br/>
+    <h3>Custom value validation</h3>
+    <br/>
+    <div>
+      <button @click="validateCustom">Validate custom value</button>
+      <input v-model="customValue" />
+      <br/>
+      <div>
+        Custom Value is Valid: {{customValueIsValid}}
+      </div>
+      <dx-validator ref="customValidator">
+        <dx-adapter :get-value="getCustomValue" />
+        <dx-required-rule message="Value is required." />
+      </dx-validator>
+    </div>
   </example-block>
 </template>
 
 <script>
 import ExampleBlock from "./example-block";
 
-import { DxButton, DxTextBox, DxValidationGroup, DxValidationSummary } from "../../src";
-import { DxValidator, DxEmailRule, DxRequiredRule} from "../../src/validator";
+import { DxButton, DxTextBox, DxValidationGroup, DxValidationSummary, DxValidator } from "../../src";
+import { DxAdapter, DxEmailRule, DxRequiredRule} from "../../src/validator";
 
 export default {
   components: {
@@ -32,10 +48,17 @@ export default {
     DxButton,
     DxTextBox, 
     DxValidator,
+    DxAdapter,
     DxEmailRule,
     DxRequiredRule,
     DxValidationGroup,
     DxValidationSummary
+  },
+  data() {
+    return {
+      customValue: 1,
+      customValueIsValid: true
+    }
   },
   methods: {
     validate(params) {
@@ -44,6 +67,13 @@ export default {
           // form data is valid
           params.validationGroup.reset();
       }
+    },
+    getCustomValue() {
+      return this.customValue;
+    },
+    validateCustom() {
+      var result = this.$refs.customValidator.instance.validate();
+      this.customValueIsValid = result.isValid;
     }
   }
 };
