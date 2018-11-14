@@ -25,9 +25,9 @@
       <button @click="validateCustom">Validate custom value</button>
       <input v-model="customValue" />
       <br/>
-      <div>
-        Custom Value is Valid: {{customValueIsValid}}
-      </div>
+      <div>Not empty: {{customValueIsNotEmpty}}</div>
+      <div>Not less than 0, not greater than 9: {{customValueIsDigit}}</div>
+      <div>Is valid: {{customValueIsValid}}</div>
       <dx-validator ref="customValidator">
         <dx-adapter :get-value="getCustomValue" />
         <dx-required-rule message="Value is required." />
@@ -39,14 +39,20 @@
 <script>
 import ExampleBlock from "./example-block";
 
-import { DxButton, DxTextBox, DxValidationGroup, DxValidationSummary, DxValidator } from "../../src";
-import { DxAdapter, DxEmailRule, DxRequiredRule} from "../../src/validator";
+import {
+  DxButton,
+  DxTextBox,
+  DxValidationGroup,
+  DxValidationSummary,
+  DxValidator
+} from "../../src";
+import { DxAdapter, DxEmailRule, DxRequiredRule } from "../../src/validator";
 
 export default {
   components: {
     ExampleBlock,
     DxButton,
-    DxTextBox, 
+    DxTextBox,
     DxValidator,
     DxAdapter,
     DxEmailRule,
@@ -54,26 +60,48 @@ export default {
     DxValidationGroup,
     DxValidationSummary
   },
+  created() {
+    const validatorComponent = new DxValidator({
+      propsData: {
+        adapter: {
+          getValue: this.getCustomValue
+        },
+        validationRules: [
+          { type: "range", min: 0, max: 9, message: "From 1 to 10" }
+        ]
+      }
+    }).$mount();
+
+    this.validator = validatorComponent.instance;
+  },
   data() {
     return {
       customValue: 1,
-      customValueIsValid: true
+      customValueIsDigit: true,
+      customValueIsNotEmpty: true
+    };
+  },
+  computed: {
+    customValueIsValid() {
+      return this.customValueIsNotEmpty && this.customValueIsDigit;
     }
   },
   methods: {
     validate(params) {
       const result = params.validationGroup.validate();
       if (result.isValid) {
-          // form data is valid
-          params.validationGroup.reset();
+        // form data is valid
+        params.validationGroup.reset();
       }
     },
     getCustomValue() {
       return this.customValue;
     },
     validateCustom() {
-      var result = this.$refs.customValidator.instance.validate();
-      this.customValueIsValid = result.isValid;
+      var result1 = this.$refs.customValidator.instance.validate();
+      var result2 = this.validator.validate();
+      this.customValueIsNotEmpty = result1.isValid;
+      this.customValueIsDigit = result2.isValid;
     }
   }
 };

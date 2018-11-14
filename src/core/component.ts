@@ -6,7 +6,7 @@ import * as events from "devextreme/events";
 import { pullAllChildren } from "./children-processing";
 import Configuration, { bindOptionWatchers, subscribeOnUpdates } from "./configuration";
 import { IConfigurable } from "./configuration-component";
-import { IExtension, IExtensionTarget } from "./extension-component";
+import { IExtension, IExtensionComponentNode } from "./extension-component";
 import { camelize, toComparable } from "./helpers";
 
 interface IWidgetComponent extends IConfigurable {
@@ -26,6 +26,7 @@ const BaseComponent: VueConstructor = Vue.extend({
     render(createElement: (...args) => VNode): VNode {
         const children: VNode[] = [];
         pullAllChildren(this.$slots.default, children, (this as any as IWidgetComponent).$_config);
+        this.$_processChildren(children);
 
         return createElement(
             "div",
@@ -118,6 +119,10 @@ const BaseComponent: VueConstructor = Vue.extend({
             return {};
         },
 
+        $_processChildren(children: VNode[]): void {
+            return;
+        },
+
         $_fillTemplate(template: any, name: string): object {
             return {
                 render: (data: any) => {
@@ -159,11 +164,15 @@ const DxComponent: VueConstructor = BaseComponent.extend({
                     (this as any).beginUpdate();
                 }
             };
-        }
-    },
+        },
 
-    beforeMount() {
-        (this as any as IExtensionTarget).$_isExtensionTarget = true;
+        $_processChildren(children: VNode[]): void {
+            children.forEach((childNode: VNode) => {
+                if (!childNode.componentOptions) { return; }
+
+                (childNode.componentOptions as any as IExtensionComponentNode).$_hasOwner = true;
+            });
+        },
     },
 
     mounted(): void {

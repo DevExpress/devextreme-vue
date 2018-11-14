@@ -1017,7 +1017,7 @@ describe("extension component", () => {
         }
     });
 
-    it("renders once without parent element targeting self element", () => {
+    it("renders once if mounted manually and targets self element", () => {
         const component = new TestExtensionComponent().$mount();
 
         const expectedElement = component.$el;
@@ -1027,7 +1027,22 @@ describe("extension component", () => {
         expect(actualElement).toBe(expectedElement);
     });
 
-    it("renders once inside component targeting parent element", () => {
+    it("renders once without parent element and targets self element", () => {
+        const vue = new Vue({
+            template: `<test-extension-component/>`,
+            components: {
+                TestExtensionComponent
+            }
+        }).$mount();
+
+        const expectedElement = vue.$el;
+        const actualElement = ExtensionWidgetClass.mock.calls[0][0];
+
+        expect(ExtensionWidgetClass).toHaveBeenCalledTimes(1);
+        expect(actualElement).toBe(expectedElement);
+    });
+
+    it("renders once inside component and targets parent element", () => {
         new Vue({
             template: `<test-component>
                             <test-extension-component/>

@@ -6,8 +6,8 @@ interface IExtension {
     attachTo(element: any);
 }
 
-interface IExtensionTarget {
-    $_isExtensionTarget: boolean;
+interface IExtensionComponentNode {
+    $_hasOwner: boolean;
 }
 
 const DxExtensionComponent: VueConstructor = BaseComponent.extend({
@@ -17,7 +17,7 @@ const DxExtensionComponent: VueConstructor = BaseComponent.extend({
     },
 
     mounted() {
-        if (this.$parent && (this.$parent as any as IExtensionTarget).$_isExtensionTarget) { return; }
+        if (this.$vnode && (this.$vnode.componentOptions as any as IExtensionComponentNode).$_hasOwner) { return; }
 
         this.attachTo(this.$el);
     },
@@ -32,5 +32,5 @@ const DxExtensionComponent: VueConstructor = BaseComponent.extend({
 export {
     DxExtensionComponent,
     IExtension,
-    IExtensionTarget
+    IExtensionComponentNode
 };
