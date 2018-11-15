@@ -1017,22 +1017,32 @@ describe("extension component", () => {
         }
     });
 
-    it("doesn't render", () => {
-        new TestExtensionComponent().$mount();
-
-        expect(ExtensionWidgetClass).toHaveBeenCalledTimes(0);
-
-        expect(Widget.beginUpdate).toHaveBeenCalledTimes(0);
-        expect(Widget.endUpdate).toHaveBeenCalledTimes(0);
-    });
-
-    it("destroys correctly", () => {
+    it("renders once if mounted manually and targets self element", () => {
         const component = new TestExtensionComponent().$mount();
 
-        expect(component.$destroy.bind(component)).not.toThrow();
+        const expectedElement = component.$el;
+        const actualElement = ExtensionWidgetClass.mock.calls[0][0];
+
+        expect(ExtensionWidgetClass).toHaveBeenCalledTimes(1);
+        expect(actualElement).toBe(expectedElement);
     });
 
-    it("renders inside component on parent element", () => {
+    it("renders once without parent element and targets self element", () => {
+        const vue = new Vue({
+            template: `<test-extension-component/>`,
+            components: {
+                TestExtensionComponent
+            }
+        }).$mount();
+
+        const expectedElement = vue.$el;
+        const actualElement = ExtensionWidgetClass.mock.calls[0][0];
+
+        expect(ExtensionWidgetClass).toHaveBeenCalledTimes(1);
+        expect(actualElement).toBe(expectedElement);
+    });
+
+    it("renders once inside component and targets parent element", () => {
         new Vue({
             template: `<test-component>
                             <test-extension-component/>
@@ -1043,8 +1053,17 @@ describe("extension component", () => {
             }
         }).$mount();
 
+        const expectedElement = WidgetClass.mock.calls[0][0];
+        const actualElement = ExtensionWidgetClass.mock.calls[0][0];
+
         expect(ExtensionWidgetClass).toHaveBeenCalledTimes(1);
-        expect(ExtensionWidgetClass.mock.calls[0][0]).toBe(WidgetClass.mock.calls[0][0]);
+        expect(actualElement).toBe(expectedElement);
+    });
+
+    it("destroys correctly", () => {
+        const component = new TestExtensionComponent().$mount();
+
+        expect(component.$destroy.bind(component)).not.toThrow();
     });
 });
 
