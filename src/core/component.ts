@@ -119,7 +119,7 @@ const BaseComponent: VueConstructor = Vue.extend({
             return {};
         },
 
-        $_processChildren(children: VNode[]): void {
+        $_processChildren(_children: VNode[]): void {
             return;
         },
 
