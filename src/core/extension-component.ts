@@ -1,10 +1,25 @@
 import { VueConstructor } from "vue";
 import { BaseComponent } from "./component";
 
+interface IExtension {
+    $_isExtension: boolean;
+    attachTo(element: any);
+}
+
+interface IExtensionComponentNode {
+    $_hasOwner: boolean;
+}
+
 const DxExtensionComponent: VueConstructor = BaseComponent.extend({
 
     created(): void {
         (this as any).$_isExtension = true;
+    },
+
+    mounted() {
+        if (this.$vnode && (this.$vnode.componentOptions as any as IExtensionComponentNode).$_hasOwner) { return; }
+
+        this.attachTo(this.$el);
     },
 
     methods: {
@@ -14,4 +29,8 @@ const DxExtensionComponent: VueConstructor = BaseComponent.extend({
     }
 });
 
-export { DxExtensionComponent };
+export {
+    DxExtensionComponent,
+    IExtension,
+    IExtensionComponentNode
+};
