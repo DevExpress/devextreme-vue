@@ -929,7 +929,7 @@ describe("template", () => {
                 TestComponent,
                 FunctionalComponent
             }
-        }).$mount()
+        }).$mount();
         renderItemTemplate({});
 
         const component: any = vm.$refs.component;
