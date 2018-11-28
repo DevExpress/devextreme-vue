@@ -1,7 +1,7 @@
 import * as VueType from "vue";
-import { VNode, VueConstructor } from "vue";
+import VueDefault, { VNode, VueConstructor } from "vue";
 
-const Vue = VueType.default || VueType;
+const Vue = VueDefault || VueType;
 
 import Configuration, { bindOptionWatchers, ExpectedChild, subscribeOnUpdates } from "./configuration";
 
@@ -22,7 +22,7 @@ interface IConfigurable extends IConfigurationOwner {
 const DxConfiguration: VueConstructor = Vue.extend({
 
     beforeMount() {
-        const config = (this.$vnode.componentOptions as any as IConfigurable).$_config;
+        const config = (this.$vnode.componentOptions as IConfigurable).$_config;
 
         config.init(Object.keys(this.$props));
         bindOptionWatchers(config, this);
