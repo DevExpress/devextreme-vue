@@ -53,7 +53,6 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
     render(createElement: (...args) => VNode): VNode {
         const children: VNode[] = [];
         pullAllChildren(this.$slots.default, children, this.$_config);
-
         this.$_processChildren(children);
         return createElement(
             "div",
@@ -214,6 +213,7 @@ const DxComponent: VueConstructor = BaseComponent.extend({
     mounted(): void {
         this.$_createWidget(this.$el);
         this.$_instance.endUpdate();
+
         this.$children.forEach((child: IExtension) => {
             if (child.$_isExtension) {
                 child.attachTo(this.$el);

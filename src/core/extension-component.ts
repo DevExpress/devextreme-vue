@@ -22,6 +22,12 @@ const DxExtensionComponent: VueConstructor = BaseComponent.extend({
         this.attachTo(this.$el);
     },
 
+    mounted() {
+        if (this.$vnode && (this.$vnode.componentOptions as any as IExtensionComponentNode).$_hasOwner) { return; }
+
+        this.attachTo(this.$el);
+    },
+
     methods: {
         attachTo(element: any) {
             this.$_createWidget(element);
