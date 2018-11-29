@@ -1,7 +1,7 @@
 import * as VueType from "vue";
-import VueDefault, { VNode, VueConstructor } from "vue";
+import { VNode, VueConstructor } from "vue";
 
-const Vue = VueDefault || VueType;
+const Vue = VueType.default || VueType;
 
 import Configuration, { bindOptionWatchers, ExpectedChild, subscribeOnUpdates } from "./configuration";
 
