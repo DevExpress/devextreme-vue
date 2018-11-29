@@ -18,7 +18,6 @@
       <dx-button text="Submit" @click="validate"/>
     </dx-validation-group>
     <br/>
-    <br/>
     <h3>Custom value validation</h3>
     <br/>
     <div>

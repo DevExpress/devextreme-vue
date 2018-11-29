@@ -912,6 +912,30 @@ describe("template", () => {
         expect(component.$children.length).toBe(1);
     });
 
+    it("updates templates on component updating (check via functional component inside)", () => {
+        expect.assertions(2);
+        const FunctionalComponent = Vue.extend({
+            functional: true,
+            render(h) {
+                expect(true).toBeTruthy();
+                return h("div");
+            }
+        });
+        const vm = new Vue({
+            template: `<test-component ref="component">
+                            <div slot='item' slot-scope='props'><functional-component/></div>
+                        </test-component>`,
+            components: {
+                TestComponent,
+                FunctionalComponent
+            }
+        }).$mount();
+        renderItemTemplate({});
+
+        const component: any = vm.$refs.component;
+        component.$forceUpdate();
+    });
+
     it("unwraps container", () => {
         new Vue({
             template: `<test-component>
