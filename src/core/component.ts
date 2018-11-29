@@ -1,5 +1,5 @@
 import * as VueType from "vue";
-import VueDefault, { VNode, VueConstructor } from "vue";
+import IVue, { VNode, VueConstructor } from "vue";
 
 import * as events from "devextreme/events";
 
@@ -15,10 +15,10 @@ interface IWidgetComponent extends IConfigurable {
 }
 
 interface IEventBusHolder {
-    eventBus: VueDefault;
+    eventBus: IVue;
 }
 
-interface IBaseComponent extends VueDefault, IWidgetComponent, IEventBusHolder {
+interface IBaseComponent extends IVue, IWidgetComponent, IEventBusHolder {
     $_isExtension: boolean;
     $_createWidget: (element: any) => void;
     $_getIntegrationOptions: () => void;
@@ -29,7 +29,7 @@ interface IBaseComponent extends VueDefault, IWidgetComponent, IEventBusHolder {
     $_processChildren: () => void;
 }
 
-const Vue = VueDefault || VueType;
+const Vue = VueType.default || VueType;
 
 const DX_TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper";
 const DX_REMOVE_EVENT = "dxremove";
