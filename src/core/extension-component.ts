@@ -13,18 +13,18 @@ interface IExtensionComponentNode {
 const DxExtensionComponent: VueConstructor = BaseComponent.extend({
 
     created(): void {
-        (this as any).$_isExtension = true;
+        this.$_isExtension = true;
     },
 
     mounted() {
-        if (this.$vnode && (this.$vnode.componentOptions as any as IExtensionComponentNode).$_hasOwner) { return; }
+        if (this.$vnode && (this.$vnode.componentOptions as IExtensionComponentNode).$_hasOwner) { return; }
 
         this.attachTo(this.$el);
     },
 
     methods: {
         attachTo(element: any) {
-            (this as any).$_createWidget(element);
+            this.$_createWidget(element);
         }
     }
 });

@@ -79,8 +79,6 @@
 </template>
 
 <script>
-import Vue from "vue";
-
 import ExampleBlock from "./example-block";
 import { DxButton, DxCheckBox, DxDataGrid, DxDateBox, DxSwitch } from "../../src";
 import {
