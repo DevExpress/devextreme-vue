@@ -1,5 +1,5 @@
 import * as VueType from "vue";
-import { VNode, VueConstructor } from "vue";
+import IVue, { VNode, VueConstructor } from "vue";
 
 import * as events from "devextreme/events";
 
@@ -14,20 +14,47 @@ interface IWidgetComponent extends IConfigurable {
     $_WidgetClass: any;
 }
 
+interface IEventBusHolder {
+    eventBus: IVue;
+}
+
+interface IBaseComponent extends IVue, IWidgetComponent, IEventBusHolder {
+    $_isExtension: boolean;
+    $_createWidget: (element: any) => void;
+    $_getIntegrationOptions: () => void;
+    $_getExtraIntegrationOptions: () => void;
+    $_getWatchMethod: () => void;
+    $_createEmitters: () => void;
+    $_fillTemplate: () => void;
+    $_processChildren: () => void;
+}
+
 const Vue = VueType.default || VueType;
 
 const DX_TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper";
 const DX_REMOVE_EVENT = "dxremove";
 
-const BaseComponent: VueConstructor = Vue.extend({
+const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
 
     inheritAttrs: false,
 
+    data() {
+        return {
+            eventBus: new Vue()
+        };
+    },
+
+    provide() {
+        return {
+            eventBus: this.eventBus
+        };
+    },
+
     render(createElement: (...args) => VNode): VNode {
         const children: VNode[] = [];
-        pullAllChildren(this.$slots.default, children, (this as any as IWidgetComponent).$_config);
-        this.$_processChildren(children);
+        pullAllChildren(this.$slots.default, children, this.$_config);
 
+        this.$_processChildren(children);
         return createElement(
             "div",
             {
@@ -37,8 +64,12 @@ const BaseComponent: VueConstructor = Vue.extend({
         );
     },
 
+    updated() {
+        this.eventBus.$emit("updated");
+    },
+
     beforeDestroy(): void {
-        const instance = (this as any as IWidgetComponent).$_instance;
+        const instance = this.$_instance;
         if (instance) {
             events.triggerHandler(this.$el, DX_REMOVE_EVENT);
             instance.dispose();
@@ -46,27 +77,26 @@ const BaseComponent: VueConstructor = Vue.extend({
     },
 
     created(): void {
-
-        (this as any as IWidgetComponent).$_config = new Configuration(
-            (n: string, v: any) => (this as any as IWidgetComponent).$_instance.option(n, v),
+        (this as IBaseComponent).$_config = new Configuration(
+            (n: string, v: any) => this.$_instance.option(n, v),
             null,
             this.$options.propsData && { ...this.$options.propsData },
-            (this as any as IWidgetComponent).$_expectedChildren
+            this.$_expectedChildren
         );
 
-        (this as any as IWidgetComponent).$_config.init(this.$props && Object.keys(this.$props));
+        this.$_config.init(this.$props && Object.keys(this.$props));
     },
 
     methods: {
         $_createWidget(element: any): void {
-            const config = (this as any as IWidgetComponent).$_config;
+            const config = this.$_config;
             const options: object = {
                 ...this.$_getIntegrationOptions(),
                 ...this.$options.propsData,
                 ...config.getInitialValues()
             };
-            const instance = new (this as any as IWidgetComponent).$_WidgetClass(element, options);
-            (this as any as IWidgetComponent).$_instance = instance;
+            const instance = new this.$_WidgetClass(element, options);
+            (this as IBaseComponent).$_instance = instance;
 
             instance.on("optionChanged", (args) => config.onOptionChanged(args));
             subscribeOnUpdates(config, this);
@@ -128,7 +158,13 @@ const BaseComponent: VueConstructor = Vue.extend({
                 render: (data: any) => {
                     const vm = new Vue({
                         name,
+                        inject: ["eventBus"],
                         parent: this,
+                        created() {
+                            (this as IEventBusHolder).eventBus.$on("updated", () => {
+                                this.$forceUpdate();
+                            });
+                        },
                         render: () => template(data.model)
                     }).$mount();
 
@@ -176,8 +212,8 @@ const DxComponent: VueConstructor = BaseComponent.extend({
     },
 
     mounted(): void {
-        (this as any).$_createWidget(this.$el);
-        (this as any as IWidgetComponent).$_instance.endUpdate();
+        this.$_createWidget(this.$el);
+        this.$_instance.endUpdate();
         this.$children.forEach((child: IExtension) => {
             if (child.$_isExtension) {
                 child.attachTo(this.$el);

@@ -22,7 +22,7 @@ interface IConfigurable extends IConfigurationOwner {
 const DxConfiguration: VueConstructor = Vue.extend({
 
     beforeMount() {
-        const config = (this.$vnode.componentOptions as any as IConfigurable).$_config;
+        const config = (this.$vnode.componentOptions as IConfigurable).$_config;
 
         config.init(Object.keys(this.$props));
         bindOptionWatchers(config, this);

@@ -11,6 +11,8 @@
         <br/>
         <scroll-view-example/>
         <br/>
+        <tab-panel-example />
+        <br/>
         <list-example/>
         <br/>
         <grid-example/>
@@ -39,6 +41,8 @@ import ValidationExample from "./components/validation-example";
 import SchedulerExample from "./components/scheduler-example";
 import ScrollViewExample from "./components/scroll-view-example";
 import ChartExample from "./components/chart-example";
+import TabPanelExample from "./components/tab-panel-example";
+
 
 export default {
     components: {
@@ -53,7 +57,8 @@ export default {
         GridExample,
         SchedulerExample,
         ScrollViewExample,
-        ChartExample
+        ChartExample,
+        TabPanelExample
     },
     name: "app"
 }
