@@ -199,7 +199,7 @@ const DxComponent: VueConstructor = BaseComponent.extend({
     mounted(): void {
         this.$_createWidget(this.$el);
         this.$_instance.endUpdate();
-        this.$children.forEach((child: IExtension) => {
+        this.$children.forEach((child: any) => {
             if (child.$_isExtension) {
                 child.attachTo(this.$el);
             }
