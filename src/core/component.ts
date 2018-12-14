@@ -91,9 +91,9 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
         $_createWidget(element: any): void {
             const config = this.$_config;
             const options: object = {
-                ...this.$_getIntegrationOptions(),
                 ...this.$options.propsData,
-                ...config.getInitialValues()
+                ...config.getInitialValues(),
+                ...this.$_getIntegrationOptions()
             };
             const instance = new this.$_WidgetClass(element, options);
             (this as IBaseComponent).$_instance = instance;
@@ -105,6 +105,14 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
         },
 
         $_getIntegrationOptions(): object {
+            const TEMPLATE_NAME = "template";
+            function shouldAddTemplate(child) {
+                return child.$vnode
+                && child.$vnode.componentOptions.$_config
+                && child.$vnode.componentOptions.$_config.name
+                && TEMPLATE_NAME in child.$props
+                && child.$scopedSlots.default;
+            }
             const result: Record<string, any> = {
                 integrationOptions:  {
                     watchMethod: this.$_getWatchMethod(),
@@ -112,10 +120,24 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
                 ...this.$_getExtraIntegrationOptions(),
             };
 
-            if (this.$scopedSlots && Object.keys(this.$scopedSlots).length) {
+            let templates = {};
+            this.$children.forEach((child: any) => {
+                if (shouldAddTemplate(child)) {
+                    const templateName = `${child.$vnode.componentOptions.$_config.fullPath}.${TEMPLATE_NAME}`;
+                    templates[templateName] = child.$scopedSlots.default;
+                    result[templateName] = templateName;
+                }
+            });
+
+            templates = {
+                ...templates,
+                ...this.$scopedSlots
+            };
+
+            if (Object.keys(templates).length) {
                 result.integrationOptions.templates = {};
-                Object.keys(this.$scopedSlots).forEach((name: string) => {
-                    result.integrationOptions.templates[name] = this.$_fillTemplate(this.$scopedSlots[name], name);
+                Object.keys(templates).forEach((name: string) => {
+                    result.integrationOptions.templates[name] = this.$_fillTemplate(templates[name], name);
                 });
             }
 
