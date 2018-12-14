@@ -110,7 +110,7 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
                 return child.$vnode
                 && child.$vnode.componentOptions.$_config
                 && child.$vnode.componentOptions.$_config.name
-                && TEMPLATE_NAME in child.$props
+                && TEMPLATE_PROP in child.$props
                 && child.$scopedSlots.default;
             }
             const result: Record<string, any> = {
@@ -120,19 +120,16 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
                 ...this.$_getExtraIntegrationOptions(),
             };
 
-            let templates = {};
+            const templates = {
+                ...this.$scopedSlots
+            };
             this.$children.forEach((child: any) => {
                 if (shouldAddTemplate(child)) {
-                    const templateName = `${child.$vnode.componentOptions.$_config.fullPath}.${TEMPLATE_NAME}`;
+                    const templateName = `${child.$vnode.componentOptions.$_config.fullPath}.${TEMPLATE_PROP}`;
                     templates[templateName] = child.$scopedSlots.default;
                     result[templateName] = templateName;
                 }
             });
-
-            templates = {
-                ...templates,
-                ...this.$scopedSlots
-            };
 
             if (Object.keys(templates).length) {
                 result.integrationOptions.templates = {};
