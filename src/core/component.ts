@@ -105,7 +105,7 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
         },
 
         $_getIntegrationOptions(): object {
-            const TEMPLATE_NAME = "template";
+            const TEMPLATE_PROP = "template";
             function shouldAddTemplate(child) {
                 return child.$vnode
                 && child.$vnode.componentOptions.$_config
