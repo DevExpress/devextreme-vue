@@ -9,6 +9,8 @@
         <br />
         <validation-example/>
         <br/>
+        <form-example/>
+        <br/>
         <scroll-view-example/>
         <br/>
         <tab-panel-example />
@@ -42,6 +44,7 @@ import SchedulerExample from "./components/scheduler-example";
 import ScrollViewExample from "./components/scroll-view-example";
 import ChartExample from "./components/chart-example";
 import TabPanelExample from "./components/tab-panel-example";
+import FormExample from "./components/form-example";
 
 
 export default {
@@ -58,7 +61,8 @@ export default {
         SchedulerExample,
         ScrollViewExample,
         ChartExample,
-        TabPanelExample
+        TabPanelExample,
+        FormExample
     },
     name: "app"
 }

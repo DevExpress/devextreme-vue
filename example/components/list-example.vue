@@ -16,6 +16,20 @@
             </div>
         </dx-list>
         <br/>
+        
+        <h4>List with static items</h4>
+        <dx-list>
+            <dx-item>
+                <div slot-scope="_">1</div>
+            </dx-item>
+            <dx-item>
+                <div slot-scope="_">2</div>
+            </dx-item>
+            <dx-item>
+                <div slot-scope="_">3</div>
+            </dx-item>
+        </dx-list>
+
         <h4>List with several templates</h4>
         <dx-list 
           itemTemplate="weekday"
@@ -36,13 +50,15 @@
 <script>
 import ExampleBlock from "./example-block";
 import { orangesByDay } from "../data";
-import { DxButton, DxList, DxTextBox } from "../../src";
+import { DxList, DxItem } from "../../src/list";
+import { DxButton, DxTextBox } from "../../src";
 
 export default {
   components: {
     ExampleBlock,
     DxButton,
     DxList,
+    DxItem,
     DxTextBox
   },
   data: function() {
