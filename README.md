@@ -441,6 +441,38 @@ export default {
 Note that configuration components are not provided for options that accept a type that depends on another option's value. For example,
 the DataGrid's [editorOptions](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/columns/#editorOptions), Form's [editorOptions](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxForm/Item_Types/SimpleItem/#editorOptions), Toolbar's [widget](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxToolbar/Default_Item_Template/#options) options.
 
+
+It is possible to specify an template inside the configuration components if they have the corresponding `template` option. 
+To use this functionality add default scoped template to configuration component.
+
+```html
+<dx-list>
+  <dx-item>
+    <span slot-scope="_">orange</span>
+  </dx-item>
+  <dx-item>
+    <span slot-scope="_">white</span>
+  </dx-item>
+  <dx-item>
+    <span slot-scope="_">black</span>
+  </dx-item>
+</dx-list>
+```
+
+```js
+import {
+  DxList,
+  DxItem
+} from "devextreme-vue/list";
+
+export default {
+  components: {
+    DxList,
+    DxItem
+  }
+};
+```
+
 ## <a name="license"></a>License ##
 
 **DevExtreme Vue components are released as an MIT-licensed (free and open-source) DevExtreme add-on.**
