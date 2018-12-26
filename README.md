@@ -442,8 +442,7 @@ Note that configuration components are not provided for options that accept a ty
 the DataGrid's [editorOptions](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/columns/#editorOptions), Form's [editorOptions](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxForm/Item_Types/SimpleItem/#editorOptions), Toolbar's [widget](https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxToolbar/Default_Item_Template/#options) options.
 
 
-It is possible to specify an template inside the configuration components if they have the corresponding `template` option. 
-To use this functionality add default scoped template to configuration component.
+If a configuration component has the `template` option, you can put the template markup directly to this component. The following example demonstrates how to specify a template for a `dx-item` component:
 
 ```html
 <dx-list>
