@@ -12,7 +12,7 @@ To reduce the time it takes to process issues, search opened and closed tickets 
 
 You can also find information that can help you to resolve the issue in the following resources:
 
-    - https://github.com/DevExpress/devextreme-vue/blob/18.2/README.md
+    - https://github.com/DevExpress/devextreme-vue/blob/master/README.md
 ******************************************************************************************************* -->
 
 # Bug Report
