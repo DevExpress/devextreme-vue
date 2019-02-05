@@ -108,7 +108,7 @@ gulp.task(NPM_BUILD, gulp.series(
 
 gulp.task(NPM_BUILD_WITH_HEADERS, gulp.series(
   NPM_BUILD,
-  function() {
+  () => {
     const pkg = require('./package.json'),
         now = new Date(),
         data = {
