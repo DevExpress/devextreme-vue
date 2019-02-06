@@ -133,7 +133,7 @@ gulp.task(NPM_BUILD_WITH_HEADERS, gulp.series(
         '\n'
         ].join('\n');
 
-    return gulp.src(path.join(config.npm.dist, config.npm.pattern))
+    return gulp.src(`${config.npm.dist}**/*.{ts,js}`)
         .pipe(header(banner, data))
         .pipe(gulp.dest(config.npm.dist));
   }
