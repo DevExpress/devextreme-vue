@@ -25,3 +25,24 @@ export function isEqual(value1, value2) {
 
     return false;
 }
+
+export function extractScopedSlots(
+    obj: Record<string, any>,
+    nonScopedSlots: string[]
+): Record<string, any> {
+
+    const result = {};
+
+    Object.keys(obj).forEach((key: string) => {
+        if (nonScopedSlots && nonScopedSlots.indexOf(key) > -1) {
+            return;
+        }
+
+        const value = obj[key];
+        if (value instanceof Function) {
+            result[key] = value;
+        }
+    });
+
+    return result;
+}
