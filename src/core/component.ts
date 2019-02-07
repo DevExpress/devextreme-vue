@@ -7,7 +7,7 @@ import { pullAllChildren } from "./children-processing";
 import Configuration, { bindOptionWatchers, subscribeOnUpdates } from "./configuration";
 import { IConfigurable } from "./configuration-component";
 import { IExtension, IExtensionComponentNode } from "./extension-component";
-import { camelize, toComparable } from "./helpers";
+import { camelize, extractScopedSlots, toComparable } from "./helpers";
 
 interface IWidgetComponent extends IConfigurable {
     $_instance: any;
@@ -120,9 +120,8 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
                 ...this.$_getExtraIntegrationOptions(),
             };
 
-            const templates = {
-                ...this.$scopedSlots
-            };
+            const templates = extractScopedSlots(this.$scopedSlots, Object.keys(this.$slots));
+
             this.$children.forEach((child: any) => {
                 if (shouldAddTemplate(child)) {
                     const templateName = `${child.$vnode.componentOptions.$_config.fullPath}.${TEMPLATE_PROP}`;
