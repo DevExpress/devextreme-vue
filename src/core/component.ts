@@ -107,12 +107,17 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
         $_getIntegrationOptions(): object {
             const TEMPLATE_PROP = "template";
             function shouldAddTemplate(child) {
-                return child.$vnode
-                && child.$vnode.componentOptions.$_config
-                && child.$vnode.componentOptions.$_config.name
+                return isConfigurationComponent(child.$vnode)
                 && TEMPLATE_PROP in child.$props
-                && child.$scopedSlots.default;
+                && child.$vnode.data.scopedSlots;
             }
+
+            function isConfigurationComponent(node) {
+                return node
+                && node.componentOptions.$_config
+                && node.componentOptions.$_config.name;
+            }
+
             const result: Record<string, any> = {
                 integrationOptions:  {
                     watchMethod: this.$_getWatchMethod(),
