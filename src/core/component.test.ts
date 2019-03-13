@@ -1089,6 +1089,36 @@ describe("static items", () => {
 
         expect(renderedTemplate.innerHTML).toBe("1");
     });
+
+    it("doesn't pass integrationOptions to widget if nestd item has sub nested item", () => {
+        const NestedItem = Vue.extend({
+            extends: DxConfiguration,
+            props: {
+                prop1: Number,
+                template: String
+            }
+        });
+        (NestedItem as any as IConfigurationComponent).$_optionName = "items";
+        (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
+
+        const subNested = buildTestConfigCtor();
+        (subNested as any as IConfigurationComponent).$_optionName = "subNestedOption";
+
+        new Vue({
+            template: `<test-component>
+                         <nested-item>
+                            <sub-nested prop2="abc"/>
+                         </nested-item>
+                       </test-component>`,
+            components: {
+                TestComponent,
+                subNested,
+                NestedItem
+            }
+        }).$mount();
+
+        expect(WidgetClass.mock.calls[0][1].integrationOptions.templates).toBeUndefined();
+    });
 });
 
 describe("events emitting", () => {
