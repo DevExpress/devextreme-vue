@@ -29,6 +29,19 @@ interface IBaseComponent extends IVue, IWidgetComponent, IEventBusHolder {
     $_processChildren: () => void;
 }
 
+function asConfigurable(vueComponent: IVue): IConfigurable | undefined {
+    if (!vueComponent.$vnode) {
+        return undefined;
+    }
+
+    const configurable = vueComponent.$vnode.componentOptions as any as IConfigurable;
+    if (!configurable.$_config || !configurable.$_config.name) {
+        return undefined;
+    }
+
+    return configurable;
+}
+
 const Vue = VueType.default || VueType;
 
 const DX_TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper";
@@ -106,16 +119,10 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
 
         $_getIntegrationOptions(): object {
             const TEMPLATE_PROP = "template";
-            function shouldAddTemplate(child) {
-                return isConfigurationComponent(child.$vnode)
-                && TEMPLATE_PROP in child.$props
-                && child.$vnode.data.scopedSlots;
-            }
 
-            function isConfigurationComponent(node) {
-                return node
-                && node.componentOptions.$_config
-                && node.componentOptions.$_config.name;
+            function shouldAddTemplate(child: IVue) {
+                return TEMPLATE_PROP in child.$props
+                && (child.$vnode.data && child.$vnode.data.scopedSlots);
             }
 
             const result: Record<string, any> = {
@@ -127,9 +134,14 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
 
             const templates = extractScopedSlots(this.$scopedSlots, Object.keys(this.$slots));
 
-            this.$children.forEach((child: any) => {
+            this.$children.forEach((child: IVue) => {
+                const configurable = asConfigurable(child);
+                if (!configurable) {
+                    return;
+                }
+
                 if (shouldAddTemplate(child)) {
-                    const templateName = `${child.$vnode.componentOptions.$_config.fullPath}.${TEMPLATE_PROP}`;
+                    const templateName = `${configurable.$_config.fullPath}.${TEMPLATE_PROP}`;
                     templates[templateName] = child.$scopedSlots.default;
                     result[templateName] = templateName;
                 }
