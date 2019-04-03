@@ -4,6 +4,18 @@
 
 Use [Vue CLI](https://cli.vuejs.org/) to create a new project.
 
-## Add DevExtreme ##
+## Install DevExtreme ##
 
-Follow the [installation](https://github.com/DevExpress/devextreme-vue#installation) section in our Readme.
+Install the **devextreme** and **devextreme-vue** npm packages:
+
+```console
+npm install --save devextreme devextreme-vue
+```
+
+## Import Stylesheets ##
+
+Refer to [Import DevExtreme Stylesheets](https://github.com/DevExpress/devextreme-vue#import_devextreme_stylesheets).
+
+## Import DevExtreme Components ##
+
+Refer to [Import DevExtreme Components](https://github.com/DevExpress/devextreme-vue#import-components).
