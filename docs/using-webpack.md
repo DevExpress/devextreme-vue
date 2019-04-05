@@ -4,9 +4,13 @@
 
 You can use [the original Vue template on Webpack](https://github.com/vuejs-templates/webpack) or some other starter to create a new project based on Webpack.
 
-## Add DevExtreme ##
+## Install DevExtreme ##
 
-Follow the [installation](https://github.com/DevExpress/devextreme-vue#installation) section in our Readme.
+Install the **devextreme** and **devextreme-vue** npm packages:
+
+```console
+npm install --save devextreme devextreme-vue
+```
 
 ## <a name="configuration"></a>Configure Webpack Loaders for DevExtreme Stylesheets ##
 
@@ -39,3 +43,7 @@ Go to your main .js file and import the stylesheets as follows:
 import 'devextreme/dist/css/dx.common.css';
 import 'devextreme/dist/css/dx.light.css';
 ```
+
+## Import DevExtreme Components ##
+
+Refer to [Import DevExtreme Components](https://github.com/DevExpress/devextreme-vue#import-components).

@@ -9,7 +9,8 @@ This project allows you to use [DevExtreme](http://js.devexpress.com) [Vue](http
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Install DevExtreme](#installation)
-  * [Use DevExtreme Components](#use-components)
+  * [Import Stylesheets](#import_devextreme_stylesheets)
+  * [Import DevExtreme Components](#import-components)
 * [API Reference](#api-reference)
 * [Component Configuration](#component-configuration)
   * [Set Component Option](#component-option)
@@ -47,27 +48,18 @@ The further configuration steps depend on which build tool, bundler or module lo
 * [Configuring Webpack](https://github.com/DevExpress/devextreme-vue/blob/master/docs/using-webpack.md)
 * [Configuring Vue CLI](https://github.com/DevExpress/devextreme-vue/blob/master/docs/using-vue-cli.md)
 
-### <a name="import_devextreme_modules"></a>Import DevExtreme Modules and Themes  ###
+### <a name="import_devextreme_stylesheets"></a>Import Stylesheets  ###
 
-Import DevExtreme modules in a DevExtreme component's file.
-
-```js
-import DxButton from 'devextreme-vue/button';
-```
-
-DevExtreme themes can be imported only once in your application's main file:
+Import `dx.common.css` and a [predefined theme stylesheet](/Documentation/Guide/Themes_and_Styles/Predefined_Themes/) in the application's main file:
 
 ```js
 import 'devextreme/dist/css/dx.common.css';
 import 'devextreme/dist/css/dx.light.compact.css';
 ```
 
-See the [Predefined Themes](https://js.devexpress.com/Documentation/Guide/Themes/Predefined_Themes/#Themes_in_Sites) guide for more information on DevExtreme themes.
+### <a name="import-components"></a>Import DevExtreme Components  ###
 
-
-### <a name="use-components"></a>Use DevExtreme Components  ###
-
-You can use DevExtreme components in a [single file component](https://vuejs.org/v2/guide/single-file-components.html),
+Import the DevExtreme components you are going to use in a [single file component](https://vuejs.org/v2/guide/single-file-components.html)...
 
 ```html
 <template>
@@ -76,6 +68,10 @@ You can use DevExtreme components in a [single file component](https://vuejs.org
 
 <script>
 import DxButton from 'devextreme-vue/button';
+
+import 'devextreme/dist/css/dx.common.css';
+import 'devextreme/dist/css/dx.light.compact.css';
+
 export default {
   name: 'HelloWorld',
   data() {
@@ -90,12 +86,14 @@ export default {
 </script>
 ```
 
-... in a [jsx](https://vuejs.org/v2/guide/render-function.html#JSX) render function,
+... or in a [jsx](https://vuejs.org/v2/guide/render-function.html#JSX) render function...
 
 ```jsx
 import Vue from 'vue';
 import { DxButton } from 'devextreme-vue';
 
+import 'devextreme/dist/css/dx.common.css';
+import 'devextreme/dist/css/dx.light.compact.css';
 
 new Vue({
   el: '#app',
@@ -116,6 +114,12 @@ new Vue({
 ... or directly in a vue template.
 
 ```js
+import Vue from 'vue';
+import DxButton from 'devextreme-vue/button';
+
+import 'devextreme/dist/css/dx.common.css';
+import 'devextreme/dist/css/dx.light.compact.css';
+
 new Vue({
   el: '#app',
   components: { DxButton },
