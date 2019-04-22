@@ -16,6 +16,7 @@ class Configuration {
     private readonly _initialValues: Record<string, any>;
     private readonly _expectedChildren: Record<string, ExpectedChild>;
     private readonly _updateFunc: UpdateFunc;
+    private readonly _ownerConfig: Configuration | undefined;
     private _nestedConfigurations: Configuration[];
     private _optionChangedFunc: any;
 
@@ -28,6 +29,7 @@ class Configuration {
         expectedChildren?: Record<string, ExpectedChild>,
         isCollectionItem?: boolean,
         collectionItemIndex?: number,
+        ownerConfig?: Configuration | undefined
     ) {
         this._updateFunc = updateFunc;
         this._name = name;
@@ -36,6 +38,7 @@ class Configuration {
         this._isCollectionItem = !!isCollectionItem;
         this._collectionItemIndex = collectionItemIndex;
         this._expectedChildren = expectedChildren || {};
+        this._ownerConfig = ownerConfig;
 
         this.updateValue = this.updateValue.bind(this);
     }
@@ -44,8 +47,14 @@ class Configuration {
         return this._name;
     }
 
-    public get fullPath(): string | null {
+    public get path(): string | null {
         return this._isCollectionItem ? `${this._name}[${this._collectionItemIndex}]` : this._name;
+    }
+
+    public get fullPath(): string | null {
+        const ownerPath = this.ownerPath ? this.ownerPath + '.' : this.ownerPath;
+        const name = this._name ? `${ownerPath}${this._name}` : this._name;
+        return this._isCollectionItem ? `${name}[${this._collectionItemIndex}]` : name;
     }
 
     public get options(): string[] {
@@ -62,6 +71,10 @@ class Configuration {
 
     public get nested(): Configuration[] {
         return this._nestedConfigurations;
+    }
+
+    public get ownerPath(): string {
+        return this._ownerConfig && this._ownerConfig.fullPath ? this._ownerConfig.fullPath : '';
     }
 
     public get collectionItemIndex(): number | undefined {
@@ -101,7 +114,8 @@ class Configuration {
         name: string,
         initialValues: Record<string, any>,
         isCollectionItem?: boolean,
-        expectedChildren?: Record<string, ExpectedChild>
+        expectedChildren?: Record<string, ExpectedChild>,
+        ownerConfig?: Configuration | undefined
     ): Configuration {
 
         const expected = this._expectedChildren[name];
@@ -125,7 +139,8 @@ class Configuration {
             initialValues,
             expectedChildren,
             actualIsCollectionItem,
-            collectionItemIndex
+            collectionItemIndex,
+            ownerConfig
         );
 
         this._nestedConfigurations.push(configuration);
@@ -134,7 +149,7 @@ class Configuration {
     }
 
     public updateValue(nestedName: string, value: any): void {
-        const fullName = [this.fullPath, nestedName].filter((n) => n).join(".");
+        const fullName = [this.path, nestedName].filter((n) => n).join(".");
         this._updateFunc(fullName, value);
     }
 
