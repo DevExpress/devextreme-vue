@@ -4,6 +4,7 @@ import IVue, { VNode, VueConstructor } from "vue";
 import * as events from "devextreme/events";
 
 import { pullAllChildren } from "./children-processing";
+import { getOption } from "./config";
 import Configuration, { bindOptionWatchers, subscribeOnUpdates } from "./configuration";
 import { IConfigurable } from "./configuration-component";
 import { IExtension, IExtensionComponentNode } from "./extension-component";
@@ -191,6 +192,9 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
         $_fillTemplate(template: any, name: string): object {
             return {
                 render: (data: any) => {
+                    const scope = getOption("useLegacyTemplateEngine")
+                        ? data.model
+                        : { data: data.model, index: data.index };
                     const vm = new Vue({
                         name,
                         inject: ["eventBus"],
@@ -200,7 +204,7 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
                                 this.$forceUpdate();
                             });
                         },
-                        render: () => template(data.model)
+                        render: () => template(scope)
                     }).$mount();
 
                     const element = vm.$el;

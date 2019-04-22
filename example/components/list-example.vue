@@ -8,11 +8,11 @@
 
         <h4>List with item template</h4>
         <dx-list :items="listData">
-            <div slot="item" slot-scope="data">
-                <i>{{data.day}}</i>
+            <div slot="item" slot-scope="{ data, index }">
+                {{index + 1}} - <i>{{data.day}}</i>
             </div>
-            <div slot="weekend" slot-scope="data">
-                <i>{{data.day}}</i>
+            <div slot="weekend" slot-scope="{ data, index }">
+                {{index + 1}} - <b>{{data.day}}</b>
             </div>
         </dx-list>
         <br/>
@@ -35,10 +35,10 @@
           itemTemplate="weekday"
           :items="listData"
         >
-            <div slot="weekday" slot-scope="data">
+            <div slot="weekday" slot-scope="{ data }">
                 <s>{{data.day}}</s>
             </div>
-            <div slot="weekend" slot-scope="data">
+            <div slot="weekend" slot-scope="{ data }">
                 <b>{{data.day}}</b>
             </div>
         </dx-list>

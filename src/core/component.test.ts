@@ -1,9 +1,12 @@
 import Vue, { VueConstructor } from "vue";
 import { DxComponent, IWidgetComponent } from "../core/component";
+import config from "../core/config";
 import { DxConfiguration, IConfigurable, IConfigurationComponent } from "../core/configuration-component";
 import { DxExtensionComponent } from "../core/extension-component";
 
 import * as events from "devextreme/events";
+
+config({ useLegacyTemplateEngine: false });
 
 const eventHandlers: { [index: string]: (e?: any) => void } = {};
 const Widget = {
@@ -891,7 +894,7 @@ describe("template", () => {
     it("renders scoped slot", () => {
         new Vue({
             template: `<test-component>
-                            <div slot='item' slot-scope='props'>Template {{props.text}}</div>
+                            <div slot='item' slot-scope='{ data }'>Template {{data.text}}</div>
                         </test-component>`,
             components: {
                 TestComponent
@@ -943,7 +946,7 @@ describe("template", () => {
     it("unwraps container", () => {
         new Vue({
             template: `<test-component>
-                            <div slot='item' slot-scope='props'>Template {{props.text}}</div>
+                            <div slot='item' slot-scope='{ data }'>Template {{data.text}}</div>
                         </test-component>`,
             components: {
                 TestComponent
