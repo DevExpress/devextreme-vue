@@ -1093,6 +1093,39 @@ describe("static items", () => {
         expect(renderedTemplate.innerHTML).toBe("1");
     });
 
+    it("render nested template", () => {
+        const NestedItem = Vue.extend({
+            extends: DxConfiguration,
+            props: {
+                prop1: Number,
+                template: String
+            }
+        });
+        (NestedItem as any as IConfigurationComponent).$_optionName = "items";
+        (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
+
+        new Vue({
+            template: `<test-component>
+                         <nested-item>
+                            <div slot-scope="_">1</div>
+                            <nested-item>
+                                <div slot-scope="_">2</div>
+                            </nested-item>
+                         </nested-item>
+                       </test-component>`,
+            components: {
+                TestComponent,
+                NestedItem
+            }
+        }).$mount();
+
+        const renderedTemplate = renderTemplate("items[0].template");
+        const renderedNestedTemplate = renderTemplate("items[0].items[0].template");
+
+        expect(renderedTemplate.innerHTML).toBe("1");
+        expect(renderedNestedTemplate.innerHTML).toBe("2");
+    });
+
     it("doesn't pass integrationOptions to widget if nestd item has sub nested item", () => {
         const NestedItem = Vue.extend({
             extends: DxConfiguration,

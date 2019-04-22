@@ -26,7 +26,8 @@ function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Co
             configComponent.$_optionName,
             initialValues,
             configComponent.$_isCollectionItem,
-            configComponent.$_expectedChildren
+            configComponent.$_expectedChildren,
+            ownerConfig
         );
 
         (node.componentOptions as any as IConfigurable).$_config = config;
