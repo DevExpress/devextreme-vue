@@ -137,26 +137,26 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
             }
 
             function getNestedOptions(config, options) {
-                if(hasNestedOptions(config)) {
+                if (hasNestedOptions(config)) {
                     config.nested.forEach((nestedConfig) => {
                         const name = nestedConfig.name;
-                        if(nestedConfig.isCollectionItem) {
-                            if(!hasPropertyName(options, name)) {
+                        if (nestedConfig.isCollectionItem) {
+                            if (!hasPropertyName(options, name)) {
                                 options[name] = [];
                             }
                             options[name].push(nestedConfig.initialValues);
-                            if(hasNestedOptions(nestedConfig)) {
+                            if (hasNestedOptions(nestedConfig)) {
                                 getNestedOptions(nestedConfig, options[name][nestedConfig.collectionItemIndex]);
                             }
                         } else {
                             options[name] = nestedConfig.initialValues;
-                            if(hasNestedOptions(nestedConfig)) {
+                            if (hasNestedOptions(nestedConfig)) {
                                 getNestedOptions(nestedConfig, options[name]);
                             }
                         }
                     });
                 }
-            };
+            }
 
             const result: Record<string, any> = {
                 integrationOptions:  {
