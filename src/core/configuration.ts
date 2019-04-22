@@ -52,7 +52,7 @@ class Configuration {
     }
 
     public get fullPath(): string | null {
-        const ownerPath = this.ownerPath ? this.ownerPath + '.' : this.ownerPath;
+        const ownerPath = this.ownerPath ? `${this.ownerPath}.` : this.ownerPath;
         const name = this._name ? `${ownerPath}${this._name}` : this._name;
         return this._isCollectionItem ? `${name}[${this._collectionItemIndex}]` : name;
     }
@@ -74,7 +74,7 @@ class Configuration {
     }
 
     public get ownerPath(): string {
-        return this._ownerConfig && this._ownerConfig.fullPath ? this._ownerConfig.fullPath : '';
+        return this._ownerConfig && this._ownerConfig.fullPath ? this._ownerConfig.fullPath : "";
     }
 
     public get collectionItemIndex(): number | undefined {
