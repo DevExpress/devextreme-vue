@@ -52,9 +52,17 @@ class Configuration {
     }
 
     public get fullPath(): string | null {
-        const ownerPath = this.ownerPath ? `${this.ownerPath}.` : this.ownerPath;
-        const name = this._name ? `${ownerPath}${this._name}` : this._name;
-        return this._isCollectionItem ? `${name}[${this._collectionItemIndex}]` : name;
+        let path = this._name;
+
+        if (this._ownerConfig && this._ownerConfig.fullPath) {
+            path = `${this._ownerConfig.fullPath}.${path}`;
+        }
+
+        if (this._isCollectionItem) {
+            path = `${path}[${this._collectionItemIndex}]`;
+        }
+
+        return path;
     }
 
     public get options(): string[] {
@@ -71,10 +79,6 @@ class Configuration {
 
     public get nested(): Configuration[] {
         return this._nestedConfigurations;
-    }
-
-    public get ownerPath(): string {
-        return this._ownerConfig && this._ownerConfig.fullPath ? this._ownerConfig.fullPath : "";
     }
 
     public get collectionItemIndex(): number | undefined {
