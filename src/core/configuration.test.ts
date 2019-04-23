@@ -13,6 +13,63 @@ function createConfigWithExpectedChildren(children: Record<string, ExpectedChild
     );
 }
 
+describe("fullPath building", () => {
+
+    const testCases: Array<{
+        msg: string;
+        name: string | null;
+        ownerPath?: string;
+        expected: string | null;
+        collectionIndex?: number;
+    }> = [
+            {
+                msg: "works for null",
+                name: null,
+                expected: null
+            },
+            {
+                msg: "works without owner",
+                name: "abc",
+                expected: "abc"
+            },
+            {
+                msg: "works with owner",
+                name: "abc",
+                ownerPath: "def",
+                expected: "def.abc"
+            },
+            {
+                msg: "works for collection item",
+                name: "abc",
+                collectionIndex: 123,
+                expected: "abc[123]"
+            },
+            {
+                msg: "works for collection item with owner",
+                name: "abc",
+                ownerPath: "def",
+                collectionIndex: 123,
+                expected: "def.abc[123]"
+            }
+        ];
+
+    for (const { msg, name, collectionIndex, ownerPath, expected } of testCases) {
+        it(msg, () => {
+            const isCollection = collectionIndex !== undefined;
+            const ownerConfig = ownerPath ? { fullPath: ownerPath } : undefined;
+            expect(new Configuration(
+                jest.fn(),
+                name,
+                {},
+                undefined,
+                isCollection,
+                collectionIndex,
+                ownerConfig
+            ).fullPath).toBe(expected);
+        });
+    }
+});
+
 it("calls update from nested", () => {
     const callback = jest.fn();
     const root = createRootConfig(callback);
