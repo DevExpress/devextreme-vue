@@ -832,13 +832,14 @@ describe("nested option", () => {
 
 });
 
-function renderTemplate(name: string, model?: object, container?: any): Element {
+function renderTemplate(name: string, model?: object, container?: any, index?: number): Element {
     model = model || {};
     container = container || document.createElement("div");
     const render = WidgetClass.mock.calls[0][1].integrationOptions.templates[name].render;
     return render({
         container,
-        model
+        model,
+        index
     });
 }
 
@@ -846,8 +847,8 @@ describe("template", () => {
 
     const DX_TEMPLATE_WRAPPER = "dx-template-wrapper";
 
-    function renderItemTemplate(model?: object, container?: any): Element {
-        return renderTemplate("item", model, container);
+    function renderItemTemplate(model?: object, container?: any, index?: number): Element {
+        return renderTemplate("item", model, container, index);
     }
 
     it("passes integrationOptions to widget", () => {
@@ -894,14 +895,16 @@ describe("template", () => {
     it("renders scoped slot", () => {
         new Vue({
             template: `<test-component>
-                            <div slot='item' slot-scope='{ data }'>Template {{data.text}}</div>
+                            <div slot='item' slot-scope='{ data: { text }, index }'>
+                                Template {{text}} and index {{index}}
+                            </div>
                         </test-component>`,
             components: {
                 TestComponent
             }
         }).$mount();
-        const renderedTemplate = renderItemTemplate({ text: "with data" });
-        expect(renderedTemplate.innerHTML).toBe("Template with data");
+        const renderedTemplate = renderItemTemplate({ text: "with data" }, undefined, 5);
+        expect(renderedTemplate.innerHTML).toContain("Template with data and index 5");
     });
 
     it("adds templates as children", () => {
