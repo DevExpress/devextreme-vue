@@ -73,7 +73,7 @@
         <dx-pager :visible="true" :showPageSizeSelector="true" />
         <dx-paging :pageSize="10"/>
 
-        <dx-button slot="cell-city" slot-scope="data" :text="data.text" />
+        <dx-button slot="cell-city" slot-scope="{ data }" :text="data.text" />
       </dx-data-grid>
     </example-block>
 </template>
