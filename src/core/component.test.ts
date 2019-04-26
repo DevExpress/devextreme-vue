@@ -1,12 +1,9 @@
 import Vue, { VueConstructor } from "vue";
 import { DxComponent, IWidgetComponent } from "../core/component";
-import globalConfig from "../core/config";
 import { DxConfiguration, IConfigurable, IConfigurationComponent } from "../core/configuration-component";
 import { DxExtensionComponent } from "../core/extension-component";
 
 import * as events from "devextreme/events";
-
-globalConfig({ useLegacyTemplateEngine: false });
 
 const eventHandlers: { [index: string]: (e?: any) => void } = {};
 const Widget = {

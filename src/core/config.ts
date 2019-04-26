@@ -3,11 +3,11 @@ interface IOptions {
   }
 
 let config: IOptions = {
-    useLegacyTemplateEngine: true
+    useLegacyTemplateEngine: false
 };
 
 function setOptions(options: Partial<IOptions>): void {
-    config = {...config, ... options};
+    config = { ...config, ...options };
 }
 
 function getOption<TName extends keyof IOptions>(optionName: TName): IOptions[TName] {

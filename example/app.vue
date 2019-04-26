@@ -46,9 +46,6 @@ import ChartExample from "./components/chart-example";
 import TabPanelExample from "./components/tab-panel-example";
 import FormExample from "./components/form-example";
 
-import config from "../src/core/config";
-config({ useLegacyTemplateEngine: false });
-
 export default {
     components: {
         AccessingInstanceExample,
