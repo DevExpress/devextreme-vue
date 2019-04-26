@@ -177,7 +177,7 @@ class Configuration {
             }
         });
 
-        return Object.keys(values).length > 0 ? values : undefined;
+        return values;
     }
 
     public getOptionsToWatch(): string[] {
