@@ -16,6 +16,7 @@ class Configuration {
     private readonly _initialValues: Record<string, any>;
     private readonly _expectedChildren: Record<string, ExpectedChild>;
     private readonly _updateFunc: UpdateFunc;
+    private readonly _ownerConfig: Pick<Configuration, "fullPath"> | undefined;
     private _nestedConfigurations: Configuration[];
     private _optionChangedFunc: any;
 
@@ -28,6 +29,7 @@ class Configuration {
         expectedChildren?: Record<string, ExpectedChild>,
         isCollectionItem?: boolean,
         collectionItemIndex?: number,
+        ownerConfig?: Pick<Configuration, "fullPath"> | undefined
     ) {
         this._updateFunc = updateFunc;
         this._name = name;
@@ -36,6 +38,7 @@ class Configuration {
         this._isCollectionItem = !!isCollectionItem;
         this._collectionItemIndex = collectionItemIndex;
         this._expectedChildren = expectedChildren || {};
+        this._ownerConfig = ownerConfig;
 
         this.updateValue = this.updateValue.bind(this);
     }
@@ -45,7 +48,17 @@ class Configuration {
     }
 
     public get fullPath(): string | null {
-        return this._isCollectionItem ? `${this._name}[${this._collectionItemIndex}]` : this._name;
+        let path = this._name;
+
+        if (this._ownerConfig && this._ownerConfig.fullPath) {
+            path = `${this._ownerConfig.fullPath}.${path}`;
+        }
+
+        if (this._isCollectionItem) {
+            path = `${path}[${this._collectionItemIndex}]`;
+        }
+
+        return path;
     }
 
     public get options(): string[] {
@@ -120,12 +133,13 @@ class Configuration {
         }
 
         const configuration = new Configuration(
-            this.updateValue,
+            this._updateFunc,
             actualName,
             initialValues,
             expectedChildren,
             actualIsCollectionItem,
-            collectionItemIndex
+            collectionItemIndex,
+            this
         );
 
         this._nestedConfigurations.push(configuration);
@@ -162,7 +176,7 @@ class Configuration {
             }
         });
 
-        return Object.keys(values).length > 0 ? values : undefined;
+        return values;
     }
 
     public getOptionsToWatch(): string[] {

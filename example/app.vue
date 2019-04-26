@@ -5,6 +5,9 @@
         <popup-example/>
         <br/>
         <text-box-example/>
+        <br/>
+        <menu-example/>
+        <br/>
         <number-box-example/>
         <br />
         <validation-example/>
@@ -38,6 +41,7 @@ import GridExample from "./components/grid-example";
 import PopupExample from "./components/popup-example";
 import TextBoxExample from "./components/text-box-example";
 import MapExample from "./components/map-example";
+import MenuExample from "./components/menu-example";
 import NumberBoxExample from "./components/number-box-example";
 import ValidationExample from "./components/validation-example";
 import SchedulerExample from "./components/scheduler-example";
@@ -53,6 +57,7 @@ export default {
         PopupExample,
         TextBoxExample,
         MapExample,
+        MenuExample,
         NumberBoxExample,
         ValidationExample,
         ListExample,
