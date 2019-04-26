@@ -16,7 +16,7 @@ class Configuration {
     private readonly _initialValues: Record<string, any>;
     private readonly _expectedChildren: Record<string, ExpectedChild>;
     private readonly _updateFunc: UpdateFunc;
-    private readonly _ownerConfig: Configuration | undefined;
+    private readonly _ownerConfig: Pick<Configuration, "fullPath"> | undefined;
     private _nestedConfigurations: Configuration[];
     private _optionChangedFunc: any;
 
@@ -29,7 +29,7 @@ class Configuration {
         expectedChildren?: Record<string, ExpectedChild>,
         isCollectionItem?: boolean,
         collectionItemIndex?: number,
-        ownerConfig?: Configuration | undefined
+        ownerConfig?: Pick<Configuration, "fullPath"> | undefined
     ) {
         this._updateFunc = updateFunc;
         this._name = name;
@@ -52,9 +52,17 @@ class Configuration {
     }
 
     public get fullPath(): string | null {
-        const ownerPath = this.ownerPath ? `${this.ownerPath}.` : this.ownerPath;
-        const name = this._name ? `${ownerPath}${this._name}` : this._name;
-        return this._isCollectionItem ? `${name}[${this._collectionItemIndex}]` : name;
+        let path = this._name;
+
+        if (this._ownerConfig && this._ownerConfig.fullPath) {
+            path = `${this._ownerConfig.fullPath}.${path}`;
+        }
+
+        if (this._isCollectionItem) {
+            path = `${path}[${this._collectionItemIndex}]`;
+        }
+
+        return path;
     }
 
     public get options(): string[] {
@@ -71,10 +79,6 @@ class Configuration {
 
     public get nested(): Configuration[] {
         return this._nestedConfigurations;
-    }
-
-    public get ownerPath(): string {
-        return this._ownerConfig && this._ownerConfig.fullPath ? this._ownerConfig.fullPath : "";
     }
 
     public get collectionItemIndex(): number | undefined {
