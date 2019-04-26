@@ -125,46 +125,12 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
                 && (child.$vnode.data && child.$vnode.data.scopedSlots);
             }
 
-            function hasPropertyName(obj, name) {
-                return Object.getOwnPropertyNames(obj).some((propertyName) => {
-                    return propertyName === name;
-                });
-            }
-
-            function hasNestedOptions(config) {
-                return config.nested && config.nested.length;
-            }
-
-            function getNestedOptions(config, options) {
-                if (hasNestedOptions(config)) {
-                    config.nested.forEach((nestedConfig) => {
-                        const name = nestedConfig.name;
-                        if (nestedConfig.isCollectionItem) {
-                            if (!hasPropertyName(options, name)) {
-                                options[name] = [];
-                            }
-                            options[name].push(nestedConfig.initialValues);
-                            if (hasNestedOptions(nestedConfig)) {
-                                getNestedOptions(nestedConfig, options[name][nestedConfig.collectionItemIndex]);
-                            }
-                        } else {
-                            options[name] = nestedConfig.initialValues;
-                            if (hasNestedOptions(nestedConfig)) {
-                                getNestedOptions(nestedConfig, options[name]);
-                            }
-                        }
-                    });
-                }
-            }
-
             const result: Record<string, any> = {
                 integrationOptions:  {
                     watchMethod: this.$_getWatchMethod(),
                 },
                 ...this.$_getExtraIntegrationOptions(),
             };
-
-            getNestedOptions(this.$_config, result);
 
             const templates = extractScopedSlots(this.$scopedSlots, Object.keys(this.$slots));
 

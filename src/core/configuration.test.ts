@@ -266,13 +266,13 @@ describe("initial configuration", () => {
         });
     });
 
-    it("pulls undefined if no values provided", () => {
+    it("pulls empty value for correct option structure T728446", () => {
         const root = createRootConfig(jest.fn());
 
-        const nested = root.createNested("option", {});
+        const nested = root.createNested("option", {}, true);
         nested.createNested("subOption", {});
 
-        expect(root.getInitialValues()).toBeUndefined();
+        expect(root.getInitialValues()).toMatchObject({ option: [{ subOption: {} }]});
     });
 
     it("pulls values and ignores empty nested", () => {
