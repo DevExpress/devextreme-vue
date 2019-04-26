@@ -47,10 +47,6 @@ class Configuration {
         return this._name;
     }
 
-    public get path(): string | null {
-        return this._isCollectionItem ? `${this._name}[${this._collectionItemIndex}]` : this._name;
-    }
-
     public get fullPath(): string | null {
         let path = this._name;
 
@@ -118,8 +114,7 @@ class Configuration {
         name: string,
         initialValues: Record<string, any>,
         isCollectionItem?: boolean,
-        expectedChildren?: Record<string, ExpectedChild>,
-        ownerConfig?: Configuration | undefined
+        expectedChildren?: Record<string, ExpectedChild>
     ): Configuration {
 
         const expected = this._expectedChildren[name];
@@ -138,13 +133,13 @@ class Configuration {
         }
 
         const configuration = new Configuration(
-            this.updateValue,
+            this._updateFunc,
             actualName,
             initialValues,
             expectedChildren,
             actualIsCollectionItem,
             collectionItemIndex,
-            ownerConfig
+            this
         );
 
         this._nestedConfigurations.push(configuration);
@@ -153,7 +148,7 @@ class Configuration {
     }
 
     public updateValue(nestedName: string, value: any): void {
-        const fullName = [this.path, nestedName].filter((n) => n).join(".");
+        const fullName = [this.fullPath, nestedName].filter((n) => n).join(".");
         this._updateFunc(fullName, value);
     }
 
