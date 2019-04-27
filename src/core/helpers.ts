@@ -46,3 +46,10 @@ export function extractScopedSlots(
 
     return result;
 }
+
+export function forEachChildNode(
+    el: Node,
+    callback: (child: ReturnType<Node["childNodes"]["item"]>) => void
+) {
+    Array.prototype.slice.call(el.childNodes).forEach(callback);
+}
