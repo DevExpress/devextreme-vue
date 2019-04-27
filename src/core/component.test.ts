@@ -827,6 +827,33 @@ describe("nested option", () => {
         });
     });
 
+    it("removes obstructive nodes before widget creation (T711311)", () => {
+        const subNestedCollectionItem = buildTestConfigCtor();
+        (subNestedCollectionItem as any as IConfigurationComponent).$_optionName = "subNestedOption";
+        (subNestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+
+        let innerHtml;
+        WidgetClass.mockImplementationOnce((element: HTMLElement, options: any) => {
+            innerHtml = element.innerHTML;
+            return createWidget(element, options);
+        });
+
+        new Vue({
+            template:
+                `<test-component>` +
+                `  <nested>` +
+                `    <sub-nested-collection-item/>` +
+                `  </nested>` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                Nested,
+                subNestedCollectionItem
+            },
+        }).$mount();
+
+        expect(innerHtml).toBe("");
+    });
 });
 
 function renderTemplate(name: string, model?: object, container?: any): Element {
