@@ -2,11 +2,15 @@
     <example-block title="dxMenu">
         <h4>Menu with simple items</h4>
         <dx-menu>
-            <dx-item text="Item 1">
+            <dx-item text="Item 1" icon="user">
                 <dx-item text="Item 1-1"/>
                 <dx-item text="Item 1-2"/>
-                <dx-item text="Item 1-3">
+                <dx-item text="Item 1-3" icon="edit">
                     <dx-item text="Item 1-3-1"/>
+                </dx-item>
+                <dx-item>
+                    <div slot-scope="_">Inline template</div>
+                    <dx-item text="Item 1-4-1"/>
                 </dx-item>
             </dx-item>
             <dx-item text="Item 2"/>

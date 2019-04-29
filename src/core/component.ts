@@ -8,7 +8,7 @@ import { getOption } from "./config";
 import Configuration, { bindOptionWatchers, subscribeOnUpdates } from "./configuration";
 import { IConfigurable } from "./configuration-component";
 import { IExtension, IExtensionComponentNode } from "./extension-component";
-import { camelize, extractScopedSlots, toComparable } from "./helpers";
+import { camelize, extractScopedSlots, forEachChildNode, toComparable } from "./helpers";
 
 interface IWidgetComponent extends IConfigurable {
     $_instance: any;
@@ -231,6 +231,14 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
     }
 });
 
+function cleanWidgetNode(node: Node) {
+    forEachChildNode(node, (childNode) => {
+        if (childNode.nodeName === "#comment") {
+            childNode.remove();
+        }
+    });
+}
+
 const DxComponent: VueConstructor = BaseComponent.extend({
     methods: {
         $_getExtraIntegrationOptions(): object {
@@ -251,6 +259,8 @@ const DxComponent: VueConstructor = BaseComponent.extend({
     },
 
     mounted(): void {
+        cleanWidgetNode(this.$el);
+
         this.$_createWidget(this.$el);
         this.$_instance.endUpdate();
         this.$children.forEach((child: IExtension) => {
