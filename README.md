@@ -181,7 +181,7 @@ For instance, you can specify the itemTemplate:
 ```html
 <div id="app">
     <dx-list :items="items">
-        <div slot="item" slot-scope="data">
+        <div slot="item" slot-scope="{ data }">
             <i>This is my template for {{data}}</i>
         </div>
     </dx-list>
@@ -209,7 +209,7 @@ new Vue({
 ```html
 <div id="app">
     <dx-list :items="items" item-template="my-template">
-        <div slot="my-template" slot-scope="data">
+        <div slot="my-template" slot-scope="{ data }">
             <i>This is my template for {{data}}</i>
         </div>
     </dx-list>
