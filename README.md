@@ -27,6 +27,8 @@ This project allows you to use [DevExtreme](http://js.devexpress.com) [Vue](http
 * [DevExtreme Validation](#validation)
 * [License](#license)
 * [Support & Feedback](#support-feedback)
+* [Version history](#version-history)
+
 ## <a name="getting-started"></a>Getting Started ##
 You can try this [live example](https://codesandbox.io/s/github/lukyanovas/devextreme-vue-example), [feature-based examples](https://js.devexpress.com/Demos/WidgetsGallery/Demo/Data_Grid/LocalDataSource/Vue/Light/) or configure local development environment as described below.
 
@@ -483,3 +485,10 @@ See the [DevExtreme License](https://js.devexpress.com/Licensing/) for more info
 ## <a name="support-feedback"></a>Support & Feedback ##
 * Check the [Vue Guide](https://vuejs.org/v2/guide/) for general Vue questions
 * For questions regarding DevExtreme libraries and widgets' APIs, use the [DevExpress Support Center](https://www.devexpress.com/Support/Center)
+
+## <a name="version-history"></a>Version history ###
+
+| DevExtreme | Vue |
+| ---------- | ----------------|
+| v19.1.x <br/> v18.2.x | v2.6.3+ |
+| v18.1.x | 2.5.16 - 2.6.0 |
