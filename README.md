@@ -491,4 +491,4 @@ See the [DevExtreme License](https://js.devexpress.com/Licensing/) for more info
 | DevExtreme | Vue |
 | ---------- | ----------------|
 | v19.1.x <br/> v18.2.x | v2.6.3+ |
-| v18.1.x | 2.5.16 - 2.6.0 |
+| v18.1.x | v2.5.16 - v2.6.0 |
