@@ -1120,6 +1120,90 @@ describe("static items", () => {
         expect(renderedTemplate.innerHTML).toBe("1");
     });
 
+    it("renders template with several root elements (vue 3)", () => {
+        const NestedItem = Vue.extend({
+            extends: DxConfiguration,
+            props: {
+                prop1: Number,
+                template: String
+            }
+        });
+        (NestedItem as any as IConfigurationComponent).$_optionName = "items";
+        (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
+
+        new Vue({
+            template: `<test-component>
+                         <nested-item>
+                            <template #default>a<p>b</p>c</template>
+                         </nested-item>
+                       </test-component>`,
+            components: {
+                TestComponent,
+                NestedItem
+            }
+        }).$mount();
+
+        const renderedTemplate = renderTemplate("items[0].template");
+
+        expect(renderedTemplate.innerHTML).toBe("a<p>b</p>c");
+    });
+
+    it("renders template with single root element (vue 3)", () => {
+        const NestedItem = Vue.extend({
+            extends: DxConfiguration,
+            props: {
+                prop1: Number,
+                template: String
+            }
+        });
+        (NestedItem as any as IConfigurationComponent).$_optionName = "items";
+        (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
+
+        new Vue({
+            template: `<test-component>
+                         <nested-item>
+                            <template #default><p>abc</p></template>
+                         </nested-item>
+                       </test-component>`,
+            components: {
+                TestComponent,
+                NestedItem
+            }
+        }).$mount();
+
+        const renderedTemplate = renderTemplate("items[0].template");
+
+        expect(renderedTemplate.innerHTML).toBe("abc");
+    });
+
+    it("keeps template root element class and id (vue 3)", () => {
+        const NestedItem = Vue.extend({
+            extends: DxConfiguration,
+            props: {
+                prop1: Number,
+                template: String
+            }
+        });
+        (NestedItem as any as IConfigurationComponent).$_optionName = "items";
+        (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
+
+        new Vue({
+            template: `<test-component>
+                         <nested-item>
+                            <template #default><p id='preserved-id' class='preserved-class'>abc</p></template>
+                         </nested-item>
+                       </test-component>`,
+            components: {
+                TestComponent,
+                NestedItem
+            }
+        }).$mount();
+
+        const renderedTemplate = renderTemplate("items[0].template");
+
+        expect(renderedTemplate.outerHTML).toBe(`<p id="preserved-id" class="preserved-class dx-template-wrapper">abc</p>`);
+    });
+
     it("render nested template", () => {
         const NestedItem = Vue.extend({
             extends: DxConfiguration,
@@ -1153,7 +1237,7 @@ describe("static items", () => {
         expect(renderedNestedTemplate.innerHTML).toBe("2");
     });
 
-    it("doesn't pass integrationOptions to widget if nestd item has sub nested item", () => {
+    it("doesn't pass integrationOptions to widget if nested item has sub nested item", () => {
         const NestedItem = Vue.extend({
             extends: DxConfiguration,
             props: {

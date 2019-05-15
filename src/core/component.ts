@@ -1,5 +1,6 @@
 import * as VueType from "vue";
 import IVue, { VNode, VueConstructor } from "vue";
+import { ScopedSlot } from "vue/types/vnode";
 
 import * as events from "devextreme/events";
 
@@ -9,15 +10,15 @@ import Configuration, { bindOptionWatchers, subscribeOnUpdates } from "./configu
 import { IConfigurable } from "./configuration-component";
 import { IExtension, IExtensionComponentNode } from "./extension-component";
 import { camelize, forEachChildNode, toComparable } from "./helpers";
-import { discover as discoverTemplates } from "./templates-discovering";
+import {
+    mountTemplate,
+    discover as discoverTemplates,
+    IEventBusHolder
+} from "./templates-discovering";
 
 interface IWidgetComponent extends IConfigurable {
     $_instance: any;
     $_WidgetClass: any;
-}
-
-interface IEventBusHolder {
-    eventBus: IVue;
 }
 
 interface IBaseComponent extends IVue, IWidgetComponent, IEventBusHolder {
@@ -158,31 +159,22 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
             return;
         },
 
-        $_fillTemplate(template: any, name: string): object {
+        $_fillTemplate(template: ScopedSlot, name: string): object {
             return {
                 render: (data: any) => {
-                    const scope = getOption("useLegacyTemplateEngine")
+                    const scopeData = getOption("useLegacyTemplateEngine")
                         ? data.model
                         : { data: data.model, index: data.index };
-                    const vm = new Vue({
-                        name,
-                        inject: ["eventBus"],
-                        parent: this,
-                        created() {
-                            (this as IEventBusHolder).eventBus.$on("updated", () => {
-                                this.$forceUpdate();
-                            });
-                        },
-                        render: () => template(scope)
-                    }).$mount();
 
-                    const element = vm.$el;
+                    const mountedTemplate = mountTemplate(template, this, scopeData, name);
+
+                    const element = mountedTemplate.$el;
                     element.classList.add(DX_TEMPLATE_WRAPPER_CLASS);
 
                     const container = data.container.get ? data.container.get(0) : data.container;
                     container.appendChild(element);
 
-                    events.one(element, DX_REMOVE_EVENT, vm.$destroy.bind(vm));
+                    events.one(element, DX_REMOVE_EVENT, mountedTemplate.$destroy.bind(mountedTemplate));
 
                     return element;
                 }
