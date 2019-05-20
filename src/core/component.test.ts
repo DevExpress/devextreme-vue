@@ -1201,7 +1201,8 @@ describe("static items", () => {
 
         const renderedTemplate = renderTemplate("items[0].template");
 
-        expect(renderedTemplate.outerHTML).toBe(`<p id="preserved-id" class="preserved-class dx-template-wrapper">abc</p>`);
+        expect(renderedTemplate.outerHTML)
+            .toBe(`<p id="preserved-id" class="preserved-class dx-template-wrapper">abc</p>`);
     });
 
     it("render nested template", () => {

@@ -1,6 +1,7 @@
 import Vue, { CreateElement } from "vue";
-import { IConfigurable } from "./configuration-component";
 import { ScopedSlot } from "vue/types/vnode";
+
+import { IConfigurable } from "./configuration-component";
 
 const TEMPLATE_PROP = "template";
 
@@ -27,7 +28,7 @@ function hasTemplate(component: Vue) {
 
 function discover(component: Vue): Record<string, ScopedSlot> {
     const templates = { ...component.$scopedSlots };
-    if (!!component.$slots["default"]) {
+    if (!!component.$slots.default) {
         delete templates.default;
     }
 
@@ -41,7 +42,7 @@ function discover(component: Vue): Record<string, ScopedSlot> {
             const templateName = `${configurable.$_config.fullPath}.${TEMPLATE_PROP}`;
             templates[templateName] = childComponent.$scopedSlots.default;
         }
-    };
+    }
 
     return templates;
 }
@@ -62,7 +63,7 @@ function mountTemplate(
             });
         },
         render: (createElement: CreateElement) => {
-            var content = template(data);
+            const content = template(data);
             if (!content) {
                 return createElement("div");
             }

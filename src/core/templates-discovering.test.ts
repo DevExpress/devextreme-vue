@@ -23,7 +23,7 @@ describe("templates-discovering (vue 2)", () => {
         const template = "<div/>";
         expect(getDiscoveredTemplates(template)).toEqual([]);
     });
-})
+});
 
 describe("templates-discovering (vue 3)", () => {
 
@@ -58,7 +58,7 @@ describe("templates-discovering (vue 3)", () => {
         const template = "<template/>";
         expect(getDiscoveredTemplates(template)).toEqual([]);
     });
-})
+});
 
 function getDiscoveredTemplates(template: string): string[] {
     let actual;

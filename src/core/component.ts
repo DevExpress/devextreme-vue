@@ -11,9 +11,9 @@ import { IConfigurable } from "./configuration-component";
 import { IExtension, IExtensionComponentNode } from "./extension-component";
 import { camelize, forEachChildNode, toComparable } from "./helpers";
 import {
-    mountTemplate,
     discover as discoverTemplates,
-    IEventBusHolder
+    IEventBusHolder,
+    mountTemplate
 } from "./templates-discovering";
 
 interface IWidgetComponent extends IConfigurable {
@@ -121,7 +121,9 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
                 result.integrationOptions.templates = {};
                 Object.keys(templates).forEach((templateName: string) => {
                     result[templateName] = templateName;
-                    result.integrationOptions.templates[templateName] = this.$_fillTemplate(templates[templateName], templateName);
+                    result.integrationOptions.templates[templateName] = this.$_fillTemplate(
+                        templates[templateName], templateName
+                    );
                 });
             }
 
