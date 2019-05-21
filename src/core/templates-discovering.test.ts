@@ -32,7 +32,7 @@ describe("templates-discovering (vue 3)", () => {
         expect(getDiscoveredTemplates(template)).toEqual(["slot_name"]);
     });
 
-    it("doesn't discover named not-scoped slot", () => {
+    it("discovers named not-scoped slot", () => {
         const template = "<template #slot_name/>";
         expect(getDiscoveredTemplates(template)).toEqual(["slot_name"]);
     });
@@ -47,15 +47,15 @@ describe("templates-discovering (vue 3)", () => {
         expect(getDiscoveredTemplates(template)).toEqual(["default"]);
     });
 
-    // to avoid creating templates from config-components
-    it("doesn't discover implicit default slot", () => {
-        const template = "<div>abc</div>";
+    // Vue doesn't recognize this as slot
+    it("doesn't discover not-scoped not-named slot", () => {
+        const template = "<template/>";
         expect(getDiscoveredTemplates(template)).toEqual([]);
     });
 
     // to avoid creating templates from config-components
-    it("doesn't discover explicit default scoped slot", () => {
-        const template = "<template/>";
+    it("doesn't discover implicit default slot", () => {
+        const template = "<div>abc</div>";
         expect(getDiscoveredTemplates(template)).toEqual([]);
     });
 });
