@@ -27,9 +27,18 @@ function hasTemplate(component: Vue) {
 }
 
 function discover(component: Vue): Record<string, ScopedSlot> {
-    const templates = { ...component.$scopedSlots };
-    if (!!component.$slots.default) {
-        delete templates.default;
+    const templates: Record<string, ScopedSlot> = {};
+    for (const slotName in component.$scopedSlots) {
+        if (slotName === "default" && component.$slots.default) {
+            continue;
+        }
+
+        const slot = component.$scopedSlots[slotName];
+        if (!slot) {
+            continue;
+        }
+
+        templates[slotName] = slot;
     }
 
     for (const childComponent of component.$children) {
@@ -38,10 +47,13 @@ function discover(component: Vue): Record<string, ScopedSlot> {
             continue;
         }
 
-        if (hasTemplate(childComponent)) {
-            const templateName = `${configurable.$_config.fullPath}.${TEMPLATE_PROP}`;
-            templates[templateName] = childComponent.$scopedSlots.default;
+        const defaultSlot = childComponent.$scopedSlots.default;
+        if (!defaultSlot || !hasTemplate(childComponent)) {
+            continue;
         }
+
+        const templateName = `${configurable.$_config.fullPath}.${TEMPLATE_PROP}`;
+        templates[templateName] = defaultSlot;
     }
 
     return templates;
