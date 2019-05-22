@@ -47,6 +47,11 @@ describe("templates-discovering (vue 3)", () => {
         expect(getDiscoveredTemplates(template)).toEqual(["default"]);
     });
 
+    it("discovers explicit default scoped slot", () => {
+        const template = "<template v-slot='_'/>";
+        expect(getDiscoveredTemplates(template)).toEqual(["default"]);
+    });
+
     // Vue doesn't recognize this as slot
     it("doesn't discover not-scoped not-named slot", () => {
         const template = "<template/>";
@@ -56,6 +61,12 @@ describe("templates-discovering (vue 3)", () => {
     // to avoid creating templates from config-components
     it("doesn't discover implicit default slot", () => {
         const template = "<div>abc</div>";
+        expect(getDiscoveredTemplates(template)).toEqual([]);
+    });
+
+    // to avoid creating templates from config-components
+    it("doesn't discover custom component", () => {
+        const template = "<customComponent #default='_'/>";
         expect(getDiscoveredTemplates(template)).toEqual([]);
     });
 });
@@ -68,6 +79,11 @@ function getDiscoveredTemplates(template: string): string[] {
             container: {
                 render(h) {
                     actual = discover(this);
+                    return h();
+                }
+            },
+            customComponent: {
+                render(h) {
                     return h();
                 }
             }
