@@ -2,6 +2,7 @@ import Vue, { CreateElement } from "vue";
 import { ScopedSlot } from "vue/types/vnode";
 
 import { IConfigurable } from "./configuration-component";
+import { TEMPLATE_SINGLE_ROOT_ERROR } from "./errors";
 
 const TEMPLATE_PROP = "template";
 
@@ -80,11 +81,11 @@ function mountTemplate(
                 return createElement("div");
             }
 
-            if (content.length === 1) {
-                return content[0];
+            if (content.length > 1) {
+                throw new Error(TEMPLATE_SINGLE_ROOT_ERROR);
             }
 
-            return createElement("div", content);
+            return content[0];
         }
     }).$mount();
 }

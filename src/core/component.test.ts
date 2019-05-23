@@ -1120,7 +1120,7 @@ describe("static items", () => {
         expect(renderedTemplate.innerHTML).toBe("1");
     });
 
-    it("renders template with several root elements (vue 3)", () => {
+    it("renders template containing text only (vue 3)", () => {
         const NestedItem = Vue.extend({
             extends: DxConfiguration,
             props: {
@@ -1128,13 +1128,12 @@ describe("static items", () => {
                 template: String
             }
         });
-        (NestedItem as any as IConfigurationComponent).$_optionName = "items";
-        (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
+        (NestedItem as any as IConfigurationComponent).$_optionName = "item";
 
         new Vue({
             template: `<test-component>
                          <nested-item>
-                            <template #default>a<p>b</p>c</template>
+                            <template #default>abc</template>
                          </nested-item>
                        </test-component>`,
             components: {
@@ -1143,9 +1142,34 @@ describe("static items", () => {
             }
         }).$mount();
 
-        const renderedTemplate = renderTemplate("items[0].template");
+        const renderedTemplate = renderTemplate("item.template");
 
-        expect(renderedTemplate.innerHTML).toBe("a<p>b</p>c");
+        expect(renderedTemplate.textContent).toBe("abc");
+    });
+
+    it("renders template with several root elements (vue 3)", () => {
+        const NestedItem = Vue.extend({
+            extends: DxConfiguration,
+            props: {
+                prop1: Number,
+                template: String
+            }
+        });
+        (NestedItem as any as IConfigurationComponent).$_optionName = "item";
+
+        expect( () =>
+            new Vue({
+                template: `<test-component>
+                            <nested-item>
+                            <template #default>a<p>b</p>c</template>
+                            </nested-item>
+                        </test-component>`,
+                components: {
+                    TestComponent,
+                    NestedItem
+                }
+            }).$mount()
+        );
     });
 
     it("renders template with single root element (vue 3)", () => {
@@ -1156,8 +1180,7 @@ describe("static items", () => {
                 template: String
             }
         });
-        (NestedItem as any as IConfigurationComponent).$_optionName = "items";
-        (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
+        (NestedItem as any as IConfigurationComponent).$_optionName = "item";
 
         new Vue({
             template: `<test-component>
@@ -1171,7 +1194,7 @@ describe("static items", () => {
             }
         }).$mount();
 
-        const renderedTemplate = renderTemplate("items[0].template");
+        const renderedTemplate = renderTemplate("item.template");
 
         expect(renderedTemplate.innerHTML).toBe("abc");
     });
@@ -1184,8 +1207,7 @@ describe("static items", () => {
                 template: String
             }
         });
-        (NestedItem as any as IConfigurationComponent).$_optionName = "items";
-        (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
+        (NestedItem as any as IConfigurationComponent).$_optionName = "item";
 
         new Vue({
             template: `<test-component>
@@ -1199,7 +1221,7 @@ describe("static items", () => {
             }
         }).$mount();
 
-        const renderedTemplate = renderTemplate("items[0].template");
+        const renderedTemplate = renderTemplate("item.template");
 
         expect(renderedTemplate.outerHTML)
             .toBe(`<p id="preserved-id" class="preserved-class dx-template-wrapper">abc</p>`);

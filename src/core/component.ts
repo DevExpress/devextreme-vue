@@ -171,7 +171,9 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
                     const mountedTemplate = mountTemplate(template, this, scopeData, name);
 
                     const element = mountedTemplate.$el;
-                    element.classList.add(DX_TEMPLATE_WRAPPER_CLASS);
+                    if (element.classList) {
+                        element.classList.add(DX_TEMPLATE_WRAPPER_CLASS);
+                    }
 
                     const container = data.container.get ? data.container.get(0) : data.container;
                     container.appendChild(element);
