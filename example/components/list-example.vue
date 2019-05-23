@@ -26,7 +26,20 @@
                 <div slot-scope="_">2</div>
             </dx-item>
             <dx-item>
-                <div slot-scope="_">3</div>
+                <div slot-scope="_">3 - <i>third</i></div>
+            </dx-item>
+        </dx-list>
+
+        <h4>List with static items (vue 3)</h4>
+        <dx-list>
+            <dx-item>
+                <template #default>1</template>
+            </dx-item>
+            <dx-item>
+                <template #default>2</template>
+            </dx-item>
+            <dx-item>
+                <template #default><span>3 - <i>third</i></span></template>
             </dx-item>
         </dx-list>
 
