@@ -2,7 +2,7 @@ import Vue, { CreateElement } from "vue";
 import { ScopedSlot } from "vue/types/vnode";
 
 import { IConfigurable } from "./configuration-component";
-import { TEMPLATE_SINGLE_ROOT_ERROR } from "./errors";
+import { TEMPLATE_MULTIPLE_ROOTS_ERROR } from "./errors";
 
 const TEMPLATE_PROP = "template";
 
@@ -82,7 +82,7 @@ function mountTemplate(
             }
 
             if (content.length > 1) {
-                throw new Error(TEMPLATE_SINGLE_ROOT_ERROR);
+                throw new Error(TEMPLATE_MULTIPLE_ROOTS_ERROR);
             }
 
             return content[0];
