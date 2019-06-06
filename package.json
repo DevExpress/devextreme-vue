@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "devextreme-vue",
   "version": "19.1.3",
   "description": "DevExtreme Vue UI and Visualization Components",
@@ -33,7 +33,7 @@
   "devDependencies": {
     "@types/jest": "^22.2.3",
     "@types/node": "^9.6.30",
-    "css-loader": "^0.28.11",
+    "css-loader": "^2.1.1",
     "dasherize": "^2.0.0",
     "del": "^3.0.0",
     "devextreme": "~19.1.3",
