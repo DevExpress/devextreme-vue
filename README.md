@@ -179,6 +179,7 @@ The DevExtreme Vue editors also support [`v-model`](https://vuejs.org/v2/guide/f
 You can customize widget elements' appearance via the corresponding template properties. 
 
 To specify a DevExtreme Vue Component template's markup, use a [named slot](https://vuejs.org/v2/guide/components-slots.html#Named-Slots). You should also specify a [slot scope](https://vuejs.org/v2/guide/components-slots.html#Scoped-Slots) to access the template element's data.
+Note that the slot should always have a single root node.
 
 For instance, you can specify the itemTemplate:
 
