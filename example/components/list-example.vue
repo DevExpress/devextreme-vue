@@ -8,16 +8,16 @@
 
         <h4>List with item template</h4>
         <dx-list :items="listData">
-            <div slot="item" slot-scope="{ data, index }">
-                {{index + 1}} - <i>{{data.day}}</i>
-            </div>
-            <div slot="weekend" slot-scope="{ data, index }">
-                {{index + 1}} - <b>{{data.day}}</b>
-            </div>
+            <template #item="{ data, index }">
+                <div>{{index + 1}} - <i>{{data.day}}</i></div>
+            </template>
+            <template #weekend="{ data, index }">
+                <div>{{index + 1}} - <b>{{data.day}}</b></div>
+            </template>
         </dx-list>
         <br/>
         
-        <h4>List with static items</h4>
+        <h4>List with static items (vue < 2.6.0)</h4>
         <dx-list>
             <dx-item>
                 <div slot-scope="_">1</div>
@@ -30,7 +30,7 @@
             </dx-item>
         </dx-list>
 
-        <h4>List with static items (vue 3)</h4>
+        <h4>List with static items</h4>
         <dx-list>
             <dx-item>
                 <template #default>1</template>
@@ -48,12 +48,12 @@
           itemTemplate="weekday"
           :items="listData"
         >
-            <div slot="weekday" slot-scope="{ data }">
+            <template #weekday="{ data }">
                 <s>{{data.day}}</s>
-            </div>
-            <div slot="weekend" slot-scope="{ data }">
+            </template>
+            <template #weekend="{ data }">
                 <b>{{data.day}}</b>
-            </div>
+            </template>
         </dx-list>
         <br/>
         <dx-button text="Toggle Weekend" @click="toggleWeekend"/>
