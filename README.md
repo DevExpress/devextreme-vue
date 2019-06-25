@@ -185,9 +185,9 @@ For instance, you can specify the itemTemplate:
 ```html
 <div id="app">
     <dx-list :items="items">
-        <div slot="item" slot-scope="{ data }">
+        <template v-slot:item="{ data }">
             <i>This is my template for {{data}}</i>
-        </div>
+        </template>
     </dx-list>
 </div>
 ```
@@ -213,9 +213,9 @@ new Vue({
 ```html
 <div id="app">
     <dx-list :items="items" item-template="my-template">
-        <div slot="my-template" slot-scope="{ data }">
+        <template  v-slot:my-template="{ data }">
             <i>This is my template for {{data}}</i>
-        </div>
+        </template>
     </dx-list>
 </div>
 ```
@@ -450,14 +450,14 @@ If a configuration component has the `template` option, you can put the default-
 
 ```html
 <dx-list>
-  <dx-item>
-    <span slot-scope="_">orange</span>
+  <dx-item #default>
+    <span>orange</span>
   </dx-item>
-  <dx-item>
-    <span slot-scope="_">white</span>
+  <dx-itemm #default>
+    <span>white</span>
   </dx-item>
-  <dx-item>
-    <span slot-scope="_">black</span>
+  <dx-itemm #default>
+    <span>black</span>
   </dx-item>
 </dx-list>
 ```
