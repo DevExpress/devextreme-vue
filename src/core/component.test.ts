@@ -710,33 +710,6 @@ describe("nested option", () => {
         });
     });
 
-    it("add nested component by condition", (done) => {
-        const vm = new Vue({
-            template:
-                `<test-component>` +
-                `  <nested v-if="showNest" :prop1="value" />` +
-                `</test-component>`,
-            components: {
-                TestComponent,
-                Nested
-            },
-            data: {
-                showNest: false
-            },
-            props: ["value"],
-            propsData: {
-                value: 123
-            }
-        }).$mount();
-
-        vm.$data.showNest = true
-
-        Vue.nextTick(() => {
-            expect(Widget.option).toHaveBeenCalledWith("nestedOption", { "prop1": 123 });
-            done();
-        });
-    });
-
     it("watches option changes (collectionItem)", (done) => {
         const nestedCollectionItem = buildTestConfigCtor();
         (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
