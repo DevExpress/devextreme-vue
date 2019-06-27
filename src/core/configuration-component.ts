@@ -32,7 +32,7 @@ const DxConfiguration: VueConstructor = Vue.extend({
     mounted() {
         const instance = this.$parent.$_instance;
 
-        if(instance) {
+        if (instance) {
             const config = (this.$vnode.componentOptions as IConfigurable).$_config;
             instance.option(config.fullPath, config.initialValues);
         }

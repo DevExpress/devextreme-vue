@@ -729,10 +729,10 @@ describe("nested option", () => {
             }
         }).$mount();
 
-        vm.$data.showNest = true
+        vm.$data.showNest = true;
 
         Vue.nextTick(() => {
-            expect(Widget.option).toHaveBeenCalledWith("nestedOption", { "prop1": 123 });
+            expect(Widget.option).toHaveBeenCalledWith("nestedOption", { prop1: 123 });
             done();
         });
     });
