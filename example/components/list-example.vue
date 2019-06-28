@@ -11,7 +11,7 @@
             <template #item="{ data, index }">
                 <div>{{index + 1}} - <i>{{data.day}}</i></div>
             </template>
-            <template #weekend="{ data, index }">
+            <template #weekend>
                 <div>{{index + 1}} - <b>{{data.day}}</b></div>
             </template>
         </dx-list>
