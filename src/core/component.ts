@@ -55,6 +55,10 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
 
     render(createElement: (...args) => VNode): VNode {
         const children: VNode[] = [];
+
+        if (this.$_config.cleanNested) {
+            this.$_config.cleanNested();
+        }
         pullAllChildren(this.$slots.default, children, this.$_config);
 
         this.$_processChildren(children);
