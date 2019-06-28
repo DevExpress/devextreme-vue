@@ -12,8 +12,19 @@
                 <div>{{index + 1}} - <i>{{data.day}}</i></div>
             </template>
             <template #weekend>
-                <div>No templates on weekend</b></div>
+                <b>No templates on weekend</b>
             </template>
+        </dx-list>
+        <br/>
+
+        <h4>List with item template (vue < 2.6.0)</h4>
+        <dx-list :items="listData">
+            <div slot="item" slot-scope="{ data, index }">
+                {{index + 1}} - <i>{{data.day}}</i>
+            </div>
+            <div slot="weekend">
+                <b>No templates on weekend</b>
+            </div>
         </dx-list>
         <br/>
         
