@@ -179,15 +179,16 @@ The DevExtreme Vue editors also support [`v-model`](https://vuejs.org/v2/guide/f
 You can customize widget elements' appearance via the corresponding template properties. 
 
 To specify a DevExtreme Vue Component template's markup, use a [named slot](https://vuejs.org/v2/guide/components-slots.html#Named-Slots). You should also specify a [slot scope](https://vuejs.org/v2/guide/components-slots.html#Scoped-Slots) to access the template element's data.
+Note that the slot should not contain more than one root element.
 
 For instance, you can specify the itemTemplate:
 
 ```html
 <div id="app">
     <dx-list :items="items">
-        <div slot="item" slot-scope="{ data }">
+        <template #item="{ data }">
             <i>This is my template for {{data}}</i>
-        </div>
+        </template>
     </dx-list>
 </div>
 ```
@@ -213,9 +214,9 @@ new Vue({
 ```html
 <div id="app">
     <dx-list :items="items" item-template="my-template">
-        <div slot="my-template" slot-scope="{ data }">
+        <template  #my-template="{ data }">
             <i>This is my template for {{data}}</i>
-        </div>
+        </template>
     </dx-list>
 </div>
 ```
@@ -450,14 +451,14 @@ If a configuration component has the `template` option, you can put the default-
 
 ```html
 <dx-list>
-  <dx-item>
-    <span slot-scope="_">orange</span>
+  <dx-item #default>
+    <span>orange</span>
   </dx-item>
-  <dx-item>
-    <span slot-scope="_">white</span>
+  <dx-item #default>
+    <span>white</span>
   </dx-item>
-  <dx-item>
-    <span slot-scope="_">black</span>
+  <dx-item #default>
+    <span>black</span>
   </dx-item>
 </dx-list>
 ```
