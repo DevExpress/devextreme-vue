@@ -18,7 +18,9 @@ class Configuration {
     private readonly _updateFunc: UpdateFunc;
     private readonly _ownerConfig: Pick<Configuration, "fullPath"> | undefined;
     private _nestedConfigurations: Configuration[];
+    private _prevNestedConfigOptions: any;
     private _optionChangedFunc: any;
+    private _hasOptionsToUpdate: any;
 
     private _options: string[];
 
@@ -39,12 +41,17 @@ class Configuration {
         this._collectionItemIndex = collectionItemIndex;
         this._expectedChildren = expectedChildren || {};
         this._ownerConfig = ownerConfig;
+        this._hasOptionsToUpdate = false;
 
         this.updateValue = this.updateValue.bind(this);
     }
 
     public get name(): string | null {
         return this._name;
+    }
+
+    public get hasOptionsToUpdate(): Boolean {
+        return this._hasOptionsToUpdate;
     }
 
     public get fullPath(): string | null {
@@ -77,6 +84,10 @@ class Configuration {
         return this._nestedConfigurations;
     }
 
+    public get prevNested(): any {
+        return this._prevNestedConfigOptions;
+    }
+
     public get collectionItemIndex(): number | undefined {
         return this._collectionItemIndex;
     }
@@ -95,6 +106,14 @@ class Configuration {
 
     public set optionChangedFunc(handler: any) {
         this._optionChangedFunc = handler;
+    }
+
+    public set hasOptionsToUpdate(value: Boolean) {
+        this._hasOptionsToUpdate = value;
+    }
+
+    public setPrevNested(value) {
+        this._prevNestedConfigOptions = value;
     }
 
     public onOptionChanged(args: {name: string, fullName: string, value: any}): void {
@@ -152,15 +171,13 @@ class Configuration {
         this._updateFunc(fullName, value);
     }
 
-    public getInitialValues(): Record<string, any> | undefined {
-        const values = {
-            ...this._initialValues
-        };
+    public getNestedOptionValues(): Record<string, any> | undefined {
+        const values = {};
 
         this._nestedConfigurations.forEach((o) => {
             if (!o._name) { return; }
 
-            const nestedValue = o.getInitialValues();
+            const nestedValue = {...o.initialValues ,...o.getNestedOptionValues()};
             if (!nestedValue) { return; }
 
             if (!o._isCollectionItem) {
