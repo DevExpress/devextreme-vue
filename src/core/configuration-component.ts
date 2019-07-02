@@ -30,7 +30,7 @@ const DxConfiguration: VueConstructor = Vue.extend({
     },
 
     mounted() {
-        if(this.$parent.$_instance) {
+        if (this.$parent.$_instance) {
             this.$parent.$_config.hasOptionsToUpdate = true;
         }
     },

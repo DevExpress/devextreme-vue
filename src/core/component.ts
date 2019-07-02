@@ -65,7 +65,7 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
 
     render(createElement: (...args) => VNode): VNode {
         const children: VNode[] = [];
-    
+
         if (this.$_config.cleanNested) {
             this.$_config.cleanNested();
         }
@@ -86,11 +86,11 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
     },
 
     updated() {
-        if(this.$_config.hasOptionsToUpdate) {
+        if (this.$_config.hasOptionsToUpdate) {
             const options = this.$_config.getNestedOptionValues();
             const nestedOptions = Object.keys(options);
             const prevNestedOptions = Object.keys(this.$_config.prevNested);
-            if(nestedOptions.length < prevNestedOptions.length) {
+            if (nestedOptions.length < prevNestedOptions.length) {
                 prevNestedOptions.forEach((prevName) => {
                     const hasOption = nestedOptions.some((name) => {
                         return prevName === name;
@@ -101,9 +101,13 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
                     }
                 });
             }
-            for(const name in options) {
-                this.$_instance.option(name, options[name]);
+
+            for (const name in options) {
+                if (options.hasOwnProperty(name)) {
+                    this.$_instance.option(name, options[name]);
+                }
             }
+
             this.$_config.hasOptionsToUpdate = false;
         }
         this.eventBus.$emit("updated");
