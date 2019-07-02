@@ -260,7 +260,7 @@ describe("initial configuration", () => {
             .createNested("subOption", { prop: 123 })
             .init(["prop"]);
 
-        expect(root.getInitialValues()).toMatchObject({
+        expect(root.getNestedOptionValues()).toMatchObject({
             option: {
                 subOption: {
                     prop: 123
@@ -274,7 +274,7 @@ describe("initial configuration", () => {
 
         root.createNested("options", { propA: 123 }, true);
 
-        expect(root.getInitialValues()).toMatchObject({
+        expect(root.getNestedOptionValues()).toMatchObject({
             options: [
                 { propA: 123 }
             ]
@@ -287,7 +287,7 @@ describe("initial configuration", () => {
         root.createNested("options", { propA: 123 }, true);
         root.createNested("options", { propA: 456, propB: 789 }, true);
 
-        expect(root.getInitialValues()).toMatchObject({
+        expect(root.getNestedOptionValues()).toMatchObject({
             options: [
                 { propA: 123 },
                 { propA: 456, propB: 789 },
@@ -301,7 +301,7 @@ describe("initial configuration", () => {
         root.createNested("option", { propA: 123 });
         root.createNested("option", { propA: 456, propB: 789 });
 
-        expect(root.getInitialValues()).toMatchObject({
+        expect(root.getNestedOptionValues()).toMatchObject({
             option: { propA: 456, propB: 789 }
         });
     });
@@ -312,14 +312,16 @@ describe("initial configuration", () => {
         const nested = root.createNested("option", { propB: 456 });
         nested.createNested("subOption", { propC: 789 });
 
-        expect(root.getInitialValues()).toMatchObject({
-            propA: 123,
+        expect(root.getNestedOptionValues()).toMatchObject({
             option: {
                 propB: 456,
                 subOption: {
                     propC: 789
                 }
             }
+        });
+        expect(root.initialValues).toMatchObject({
+            propA: 123
         });
     });
 
@@ -329,7 +331,7 @@ describe("initial configuration", () => {
         const nested = root.createNested("option", {}, true);
         nested.createNested("subOption", {});
 
-        expect(root.getInitialValues()).toMatchObject({ option: [{ subOption: {} }]});
+        expect(root.getNestedOptionValues()).toMatchObject({ option: [{ subOption: {} }]});
     });
 
     it("pulls values and ignores empty nested", () => {
@@ -344,7 +346,7 @@ describe("initial configuration", () => {
         root.createNested("anotherOption", {});
         nested.createNested("anotherSubOption", {});
 
-        expect(root.getInitialValues()).toMatchObject({
+        expect(root.getNestedOptionValues()).toMatchObject({
             option: {
                 subOption: {
                     prop: 123

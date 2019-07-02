@@ -65,7 +65,7 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
 
     render(createElement: (...args) => VNode): VNode {
         const children: VNode[] = [];
-
+    
         if (this.$_config.cleanNested) {
             this.$_config.cleanNested();
         }
@@ -81,7 +81,31 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
         );
     },
 
+    beforeUpdate() {
+        this.$_config.setPrevNested(this.$_config.getNestedOptionValues());
+    },
+
     updated() {
+        if(this.$_config.hasOptionsToUpdate) {
+            const options = this.$_config.getNestedOptionValues();
+            const nestedOptions = Object.keys(options);
+            const prevNestedOptions = Object.keys(this.$_config.prevNested);
+            if(nestedOptions.length < prevNestedOptions.length) {
+                prevNestedOptions.forEach((prevName) => {
+                    const hasOption = nestedOptions.some((name) => {
+                        return prevName === name;
+                    });
+
+                    if (!hasOption) {
+                        this.$_instance.option(prevName, this[prevName]);
+                    }
+                });
+            }
+            for(const name in options) {
+                this.$_instance.option(name, options[name]);
+            }
+            this.$_config.hasOptionsToUpdate = false;
+        }
         this.eventBus.$emit("updated");
     },
 
@@ -109,7 +133,8 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
             const config = this.$_config;
             const options: object = {
                 ...this.$options.propsData,
-                ...config.getInitialValues(),
+                ...config.initialValues,
+                ...config.getNestedOptionValues(),
                 ...this.$_getIntegrationOptions()
             };
             const instance = new this.$_WidgetClass(element, options);

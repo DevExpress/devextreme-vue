@@ -30,12 +30,13 @@ const DxConfiguration: VueConstructor = Vue.extend({
     },
 
     mounted() {
-        const instance = this.$parent.$_instance;
-
-        if (instance) {
-            const config = (this.$vnode.componentOptions as IConfigurable).$_config;
-            instance.option(config.fullPath, config.initialValues);
+        if(this.$parent.$_instance) {
+            this.$parent.$_config.hasOptionsToUpdate = true;
         }
+    },
+
+    beforeDestroy() {
+        this.$parent.$_config.hasOptionsToUpdate = true;
     },
 
     render(createElement: (...args) => VNode): VNode {
