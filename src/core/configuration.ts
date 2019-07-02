@@ -20,7 +20,7 @@ class Configuration {
     private _nestedConfigurations: Configuration[];
     private _prevNestedConfigOptions: any;
     private _optionChangedFunc: any;
-    private _hasOptionsToUpdate: any;
+    private _hasOptionsToUpdate: boolean;
 
     private _options: string[];
 
