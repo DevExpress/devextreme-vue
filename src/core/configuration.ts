@@ -112,7 +112,7 @@ class Configuration {
         this._optionChangedFunc = handler;
     }
 
-    public setPrevNestedOptions(value) {
+    public setPrevNestedOptions(value: any) {
         this._prevNestedConfigOptions = value;
     }
 
