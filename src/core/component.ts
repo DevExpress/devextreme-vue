@@ -72,14 +72,14 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
     },
 
     beforeUpdate() {
-        this.$_config.setPrevNested(this.$_config.getNestedOptionValues());
+        this.$_config.setPrevNestedOptions(this.$_config.getNestedOptionValues());
     },
 
     updated() {
         if (this.$_config.hasOptionsToUpdate) {
             const options = this.$_config.getNestedOptionValues();
             const nestedOptions = Object.keys(options);
-            const prevNestedOptions = Object.keys(this.$_config.prevNested);
+            const prevNestedOptions = Object.keys(this.$_config.prevNestedOptions);
             if (nestedOptions.length < prevNestedOptions.length) {
                 prevNestedOptions.forEach((prevName) => {
                     const hasOption = nestedOptions.some((name) => {
