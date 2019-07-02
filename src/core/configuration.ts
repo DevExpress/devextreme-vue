@@ -50,8 +50,12 @@ class Configuration {
         return this._name;
     }
 
-    public get hasOptionsToUpdate(): Boolean {
+    public get hasOptionsToUpdate(): boolean {
         return this._hasOptionsToUpdate;
+    }
+
+    public set hasOptionsToUpdate(value: boolean) {
+        this._hasOptionsToUpdate = value;
     }
 
     public get fullPath(): string | null {
@@ -106,10 +110,6 @@ class Configuration {
 
     public set optionChangedFunc(handler: any) {
         this._optionChangedFunc = handler;
-    }
-
-    public set hasOptionsToUpdate(value: Boolean) {
-        this._hasOptionsToUpdate = value;
     }
 
     public setPrevNested(value) {
@@ -177,7 +177,7 @@ class Configuration {
         this._nestedConfigurations.forEach((o) => {
             if (!o._name) { return; }
 
-            const nestedValue = {...o.initialValues ,...o.getNestedOptionValues()};
+            const nestedValue = {...o.initialValues, ...o.getNestedOptionValues()};
             if (!nestedValue) { return; }
 
             if (!o._isCollectionItem) {
