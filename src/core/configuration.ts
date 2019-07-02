@@ -88,7 +88,7 @@ class Configuration {
         return this._nestedConfigurations;
     }
 
-    public get prevNested(): any {
+    public get prevNestedOptions(): any {
         return this._prevNestedConfigOptions;
     }
 
@@ -112,7 +112,7 @@ class Configuration {
         this._optionChangedFunc = handler;
     }
 
-    public setPrevNested(value) {
+    public setPrevNestedOptions(value) {
         this._prevNestedConfigOptions = value;
     }
 
