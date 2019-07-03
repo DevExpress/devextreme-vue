@@ -1,6 +1,6 @@
+import * as VueType from "vue";
 import IVue, { CreateElement } from "vue";
 import { ScopedSlot } from "vue/types/vnode";
-import * as VueType from "vue";
 
 import { IConfigurable } from "./configuration-component";
 import { TEMPLATE_MULTIPLE_ROOTS_ERROR } from "./errors";
