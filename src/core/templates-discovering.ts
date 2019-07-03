@@ -1,16 +1,18 @@
-import Vue, { CreateElement } from "vue";
+import IVue, { CreateElement } from "vue";
 import { ScopedSlot } from "vue/types/vnode";
+import * as VueType from "vue";
 
 import { IConfigurable } from "./configuration-component";
 import { TEMPLATE_MULTIPLE_ROOTS_ERROR } from "./errors";
 
 const TEMPLATE_PROP = "template";
+const Vue = VueType.default || VueType;
 
 interface IEventBusHolder {
-    eventBus: Vue;
+    eventBus: IVue;
 }
 
-function asConfigurable(component: Vue): IConfigurable | undefined {
+function asConfigurable(component: IVue): IConfigurable | undefined {
     if (!component.$vnode) {
         return undefined;
     }
@@ -23,11 +25,11 @@ function asConfigurable(component: Vue): IConfigurable | undefined {
     return configurable;
 }
 
-function hasTemplate(component: Vue) {
+function hasTemplate(component: IVue) {
     return TEMPLATE_PROP in component.$props && (component.$vnode.data && component.$vnode.data.scopedSlots);
 }
 
-function discover(component: Vue): Record<string, ScopedSlot> {
+function discover(component: IVue): Record<string, ScopedSlot> {
     const templates: Record<string, ScopedSlot> = {};
     for (const slotName in component.$scopedSlots) {
         if (slotName === "default" && component.$slots.default) {
@@ -62,15 +64,15 @@ function discover(component: Vue): Record<string, ScopedSlot> {
 
 function mountTemplate(
     template: ScopedSlot,
-    parent: Vue,
+    parent: IVue,
     data: any,
     name: string
-): Vue {
+): IVue {
     return new Vue({
         name,
         inject: ["eventBus"],
         parent,
-        created(this: Vue & IEventBusHolder) {
+        created(this: IVue & IEventBusHolder) {
             this.eventBus.$on("updated", () => {
                 this.$forceUpdate();
             });
