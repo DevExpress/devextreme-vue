@@ -765,6 +765,34 @@ describe("nested option", () => {
         });
     });
 
+    it("replace nested component", (done) => {
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <nested v-if="showNest" :prop1="value" />` +
+                `  <nested v-if="!showNest" :prop1="123" prop2="text" />` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                Nested
+            },
+            data: {
+                showNest: true
+            },
+            props: ["value"],
+            propsData: {
+                value: 123
+            }
+        }).$mount();
+
+        vm.$data.showNest = false;
+
+        Vue.nextTick(() => {
+            expect(Widget.option).toHaveBeenCalledWith("nestedOption.prop2", "text");
+            done();
+        });
+    });
+
     it("remove all nested component", (done) => {
         const vm = new Vue({
             template:
@@ -787,7 +815,7 @@ describe("nested option", () => {
         vm.$data.showNest = false;
 
         Vue.nextTick(() => {
-            expect(Widget.option).toHaveBeenCalledWith("nestedOption", undefined);
+            expect(Widget.option).toHaveBeenCalledWith("nestedOption", {});
             done();
         });
     });
