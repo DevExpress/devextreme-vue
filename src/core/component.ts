@@ -76,7 +76,7 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
     },
 
     updated() {
-        if (this.$_config.hasOptionsToUpdate) {
+        if (this.$_config.componentsCountChanged) {
             const options = this.$_config.getNestedOptionValues();
             const prevOptions = this.$_config.prevNestedOptions;
             const optionsList = Object.keys(options);
@@ -100,7 +100,7 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
                 }
             }
 
-            this.$_config.hasOptionsToUpdate = false;
+            this.$_config.componentsCountChanged = false;
         }
         this.eventBus.$emit("updated");
     },

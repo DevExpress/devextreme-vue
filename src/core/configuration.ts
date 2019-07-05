@@ -20,7 +20,7 @@ class Configuration {
     private _nestedConfigurations: Configuration[];
     private _prevNestedConfigOptions: any;
     private _optionChangedFunc: any;
-    private _hasOptionsToUpdate: boolean;
+    private _componentsCountChanged: boolean;
 
     private _options: string[];
 
@@ -41,7 +41,7 @@ class Configuration {
         this._collectionItemIndex = collectionItemIndex;
         this._expectedChildren = expectedChildren || {};
         this._ownerConfig = ownerConfig;
-        this._hasOptionsToUpdate = false;
+        this._componentsCountChanged = false;
 
         this.updateValue = this.updateValue.bind(this);
     }
@@ -51,11 +51,11 @@ class Configuration {
     }
 
     public get hasOptionsToUpdate(): boolean {
-        return this._hasOptionsToUpdate;
+        return this._componentsCountChanged;
     }
 
     public set hasOptionsToUpdate(value: boolean) {
-        this._hasOptionsToUpdate = value;
+        this._componentsCountChanged = value;
     }
 
     public get fullPath(): string | null {
