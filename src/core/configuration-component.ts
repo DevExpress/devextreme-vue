@@ -31,12 +31,12 @@ const DxConfiguration: VueConstructor = Vue.extend({
 
     mounted() {
         if (this.$parent.$_instance) {
-            this.$parent.$_config.hasOptionsToUpdate = true;
+            this.$parent.$_config.componentsCountChanged = true;
         }
     },
 
     beforeDestroy() {
-        this.$parent.$_config.hasOptionsToUpdate = true;
+        this.$parent.$_config.componentsCountChanged = true;
     },
 
     render(createElement: (...args) => VNode): VNode {
