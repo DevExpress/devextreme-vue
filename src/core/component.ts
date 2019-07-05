@@ -71,7 +71,37 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
         );
     },
 
+    beforeUpdate() {
+        this.$_config.setPrevNestedOptions(this.$_config.getNestedOptionValues());
+    },
+
     updated() {
+        if (this.$_config.componentsCountChanged) {
+            const options = this.$_config.getNestedOptionValues();
+            const prevOptions = this.$_config.prevNestedOptions;
+            const optionsList = Object.keys(options);
+            const prevOptionsList = Object.keys(prevOptions);
+            if (optionsList.length < prevOptionsList.length) {
+                prevOptionsList.forEach((prevName) => {
+                    const hasOption = optionsList.some((name) => {
+                        return prevName === name;
+                    });
+
+                    if (!hasOption) {
+                        const value = Array.isArray(prevOptions[prevName]) ? [] : {};
+                        this.$_instance.option(prevName, value);
+                    }
+                });
+            }
+
+            for (const name in options) {
+                if (options.hasOwnProperty(name)) {
+                    this.$_instance.option(name, options[name]);
+                }
+            }
+
+            this.$_config.componentsCountChanged = false;
+        }
         this.eventBus.$emit("updated");
     },
 
@@ -99,7 +129,8 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
             const config = this.$_config;
             const options: object = {
                 ...this.$options.propsData,
-                ...config.getInitialValues(),
+                ...config.initialValues,
+                ...config.getNestedOptionValues(),
                 ...this.$_getIntegrationOptions()
             };
             const instance = new this.$_WidgetClass(element, options);

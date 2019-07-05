@@ -281,7 +281,7 @@ describe("configuration", () => {
 
         const vm = new TestComponent();
         (vm as IConfigurable).$_config = {
-            getInitialValues: jest.fn(() => initialValues),
+            getNestedOptionValues: jest.fn(() => initialValues),
             getOptionsToWatch: jest.fn()
         } as any;
 
@@ -416,7 +416,7 @@ describe("configuration", () => {
         }).$mount();
 
         const config = (vm.$children[0] as any as IConfigurable).$_config;
-        const initialValues = config.getInitialValues();
+        const initialValues = config.getNestedOptionValues();
         expect(initialValues).toHaveProperty("nestedOption");
         expect(initialValues!.nestedOption).toHaveProperty("predefinedProp");
         expect(initialValues!.nestedOption!.predefinedProp).toBe(predefinedValue);
@@ -714,7 +714,7 @@ describe("nested option", () => {
         const vm = new Vue({
             template:
                 `<test-component>` +
-                `  <nested v-if="showNest" :prop1="value" />` +
+                `  <nested v-if="showNest" :prop1="123" />` +
                 `</test-component>`,
             components: {
                 TestComponent,
@@ -722,10 +722,6 @@ describe("nested option", () => {
             },
             data: {
                 showNest: false
-            },
-            props: ["value"],
-            propsData: {
-                value: 123
             }
         }).$mount();
 
@@ -733,6 +729,101 @@ describe("nested option", () => {
 
         Vue.nextTick(() => {
             expect(Widget.option).toHaveBeenCalledWith("nestedOption", { prop1: 123 });
+            done();
+        });
+    });
+
+    it("remove nested component by condition", (done) => {
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <nested v-if="showNest" :prop1="123" />` +
+                `  <nested :prop1="321" />` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                Nested
+            },
+            data: {
+                showNest: true
+            }
+        }).$mount();
+
+        vm.$data.showNest = false;
+
+        Vue.nextTick(() => {
+            expect(Widget.option).toHaveBeenCalledWith("nestedOption", { prop1: 321 });
+            done();
+        });
+    });
+
+    it("replace and add new property", (done) => {
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <nested v-if="showNest" :prop1="123" />` +
+                `  <nested v-if="!showNest" :prop1="123" prop2="text" />` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                Nested
+            },
+            data: {
+                showNest: true
+            }
+        }).$mount();
+
+        vm.$data.showNest = false;
+
+        Vue.nextTick(() => {
+            expect(Widget.option).toHaveBeenCalledWith("nestedOption.prop2", "text");
+            done();
+        });
+    });
+
+    it("replace and update property", (done) => {
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <nested v-if="showNest" :prop1="123" />` +
+                `  <nested v-if="!showNest" :prop1="321" />` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                Nested
+            },
+            data: {
+                showNest: true
+            }
+        }).$mount();
+
+        vm.$data.showNest = false;
+
+        Vue.nextTick(() => {
+            expect(Widget.option).toHaveBeenCalledWith("nestedOption.prop1", 321);
+            done();
+        });
+    });
+
+    it("remove all nested component", (done) => {
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <nested v-if="showNest" :prop1="123" />` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                Nested
+            },
+            data: {
+                showNest: true
+            }
+        }).$mount();
+
+        vm.$data.showNest = false;
+
+        Vue.nextTick(() => {
+            expect(Widget.option).toHaveBeenCalledWith("nestedOption", {});
             done();
         });
     });
