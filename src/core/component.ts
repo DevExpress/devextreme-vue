@@ -264,8 +264,9 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
 
 function cleanWidgetNode(node: Node) {
     forEachChildNode(node, (childNode) => {
-        if (childNode.nodeName === "#comment") {
-            childNode.remove();
+        const parent = childNode.parentNode;
+        if (childNode.nodeName === "#comment" && parent) {
+            parent.removeChild(childNode);
         }
     });
 }
