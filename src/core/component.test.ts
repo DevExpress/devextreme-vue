@@ -34,6 +34,13 @@ const TestComponent = Vue.extend({
     extends: DxComponent,
     beforeCreate() {
         (this as any as IWidgetComponent).$_WidgetClass = WidgetClass;
+    },
+    props: {
+        prop1: Number
+    },
+    model: {
+        prop: "prop1",
+        event: "update:prop1"
     }
 });
 
@@ -706,6 +713,33 @@ describe("nested option", () => {
         Vue.nextTick(() => {
             expect(Widget.option).toHaveBeenCalledTimes(1);
             expect(Widget.option).toHaveBeenCalledWith("nestedOption.prop1", 456);
+            done();
+        });
+    });
+
+    it("component shouldn't emit update for the same value (v-model)", (done) => {
+        const vm = new Vue({
+            template:
+                `<test-component v-model="value">` +
+                `</test-component>`,
+            components: {
+                TestComponent
+            },
+            props: ["value"],
+            propsData: {
+                value: 123
+            }
+        }).$mount();
+
+        const $emitSpy = jest.spyOn(vm.$children[0], "$emit");
+
+        Widget.fire("optionChanged", { name: "prop1", fullName: "prop1", value: 456, previousValue: 123 });
+
+        Vue.nextTick(() => {
+            Widget.fire("optionChanged", { name: "prop1", fullName: "prop1", value: 456, previousValue: 123 });
+
+            expect(vm.$props.value).toBe(456);
+            expect($emitSpy).toHaveBeenCalledTimes(1);
             done();
         });
     });
