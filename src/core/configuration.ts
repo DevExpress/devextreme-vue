@@ -213,7 +213,7 @@ function bindOptionWatchers(config: Configuration, vueInstance: Pick<Vue, "$watc
     }
 }
 
-function subscribeOnUpdates(config: Configuration, vueInstance: Pick<Vue, "$emit">): void {
+function subscribeOnUpdates(config: Configuration, vueInstance: Pick<Vue, "$emit" | "$props">): void {
     config.optionChangedFunc = (args: any) => {
         let optionName = args.name;
         let optionValue = args.value;
@@ -224,7 +224,7 @@ function subscribeOnUpdates(config: Configuration, vueInstance: Pick<Vue, "$emit
         } else if (args.fullName !== args.name) {
             optionValue = args.component.option(optionName);
         }
-        if (!isEqual(args.value, args.previousValue)) {
+        if (!isEqual(args.value, args.previousValue) && !isEqual(args.value, vueInstance.$props[optionName])) {
             vueInstance.$emit("update:" + optionName, optionValue);
         }
     };

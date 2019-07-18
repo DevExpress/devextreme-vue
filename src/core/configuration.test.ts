@@ -177,7 +177,8 @@ it("subscribes on updates", () => {
     subscribeOnUpdates(
         config,
         {
-            $emit: emitStub
+            $emit: emitStub,
+            $props: {}
         }
     );
     config.optionChangedFunc({name: "option1", fullName: "option1", value: "value"});
@@ -197,7 +198,8 @@ it("subscribes on updates of nested options", () => {
     subscribeOnUpdates(
         config,
         {
-            $emit: emitStub
+            $emit: emitStub,
+            $props: {}
         }
     );
     config.optionChangedFunc({name: "widgetOption", fullName: "widgetOption[1].option1", value: "value"});
@@ -216,7 +218,8 @@ it("subscribes on nested updates in root component", () => {
     subscribeOnUpdates(
         config,
         {
-            $emit: emitStub
+            $emit: emitStub,
+            $props: {}
         }
     );
     config.optionChangedFunc({
@@ -242,7 +245,8 @@ it("subscribeOnUpdates does'not call update with empty array change", () => {
     subscribeOnUpdates(
         config,
         {
-            $emit: emitStub
+            $emit: emitStub,
+            $props: {}
         }
     );
     config.optionChangedFunc({name: "option1", fullName: "option1", value: [], previousValue: []});
