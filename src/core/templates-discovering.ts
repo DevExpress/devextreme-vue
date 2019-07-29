@@ -66,9 +66,11 @@ function mountTemplate(
     template: ScopedSlot,
     parent: IVue,
     data: any,
-    name: string
+    name: string,
+    placeholder: Element
 ): IVue {
     return new Vue({
+        el: placeholder,
         name,
         inject: ["eventBus"],
         parent,
@@ -89,7 +91,7 @@ function mountTemplate(
 
             return content[0];
         }
-    }).$mount();
+    });
 }
 
 export {

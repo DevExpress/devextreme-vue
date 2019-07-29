@@ -1183,6 +1183,46 @@ describe("template", () => {
 
         expect(() => events.triggerHandler(renderedTemplate, "dxremove")).not.toThrow();
     });
+
+    describe("with DOM", () => {
+        let fixture;
+
+        beforeEach(() => {
+            fixture = document.createElement("div");
+            document.body.appendChild(fixture);
+        });
+
+        afterEach(() => {
+            fixture.remove();
+        });
+
+        it("template content should be rendered in DOM", () => {
+            let mountedInDom;
+            const ChildComponent = Vue.extend({
+                template: "<div></div>",
+                mounted() {
+                    mountedInDom = document.body.contains(this.$el);
+                }
+            });
+            const instance = new Vue({
+                el: fixture,
+                template: `<test-component ref="component">
+                                <div class="template-container"></div>
+                                <template #tmpl>
+                                    <child-component/>
+                                </template>
+                            </test-component>`,
+                components: {
+                    TestComponent,
+                    ChildComponent
+                }
+            }).$mount();
+
+            renderTemplate("tmpl", {}, instance.$el.querySelector(".template-container"));
+
+            expect(mountedInDom).toBeTruthy();
+        });
+    });
 });
 
 describe("static items", () => {
