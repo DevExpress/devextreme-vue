@@ -203,15 +203,15 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
                         ? data.model
                         : { data: data.model, index: data.index };
 
-                    const mountedTemplate = mountTemplate(template, this, scopeData, name);
+                    const container = data.container.get ? data.container.get(0) : data.container;
+                    const placeholder = document.createElement("div");
+                    container.appendChild(placeholder);
+                    const mountedTemplate = mountTemplate(template, this, scopeData, name, placeholder);
 
                     const element = mountedTemplate.$el;
                     if (element.classList) {
                         element.classList.add(DX_TEMPLATE_WRAPPER_CLASS);
                     }
-
-                    const container = data.container.get ? data.container.get(0) : data.container;
-                    container.appendChild(element);
 
                     events.one(element, DX_REMOVE_EVENT, mountedTemplate.$destroy.bind(mountedTemplate));
 
