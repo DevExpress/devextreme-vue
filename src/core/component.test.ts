@@ -1418,6 +1418,25 @@ describe("extension component", () => {
         expect(actualElement).toBe(expectedElement);
     });
 
+    it("should remove extension component from dom", () => {
+        let childCount;
+        WidgetClass.mockImplementationOnce((element: HTMLElement, options: any) => {
+            childCount = element.childElementCount;
+            return createWidget(element, options);
+        });
+
+        new Vue({
+            template: `<test-component>
+                            <test-extension-component/>
+                        </test-component>`,
+            components: {
+                TestComponent,
+                TestExtensionComponent
+            }
+        }).$mount();
+        expect(childCount).toBe(0);
+    });
+
     it("destroys correctly", () => {
         const component = new TestExtensionComponent().$mount();
 
