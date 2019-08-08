@@ -15,7 +15,7 @@ const DxExtensionComponent: VueConstructor = BaseComponent.extend({
     render(createElement: (...args) => VNode): VNode {
         return createElement();
     },
-    
+
     created(): void {
         this.$_isExtension = true;
     },
