@@ -1,4 +1,4 @@
-import { VueConstructor } from "vue";
+import { VNode, VueConstructor } from "vue";
 import { BaseComponent } from "./component";
 
 interface IExtension {
@@ -12,6 +12,10 @@ interface IExtensionComponentNode {
 
 const DxExtensionComponent: VueConstructor = BaseComponent.extend({
 
+    render(createElement: (...args) => VNode): VNode {
+        return createElement();
+    },
+    
     created(): void {
         this.$_isExtension = true;
     },
