@@ -12,17 +12,12 @@ interface IExtensionComponentNode {
 }
 
 const DxExtensionComponent: VueConstructor = BaseComponent.extend({
-
-    render(createElement: (...args) => VNode): VNode {
-        pullAllChildren(this.$slots.default, [], this.$_config);
-        return createElement();
-    },
-
     created(): void {
         this.$_isExtension = true;
     },
 
     mounted() {
+        this.$el.setAttribute("isExtension", true);
         if (this.$vnode && (this.$vnode.componentOptions as IExtensionComponentNode).$_hasOwner) { return; }
 
         this.attachTo(this.$el);
