@@ -1,6 +1,6 @@
 import { VNode, VueConstructor } from "vue";
-import { BaseComponent } from "./component";
 import { pullAllChildren } from "./children-processing";
+import { BaseComponent } from "./component";
 
 interface IExtension {
     $_isExtension: boolean;
