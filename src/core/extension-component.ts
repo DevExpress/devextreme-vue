@@ -1,5 +1,6 @@
 import { VNode, VueConstructor } from "vue";
 import { BaseComponent } from "./component";
+import { pullAllChildren } from "./children-processing";
 
 interface IExtension {
     $_isExtension: boolean;
@@ -13,6 +14,7 @@ interface IExtensionComponentNode {
 const DxExtensionComponent: VueConstructor = BaseComponent.extend({
 
     render(createElement: (...args) => VNode): VNode {
+        pullAllChildren(this.$slots.default, [], this.$_config);
         return createElement();
     },
 
