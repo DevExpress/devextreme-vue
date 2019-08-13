@@ -1,4 +1,4 @@
-import { VNode, VueConstructor } from "vue";
+import { VueConstructor } from "vue";
 import { BaseComponent } from "./component";
 
 interface IExtension {
@@ -11,16 +11,12 @@ interface IExtensionComponentNode {
 }
 
 const DxExtensionComponent: VueConstructor = BaseComponent.extend({
-
-    render(createElement: (...args) => VNode): VNode {
-        return createElement();
-    },
-
     created(): void {
         this.$_isExtension = true;
     },
 
     mounted() {
+        this.$el.setAttribute("isExtension", true);
         if (this.$vnode && (this.$vnode.componentOptions as IExtensionComponentNode).$_hasOwner) { return; }
 
         this.attachTo(this.$el);
