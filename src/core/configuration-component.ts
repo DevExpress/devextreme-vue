@@ -29,6 +29,16 @@ const DxConfiguration: VueConstructor = Vue.extend({
         subscribeOnUpdates(config, this);
     },
 
+    mounted() {
+        if (this.$parent.$_instance) {
+            this.$parent.$_config.componentsCountChanged = true;
+        }
+    },
+
+    beforeDestroy() {
+        this.$parent.$_config.componentsCountChanged = true;
+    },
+
     render(createElement: (...args) => VNode): VNode {
         return createElement();
     }

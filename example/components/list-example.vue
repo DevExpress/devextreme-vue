@@ -8,16 +8,27 @@
 
         <h4>List with item template</h4>
         <dx-list :items="listData">
+            <template #item="{ data, index }">
+                <div>{{index + 1}} - <i>{{data.day}}</i></div>
+            </template>
+            <template #weekend>
+                <b>No templates on weekend</b>
+            </template>
+        </dx-list>
+        <br/>
+
+        <h4>List with item template (vue < 2.6.0)</h4>
+        <dx-list :items="listData">
             <div slot="item" slot-scope="{ data, index }">
                 {{index + 1}} - <i>{{data.day}}</i>
             </div>
-            <div slot="weekend" slot-scope="{ data, index }">
-                {{index + 1}} - <b>{{data.day}}</b>
+            <div slot="weekend">
+                <b>No templates on weekend</b>
             </div>
         </dx-list>
         <br/>
         
-        <h4>List with static items</h4>
+        <h4>List with static items (vue < 2.6.0)</h4>
         <dx-list>
             <dx-item>
                 <div slot-scope="_">1</div>
@@ -26,7 +37,20 @@
                 <div slot-scope="_">2</div>
             </dx-item>
             <dx-item>
-                <div slot-scope="_">3</div>
+                <div slot-scope="_">3 - <i>third</i></div>
+            </dx-item>
+        </dx-list>
+
+        <h4>List with static items</h4>
+        <dx-list>
+            <dx-item>
+                <template #default>1</template>
+            </dx-item>
+            <dx-item>
+                <template #default>2</template>
+            </dx-item>
+            <dx-item>
+                <template #default><span>3 - <i>third</i></span></template>
             </dx-item>
         </dx-list>
 
@@ -35,12 +59,12 @@
           itemTemplate="weekday"
           :items="listData"
         >
-            <div slot="weekday" slot-scope="{ data }">
+            <template #weekday="{ data }">
                 <s>{{data.day}}</s>
-            </div>
-            <div slot="weekend" slot-scope="{ data }">
+            </template>
+            <template #weekend="{ data }">
                 <b>{{data.day}}</b>
-            </div>
+            </template>
         </dx-list>
         <br/>
         <dx-button text="Toggle Weekend" @click="toggleWeekend"/>

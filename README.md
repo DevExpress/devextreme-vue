@@ -3,6 +3,8 @@
 [![Build Status](https://img.shields.io/shippable/5444c5ecb904a4b21567b0ff/master.svg?maxAge=43200)](https://app.shippable.com/github/DevExpress/devextreme-vue)
 [![NPM](https://img.shields.io/npm/v/devextreme-vue.svg?maxAge=43200)](https://www.npmjs.com/package/devextreme-vue)
 
+### If you are looking for the v18.2 branch, please follow this link: [https://github.com/DevExpress/devextreme-vue/tree/18.2](https://github.com/DevExpress/devextreme-vue/tree/18.2).
+
 This project allows you to use [DevExtreme widgets](http://js.devexpress.com/Demos/WidgetsGallery/) in [Vue](https://vuejs.org) applications.
 
 * [Documentation](https://js.devexpress.com/Documentation/Guide/Vue_Components/DevExtreme_Vue_Components/)

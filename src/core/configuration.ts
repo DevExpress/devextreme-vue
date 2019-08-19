@@ -18,7 +18,9 @@ class Configuration {
     private readonly _updateFunc: UpdateFunc;
     private readonly _ownerConfig: Pick<Configuration, "fullPath"> | undefined;
     private _nestedConfigurations: Configuration[];
+    private _prevNestedConfigOptions: any;
     private _optionChangedFunc: any;
+    private _componentsCountChanged: boolean;
 
     private _options: string[];
 
@@ -39,12 +41,21 @@ class Configuration {
         this._collectionItemIndex = collectionItemIndex;
         this._expectedChildren = expectedChildren || {};
         this._ownerConfig = ownerConfig;
+        this._componentsCountChanged = false;
 
         this.updateValue = this.updateValue.bind(this);
     }
 
     public get name(): string | null {
         return this._name;
+    }
+
+    public get hasOptionsToUpdate(): boolean {
+        return this._componentsCountChanged;
+    }
+
+    public set hasOptionsToUpdate(value: boolean) {
+        this._componentsCountChanged = value;
     }
 
     public get fullPath(): string | null {
@@ -77,6 +88,10 @@ class Configuration {
         return this._nestedConfigurations;
     }
 
+    public get prevNestedOptions(): any {
+        return this._prevNestedConfigOptions;
+    }
+
     public get collectionItemIndex(): number | undefined {
         return this._collectionItemIndex;
     }
@@ -95,6 +110,10 @@ class Configuration {
 
     public set optionChangedFunc(handler: any) {
         this._optionChangedFunc = handler;
+    }
+
+    public setPrevNestedOptions(value: any) {
+        this._prevNestedConfigOptions = value;
     }
 
     public onOptionChanged(args: {name: string, fullName: string, value: any}): void {
@@ -152,15 +171,13 @@ class Configuration {
         this._updateFunc(fullName, value);
     }
 
-    public getInitialValues(): Record<string, any> | undefined {
-        const values = {
-            ...this._initialValues
-        };
+    public getNestedOptionValues(): Record<string, any> | undefined {
+        const values = {};
 
         this._nestedConfigurations.forEach((o) => {
             if (!o._name) { return; }
 
-            const nestedValue = o.getInitialValues();
+            const nestedValue = {...o.initialValues, ...o.getNestedOptionValues()};
             if (!nestedValue) { return; }
 
             if (!o._isCollectionItem) {
@@ -196,7 +213,7 @@ function bindOptionWatchers(config: Configuration, vueInstance: Pick<Vue, "$watc
     }
 }
 
-function subscribeOnUpdates(config: Configuration, vueInstance: Pick<Vue, "$emit">): void {
+function subscribeOnUpdates(config: Configuration, vueInstance: Pick<Vue, "$emit" | "$props">): void {
     config.optionChangedFunc = (args: any) => {
         let optionName = args.name;
         let optionValue = args.value;
@@ -207,7 +224,7 @@ function subscribeOnUpdates(config: Configuration, vueInstance: Pick<Vue, "$emit
         } else if (args.fullName !== args.name) {
             optionValue = args.component.option(optionName);
         }
-        if (!isEqual(args.value, args.previousValue)) {
+        if (!isEqual(args.value, args.previousValue) && !isEqual(args.value, vueInstance.$props[optionName])) {
             vueInstance.$emit("update:" + optionName, optionValue);
         }
     };

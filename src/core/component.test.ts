@@ -34,6 +34,13 @@ const TestComponent = Vue.extend({
     extends: DxComponent,
     beforeCreate() {
         (this as any as IWidgetComponent).$_WidgetClass = WidgetClass;
+    },
+    props: {
+        prop1: Number
+    },
+    model: {
+        prop: "prop1",
+        event: "update:prop1"
     }
 });
 
@@ -281,7 +288,7 @@ describe("configuration", () => {
 
         const vm = new TestComponent();
         (vm as IConfigurable).$_config = {
-            getInitialValues: jest.fn(() => initialValues),
+            getNestedOptionValues: jest.fn(() => initialValues),
             getOptionsToWatch: jest.fn()
         } as any;
 
@@ -416,7 +423,7 @@ describe("configuration", () => {
         }).$mount();
 
         const config = (vm.$children[0] as any as IConfigurable).$_config;
-        const initialValues = config.getInitialValues();
+        const initialValues = config.getNestedOptionValues();
         expect(initialValues).toHaveProperty("nestedOption");
         expect(initialValues!.nestedOption).toHaveProperty("predefinedProp");
         expect(initialValues!.nestedOption!.predefinedProp).toBe(predefinedValue);
@@ -706,6 +713,151 @@ describe("nested option", () => {
         Vue.nextTick(() => {
             expect(Widget.option).toHaveBeenCalledTimes(1);
             expect(Widget.option).toHaveBeenCalledWith("nestedOption.prop1", 456);
+            done();
+        });
+    });
+
+    it("component shouldn't emit update for the same value (v-model)", (done) => {
+        const vm = new Vue({
+            template:
+                `<test-component v-model="value">` +
+                `</test-component>`,
+            components: {
+                TestComponent
+            },
+            props: ["value"],
+            propsData: {
+                value: 123
+            }
+        }).$mount();
+
+        const $emitSpy = jest.spyOn(vm.$children[0], "$emit");
+
+        Widget.fire("optionChanged", { name: "prop1", fullName: "prop1", value: 456, previousValue: 123 });
+
+        Vue.nextTick(() => {
+            Widget.fire("optionChanged", { name: "prop1", fullName: "prop1", value: 456, previousValue: 123 });
+
+            expect(vm.$props.value).toBe(456);
+            expect($emitSpy).toHaveBeenCalledTimes(1);
+            done();
+        });
+    });
+
+    it("add nested component by condition", (done) => {
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <nested v-if="showNest" :prop1="123" />` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                Nested
+            },
+            data: {
+                showNest: false
+            }
+        }).$mount();
+
+        vm.$data.showNest = true;
+
+        Vue.nextTick(() => {
+            expect(Widget.option).toHaveBeenCalledWith("nestedOption", { prop1: 123 });
+            done();
+        });
+    });
+
+    it("remove nested component by condition", (done) => {
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <nested v-if="showNest" :prop1="123" />` +
+                `  <nested :prop1="321" />` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                Nested
+            },
+            data: {
+                showNest: true
+            }
+        }).$mount();
+
+        vm.$data.showNest = false;
+
+        Vue.nextTick(() => {
+            expect(Widget.option).toHaveBeenCalledWith("nestedOption", { prop1: 321 });
+            done();
+        });
+    });
+
+    it("replace and add new property", (done) => {
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <nested v-if="showNest" :prop1="123" />` +
+                `  <nested v-if="!showNest" :prop1="123" prop2="text" />` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                Nested
+            },
+            data: {
+                showNest: true
+            }
+        }).$mount();
+
+        vm.$data.showNest = false;
+
+        Vue.nextTick(() => {
+            expect(Widget.option).toHaveBeenCalledWith("nestedOption.prop2", "text");
+            done();
+        });
+    });
+
+    it("replace and update property", (done) => {
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <nested v-if="showNest" :prop1="123" />` +
+                `  <nested v-if="!showNest" :prop1="321" />` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                Nested
+            },
+            data: {
+                showNest: true
+            }
+        }).$mount();
+
+        vm.$data.showNest = false;
+
+        Vue.nextTick(() => {
+            expect(Widget.option).toHaveBeenCalledWith("nestedOption.prop1", 321);
+            done();
+        });
+    });
+
+    it("remove all nested component", (done) => {
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <nested v-if="showNest" :prop1="123" />` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                Nested
+            },
+            data: {
+                showNest: true
+            }
+        }).$mount();
+
+        vm.$data.showNest = false;
+
+        Vue.nextTick(() => {
+            expect(Widget.option).toHaveBeenCalledWith("nestedOption", {});
             done();
         });
     });
@@ -1031,6 +1183,46 @@ describe("template", () => {
 
         expect(() => events.triggerHandler(renderedTemplate, "dxremove")).not.toThrow();
     });
+
+    describe("with DOM", () => {
+        let fixture;
+
+        beforeEach(() => {
+            fixture = document.createElement("div");
+            document.body.appendChild(fixture);
+        });
+
+        afterEach(() => {
+            fixture.remove();
+        });
+
+        it("template content should be rendered in DOM", () => {
+            let mountedInDom;
+            const ChildComponent = Vue.extend({
+                template: "<div></div>",
+                mounted() {
+                    mountedInDom = document.body.contains(this.$el);
+                }
+            });
+            const instance = new Vue({
+                el: fixture,
+                template: `<test-component ref="component">
+                                <div class="template-container"></div>
+                                <template #tmpl>
+                                    <child-component/>
+                                </template>
+                            </test-component>`,
+                components: {
+                    TestComponent,
+                    ChildComponent
+                }
+            }).$mount();
+
+            renderTemplate("tmpl", {}, instance.$el.querySelector(".template-container"));
+
+            expect(mountedInDom).toBeTruthy();
+        });
+    });
 });
 
 describe("static items", () => {
@@ -1120,6 +1312,113 @@ describe("static items", () => {
         expect(renderedTemplate.innerHTML).toBe("1");
     });
 
+    it("renders template containing text only (vue 3)", () => {
+        const NestedItem = Vue.extend({
+            extends: DxConfiguration,
+            props: {
+                prop1: Number,
+                template: String
+            }
+        });
+        (NestedItem as any as IConfigurationComponent).$_optionName = "item";
+
+        new Vue({
+            template: `<test-component>
+                         <nested-item>
+                            <template #default>abc</template>
+                         </nested-item>
+                       </test-component>`,
+            components: {
+                TestComponent,
+                NestedItem
+            }
+        }).$mount();
+
+        const renderedTemplate = renderTemplate("item.template");
+
+        expect(renderedTemplate.textContent).toBe("abc");
+    });
+
+    it("renders template with several root elements (vue 3)", () => {
+        const NestedItem = Vue.extend({
+            extends: DxConfiguration,
+            props: {
+                prop1: Number,
+                template: String
+            }
+        });
+        (NestedItem as any as IConfigurationComponent).$_optionName = "item";
+
+        expect( () =>
+            new Vue({
+                template: `<test-component>
+                            <nested-item>
+                            <template #default>a<p>b</p>c</template>
+                            </nested-item>
+                        </test-component>`,
+                components: {
+                    TestComponent,
+                    NestedItem
+                }
+            }).$mount()
+        );
+    });
+
+    it("renders template with single root element (vue 3)", () => {
+        const NestedItem = Vue.extend({
+            extends: DxConfiguration,
+            props: {
+                prop1: Number,
+                template: String
+            }
+        });
+        (NestedItem as any as IConfigurationComponent).$_optionName = "item";
+
+        new Vue({
+            template: `<test-component>
+                         <nested-item>
+                            <template #default><p>abc</p></template>
+                         </nested-item>
+                       </test-component>`,
+            components: {
+                TestComponent,
+                NestedItem
+            }
+        }).$mount();
+
+        const renderedTemplate = renderTemplate("item.template");
+
+        expect(renderedTemplate.innerHTML).toBe("abc");
+    });
+
+    it("keeps template root element class and id (vue 3)", () => {
+        const NestedItem = Vue.extend({
+            extends: DxConfiguration,
+            props: {
+                prop1: Number,
+                template: String
+            }
+        });
+        (NestedItem as any as IConfigurationComponent).$_optionName = "item";
+
+        new Vue({
+            template: `<test-component>
+                         <nested-item>
+                            <template #default><p id='preserved-id' class='preserved-class'>abc</p></template>
+                         </nested-item>
+                       </test-component>`,
+            components: {
+                TestComponent,
+                NestedItem
+            }
+        }).$mount();
+
+        const renderedTemplate = renderTemplate("item.template");
+
+        expect(renderedTemplate.outerHTML)
+            .toBe(`<p id="preserved-id" class="preserved-class dx-template-wrapper">abc</p>`);
+    });
+
     it("render nested template", () => {
         const NestedItem = Vue.extend({
             extends: DxConfiguration,
@@ -1153,7 +1452,7 @@ describe("static items", () => {
         expect(renderedNestedTemplate.innerHTML).toBe("2");
     });
 
-    it("doesn't pass integrationOptions to widget if nestd item has sub nested item", () => {
+    it("doesn't pass integrationOptions to widget if nested item has sub nested item", () => {
         const NestedItem = Vue.extend({
             extends: DxConfiguration,
             props: {
@@ -1267,6 +1566,25 @@ describe("extension component", () => {
 
         expect(ExtensionWidgetClass).toHaveBeenCalledTimes(1);
         expect(actualElement).toBe(expectedElement);
+    });
+
+    it("should remove extension component from dom", () => {
+        let childCount;
+        WidgetClass.mockImplementationOnce((element: HTMLElement, options: any) => {
+            childCount = element.childElementCount;
+            return createWidget(element, options);
+        });
+
+        new Vue({
+            template: `<test-component>
+                            <test-extension-component/>
+                        </test-component>`,
+            components: {
+                TestComponent,
+                TestExtensionComponent
+            }
+        }).$mount();
+        expect(childCount).toBe(0);
     });
 
     it("destroys correctly", () => {
