@@ -8,7 +8,7 @@ interface ExpectedChild {
     optionName: string;
 }
 
-const changedOptions = {};
+const internalChanges = {};
 
 class Configuration {
 
@@ -211,10 +211,10 @@ function bindOptionWatchers(config: Configuration, vueInstance: Pick<Vue, "$watc
     if (targets) {
         targets.forEach((optionName: string) => {
             vueInstance.$watch(optionName, (value) => {
-                if (changedOptions[optionName] !== value) {
+                if (internalChanges[optionName] !== value) {
                     config.updateValue(optionName, value);
                 }
-                delete changedOptions[optionName];
+                delete internalChanges[optionName];
             });
         });
     }
@@ -232,7 +232,7 @@ function subscribeOnUpdates(config: Configuration, vueInstance: Pick<Vue, "$emit
             optionValue = args.component.option(optionName);
         }
         if (!isEqual(args.value, args.previousValue) && !isEqual(args.value, vueInstance.$props[optionName])) {
-            changedOptions[optionName] = optionValue;
+            internalChanges[optionName] = optionValue;
             vueInstance.$emit("update:" + optionName, optionValue);
         }
     };
