@@ -151,6 +151,7 @@ it("binds option watchers", () => {
         {
             updateValue: updateValueFunc,
             getOptionsToWatch: () => ["prop1"],
+            changedOptions: {}
         } as any,
         {
             $watch: $watchFunc
@@ -169,9 +170,11 @@ it("binds option watchers", () => {
 
 it("subscribes on updates", () => {
     const emitStub = jest.fn();
+    const setChangedOption = jest.fn();
 
     const config: any = {
-        name: null
+        name: null,
+        setChangedOption
     };
 
     subscribeOnUpdates(
@@ -184,15 +187,19 @@ it("subscribes on updates", () => {
     config.optionChangedFunc({name: "option1", fullName: "option1", value: "value"});
 
     expect(emitStub).toHaveBeenCalledTimes(1);
+    expect(setChangedOption).toHaveBeenCalledTimes(1);
     expect(emitStub).toHaveBeenCalledWith("update:option1", "value");
+    expect(setChangedOption).toHaveBeenCalledWith("option1", "value");
 });
 
 it("subscribes on updates of nested options", () => {
     const emitStub = jest.fn();
+    const setChangedOption = jest.fn();
 
     const config: any = {
         name: "widgetOption",
-        fullPath: "widgetOption[1]"
+        fullPath: "widgetOption[1]",
+        setChangedOption
     };
 
     subscribeOnUpdates(
@@ -206,13 +213,17 @@ it("subscribes on updates of nested options", () => {
 
     expect(emitStub).toHaveBeenCalledTimes(1);
     expect(emitStub).toHaveBeenCalledWith("update:option1", "value");
+    expect(setChangedOption).toHaveBeenCalledTimes(1);
+    expect(setChangedOption).toHaveBeenCalledWith("option1", "value");
 });
 
 it("subscribes on nested updates in root component", () => {
     const emitStub = jest.fn();
+    const setChangedOption = jest.fn();
 
     const config: any = {
-        name: null
+        name: null,
+        setChangedOption
     };
 
     subscribeOnUpdates(
@@ -233,6 +244,8 @@ it("subscribes on nested updates in root component", () => {
 
     expect(emitStub).toHaveBeenCalledTimes(1);
     expect(emitStub).toHaveBeenCalledWith("update:widgetOption", "widgetOptionValue");
+    expect(setChangedOption).toHaveBeenCalledTimes(1);
+    expect(setChangedOption).toHaveBeenCalledWith("widgetOption", "widgetOptionValue");
 });
 
 it("subscribeOnUpdates does'not call update with empty array change", () => {
