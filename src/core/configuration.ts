@@ -204,21 +204,24 @@ class Configuration {
     }
 }
 
-function bindOptionWatchers(config: Configuration, vueInstance: Pick<Vue, "$watch">, internalChanges: any): void {
+function bindOptionWatchers(config: Configuration, vueInstance: Pick<Vue, "$watch">, innerChanges: any): void {
     const targets = config.getOptionsToWatch();
     if (targets) {
         targets.forEach((optionName: string) => {
             vueInstance.$watch(optionName, (value) => {
-                if (internalChanges[optionName] !== value) {
+                if (innerChanges[optionName] !== value) {
                     config.updateValue(optionName, value);
                 }
-                delete internalChanges[optionName];
+                delete innerChanges[optionName];
             });
         });
     }
 }
 
-function subscribeOnUpdates(config: Configuration, vueInstance: Pick<Vue, "$emit" | "$props">, internalChanges: any): void {
+function subscribeOnUpdates(
+    config: Configuration,
+    vueInstance: Pick<Vue, "$emit" | "$props">,
+    innerChanges: any): void {
     config.optionChangedFunc = (args: any) => {
         let optionName = args.name;
         let optionValue = args.value;
@@ -230,7 +233,7 @@ function subscribeOnUpdates(config: Configuration, vueInstance: Pick<Vue, "$emit
             optionValue = args.component.option(optionName);
         }
         if (!isEqual(args.value, args.previousValue) && !isEqual(args.value, vueInstance.$props[optionName])) {
-            internalChanges[optionName] = optionValue;
+            innerChanges[optionName] = optionValue;
             vueInstance.$emit("update:" + optionName, optionValue);
         }
     };

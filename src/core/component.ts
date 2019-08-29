@@ -126,7 +126,7 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
 
     methods: {
         $_createWidget(element: any): void {
-            const internalChanges = {};
+            const innerChanges = {};
             const config = this.$_config;
             const options: object = {
                 ...this.$options.propsData,
@@ -138,8 +138,8 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
             (this as IBaseComponent).$_instance = instance;
 
             instance.on("optionChanged", (args) => config.onOptionChanged(args));
-            subscribeOnUpdates(config, this, internalChanges);
-            bindOptionWatchers(config, this, internalChanges);
+            subscribeOnUpdates(config, this, innerChanges);
+            bindOptionWatchers(config, this, innerChanges);
             this.$_createEmitters(instance);
         },
 
