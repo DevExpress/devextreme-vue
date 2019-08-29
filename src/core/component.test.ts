@@ -744,6 +744,28 @@ describe("nested option", () => {
         });
     });
 
+    it("component shouldn't set option if option already set (v-model)", (done) => {
+        new Vue({
+            template:
+                `<test-component v-model="value">` +
+                `</test-component>`,
+            components: {
+                TestComponent
+            },
+            props: ["value"],
+            propsData: {
+                value: 123
+            }
+        }).$mount();
+
+        Widget.fire("optionChanged", { name: "prop1", fullName: "prop1", value: 456, previousValue: 123 });
+
+        Vue.nextTick(() => {
+            expect(Widget.option).toHaveBeenCalledTimes(0);
+            done();
+        });
+    });
+
     it("add nested component by condition", (done) => {
         const vm = new Vue({
             template:

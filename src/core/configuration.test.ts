@@ -146,15 +146,18 @@ it("calls update from nested collectionItem (the only)", () => {
 it("binds option watchers", () => {
     const updateValueFunc = jest.fn();
     const $watchFunc = jest.fn();
+    const innerChanges = {};
 
     bindOptionWatchers(
         {
             updateValue: updateValueFunc,
             getOptionsToWatch: () => ["prop1"],
+            innerChanges: {}
         } as any,
         {
             $watch: $watchFunc
-        }
+        },
+        innerChanges
     );
 
     expect($watchFunc.mock.calls[0][0]).toBe("prop1");
@@ -169,9 +172,11 @@ it("binds option watchers", () => {
 
 it("subscribes on updates", () => {
     const emitStub = jest.fn();
+    const innerChanges = {};
 
     const config: any = {
-        name: null
+        name: null,
+        innerChanges
     };
 
     subscribeOnUpdates(
@@ -179,20 +184,24 @@ it("subscribes on updates", () => {
         {
             $emit: emitStub,
             $props: {}
-        }
+        },
+        innerChanges
     );
     config.optionChangedFunc({name: "option1", fullName: "option1", value: "value"});
 
     expect(emitStub).toHaveBeenCalledTimes(1);
     expect(emitStub).toHaveBeenCalledWith("update:option1", "value");
+    expect(innerChanges).toEqual({option1: "value"});
 });
 
 it("subscribes on updates of nested options", () => {
     const emitStub = jest.fn();
+    const innerChanges = {};
 
     const config: any = {
         name: "widgetOption",
-        fullPath: "widgetOption[1]"
+        fullPath: "widgetOption[1]",
+        innerChanges
     };
 
     subscribeOnUpdates(
@@ -200,16 +209,19 @@ it("subscribes on updates of nested options", () => {
         {
             $emit: emitStub,
             $props: {}
-        }
+        },
+        innerChanges
     );
     config.optionChangedFunc({name: "widgetOption", fullName: "widgetOption[1].option1", value: "value"});
 
     expect(emitStub).toHaveBeenCalledTimes(1);
     expect(emitStub).toHaveBeenCalledWith("update:option1", "value");
+    expect(innerChanges).toEqual({option1: "value"});
 });
 
 it("subscribes on nested updates in root component", () => {
     const emitStub = jest.fn();
+    const innerChanges = {};
 
     const config: any = {
         name: null
@@ -220,7 +232,8 @@ it("subscribes on nested updates in root component", () => {
         {
             $emit: emitStub,
             $props: {}
-        }
+        },
+        innerChanges
     );
     config.optionChangedFunc({
         name: "widgetOption",
@@ -233,10 +246,12 @@ it("subscribes on nested updates in root component", () => {
 
     expect(emitStub).toHaveBeenCalledTimes(1);
     expect(emitStub).toHaveBeenCalledWith("update:widgetOption", "widgetOptionValue");
+    expect(innerChanges).toEqual({widgetOption: "widgetOptionValue"});
 });
 
 it("subscribeOnUpdates does'not call update with empty array change", () => {
     const emitStub = jest.fn();
+    const innerChanges = {};
 
     const config: any = {
         name: null
@@ -247,7 +262,8 @@ it("subscribeOnUpdates does'not call update with empty array change", () => {
         {
             $emit: emitStub,
             $props: {}
-        }
+        },
+        innerChanges
     );
     config.optionChangedFunc({name: "option1", fullName: "option1", value: [], previousValue: []});
 
