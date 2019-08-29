@@ -188,7 +188,7 @@ it("subscribes on updates", () => {
 
     expect(emitStub).toHaveBeenCalledTimes(1);
     expect(emitStub).toHaveBeenCalledWith("update:option1", "value");
-    expect(changedOptions["option1"]).toBe("value");
+    expect(changedOptions).toEqual({option1: "value"});
 });
 
 it("subscribes on updates of nested options", () => {
@@ -212,7 +212,7 @@ it("subscribes on updates of nested options", () => {
 
     expect(emitStub).toHaveBeenCalledTimes(1);
     expect(emitStub).toHaveBeenCalledWith("update:option1", "value");
-    expect(changedOptions["option1"]).toBe("value");
+    expect(changedOptions).toEqual({option1: "value"});
 });
 
 it("subscribes on nested updates in root component", () => {
@@ -242,7 +242,7 @@ it("subscribes on nested updates in root component", () => {
 
     expect(emitStub).toHaveBeenCalledTimes(1);
     expect(emitStub).toHaveBeenCalledWith("update:widgetOption", "widgetOptionValue");
-    expect(changedOptions["widgetOption"]).toBe("widgetOptionValue");
+    expect(changedOptions).toEqual({widgetOption: "widgetOptionValue"});
 });
 
 it("subscribeOnUpdates does'not call update with empty array change", () => {

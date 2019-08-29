@@ -10,6 +10,7 @@ interface ExpectedChild {
 
 class Configuration {
 
+    public changedOptions: any;
     private readonly _name: string | null;
     private readonly _isCollectionItem: boolean;
     private readonly _collectionItemIndex: number | undefined;
@@ -21,7 +22,6 @@ class Configuration {
     private _prevNestedConfigOptions: any;
     private _optionChangedFunc: any;
     private _componentsCountChanged: boolean;
-    public changedOptions: any;
 
     private _options: string[];
 
