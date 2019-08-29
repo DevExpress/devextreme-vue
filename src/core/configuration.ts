@@ -221,7 +221,7 @@ function bindOptionWatchers(config: Configuration, vueInstance: Pick<Vue, "$watc
 function subscribeOnUpdates(
     config: Configuration,
     vueInstance: Pick<Vue, "$emit" | "$props">,
-    innerChanges: any): void {
+    innerChanges: Record<string, any>): void {
     config.optionChangedFunc = (args: any) => {
         let optionName = args.name;
         let optionValue = args.value;
