@@ -21,7 +21,7 @@ class Configuration {
     private _prevNestedConfigOptions: any;
     private _optionChangedFunc: any;
     private _componentsCountChanged: boolean;
-    private _changedOptions: any;
+    public changedOptions: any;
 
     private _options: string[];
 
@@ -43,7 +43,7 @@ class Configuration {
         this._expectedChildren = expectedChildren || {};
         this._ownerConfig = ownerConfig;
         this._componentsCountChanged = false;
-        this._changedOptions = {};
+        this.changedOptions = {};
 
         this.updateValue = this.updateValue.bind(this);
     }
@@ -72,10 +72,6 @@ class Configuration {
         }
 
         return path;
-    }
-
-    public get changedOptions(): any {
-        return this._changedOptions;
     }
 
     public get options(): string[] {
@@ -133,10 +129,6 @@ class Configuration {
 
     public cleanNested() {
         this._nestedConfigurations = [];
-    }
-
-    public setChangedOption(name, value) {
-        this._changedOptions[name] = value;
     }
 
     public createNested(
@@ -240,7 +232,7 @@ function subscribeOnUpdates(config: Configuration, vueInstance: Pick<Vue, "$emit
             optionValue = args.component.option(optionName);
         }
         if (!isEqual(args.value, args.previousValue) && !isEqual(args.value, vueInstance.$props[optionName])) {
-            config.setChangedOption(optionName, optionValue);
+            config.changedOptions[optionName] = optionValue;
             vueInstance.$emit("update:" + optionName, optionValue);
         }
     };
