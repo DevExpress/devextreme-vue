@@ -170,11 +170,9 @@ it("binds option watchers", () => {
 
 it("subscribes on updates", () => {
     const emitStub = jest.fn();
-    const changedOptions = {};
 
     const config: any = {
-        name: null,
-        changedOptions
+        name: null
     };
 
     subscribeOnUpdates(
@@ -188,17 +186,14 @@ it("subscribes on updates", () => {
 
     expect(emitStub).toHaveBeenCalledTimes(1);
     expect(emitStub).toHaveBeenCalledWith("update:option1", "value");
-    expect(changedOptions).toEqual({option1: "value"});
 });
 
 it("subscribes on updates of nested options", () => {
     const emitStub = jest.fn();
-    const changedOptions = {};
 
     const config: any = {
         name: "widgetOption",
-        fullPath: "widgetOption[1]",
-        changedOptions
+        fullPath: "widgetOption[1]"
     };
 
     subscribeOnUpdates(
@@ -212,16 +207,13 @@ it("subscribes on updates of nested options", () => {
 
     expect(emitStub).toHaveBeenCalledTimes(1);
     expect(emitStub).toHaveBeenCalledWith("update:option1", "value");
-    expect(changedOptions).toEqual({option1: "value"});
 });
 
 it("subscribes on nested updates in root component", () => {
     const emitStub = jest.fn();
-    const changedOptions = {};
 
     const config: any = {
-        name: null,
-        changedOptions
+        name: null
     };
 
     subscribeOnUpdates(
@@ -242,7 +234,6 @@ it("subscribes on nested updates in root component", () => {
 
     expect(emitStub).toHaveBeenCalledTimes(1);
     expect(emitStub).toHaveBeenCalledWith("update:widgetOption", "widgetOptionValue");
-    expect(changedOptions).toEqual({widgetOption: "widgetOptionValue"});
 });
 
 it("subscribeOnUpdates does'not call update with empty array change", () => {

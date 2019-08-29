@@ -8,9 +8,10 @@ interface ExpectedChild {
     optionName: string;
 }
 
+const changedOptions = {};
+
 class Configuration {
 
-    public changedOptions: any;
     private readonly _name: string | null;
     private readonly _isCollectionItem: boolean;
     private readonly _collectionItemIndex: number | undefined;
@@ -43,7 +44,6 @@ class Configuration {
         this._expectedChildren = expectedChildren || {};
         this._ownerConfig = ownerConfig;
         this._componentsCountChanged = false;
-        this.changedOptions = {};
 
         this.updateValue = this.updateValue.bind(this);
     }
@@ -211,10 +211,10 @@ function bindOptionWatchers(config: Configuration, vueInstance: Pick<Vue, "$watc
     if (targets) {
         targets.forEach((optionName: string) => {
             vueInstance.$watch(optionName, (value) => {
-                if (config.changedOptions[optionName] !== value) {
+                if (changedOptions[optionName] !== value) {
                     config.updateValue(optionName, value);
                 }
-                delete config.changedOptions[optionName];
+                delete changedOptions[optionName];
             });
         });
     }
@@ -232,7 +232,7 @@ function subscribeOnUpdates(config: Configuration, vueInstance: Pick<Vue, "$emit
             optionValue = args.component.option(optionName);
         }
         if (!isEqual(args.value, args.previousValue) && !isEqual(args.value, vueInstance.$props[optionName])) {
-            config.changedOptions[optionName] = optionValue;
+            changedOptions[optionName] = optionValue;
             vueInstance.$emit("update:" + optionName, optionValue);
         }
     };
