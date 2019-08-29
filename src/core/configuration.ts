@@ -204,7 +204,7 @@ class Configuration {
     }
 }
 
-function bindOptionWatchers(config: Configuration, vueInstance: Pick<Vue, "$watch">, innerChanges: any): void {
+function bindOptionWatchers(config: Configuration, vueInstance: Pick<Vue, "$watch">, innerChanges: Record<string, any>): void {
     const targets = config.getOptionsToWatch();
     if (targets) {
         targets.forEach((optionName: string) => {
