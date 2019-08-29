@@ -8,8 +8,6 @@ interface ExpectedChild {
     optionName: string;
 }
 
-const internalChanges = {};
-
 class Configuration {
 
     private readonly _name: string | null;
@@ -206,7 +204,7 @@ class Configuration {
     }
 }
 
-function bindOptionWatchers(config: Configuration, vueInstance: Pick<Vue, "$watch">): void {
+function bindOptionWatchers(config: Configuration, vueInstance: Pick<Vue, "$watch">, internalChanges: any): void {
     const targets = config.getOptionsToWatch();
     if (targets) {
         targets.forEach((optionName: string) => {
@@ -220,7 +218,7 @@ function bindOptionWatchers(config: Configuration, vueInstance: Pick<Vue, "$watc
     }
 }
 
-function subscribeOnUpdates(config: Configuration, vueInstance: Pick<Vue, "$emit" | "$props">): void {
+function subscribeOnUpdates(config: Configuration, vueInstance: Pick<Vue, "$emit" | "$props">, internalChanges: any): void {
     config.optionChangedFunc = (args: any) => {
         let optionName = args.name;
         let optionValue = args.value;
