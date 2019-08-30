@@ -22,11 +22,12 @@ interface IConfigurable extends IConfigurationOwner {
 const DxConfiguration: VueConstructor = Vue.extend({
 
     beforeMount() {
+        const innerChanges = {};
         const config = (this.$vnode.componentOptions as IConfigurable).$_config;
 
         config.init(Object.keys(this.$props));
-        bindOptionWatchers(config, this);
-        subscribeOnUpdates(config, this);
+        bindOptionWatchers(config, this, innerChanges);
+        subscribeOnUpdates(config, this, innerChanges);
     },
 
     mounted() {
