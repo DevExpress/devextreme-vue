@@ -6,13 +6,12 @@ it("generates", () => {
 import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
-import { VueConstructor } from "vue";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 
-interface COMPONENT extends VueConstructor {
+interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT: COMPONENT = Vue.extend({
+const COMPONENT = Vue.extend({
   extends: BASE_COMPONENT,
   computed: {
     instance(): WIDGET {
@@ -57,13 +56,12 @@ it("generates component with model", () => {
 import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
-import { VueConstructor } from "vue";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 
-interface COMPONENT extends VueConstructor {
+interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT: COMPONENT = Vue.extend({
+const COMPONENT = Vue.extend({
   extends: BASE_COMPONENT,
   model: { prop: "value", event: "update:value" },
   computed: {
@@ -110,17 +108,16 @@ it("generates option", () => {
 import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import WIDGET, { IOptions } from "devextreme/DX/WIDGET/PATH";
-import { VueConstructor } from "vue";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 
 type AccessibleOptions = Pick<IOptions,
   "PROP"
 >;
 
-interface COMPONENT extends VueConstructor, AccessibleOptions {
+interface COMPONENT extends AccessibleOptions {
   readonly instance?: WIDGET;
 }
-const COMPONENT: COMPONENT = Vue.extend({
+const COMPONENT = Vue.extend({
   extends: BASE_COMPONENT,
   props: {
     PROP: {}
@@ -169,14 +166,13 @@ it("generates nested option component", () => {
 import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
-import { VueConstructor } from "vue";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
 
-interface COMPONENT extends VueConstructor {
+interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT: COMPONENT = Vue.extend({
+const COMPONENT = Vue.extend({
   extends: BASE_COMPONENT,
   computed: {
     instance(): WIDGET {
@@ -241,14 +237,13 @@ it("generates nested collection option component", () => {
 import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
-import { VueConstructor } from "vue";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
 
-interface COMPONENT extends VueConstructor {
+interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT: COMPONENT = Vue.extend({
+const COMPONENT = Vue.extend({
   extends: BASE_COMPONENT,
   computed: {
     instance(): WIDGET {
@@ -314,14 +309,13 @@ it("generates expectedChildren info", () => {
 import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
-import { VueConstructor } from "vue";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
 
-interface COMPONENT extends VueConstructor {
+interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT: COMPONENT = Vue.extend({
+const COMPONENT = Vue.extend({
   extends: BASE_COMPONENT,
   computed: {
     instance(): WIDGET {
@@ -502,14 +496,13 @@ describe("props generation", () => {
 import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
-import { VueConstructor } from "vue";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
 
-interface COMPONENT extends VueConstructor {
+interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT: COMPONENT = Vue.extend({
+const COMPONENT = Vue.extend({
   extends: BASE_COMPONENT,
   computed: {
     instance(): WIDGET {
@@ -580,14 +573,13 @@ export {
 import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
-import { VueConstructor } from "vue";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
 
-interface COMPONENT extends VueConstructor {
+interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT: COMPONENT = Vue.extend({
+const COMPONENT = Vue.extend({
   extends: BASE_COMPONENT,
   computed: {
     instance(): WIDGET {
