@@ -77,10 +77,6 @@ function generate(component: IComponent): string {
 
     const namedExports: string[] = [component.name];
     const namedImports = [
-        {
-            name: "VueConstructor",
-            path: "vue"
-        },
         component.baseComponent
     ];
 
@@ -176,11 +172,11 @@ const renderComponent: (model: {
     `\n` +
 `<#?#>` +
 
-`interface <#= it.component #> extends VueConstructor<#? it.props #>, AccessibleOptions<#?#> {` +
+`interface <#= it.component #><#? it.props #> extends AccessibleOptions<#?#> {` +
     L1 + `readonly instance?: <#= it.widgetImport.name #>;` + `\n` +
 `}` + `\n` +
 
-`const <#= it.component #>: <#= it.component #> = Vue.extend({` +
+`const <#= it.component #> = Vue.extend({` +
 L1 + `extends: <#= it.baseComponent #>,` +
 
 `<#? it.props #>` +
