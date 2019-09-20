@@ -105,7 +105,7 @@ function mapWidget(
         name: "DxConfiguration",
         path: configComponentPath
       },
-      props: raw.options.map((o) => mapProp(o, customTypeHash)),
+      props: getProps(raw.options, customTypeHash),
       hasModel: !!raw.isEditor,
       nestedComponents: raw.complexOptions
         ? raw.complexOptions.map((o) => mapNestedComponent(o, customTypeHash))
@@ -122,11 +122,15 @@ function mapNestedComponent(
   return {
     name: `Dx${uppercaseFirst(complexOption.name)}`,
     optionName: complexOption.optionName,
-    props: complexOption.props.map((o) => mapProp(o, customTypes)),
+    props: getProps(complexOption.props, customTypes),
     isCollectionItem: complexOption.isCollectionItem,
     predefinedProps: complexOption.predefinedProps,
     expectedChildren: mapExpectedChildren(complexOption.nesteds)
   };
+}
+
+function getProps(options: IOption[], customTypes: Record<string, ICustomType>) {
+  return options.filter((o) => o.name !== "key").map((o) => mapProp(o, customTypes));
 }
 
 function mapProp(rawOption: IOption, customTypes: Record<string, ICustomType>): IProp {
