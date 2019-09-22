@@ -1,5 +1,7 @@
-import Vue from "vue";
+import * as VueType from "vue";
 import { discover } from "./templates-discovering";
+
+const Vue = VueType.default || VueType;
 
 describe("templates-discovering (vue 2)", () => {
 

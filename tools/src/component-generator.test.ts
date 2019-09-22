@@ -44,8 +44,7 @@ export {
             baseComponent: {
                 name: "BASE_COMPONENT",
                 path: "./BASE_COMPONENT_PATH"
-            },
-            expectedChildren: undefined
+            }
         })
     ).toBe(EXPECTED);
 });
@@ -96,8 +95,7 @@ export {
                 name: "CONFIG_COMPONENT",
                 path: "./CONFIG_COMPONENT_PATH"
             },
-            hasModel: true,
-            expectedChildren: undefined
+            hasModel: true
         })
     ).toBe(EXPECTED);
 });
@@ -154,8 +152,7 @@ export {
                 name: "CONFIG_COMPONENT",
                 path: "./CONFIG_COMPONENT_PATH"
             },
-            props: [{ name: "PROP" }],
-            expectedChildren: undefined
+            props: [{ name: "PROP" }]
         })
     ).toBe(EXPECTED);
 });
@@ -222,11 +219,9 @@ export {
                 props: [
                   { name: "PROP" }
                 ],
-                isCollectionItem: false,
-                expectedChildren: undefined
+                isCollectionItem: false
               }
-            ],
-            expectedChildren: undefined
+            ]
         })
     ).toBe(EXPECTED);
 });
@@ -294,11 +289,9 @@ export {
                 props: [
                   { name: "PROP" }
                 ],
-                isCollectionItem: true,
-                expectedChildren: undefined
+                isCollectionItem: true
               }
-            ],
-            expectedChildren: undefined
+            ]
         })
     ).toBe(EXPECTED);
 });
@@ -558,11 +551,9 @@ export {
                     isCollectionItem: false,
                     predefinedProps: {
                       PROP_1: "PREDEFINED_VALUE"
-                    },
-                    expectedChildren: undefined
+                    }
                   }
-                ],
-                expectedChildren: undefined
+                ]
             })
         ).toBe(EXPECTED);
     });
@@ -637,11 +628,9 @@ export {
                     predefinedProps: {
                       PROP_1: "PREDEFINED_VALUE_1",
                       PROP_2: "PREDEFINED_VALUE_2"
-                    },
-                    expectedChildren: undefined
+                    }
                   }
-                ],
-                expectedChildren: undefined
+                ]
             })
         ).toBe(EXPECTED);
     });
