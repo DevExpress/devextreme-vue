@@ -46,8 +46,8 @@ export interface ICustomType {
 }
 
 export interface ITypeDescr {
-  acceptableValues: string[];
-  isCustomType: boolean;
+  acceptableValues?: string[];
+  isCustomType?: boolean;
   type: string;
 }
 

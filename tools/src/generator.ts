@@ -138,7 +138,7 @@ function mapProp(rawOption: IOption, customTypes: Record<string, ICustomType>): 
   const restrictedTypes: ITypeDescr[] = rawOption.types.filter(
     (t) => t.acceptableValues && t.acceptableValues.length > 0
   );
-  const valueRestriction: ITypeDescr = restrictedTypes.length > 0 ? restrictedTypes[0] : null;
+  const valueRestriction = restrictedTypes.length > 0 ? restrictedTypes[0] : undefined;
   return {
     name: rawOption.name,
     acceptableValues: valueRestriction && valueRestriction.acceptableValues,
@@ -148,9 +148,9 @@ function mapProp(rawOption: IOption, customTypes: Record<string, ICustomType>): 
   };
 }
 
-function mapExpectedChildren(nesteds: IComponentRef[]): Record<string, IExpectedChild> {
+function mapExpectedChildren(nesteds: IComponentRef[]): Record<string, IExpectedChild> | undefined {
   if (!nesteds || nesteds.length === 0) {
-    return undefined;
+    return;
   }
 
   const expectedChildren = {};
@@ -165,3 +165,6 @@ function mapExpectedChildren(nesteds: IComponentRef[]): Record<string, IExpected
 }
 
 export default generate;
+export {
+  mapWidget
+};
