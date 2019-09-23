@@ -19,7 +19,7 @@ interface IComponent {
     props?: IProp[];
     hasModel?: boolean;
     nestedComponents?: INestedComponent[];
-    expectedChildren: Record<string, IExpectedChild>;
+    expectedChildren?: Record<string, IExpectedChild>;
 }
 
 interface INestedComponent {
@@ -27,20 +27,20 @@ interface INestedComponent {
     optionName: string;
     props: IProp[];
     isCollectionItem: boolean;
-    expectedChildren: Record<string, IExpectedChild>;
+    expectedChildren?: Record<string, IExpectedChild>;
     predefinedProps?: Record<string, any>;
 }
 
 interface INestedComponentModel {
     name: string;
     optionName: string;
-    renderedProps: string;
+    renderedProps?: string;
     isCollectionItem: boolean;
     predefinedProps: Array<{
         name: string;
         value: any;
     }>;
-    expectedChildren: Array<{
+    expectedChildren?: Array<{
         name: string;
         isCollectionItem: boolean;
     }>;
@@ -114,7 +114,7 @@ function createNestedComponentModel(component: INestedComponent): INestedCompone
     if (component.predefinedProps) {
         predefinedProps = Object.keys(component.predefinedProps).map((name) => ({
             name,
-            value: component.predefinedProps[name]
+            value: component.predefinedProps && component.predefinedProps[name]
         }));
     }
 
@@ -130,8 +130,8 @@ function createNestedComponentModel(component: INestedComponent): INestedCompone
     };
 }
 
-function formatExpectedChildren(dict: Record<string, IExpectedChild>): IExpectedChildModel[] {
-    if (!dict) { return undefined; }
+function formatExpectedChildren(dict: Record<string, IExpectedChild> | undefined): IExpectedChildModel[] | undefined {
+    if (!dict) { return; }
 
     return Object.keys(dict).map((name) => ({
         name,
@@ -151,7 +151,7 @@ const renderComponent: (model: {
     renderedProps?: string;
     hasModel?: boolean;
     nestedComponents?: INestedComponentModel[];
-    expectedChildren: IExpectedChildModel[];
+    expectedChildren?: IExpectedChildModel[];
     defaultExport: string;
     namedExports: string[];
 }) => string = createTempate(

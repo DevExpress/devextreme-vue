@@ -80,7 +80,7 @@ function mountTemplate(
             });
         },
         render: (createElement: CreateElement) => {
-            const content = template(data);
+            const content = template(data) as any;
             if (!content) {
                 return createElement("div");
             }

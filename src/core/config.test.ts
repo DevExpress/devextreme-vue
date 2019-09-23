@@ -1,6 +1,8 @@
-import Vue from "vue";
+import * as VueType from "vue";
 import { DxComponent, IWidgetComponent } from "../core/component";
 import config, { getOption } from "../core/config";
+
+const Vue = VueType.default || VueType;
 
 const Widget = {
     option: jest.fn(),
