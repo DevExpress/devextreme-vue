@@ -1,9 +1,11 @@
-import Vue, { VueConstructor } from "vue";
+import * as VueType from "vue";
 import { DxComponent, IWidgetComponent } from "../core/component";
 import { DxConfiguration, IConfigurable, IConfigurationComponent } from "../core/configuration-component";
 import { DxExtensionComponent } from "../core/extension-component";
 
 import * as events from "devextreme/events";
+
+const Vue = VueType.default || VueType;
 
 const eventHandlers: { [index: string]: (e?: any) => void } = {};
 const Widget = {
@@ -54,7 +56,7 @@ function skipIntegrationOptions(options: {
     return result;
 }
 
-function buildTestConfigCtor(): VueConstructor {
+function buildTestConfigCtor(): VueType.VueConstructor {
     return Vue.extend({
         extends: DxConfiguration,
         props: {

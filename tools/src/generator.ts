@@ -105,7 +105,7 @@ function mapWidget(
         name: "DxConfiguration",
         path: configComponentPath
       },
-      props: raw.options.map((o) => mapProp(o, customTypeHash)),
+      props: getProps(raw.options, customTypeHash),
       hasModel: !!raw.isEditor,
       nestedComponents: raw.complexOptions
         ? raw.complexOptions.map((o) => mapNestedComponent(o, customTypeHash))
@@ -122,11 +122,16 @@ function mapNestedComponent(
   return {
     name: `Dx${uppercaseFirst(complexOption.name)}`,
     optionName: complexOption.optionName,
-    props: complexOption.props.map((o) => mapProp(o, customTypes)),
+    props: getProps(complexOption.props, customTypes),
     isCollectionItem: complexOption.isCollectionItem,
     predefinedProps: complexOption.predefinedProps,
     expectedChildren: mapExpectedChildren(complexOption.nesteds)
   };
+}
+
+function getProps(options: IOption[], customTypes: Record<string, ICustomType>) {
+  const reservedPropNames = ["key"];
+  return options.filter((o) => reservedPropNames.indexOf(o.name) < 0).map((o) => mapProp(o, customTypes));
 }
 
 function mapProp(rawOption: IOption, customTypes: Record<string, ICustomType>): IProp {
@@ -134,7 +139,7 @@ function mapProp(rawOption: IOption, customTypes: Record<string, ICustomType>): 
   const restrictedTypes: ITypeDescr[] = rawOption.types.filter(
     (t) => t.acceptableValues && t.acceptableValues.length > 0
   );
-  const valueRestriction: ITypeDescr = restrictedTypes.length > 0 ? restrictedTypes[0] : null;
+  const valueRestriction = restrictedTypes.length > 0 ? restrictedTypes[0] : undefined;
   return {
     name: rawOption.name,
     acceptableValues: valueRestriction && valueRestriction.acceptableValues,
@@ -144,9 +149,9 @@ function mapProp(rawOption: IOption, customTypes: Record<string, ICustomType>): 
   };
 }
 
-function mapExpectedChildren(nesteds: IComponentRef[]): Record<string, IExpectedChild> {
+function mapExpectedChildren(nesteds: IComponentRef[]): Record<string, IExpectedChild> | undefined {
   if (!nesteds || nesteds.length === 0) {
-    return undefined;
+    return;
   }
 
   const expectedChildren = {};
@@ -161,3 +166,6 @@ function mapExpectedChildren(nesteds: IComponentRef[]): Record<string, IExpected
 }
 
 export default generate;
+export {
+  mapWidget
+};

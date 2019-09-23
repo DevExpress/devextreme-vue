@@ -297,9 +297,10 @@ const DxComponent: VueConstructor = BaseComponent.extend({
 
         this.$_createWidget(this.$el);
         this.$_instance.endUpdate();
-        this.$children.forEach((child: IExtension) => {
-            if (child.$_isExtension) {
-                child.attachTo(this.$el);
+        this.$children.forEach((child: IVue) => {
+            const childExtension = child as any as IExtension;
+            if (childExtension.$_isExtension) {
+                childExtension.attachTo(this.$el);
             }
         });
     }

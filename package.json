@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "devextreme-vue",
   "version": "18.2.10",
   "description": "DevExtreme Vue UI and Visualization Components",
@@ -31,8 +31,8 @@
     "vue": "^2.5.16"
   },
   "devDependencies": {
-    "@types/jest": "^22.2.3",
-    "@types/node": "^9.6.30",
+    "@types/jest": "^24.0.18",
+    "@types/node": "^12.7.5",
     "css-loader": "^0.28.11",
     "dasherize": "^2.0.0",
     "del": "^3.0.0",
@@ -43,14 +43,14 @@
     "gulp-shell": "^0.6.5",
     "gulp-tslint": "^8.1.3",
     "gulp-typescript": "^5.0.0",
-    "jest": "^22.4.4",
+    "jest": "^24.9.0",
     "minimatch": "^3.0.2",
     "source-map-loader": "^0.2.4",
     "style-loader": "^0.20.3",
-    "ts-jest": "^22.4.6",
+    "ts-jest": "^24.1.0",
     "ts-loader": "^4.5.0",
     "tslint": "^5.11.0",
-    "typescript": "^2.9.2",
+    "typescript": "^3.6.3",
     "url-loader": "^1.1.1",
     "vue": "^2.6.3",
     "vue-loader": "^14.2.3",
