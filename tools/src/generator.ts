@@ -130,8 +130,8 @@ function mapNestedComponent(
 }
 
 function getProps(options: IOption[], customTypes: Record<string, ICustomType>) {
-  const ignoredOptions = ["key"];
-  return options.filter((o) => ignoredOptions.indexOf(o.name) < 0).map((o) => mapProp(o, customTypes));
+  const reservedPropNames = ["key"];
+  return options.filter((o) => reservedPropNames.indexOf(o.name) < 0).map((o) => mapProp(o, customTypes));
 }
 
 function mapProp(rawOption: IOption, customTypes: Record<string, ICustomType>): IProp {
