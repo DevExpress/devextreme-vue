@@ -20,7 +20,10 @@ describe("mapWidget", () => {
                 options: [
                     {
                         name: "key",
-                        types: [{ type: "Object" }, { type: "String" }],
+                        types: [
+                            { type: "Object" } as any,
+                            { type: "String" } as any
+                        ],
                         isSubscribable: false,
                         props: []
                     }
