@@ -1,6 +1,9 @@
 import { ICustomType, ITypeDescr } from "../integration-data-model";
 
-function convertTypes(types: ITypeDescr[], customTypes?: Record<string, ICustomType>): string[] {
+function convertTypes(
+    types: ITypeDescr[] | undefined | null,
+    customTypes?: Record<string, ICustomType>
+): string[] | undefined {
     if (types === undefined || types === null || types.length === 0) {
         return;
     }
@@ -18,7 +21,7 @@ function convertTypes(types: ITypeDescr[], customTypes?: Record<string, ICustomT
 }
 
 function expandTypes(types: ITypeDescr[], customTypes: Record<string, ICustomType>): ITypeDescr[] {
-    const expandedTypes = [];
+    const expandedTypes: ITypeDescr[] = [];
     types.forEach((t) => {
       if (t.isCustomType) {
         const aliases = customTypes[t.type].types;

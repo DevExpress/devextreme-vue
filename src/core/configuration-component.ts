@@ -23,7 +23,7 @@ const DxConfiguration: VueConstructor = Vue.extend({
 
     beforeMount() {
         const innerChanges = {};
-        const config = (this.$vnode.componentOptions as IConfigurable).$_config;
+        const config = (this.$vnode.componentOptions as any as IConfigurable).$_config;
 
         config.init(Object.keys(this.$props));
         bindOptionWatchers(config, this, innerChanges);
@@ -31,13 +31,13 @@ const DxConfiguration: VueConstructor = Vue.extend({
     },
 
     mounted() {
-        if (this.$parent.$_instance) {
-            this.$parent.$_config.componentsCountChanged = true;
+        if ((this.$parent as any).$_instance) {
+            (this.$parent as any).$_config.componentsCountChanged = true;
         }
     },
 
     beforeDestroy() {
-        this.$parent.$_config.componentsCountChanged = true;
+        (this.$parent as any).$_config.componentsCountChanged = true;
     },
 
     render(createElement: (...args) => VNode): VNode {
