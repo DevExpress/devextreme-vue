@@ -886,6 +886,35 @@ describe("nested option", () => {
         });
     });
 
+    it("update position nested components by v-for", (done) => {
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <nested v-for="opt in nestedOptions" :key="opt.key" />` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                Nested
+            },
+            data: {
+                nestedOptions: [
+                    { key: "first", value: 123 },
+                    { key: "second", value: 321 }
+                ]
+            }
+        }).$mount();
+
+        vm.$data.nestedOptions = [
+            { key: "second", value: 321 },
+            { key: "third", value: 123 }
+        ];
+
+        Vue.nextTick(() => {
+            expect(vm.$el.childNodes.length).toEqual(2);
+            done();
+        });
+    });
+
     it("watches option changes (collectionItem)", (done) => {
         const nestedCollectionItem = buildTestConfigCtor();
         (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
