@@ -273,7 +273,7 @@ function cleanWidgetNode(node: Node) {
     });
 }
 
-function restoreNodes(el: Element, nodes: Node) {
+function restoreNodes(el: Element, nodes: Record<number, ChildNode>) {
     for (const key in nodes) {
         if (nodes.hasOwnProperty(key)) {
             el.appendChild(nodes[key]);
