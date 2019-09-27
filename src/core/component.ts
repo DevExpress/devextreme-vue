@@ -273,6 +273,14 @@ function cleanWidgetNode(node: Node) {
     });
 }
 
+function restoreNodes(el: Element, nodes: Record<number, ChildNode>) {
+    for (const key in nodes) {
+        if (nodes.hasOwnProperty(key)) {
+            el.appendChild(nodes[key]);
+        }
+    }
+}
+
 const DxComponent: VueConstructor = BaseComponent.extend({
     methods: {
         $_getExtraIntegrationOptions(): object {
@@ -293,10 +301,13 @@ const DxComponent: VueConstructor = BaseComponent.extend({
     },
 
     mounted(): void {
+        const nodes = {...this.$el.childNodes};
         cleanWidgetNode(this.$el);
 
         this.$_createWidget(this.$el);
         this.$_instance.endUpdate();
+
+        restoreNodes(this.$el, nodes);
         this.$children.forEach((child: IVue) => {
             const childExtension = child as any as IExtension;
             if (childExtension.$_isExtension) {

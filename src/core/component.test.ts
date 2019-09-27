@@ -1030,6 +1030,22 @@ describe("nested option", () => {
 
         expect(innerHtml).toBe("");
     });
+
+    it("restore nodes after widget creation (T800987)", () => {
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <nested/>` +
+                `  <nested/>` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                Nested
+            }
+        }).$mount();
+
+        expect(vm.$el.childNodes.length).toBe(3);
+    });
 });
 
 function renderTemplate(name: string, model?: object, container?: any): Element {
