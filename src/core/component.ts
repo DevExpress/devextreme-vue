@@ -233,20 +233,22 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
 });
 
 function cleanWidgetNode(node: Node) {
+    const removedNodes: Element[] = [];
     forEachChildNode(node, (childNode: Element) => {
         const parent = childNode.parentNode;
         const isExtension = childNode.hasAttribute && childNode.hasAttribute("isExtension");
         if ((childNode.nodeName === "#comment" || isExtension) && parent) {
+            removedNodes.push(childNode);
             parent.removeChild(childNode);
         }
     });
+
+    return removedNodes;
 }
 
-function restoreNodes(el: Element, nodes: Record<number, ChildNode>) {
-    for (const key in nodes) {
-        if (nodes.hasOwnProperty(key)) {
-            el.appendChild(nodes[key]);
-        }
+function restoreNodes(el: Element, nodes: Element[]) {
+    for(const key in nodes) {
+        el.appendChild(nodes[key]);
     }
 }
 
@@ -270,8 +272,7 @@ const DxComponent: VueConstructor = BaseComponent.extend({
     },
 
     mounted(): void {
-        const nodes = {...this.$el.childNodes};
-        cleanWidgetNode(this.$el);
+        const nodes = cleanWidgetNode(this.$el);
 
         this.$_createWidget(this.$el);
         this.$_instance.endUpdate();
