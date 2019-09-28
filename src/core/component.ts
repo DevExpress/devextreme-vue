@@ -247,8 +247,10 @@ function cleanWidgetNode(node: Node) {
 }
 
 function restoreNodes(el: Element, nodes: Element[]) {
-    for(const key in nodes) {
-        el.appendChild(nodes[key]);
+    for (const key in nodes) {
+        if (nodes.hasOwnProperty(key)) {
+            el.appendChild(nodes[key]);
+        }
     }
 }
 
