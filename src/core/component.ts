@@ -247,11 +247,9 @@ function cleanWidgetNode(node: Node) {
 }
 
 function restoreNodes(el: Element, nodes: Element[]) {
-    for (const key in nodes) {
-        if (nodes.hasOwnProperty(key)) {
-            el.appendChild(nodes[key]);
-        }
-    }
+    nodes.forEach((node) => {
+        el.appendChild(node);
+    });
 }
 
 const DxComponent: VueConstructor = BaseComponent.extend({
