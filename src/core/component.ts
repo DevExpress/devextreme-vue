@@ -1,24 +1,24 @@
 import * as VueType from "vue";
 import IVue, { VNode, VueConstructor } from "vue";
-import { ScopedSlot } from "vue/types/vnode";
 
 import * as events from "devextreme/events";
 
 import { pullAllChildren } from "./children-processing";
-import { getOption } from "./config";
 import Configuration, { bindOptionWatchers, subscribeOnUpdates } from "./configuration";
 import { IConfigurable } from "./configuration-component";
+import { DX_REMOVE_EVENT } from "./constants";
 import { IExtension, IExtensionComponentNode } from "./extension-component";
 import { camelize, forEachChildNode, toComparable } from "./helpers";
 import {
-    discover as discoverTemplates,
-    IEventBusHolder,
-    mountTemplate
+    IEventBusHolder
 } from "./templates-discovering";
+import { TemplatesManager } from "./templates-manager";
 
 interface IWidgetComponent extends IConfigurable {
     $_instance: any;
     $_WidgetClass: any;
+    $_pendingOptions: Record<string, any>;
+    $_templatesManager: TemplatesManager;
 }
 
 interface IBaseComponent extends IVue, IWidgetComponent, IEventBusHolder {
@@ -28,14 +28,11 @@ interface IBaseComponent extends IVue, IWidgetComponent, IEventBusHolder {
     $_getExtraIntegrationOptions: () => void;
     $_getWatchMethod: () => void;
     $_createEmitters: () => void;
-    $_fillTemplate: () => void;
     $_processChildren: () => void;
+    $_getTemplates: () => object;
 }
 
 const Vue = VueType.default || VueType;
-
-const DX_TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper";
-const DX_REMOVE_EVENT = "dxremove";
 
 const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
 
@@ -76,6 +73,26 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
     },
 
     updated() {
+        this.$_templatesManager.discover();
+
+        this.$_instance.beginUpdate();
+        if (this.$_templatesManager.hasTemplates) {
+            const templates = this.$_templatesManager.getTemplates();
+
+            this.$_instance.option(
+                "integrationOptions.templates",
+                this.$_templatesManager.getTemplates()
+            );
+
+            Object.keys(templates).forEach((name) => {
+                this.$_instance.option(name, name);
+            });
+        }
+
+        Object.keys(this.$_pendingOptions).forEach((name: string) => {
+            this.$_instance.option(name, this.$_pendingOptions[name]);
+        });
+
         if (this.$_config.componentsCountChanged) {
             const options = this.$_config.getNestedOptionValues();
             const prevOptions = this.$_config.prevNestedOptions;
@@ -102,6 +119,7 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
 
             this.$_config.componentsCountChanged = false;
         }
+        this.$_instance.endUpdate();
         this.eventBus.$emit("updated");
     },
 
@@ -115,7 +133,7 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
 
     created(): void {
         (this as IBaseComponent).$_config = new Configuration(
-            (n: string, v: any) => this.$_instance.option(n, v),
+            (n: string, v: any) => this.$_pendingOptions[n] = v,
             null,
             this.$options.propsData && { ...this.$options.propsData },
             this.$_expectedChildren
@@ -126,6 +144,11 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
 
     methods: {
         $_createWidget(element: any): void {
+            const thisComponent = this as IBaseComponent;
+
+            thisComponent.$_pendingOptions = {};
+            thisComponent.$_templatesManager = new TemplatesManager(this);
+
             const innerChanges = {};
             const config = this.$_config;
             const options: object = {
@@ -134,8 +157,9 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
                 ...config.getNestedOptionValues(),
                 ...this.$_getIntegrationOptions()
             };
+
             const instance = new this.$_WidgetClass(element, options);
-            (this as IBaseComponent).$_instance = instance;
+            thisComponent.$_instance = instance;
 
             instance.on("optionChanged", (args) => config.onOptionChanged(args));
             subscribeOnUpdates(config, this, innerChanges);
@@ -151,15 +175,12 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
                 ...this.$_getExtraIntegrationOptions(),
             };
 
-            const templates = discoverTemplates(this);
+            if (this.$_templatesManager.hasTemplates) {
+                const templates = this.$_templatesManager.getTemplates();
 
-            if (Object.keys(templates).length) {
-                result.integrationOptions.templates = {};
-                Object.keys(templates).forEach((templateName: string) => {
-                    result[templateName] = templateName;
-                    result.integrationOptions.templates[templateName] = this.$_fillTemplate(
-                        templates[templateName], templateName
-                    );
+                result.integrationOptions.templates = templates;
+                Object.keys(templates).forEach((name) => {
+                    result[name] = name;
                 });
             }
 
@@ -195,30 +216,6 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
 
         $_processChildren(_children: VNode[]): void {
             return;
-        },
-
-        $_fillTemplate(template: ScopedSlot, name: string): object {
-            return {
-                render: (data: any) => {
-                    const scopeData = getOption("useLegacyTemplateEngine")
-                        ? data.model
-                        : { data: data.model, index: data.index };
-
-                    const container = data.container.get ? data.container.get(0) : data.container;
-                    const placeholder = document.createElement("div");
-                    container.appendChild(placeholder);
-                    const mountedTemplate = mountTemplate(template, this, scopeData, name, placeholder);
-
-                    const element = mountedTemplate.$el;
-                    if (element.classList) {
-                        element.classList.add(DX_TEMPLATE_WRAPPER_CLASS);
-                    }
-
-                    events.one(element, DX_REMOVE_EVENT, mountedTemplate.$destroy.bind(mountedTemplate));
-
-                    return element;
-                }
-            };
         },
 
         $_createEmitters(instance: any): void {

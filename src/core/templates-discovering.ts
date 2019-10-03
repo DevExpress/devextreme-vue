@@ -63,7 +63,7 @@ function discover(component: IVue): Record<string, ScopedSlot> {
 }
 
 function mountTemplate(
-    template: ScopedSlot,
+    getSlot: () => ScopedSlot,
     parent: IVue,
     data: any,
     name: string,
@@ -80,7 +80,8 @@ function mountTemplate(
             });
         },
         render: (createElement: CreateElement) => {
-            const content = template(data) as any;
+            const slot = getSlot();
+            const content = slot(data) as any;
             if (!content) {
                 return createElement("div");
             }
