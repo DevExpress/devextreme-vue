@@ -33,6 +33,7 @@
   "devDependencies": {
     "@types/jest": "^22.2.3",
     "@types/node": "^9.6.30",
+    "@vue/test-utils": "^1.0.0-beta.29",
     "css-loader": "^2.1.1",
     "dasherize": "^2.0.0",
     "del": "^3.0.0",

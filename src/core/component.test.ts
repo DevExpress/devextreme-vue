@@ -5,6 +5,8 @@ import { DxExtensionComponent } from "../core/extension-component";
 
 import * as events from "devextreme/events";
 
+import { mount } from "@vue/test-utils";
+
 const Vue = VueType.default || VueType;
 
 const eventHandlers: { [index: string]: (e?: any) => void } = {};
@@ -138,20 +140,15 @@ describe("options", () => {
         expect(eventHandlers).toHaveProperty("optionChanged");
     });
 
-    it("watch prop changing", (done) => {
-        const vm = new TestComponent({
-            props: ["sampleProp"],
-            propsData: {
-                sampleProp: "default"
-            }
-        }).$mount();
+    it("watch prop changing", () => {
+        const wrapper = mount(TestComponent, {props: ["sampleProp"],
+        propsData: {
+            sampleProp: "default"
+        }});
+        wrapper.setProps({ sampleProp: "new" });
 
-        vm.$props.sampleProp = "new";
-        Vue.nextTick(() => {
-            expect(Widget.option).toHaveBeenCalledTimes(1);
-            expect(Widget.option).toHaveBeenCalledWith("sampleProp", "new");
-            done();
-        });
+        expect(Widget.option).toHaveBeenCalledTimes(1);
+        expect(Widget.option).toHaveBeenCalledWith("sampleProp", "new");
     });
 
     it("watch array prop changing", (done) => {
@@ -303,21 +300,17 @@ describe("configuration", () => {
         expect(WidgetClass.mock.calls[0][1].b.c.d).toBe(initialValues.b.c.d);
     });
 
-    it("calls the option method from a widget component configuration updateFunc", () => {
-        const optionSetter = jest.fn();
+    it("updates pendingOptions from a widget component configuration updateFunc", () => {
         const vm = new TestComponent();
+        vm.$mount();
 
-        (vm as IWidgetComponent).$_instance = {
-            option: optionSetter
-        };
+        const pendingOptions = (vm as IWidgetComponent).$_pendingOptions;
+
         const name = "abc";
         const value = {};
 
         (vm as IConfigurable).$_config.updateFunc(name, value);
-
-        expect(optionSetter).toHaveBeenCalledTimes(1);
-        expect(optionSetter.mock.calls[0][0]).toBe(name);
-        expect(optionSetter.mock.calls[0][1]).toBe(value);
+        expect(pendingOptions[name]).toEqual(value);
     });
 
     it("initializes nested config", () => {
