@@ -76,22 +76,23 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
         this.$_templatesManager.discover();
 
         this.$_instance.beginUpdate();
-        if (this.$_templatesManager.hasTemplates) {
-            const templates = this.$_templatesManager.getTemplates();
-
+        if (this.$_templatesManager.isDirty) {
             this.$_instance.option(
                 "integrationOptions.templates",
-                this.$_templatesManager.getTemplates()
+                this.$_templatesManager.templates
             );
 
-            Object.keys(templates).forEach((name) => {
+            Object.keys(this.$_templatesManager.templates).forEach((name) => {
                 this.$_instance.option(name, name);
             });
+
+            this.$_templatesManager.resetDirtyFlag();
         }
 
         Object.keys(this.$_pendingOptions).forEach((name: string) => {
             this.$_instance.option(name, this.$_pendingOptions[name]);
         });
+        (this as IBaseComponent).$_pendingOptions = {};
 
         if (this.$_config.componentsCountChanged) {
             const options = this.$_config.getNestedOptionValues();
@@ -175,13 +176,15 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
                 ...this.$_getExtraIntegrationOptions(),
             };
 
-            if (this.$_templatesManager.hasTemplates) {
-                const templates = this.$_templatesManager.getTemplates();
+            if (this.$_templatesManager.isDirty) {
+                const templates = this.$_templatesManager.templates;
 
                 result.integrationOptions.templates = templates;
                 Object.keys(templates).forEach((name) => {
                     result[name] = name;
                 });
+
+                this.$_templatesManager.resetDirtyFlag();
             }
 
             return result;

@@ -32,3 +32,19 @@ export function forEachChildNode(
 ) {
     Array.prototype.slice.call(el.childNodes).forEach(callback);
 }
+
+export function haveEqualKeys(obj1: object, obj2: object) {
+    const obj1Keys = Object.keys(obj1);
+
+    if (obj1Keys.length !==  Object.keys(obj2).length) {
+        return false;
+    }
+
+    for (const key of obj1Keys) {
+        if (!obj2.hasOwnProperty(key)) {
+            return false;
+        }
+    }
+
+    return true;
+}

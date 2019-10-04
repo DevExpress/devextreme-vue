@@ -1,4 +1,4 @@
-import { isEqual, toComparable } from "./helpers";
+import { isEqual, toComparable, haveEqualKeys } from "./helpers";
 
 describe("toComparable", () => {
 
@@ -40,5 +40,27 @@ describe("isEqual", () => {
         const testDate1 = new Date(2018, 9, 9);
         const testDate2 = new Date(2018, 9, 9);
         expect(isEqual(testDate1, testDate2)).toBe(true);
+    });
+});
+
+describe("haveEqualKeys", () => {
+    [
+        [{}, {}],
+        [{a: 1}, {a: 2}],
+        [{a: 1, b: 2}, {a: 1, b: 2}]
+    ].map((input) => {
+        it("returns true", () => {
+            expect(haveEqualKeys(input[0], input[1])).toBe(true);
+        });
+    });
+
+    [
+        [{}, {a: 1}],
+        [{a: 1}, {}],
+        [{a: 1, b: 2}, {a: 1, c: 3}]
+    ].map((input) => {
+        it("returns false", () => {
+            expect(haveEqualKeys(input[0], input[1])).toBe(false);
+        });
     });
 });
