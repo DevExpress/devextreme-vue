@@ -96,8 +96,6 @@ class TemplatesManager {
     private _getSlot(name: string) {
         return this._slots[name];
     }
-
-    private 
 }
 
 export { TemplatesManager };
