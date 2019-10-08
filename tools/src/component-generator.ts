@@ -321,13 +321,16 @@ const renderPropsTemplate: (props: IProp[]) => string = createTempate(
                     `"string"` +
                 `<#?#>` +
 
-                ` || [` +
+                `<#? prop.name !== 'formatName' #>` + // T820668
 
-                `<#~ prop.acceptableValues : value #>` +
-                    L4 + `<#= value #>,` +
-                `<#~#>` + `\b` +
+                    ` || [` +
 
-                L3 + `].indexOf(v) !== -1` +
+                    `<#~ prop.acceptableValues : value #>` +
+                        L4 + `<#= value #>,` +
+                    `<#~#>` + `\b` +
+
+                    L3 + `].indexOf(v) !== -1` +
+                `<#?#>` +
             `<#?#>` +
 
             L2 +
