@@ -1,4 +1,4 @@
-import { isEqual, toComparable, haveEqualKeys } from "./helpers";
+import { haveEqualKeys, isEqual, toComparable } from "./helpers";
 
 describe("toComparable", () => {
 
