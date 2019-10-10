@@ -134,22 +134,33 @@ function getProps(options: IOption[], customTypes: Record<string, ICustomType>) 
   return options.filter((o) => reservedPropNames.indexOf(o.name) < 0).map((o) => mapProp(o, customTypes));
 }
 
+function buildValueRestriction(restrictedTypes) {
+  const valueRestriction = restrictedTypes.length > 0 ? restrictedTypes[0] : undefined;
+  const acceptableValueType = valueRestriction && valueRestriction.type.toLowerCase();
+  if (!valueRestriction || acceptableValueType === "string") {
+    return { };
+  }
+
+  return {
+    acceptableValueType,
+    acceptableValues : valueRestriction.acceptableValues,
+  };
+}
+
 function mapProp(rawOption: IOption, customTypes: Record<string, ICustomType>): IProp {
   const types = convertTypes(rawOption.types, customTypes);
   const restrictedTypes: ITypeDescr[] = rawOption.types.filter(
     (t) => t.acceptableValues && t.acceptableValues.length > 0
   );
-  const valueRestriction = restrictedTypes.length > 0 ? restrictedTypes[0] : undefined;
-  const acceptableType = valueRestriction &&  valueRestriction.type.toLowerCase();
-  const acceptableValues = valueRestriction && valueRestriction.acceptableValues;
-  const isStringAcceptableValue = acceptableValues && acceptableType === "string";
+
+  const valueRestriction = buildValueRestriction(restrictedTypes);
 
   return {
     name: rawOption.name,
-    acceptableValues: isStringAcceptableValue ? undefined : acceptableValues, // T820668
+    acceptableValues: valueRestriction.acceptableValues,
     types,
     isArray: types && types.length === 1 && types[0] === "Array",
-    acceptableValueType: isStringAcceptableValue ? undefined : acceptableType // T820668
+    acceptableValueType: valueRestriction.acceptableValueType
   };
 }
 
