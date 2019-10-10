@@ -1,7 +1,7 @@
 
 module.exports = {
   src: './src/**/*.ts',
-  testSrc: './src/**/*.test.ts', 
+  ignoredGlobs: ['!./src/**/*.test.ts', '!./src/**/__mocks__/*'],
   generator: {
     src: './tools/src/**/*.ts',
     binDir: './tools/bin/',

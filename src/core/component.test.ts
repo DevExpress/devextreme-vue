@@ -5,6 +5,8 @@ import { DxExtensionComponent } from "../core/extension-component";
 
 import * as events from "devextreme/events";
 
+import { mount } from "@vue/test-utils";
+
 const Vue = VueType.default || VueType;
 
 const eventHandlers: { [index: string]: (e?: any) => void } = {};
@@ -138,20 +140,15 @@ describe("options", () => {
         expect(eventHandlers).toHaveProperty("optionChanged");
     });
 
-    it("watch prop changing", (done) => {
-        const vm = new TestComponent({
-            props: ["sampleProp"],
-            propsData: {
-                sampleProp: "default"
-            }
-        }).$mount();
+    it("watch prop changing", () => {
+        const wrapper = mount(TestComponent, {props: ["sampleProp"],
+        propsData: {
+            sampleProp: "default"
+        }});
+        wrapper.setProps({ sampleProp: "new" });
 
-        vm.$props.sampleProp = "new";
-        Vue.nextTick(() => {
-            expect(Widget.option).toHaveBeenCalledTimes(1);
-            expect(Widget.option).toHaveBeenCalledWith("sampleProp", "new");
-            done();
-        });
+        expect(Widget.option).toHaveBeenCalledTimes(1);
+        expect(Widget.option).toHaveBeenCalledWith("sampleProp", "new");
     });
 
     it("watch array prop changing", (done) => {
@@ -303,21 +300,17 @@ describe("configuration", () => {
         expect(WidgetClass.mock.calls[0][1].b.c.d).toBe(initialValues.b.c.d);
     });
 
-    it("calls the option method from a widget component configuration updateFunc", () => {
-        const optionSetter = jest.fn();
+    it("updates pendingOptions from a widget component configuration updateFunc", () => {
         const vm = new TestComponent();
+        vm.$mount();
 
-        (vm as IWidgetComponent).$_instance = {
-            option: optionSetter
-        };
+        const pendingOptions = (vm as IWidgetComponent).$_pendingOptions;
+
         const name = "abc";
         const value = {};
 
         (vm as IConfigurable).$_config.updateFunc(name, value);
-
-        expect(optionSetter).toHaveBeenCalledTimes(1);
-        expect(optionSetter.mock.calls[0][0]).toBe(name);
-        expect(optionSetter.mock.calls[0][1]).toBe(value);
+        expect(pendingOptions[name]).toEqual(value);
     });
 
     it("initializes nested config", () => {
@@ -1062,6 +1055,15 @@ function renderTemplate(name: string, model?: object, container?: any, index?: n
 describe("template", () => {
 
     const DX_TEMPLATE_WRAPPER = "dx-template-wrapper";
+    const componentWithTemplate = Vue.extend({
+        template: `<test-component :prop1='prop1Value'>
+                     <template #test v-if='renderTemplate'>content</template>
+                   </test-component>`,
+        components: {
+            TestComponent
+        },
+        props: ["renderTemplate", "prop1Value"]
+    });
 
     function renderItemTemplate(model?: object, container?: any, index?: number): Element {
         return renderTemplate("item", model, container, index);
@@ -1090,6 +1092,61 @@ describe("template", () => {
         expect(typeof integrationOptions.templates.content.render).toBe("function");
 
         expect(integrationOptions.templates.default).toBeUndefined();
+    });
+
+    it("passes 'integrationOptions.templates' on update", () => {
+        const wrapper = mount(componentWithTemplate, {
+            propsData: {
+                renderTemplate: false,
+                prop1Value: 1
+            }
+        });
+
+        wrapper.setProps({
+            renderTemplate: true
+        });
+
+        expect(Widget.option.mock.calls[0][0]).toEqual("integrationOptions.templates");
+        expect(Widget.option.mock.calls[0][1].test.render).toBeInstanceOf(Function);
+    });
+
+    it("passes 'integrationOptions.templates' on update before other options", () => {
+        const wrapper = mount(componentWithTemplate, {
+            propsData: {
+                renderTemplate: false,
+                prop1Value: 1
+            }
+        });
+
+        wrapper.setProps({
+            renderTemplate: true,
+            prop1Value: 2
+        });
+
+        expect(Widget.option.mock.calls[0][0]).toEqual("integrationOptions.templates");
+        expect(Widget.option.mock.calls[1]).toEqual([ "test", "test" ]);
+        expect(Widget.option.mock.calls[2]).toEqual([ "prop1", 2 ]);
+    });
+
+    it("does not unnecessarily pass 'integrationOptions.templates'", () => {
+        const wrapper = mount(componentWithTemplate, {
+            propsData: {
+                renderTemplate: true,
+                prop1Value: 1
+            }
+        });
+
+        wrapper.setProps({
+            prop1Value: 2
+        });
+
+        wrapper.setProps({
+            prop1Value: 3
+        });
+
+        expect(
+            Widget.option.mock.calls.find((call) => call[0] === "integrationOptions.templates")
+        ).toBeUndefined();
     });
 
     it("renders", () => {
