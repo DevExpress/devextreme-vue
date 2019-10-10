@@ -140,9 +140,10 @@ function mapProp(rawOption: IOption, customTypes: Record<string, ICustomType>): 
     (t) => t.acceptableValues && t.acceptableValues.length > 0
   );
   const valueRestriction = restrictedTypes.length > 0 ? restrictedTypes[0] : undefined;
+  const isFormatName = rawOption.name === "formatName";
   return {
     name: rawOption.name,
-    acceptableValues: rawOption.name === "formatName" ? undefined : valueRestriction && valueRestriction.acceptableValues, // T820668
+    acceptableValues: isFormatName ? undefined : valueRestriction && valueRestriction.acceptableValues, // T820668
     types,
     isArray: types && types.length === 1 && types[0] === "Array",
     acceptableValueType: valueRestriction && valueRestriction.type.toLowerCase()
