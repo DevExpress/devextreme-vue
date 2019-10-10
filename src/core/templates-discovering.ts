@@ -80,8 +80,7 @@ function mountTemplate(
             });
         },
         render: (createElement: CreateElement) => {
-            const slot = getSlot();
-            const content = slot(data) as any;
+            const content = getSlot()(data) as any;
             if (!content) {
                 return createElement("div");
             }

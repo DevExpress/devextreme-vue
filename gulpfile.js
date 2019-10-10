@@ -99,7 +99,7 @@ gulp.task(NPM_BUILD, gulp.series(
   () => {
     return gulp.src([
         config.src,
-        "!" + config.testSrc
+        ...config.ignoredGlobs
       ])
       .pipe(ts('tsconfig.json'))
       .pipe(gulp.dest(config.npm.dist))

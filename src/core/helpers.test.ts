@@ -1,4 +1,4 @@
-import { haveEqualKeys, isEqual, toComparable } from "./helpers";
+import { allKeysAreEqual, isEqual, toComparable } from "./helpers";
 
 describe("toComparable", () => {
 
@@ -43,24 +43,29 @@ describe("isEqual", () => {
     });
 });
 
-describe("haveEqualKeys", () => {
+describe("allKeysAreEqual", () => {
     [
         [{}, {}],
         [{a: 1}, {a: 2}],
-        [{a: 1, b: 2}, {a: 1, b: 2}]
+        [{a: 1, b: 2}, {a: 1, b: 2}],
+        [{}, Object.create({}, {a: { value: 1}})],
+        [Object.create({}, {a: { value: 1}}), {}],
+        [Object.create({}, {a: { value: 1}}), Object.create({}, {b: { value: 1}})]
     ].map((input) => {
         it("returns true", () => {
-            expect(haveEqualKeys(input[0], input[1])).toBe(true);
+            expect(allKeysAreEqual(input[0], input[1])).toBe(true);
         });
     });
 
     [
         [{}, {a: 1}],
         [{a: 1}, {}],
-        [{a: 1, b: 2}, {a: 1, c: 3}]
+        [{a: 1, b: 2}, {a: 1, c: 3}],
+        [{a: 1}, Object.create({}, {a: { value: 1}})],
+        [Object.create({}, {a: { value: 1}}), {a: 1}]
     ].map((input) => {
         it("returns false", () => {
-            expect(haveEqualKeys(input[0], input[1])).toBe(false);
+            expect(allKeysAreEqual(input[0], input[1])).toBe(false);
         });
     });
 });

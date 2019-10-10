@@ -82,16 +82,16 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
                 this.$_templatesManager.templates
             );
 
-            Object.keys(this.$_templatesManager.templates).forEach((name) => {
+            for (const name of Object.keys(this.$_templatesManager.templates)) {
                 this.$_instance.option(name, name);
-            });
+            }
 
             this.$_templatesManager.resetDirtyFlag();
         }
 
-        Object.keys(this.$_pendingOptions).forEach((name: string) => {
+        for (const name of Object.keys(this.$_pendingOptions)) {
             this.$_instance.option(name, this.$_pendingOptions[name]);
-        });
+        }
         (this as IBaseComponent).$_pendingOptions = {};
 
         if (this.$_config.componentsCountChanged) {
@@ -180,9 +180,9 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
                 const templates = this.$_templatesManager.templates;
 
                 result.integrationOptions.templates = templates;
-                Object.keys(templates).forEach((name) => {
+                for (const name of Object.keys(templates)) {
                     result[name] = name;
-                });
+                }
 
                 this.$_templatesManager.resetDirtyFlag();
             }

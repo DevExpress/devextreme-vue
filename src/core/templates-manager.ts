@@ -8,7 +8,7 @@ import {
 
 import * as events from "devextreme/events";
 import { DX_REMOVE_EVENT, DX_TEMPLATE_WRAPPER_CLASS } from "./constants";
-import { haveEqualKeys } from "./helpers";
+import { allKeysAreEqual } from "./helpers";
 
 class TemplatesManager {
     private _component: IVue;
@@ -19,8 +19,6 @@ class TemplatesManager {
     constructor(component: IVue) {
         this._component = component;
         this.discover();
-
-        this._getSlot = this._getSlot.bind(this);
     }
 
     public discover() {
@@ -30,11 +28,9 @@ class TemplatesManager {
             ...slots
         };
 
-        if (haveEqualKeys(this._templates, slots)) {
-            return;
+        if (!allKeysAreEqual(this._templates, slots)) {
+            this._prepareTemplates();
         }
-
-        this._prepareTemplates();
     }
 
     public get templates() {
@@ -52,18 +48,14 @@ class TemplatesManager {
     private _prepareTemplates() {
         this._templates = {};
 
-        Object.keys(this._slots).forEach(
-            (name) => {
-                this._templates[name] = this.prepareTemplate(name);
-            }
-        );
+        for (const name of Object.keys(this._slots)) {
+            this._templates[name] = this.createDxTemplate(name);
+        }
 
         this._isDirty = true;
     }
 
-    private prepareTemplate(
-        name: string
-    ) {
+    private createDxTemplate(name: string) {
         return {
             render: (data: any) => {
                 const scopeData = getOption("useLegacyTemplateEngine")
@@ -74,7 +66,7 @@ class TemplatesManager {
                 const placeholder = document.createElement("div");
                 container.appendChild(placeholder);
                 const mountedTemplate = mountTemplate(
-                    () => this._getSlot(name),
+                    () => this._slots[name],
                     this._component,
                     scopeData,
                     name,
@@ -91,10 +83,6 @@ class TemplatesManager {
                 return element;
             }
         };
-    }
-
-    private _getSlot(name: string) {
-        return this._slots[name];
     }
 }
 
