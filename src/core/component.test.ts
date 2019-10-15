@@ -1277,6 +1277,38 @@ describe("template", () => {
         expect(() => events.triggerHandler(renderedTemplate, "dxremove")).not.toThrow();
     });
 
+    it("unmounts template on dxremove", () => {
+        const vm = new Vue({
+            template: `<test-component>
+                            <div slot='item' slot-scope='props'>Template {{props.text}}</div>
+                        </test-component>`,
+            components: {
+                TestComponent
+            }
+        }).$mount();
+
+        const renderedTemplate = renderItemTemplate({ text: "with data" });
+        events.triggerHandler(renderedTemplate.children[1], "dxremove");
+
+        expect(vm.$children[0].$children.length).toEqual(0);
+    });
+
+    it("unmounts template on dxremove(new syntax)", () => {
+        const vm = new Vue({
+            template: `<test-component>
+                            <template #item="{data}">Template {{data.text}}</template>
+                        </test-component>`,
+            components: {
+                TestComponent
+            }
+        }).$mount();
+
+        const renderedTemplate = renderItemTemplate({ text: "with data" });
+        events.triggerHandler(renderedTemplate.children[0], "dxremove");
+
+        expect(vm.$children[0].$children.length).toEqual(0);
+    });
+
     describe("with DOM", () => {
         let fixture;
 
