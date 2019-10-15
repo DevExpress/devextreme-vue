@@ -1053,8 +1053,6 @@ function renderTemplate(name: string, model?: object, container?: any, index?: n
 }
 
 describe("template", () => {
-
-    const DX_TEMPLATE_WRAPPER = "dx-template-wrapper";
     const componentWithTemplate = Vue.extend({
         template: `<test-component :prop1='prop1Value'>
                      <template #test v-if='renderTemplate'>content</template>
@@ -1160,9 +1158,7 @@ describe("template", () => {
         }).$mount();
         const renderedTemplate = renderItemTemplate();
 
-        expect(renderedTemplate.nodeName).toBe("DIV");
-        expect(renderedTemplate.className).toBe(DX_TEMPLATE_WRAPPER);
-        expect(renderedTemplate.innerHTML).toBe("Template");
+        expect(renderedTemplate.outerHTML).toBe(`<div><div>Template</div><span style=\"display: none;\"></span></div>`);
     });
 
     it("renders scoped slot", () => {
@@ -1234,7 +1230,7 @@ describe("template", () => {
         );
 
         expect(renderedTemplate.nodeName).toBe("DIV");
-        expect(renderedTemplate.innerHTML).toBe("Template with data");
+        expect(renderedTemplate.innerHTML).toBe(`<div>Template with data</div><span style=\"display: none;\"></span>`);
     });
 
     it("preserves classes", () => {
@@ -1248,7 +1244,7 @@ describe("template", () => {
         }).$mount();
         const renderedTemplate = renderItemTemplate({});
 
-        expect(renderedTemplate.className).toBe(`custom-class ${DX_TEMPLATE_WRAPPER}`);
+        expect(renderedTemplate.children[0].className).toBe(`custom-class`);
     });
 
     it("preserves custom-attrs", () => {
@@ -1262,8 +1258,8 @@ describe("template", () => {
         }).$mount();
         const renderedTemplate = renderItemTemplate({});
 
-        expect(renderedTemplate.attributes).toHaveProperty("custom-attr");
-        expect(renderedTemplate.attributes["custom-attr"].value).toBe("123");
+        expect(renderedTemplate.children[0].attributes).toHaveProperty("custom-attr");
+        expect(renderedTemplate.children[0].attributes["custom-attr"].value).toBe("123");
     });
 
     it("doesn't throw on dxremove", () => {
@@ -1406,7 +1402,7 @@ describe("static items", () => {
 
         const renderedTemplate = renderTemplate("items[0].template");
 
-        expect(renderedTemplate.innerHTML).toBe("1");
+        expect(renderedTemplate.innerHTML).toBe(`<div>1</div><span style=\"display: none;\"></span>`);
     });
 
     it("renders template containing text only (vue 3)", () => {
@@ -1485,7 +1481,7 @@ describe("static items", () => {
 
         const renderedTemplate = renderTemplate("item.template");
 
-        expect(renderedTemplate.innerHTML).toBe("abc");
+        expect(renderedTemplate.outerHTML).toBe(`<div><p>abc</p><span style=\"display: none;\"></span></div>`);
     });
 
     it("keeps template root element class and id (vue 3)", () => {
@@ -1513,7 +1509,7 @@ describe("static items", () => {
         const renderedTemplate = renderTemplate("item.template");
 
         expect(renderedTemplate.outerHTML)
-            .toBe(`<p id="preserved-id" class="preserved-class dx-template-wrapper">abc</p>`);
+            .toBe(`<div><p id=\"preserved-id\" class=\"preserved-class\">abc</p><span style=\"display: none;\"></span></div>`);
     });
 
     it("render nested template", () => {
@@ -1545,8 +1541,8 @@ describe("static items", () => {
         const renderedTemplate = renderTemplate("items[0].template");
         const renderedNestedTemplate = renderTemplate("items[0].items[0].template");
 
-        expect(renderedTemplate.innerHTML).toBe("1");
-        expect(renderedNestedTemplate.innerHTML).toBe("2");
+        expect(renderedTemplate.innerHTML).toBe("<div>1</div><span style=\"display: none;\"></span>");
+        expect(renderedNestedTemplate.innerHTML).toBe("<div>2</div><span style=\"display: none;\"></span>");
     });
 
     it("doesn't pass integrationOptions to widget if nested item has sub nested item", () => {
