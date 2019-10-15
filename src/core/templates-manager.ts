@@ -7,7 +7,7 @@ import {
 } from "./templates-discovering";
 
 import * as events from "devextreme/events";
-import { DX_REMOVE_EVENT, DX_TEMPLATE_WRAPPER_CLASS } from "./constants";
+import { DX_REMOVE_EVENT } from "./constants";
 import { allKeysAreEqual } from "./helpers";
 
 class TemplatesManager {
@@ -73,14 +73,12 @@ class TemplatesManager {
                     placeholder
                 );
 
-                const element = mountedTemplate.$el;
-                if (element.classList) {
-                    element.classList.add(DX_TEMPLATE_WRAPPER_CLASS);
-                }
+                const removalListener = document.createElement(container.nodeName === "TABLE" ? "tbody" : "span");
+                removalListener.style.display = "none";
+                container.appendChild(removalListener);
+                events.one(removalListener, DX_REMOVE_EVENT, mountedTemplate.$destroy.bind(mountedTemplate));
 
-                events.one(element, DX_REMOVE_EVENT, mountedTemplate.$destroy.bind(mountedTemplate));
-
-                return element;
+                return container;
             }
         };
     }
