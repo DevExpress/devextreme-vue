@@ -49,6 +49,6 @@ describe("useLegacyTemplateEngine", () => {
             model: { text: "with data" }
         });
 
-        expect(renderedTemplate.innerHTML).toBe(`<div>Template with data</div><span style=\"display: none;\"></span>`);
+        expect(renderedTemplate.innerHTML).toBe("Template with data");
     });
 });
