@@ -78,7 +78,14 @@ class TemplatesManager {
                     element.classList.add(DX_TEMPLATE_WRAPPER_CLASS);
                 }
 
-                events.one(element, DX_REMOVE_EVENT, mountedTemplate.$destroy.bind(mountedTemplate));
+                if (element.nodeType === 3) {
+                    const removalListener = document.createElement(container.nodeName === "TABLE" ? "tbody" : "span");
+                    removalListener.style.display = "none";
+                    container.appendChild(removalListener);
+                    events.one(removalListener, DX_REMOVE_EVENT, mountedTemplate.$destroy.bind(mountedTemplate));
+                } else {
+                    events.one(element, DX_REMOVE_EVENT, mountedTemplate.$destroy.bind(mountedTemplate));
+                }
 
                 return element;
             }
