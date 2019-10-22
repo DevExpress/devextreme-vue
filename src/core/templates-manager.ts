@@ -78,7 +78,7 @@ class TemplatesManager {
                     element.classList.add(DX_TEMPLATE_WRAPPER_CLASS);
                 }
 
-                if (element.nodeType === 3) {
+                if (element.nodeType === Node.TEXT_NODE) {
                     const removalListener = document.createElement(container.nodeName === "TABLE" ? "tbody" : "span");
                     removalListener.style.display = "none";
                     container.appendChild(removalListener);
