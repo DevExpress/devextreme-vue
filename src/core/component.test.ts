@@ -1281,6 +1281,40 @@ describe("template", () => {
         expect(() => events.triggerHandler(renderedTemplate, "dxremove")).not.toThrow();
     });
 
+    it("unmounts template with root element node", () => {
+        const vm = new Vue({
+            template: `<test-component>
+                            <div slot='item' slot-scope='props'>Template {{props.text}}</div>
+                        </test-component>`,
+            components: {
+                TestComponent
+            }
+        }).$mount();
+
+        const container = document.createElement("div");
+        renderItemTemplate({ text: "with data" }, container);
+        events.triggerHandler(container.children[0], "dxremove");
+
+        expect(vm.$children[0].$children.length).toEqual(0);
+    });
+
+    it("unmounts template with root text node", () => {
+        const vm = new Vue({
+            template: `<test-component>
+                            <template #item="{data}">Template {{data.text}}</template>
+                        </test-component>`,
+            components: {
+                TestComponent
+            }
+        }).$mount();
+
+        const container = document.createElement("div");
+        renderItemTemplate({ text: "with data" }, container);
+        events.triggerHandler(container.children[0], "dxremove");
+
+        expect(vm.$children[0].$children.length).toEqual(0);
+    });
+
     describe("with DOM", () => {
         let fixture;
 
