@@ -5,7 +5,7 @@ import * as events from "devextreme/events";
 
 import { pullAllChildren } from "./children-processing";
 import Configuration, { bindOptionWatchers, subscribeOnUpdates } from "./configuration";
-import { IConfigurable } from "./configuration-component";
+import { $_initBinding, IConfigurable } from "./configuration-component";
 import { DX_REMOVE_EVENT } from "./constants";
 import { IExtension, IExtensionComponentNode } from "./extension-component";
 import { camelize, forEachChildNode, toComparable } from "./helpers";
@@ -73,6 +73,9 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
     },
 
     updated() {
+        this.$children.forEach((child) => {
+            $_initBinding(child);
+        });
         this.$_templatesManager.discover();
 
         this.$_instance.beginUpdate();
