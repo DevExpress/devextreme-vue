@@ -73,9 +73,7 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
     },
 
     updated() {
-        this.$children.forEach((child) => {
-            initBinding(child);
-        });
+        this.$children.forEach((initBinding));
         this.$_templatesManager.discover();
 
         this.$_instance.beginUpdate();

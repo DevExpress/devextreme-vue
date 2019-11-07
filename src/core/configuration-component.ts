@@ -20,16 +20,21 @@ interface IConfigurable extends IConfigurationOwner {
 }
 
 function initBinding(vueInstance) {
-    if (vueInstance.$vnode) {
-        const componentOptions = (vueInstance.$vnode.componentOptions as any as IConfigurable);
-        const config = componentOptions && componentOptions.$_config;
-        if (config) {
-            const innerChanges = {};
-            config.init(Object.keys(vueInstance.$props));
-            bindOptionWatchers(config, vueInstance, innerChanges);
-            subscribeOnUpdates(config, vueInstance, innerChanges);
-        }
+    if (!vueInstance.$vnode) {
+        return;
     }
+
+    const componentOptions = (vueInstance.$vnode.componentOptions as any as IConfigurable);
+    const config = componentOptions && componentOptions.$_config;
+
+    if (!config) {
+        return;
+    }
+
+    const innerChanges = {};
+    config.init(Object.keys(vueInstance.$props));
+    bindOptionWatchers(config, vueInstance, innerChanges);
+    subscribeOnUpdates(config, vueInstance, innerChanges);
 }
 
 const DxConfiguration: VueConstructor = Vue.extend({
