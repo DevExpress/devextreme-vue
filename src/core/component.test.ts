@@ -712,6 +712,34 @@ describe("nested option", () => {
         });
     });
 
+    it("should reinit binding and optionChanged functions for nested components after changes", (done) => {
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <nested :prop1="value" />` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                Nested
+            },
+            data() {
+                return {
+                    value: 123
+                };
+            }
+        }).$mount();
+
+        vm.$data.value = 456;
+
+        Vue.nextTick(() => {
+            const nestedConfig = (vm.$children[0] as any ).$children[0].$vnode.componentOptions.$_config;
+            expect(nestedConfig._optionChangedFunc).toBeDefined();
+            expect(nestedConfig._options).toBeDefined();
+            expect(Widget.option).toHaveBeenCalledWith("nestedOption.prop1", 456);
+            done();
+        });
+    });
+
     it("component shouldn't emit update for the same value (v-model)", (done) => {
         const vm = new Vue({
             template:
