@@ -19,7 +19,7 @@ interface IConfigurable extends IConfigurationOwner {
     $_config: Configuration;
 }
 
-function $_initBinding(vueInstance) {
+function initBinding(vueInstance) {
     if (vueInstance.$vnode) {
         const componentOptions = (vueInstance.$vnode.componentOptions as any as IConfigurable);
         const config = componentOptions && componentOptions.$_config;
@@ -35,7 +35,7 @@ function $_initBinding(vueInstance) {
 const DxConfiguration: VueConstructor = Vue.extend({
 
     beforeMount() {
-        $_initBinding(this);
+        initBinding(this);
     },
 
     mounted() {
@@ -53,4 +53,4 @@ const DxConfiguration: VueConstructor = Vue.extend({
     }
 });
 
-export { DxConfiguration, IConfigurable, IConfigurationComponent, $_initBinding };
+export { DxConfiguration, IConfigurable, IConfigurationComponent, initBinding };
