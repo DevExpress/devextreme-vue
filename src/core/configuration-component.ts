@@ -3,7 +3,7 @@ import { VNode, VueConstructor } from "vue";
 
 const Vue = VueType.default || VueType;
 
-import Configuration, { bindOptionWatchers, ExpectedChild, subscribeOnUpdates } from "./configuration";
+import Configuration, { bindOptionWatchers, ExpectedChild, setEmitOptionChangedFunc } from "./configuration";
 
 interface IConfigurationOwner {
     $_expectedChildren: Record<string, ExpectedChild>;
@@ -34,7 +34,7 @@ function initBinding(vueInstance) {
     const innerChanges = {};
     config.init(Object.keys(vueInstance.$props));
     bindOptionWatchers(config, vueInstance, innerChanges);
-    subscribeOnUpdates(config, vueInstance, innerChanges);
+    setEmitOptionChangedFunc(config, vueInstance, innerChanges);
 }
 
 const DxConfiguration: VueConstructor = Vue.extend({

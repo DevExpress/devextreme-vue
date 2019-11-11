@@ -733,7 +733,7 @@ describe("nested option", () => {
 
         Vue.nextTick(() => {
             const nestedConfig = (vm.$children[0] as any ).$children[0].$vnode.componentOptions.$_config;
-            expect(nestedConfig._optionChangedFunc).toBeDefined();
+            expect(nestedConfig._emitOptionChanged).toBeDefined();
             expect(nestedConfig._options).toBeDefined();
             expect(Widget.option).toHaveBeenCalledWith("nestedOption.prop1", 456);
             done();

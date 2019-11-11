@@ -2,10 +2,17 @@ import { Vue } from "vue/types/vue";
 import { isEqual } from "./helpers";
 
 type UpdateFunc = (name: string, value: any) => void;
+type EmitOptionChangedFunc = (optionName: string, optionValue: any) => void;
 
 interface ExpectedChild {
     isCollectionItem: boolean;
     optionName: string;
+}
+
+interface IOptionChangedArgs {
+    value: any;
+    previousValue: any;
+    component: any;
 }
 
 class Configuration {
@@ -19,7 +26,7 @@ class Configuration {
     private readonly _ownerConfig: Pick<Configuration, "fullPath"> | undefined;
     private _nestedConfigurations: Configuration[];
     private _prevNestedConfigOptions: any;
-    private _optionChangedFunc: any;
+    private _emitOptionChanged: EmitOptionChangedFunc;
     private _componentsCountChanged: boolean;
 
     private _options: string[];
@@ -50,6 +57,14 @@ class Configuration {
         return this._name;
     }
 
+    public get fullName(): string | null {
+        if (this._name && this._isCollectionItem) {
+            return `${this._name}[${this._collectionItemIndex}]`;
+        }
+
+        return this._name;
+    }
+
     public get hasOptionsToUpdate(): boolean {
         return this._componentsCountChanged;
     }
@@ -59,14 +74,10 @@ class Configuration {
     }
 
     public get fullPath(): string | null {
-        let path = this._name;
+        let path = this.fullName;
 
         if (this._ownerConfig && this._ownerConfig.fullPath) {
             path = `${this._ownerConfig.fullPath}.${path}`;
-        }
-
-        if (this._isCollectionItem) {
-            path = `${path}[${this._collectionItemIndex}]`;
         }
 
         return path;
@@ -108,21 +119,37 @@ class Configuration {
         this._options = options ? options : [];
     }
 
-    public set optionChangedFunc(handler: any) {
-        this._optionChangedFunc = handler;
+    public set emitOptionChanged(handler: EmitOptionChangedFunc) {
+        this._emitOptionChanged = handler;
     }
 
     public setPrevNestedOptions(value: any) {
         this._prevNestedConfigOptions = value;
     }
 
-    public onOptionChanged(args: {name: string, fullName: string, value: any}): void {
-        if (this._optionChangedFunc) {
-            this._optionChangedFunc(args);
+    public onOptionChanged(optionRelativePath: string[], args: IOptionChangedArgs): void {
+        if (optionRelativePath.length === 0) {
+            return;
         }
-        this._nestedConfigurations.forEach((nestedConfig) => {
-            nestedConfig.onOptionChanged(args);
-        });
+
+        const optionName = optionRelativePath[0];
+        let optionValue: any;
+        if (optionRelativePath.length > 1) {
+            for (const nestedConfig of this._nestedConfigurations) {
+                if (nestedConfig.fullName === optionName) {
+                    nestedConfig.onOptionChanged(optionRelativePath.slice(1), args);
+                    return;
+                }
+            }
+
+            optionValue = args.component.option(this.fullPath ? `${this.fullPath}.${optionName}` : optionName);
+        } else {
+            optionValue = args.value;
+        }
+
+        if (this._emitOptionChanged && !isEqual(args.value, args.previousValue)) {
+            this._emitOptionChanged(optionName, optionValue);
+        }
     }
 
     public cleanNested() {
@@ -221,26 +248,17 @@ function bindOptionWatchers(
     }
 }
 
-function subscribeOnUpdates(
+function setEmitOptionChangedFunc(
     config: Configuration,
     vueInstance: Pick<Vue, "$emit" | "$props">,
     innerChanges: Record<string, any>): void {
-    config.optionChangedFunc = (args: any) => {
-        let optionName = args.name;
-        let optionValue = args.value;
-        const fullOptionPath = config.fullPath + ".";
-
-        if (config.name && config.name === args.name && args.fullName.indexOf(fullOptionPath) === 0) {
-            optionName = args.fullName.slice(fullOptionPath.length);
-        } else if (args.fullName !== args.name) {
-            optionValue = args.component.option(optionName);
-        }
-        if (!isEqual(args.value, args.previousValue) && !isEqual(args.value, vueInstance.$props[optionName])) {
-            innerChanges[optionName] = optionValue;
-            vueInstance.$emit("update:" + optionName, optionValue);
+    config.emitOptionChanged = (name: string, value: string) => {
+        if (!isEqual(value, vueInstance.$props[name])) {
+            innerChanges[name] = value;
+            vueInstance.$emit("update:" + name, value);
         }
     };
 }
 
 export default Configuration;
-export { bindOptionWatchers, subscribeOnUpdates, UpdateFunc, ExpectedChild };
+export { bindOptionWatchers, setEmitOptionChangedFunc, UpdateFunc, ExpectedChild, IOptionChangedArgs };

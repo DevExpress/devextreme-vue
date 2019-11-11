@@ -4,7 +4,7 @@ import IVue, { VNode, VueConstructor } from "vue";
 import * as events from "devextreme/events";
 
 import { pullAllChildren } from "./children-processing";
-import Configuration, { bindOptionWatchers, subscribeOnUpdates } from "./configuration";
+import Configuration, { bindOptionWatchers, setEmitOptionChangedFunc } from "./configuration";
 import { IConfigurable, initBinding } from "./configuration-component";
 import { DX_REMOVE_EVENT } from "./constants";
 import { IExtension, IExtensionComponentNode } from "./extension-component";
@@ -163,8 +163,8 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
             const instance = new this.$_WidgetClass(element, options);
             thisComponent.$_instance = instance;
 
-            instance.on("optionChanged", (args) => config.onOptionChanged(args));
-            subscribeOnUpdates(config, this, innerChanges);
+            instance.on("optionChanged", (args) => config.onOptionChanged(args.fullName.split("."), args));
+            setEmitOptionChangedFunc(config, this, innerChanges);
             bindOptionWatchers(config, this, innerChanges);
             this.$_createEmitters(instance);
         },
