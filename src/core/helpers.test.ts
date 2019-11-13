@@ -1,4 +1,4 @@
-import { allKeysAreEqual, isEqual, toComparable } from "./helpers";
+import { allKeysAreEqual, getOptionInfo, isEqual, toComparable } from "./helpers";
 
 describe("toComparable", () => {
 
@@ -67,5 +67,27 @@ describe("allKeysAreEqual", () => {
         it("returns false", () => {
             expect(allKeysAreEqual(input[0], input[1])).toBe(false);
         });
+    });
+});
+
+describe("getOptionInfo", () => {
+    it("returns for simple option", () => {
+        const optionInfo = getOptionInfo("test");
+
+        expect(optionInfo.isCollection).toBe(false);
+        expect(optionInfo.name).toEqual("test");
+        expect(optionInfo.fullName).toEqual("test");
+    });
+
+    it("returns for collection option", () => {
+        const optionInfo = getOptionInfo("test[4]");
+
+        expect(optionInfo.isCollection).toBe(true);
+        expect(optionInfo.name).toEqual("test");
+        expect(optionInfo.fullName).toEqual("test[4]");
+
+        if (optionInfo.isCollection) {
+            expect(optionInfo.index).toEqual(4);
+        }
     });
 });

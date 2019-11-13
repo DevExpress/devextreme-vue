@@ -1,8 +1,8 @@
 import { Vue } from "vue/types/vue";
-import { isEqual } from "./helpers";
+import { getOptionInfo, isEqual } from "./helpers";
 
 type UpdateFunc = (name: string, value: any) => void;
-type EmitOptionChangedFunc = (optionName: string, optionValue: any) => void;
+type EmitOptionChangedFunc = (name: string, value: any) => void;
 
 interface ExpectedChild {
     isCollectionItem: boolean;
@@ -58,11 +58,9 @@ class Configuration {
     }
 
     public get fullName(): string | null {
-        if (this._name && this._isCollectionItem) {
-            return `${this._name}[${this._collectionItemIndex}]`;
-        }
-
-        return this._name;
+        return this._name && this._isCollectionItem
+            ? `${this._name}[${this._collectionItemIndex}]`
+            : this._name;
     }
 
     public get hasOptionsToUpdate(): boolean {
@@ -74,13 +72,9 @@ class Configuration {
     }
 
     public get fullPath(): string | null {
-        let path = this.fullName;
-
-        if (this._ownerConfig && this._ownerConfig.fullPath) {
-            path = `${this._ownerConfig.fullPath}.${path}`;
-        }
-
-        return path;
+        return this._ownerConfig && this._ownerConfig.fullPath
+            ? `${this._ownerConfig.fullPath}.${this.fullName}`
+            : this.fullName;
     }
 
     public get options(): string[] {
@@ -132,12 +126,11 @@ class Configuration {
             return;
         }
 
-        const optionName = optionRelativePath[0];
-        const optionInfo = getOptionInfo(optionName);
+        const optionInfo = getOptionInfo(optionRelativePath[0]);
         let optionValue: any;
-        if (optionInfo.isCollectionItem || optionRelativePath.length > 1) {
+        if (optionInfo.isCollection || optionRelativePath.length > 1) {
             for (const nestedConfig of this._nestedConfigurations) {
-                if (nestedConfig.fullName === optionName) {
+                if (nestedConfig.fullName === optionInfo.fullName) {
                     nestedConfig.onOptionChanged(optionRelativePath.slice(1), args);
                     return;
                 }
@@ -261,34 +254,6 @@ function setEmitOptionChangedFunc(
             vueInstance.$emit("update:" + name, value);
         }
     };
-}
-
-function getOptionInfo(name: string): IOptionInfo | ICollectionOptionInfo {
-    const parts = name.split("[");
-
-    if (parts.length === 1) {
-        return {
-            isCollectionItem: false,
-            name
-        };
-    }
-
-    return {
-        isCollectionItem: true,
-        name: parts[0],
-        index: Number(parts[1].slice(0, -1))
-    };
-}
-
-interface IOptionInfo {
-    isCollectionItem: false;
-    name: string;
-}
-
-interface ICollectionOptionInfo {
-    isCollectionItem: true;
-    name: string;
-    index: number;
 }
 
 export default Configuration;
