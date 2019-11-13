@@ -399,98 +399,124 @@ describe("options watch-list", () => {
 
 describe("onOptionChanged", () => {
 
-    it("emits", () => {
-        const innerChanges = {};
-        const emitStub = jest.fn();
+    [
+        {
+            optionPath: ["option"],
+            args: { value: "new value", previousValue: "old value", component: null }
+        },
+        {
+            optionPath: ["option", "nested-option", "sub-nested-option"],
+            args: { value: "any value", previousValue: "old value", component: { option: (name: string) => name === "option" && "new value" } }
+        },
+        {
+            optionPath: ["option[0]"],
+            args: { value: "any value", previousValue: "old value", component: { option: (name: string) => name === "option" && "new value" } }
+        },
+        {
+            optionPath: ["option[0]", "nested-option"],
+            args: { value: "any value", previousValue: "old value", component: { option: (name: string) => name === "option" && "new value" } }
+        },
+    ].map((testCase) => {
+        it("emits from root configuration", () => {
+            const innerChanges = {};
+            const emitStub = jest.fn();
 
-        const config = new Configuration(jest.fn(), null, {});
-        config.init(["option1"]);
-        setEmitOptionChangedFunc(config, { $emit: emitStub, $props: {} }, innerChanges);
+            const config = new Configuration(jest.fn(), null, {});
+            setEmitOptionChangedFunc(config, { $emit: emitStub, $props: {} }, innerChanges);
 
-        config.onOptionChanged(
-            ["option1"],
-            { value: "value", previousValue: "old value", component: null }
-        );
+            config.onOptionChanged(
+                testCase.optionPath,
+                testCase.args
+            );
 
-        expect(emitStub).toHaveBeenCalledTimes(1);
-        expect(emitStub).toHaveBeenCalledWith("update:option1", "value");
-        expect(innerChanges).toEqual({option1: "value"});
+            expect(emitStub).toHaveBeenCalledTimes(1);
+            expect(emitStub).toHaveBeenCalledWith("update:option", "new value");
+            expect(innerChanges).toEqual({ option: "new value" });
+        });
     });
 
-    it("emits on root for not existing nested option", () => {
-        const innerChanges = {};
-        const emitStub = jest.fn();
+    [
+        {
+            optionPath: ["option", "nested-option"],
+            args: { value: "new value", previousValue: "old value", component: null }
+        },
+        {
+            optionPath: ["option", "nested-option", "sub-nested-option"],
+            args: { value: "any value", previousValue: "old value", component: { option: (name: string) => name === "option.nested-option" && "new value" } }
+        },
+    ].map((testCase) => {
+        it("emits from nested configuration", () => {
+            const innerChanges = {};
+            const emitStub = jest.fn();
 
-        const config = new Configuration(jest.fn(), null, {});
-        config.init(["option1"]);
-        setEmitOptionChangedFunc(config, { $emit: emitStub, $props: {} }, innerChanges);
+            const config = new Configuration(jest.fn(), null, {});
+            const nestedConfig = config.createNested("option", {});
+            setEmitOptionChangedFunc(nestedConfig, { $emit: emitStub, $props: {} }, innerChanges);
 
-        config.onOptionChanged(
-            ["option1", "option2", "option3"],
-            {
-                value: "value",
-                previousValue: "old value",
-                component: {
-                    option: (name: string) => name === "option1" && "value"
-                }
-            }
-        );
+            config.onOptionChanged(
+                testCase.optionPath,
+                testCase.args
+            );
 
-        expect(emitStub).toHaveBeenCalledTimes(1);
-        expect(emitStub).toHaveBeenCalledWith("update:option1", "value");
-        expect(innerChanges).toEqual({option1: "value"});
+            expect(emitStub).toHaveBeenCalledTimes(1);
+            expect(emitStub).toHaveBeenCalledWith("update:nested-option", "new value");
+            expect(innerChanges).toEqual({ "nested-option": "new value" });
+        });
     });
 
-    it("emits from nested configuration", () => {
-        const innerChanges = {};
-        const emitStub = jest.fn();
+    [
+        {
+            optionPath: ["option[0]", "nested-option"],
+            args: { value: "new value", previousValue: "old value", component: null }
+        },
+        {
+            optionPath: ["option[0]", "nested-option", "sub-nested-option"],
+            args: { value: "any value", previousValue: "old value", component: { option: (name: string) => name === "option[0].nested-option" && "new value" } }
+        },
+    ].map((testCase) => {
+        it("emits from nested collection configuration", () => {
+            const innerChanges = {};
+            const emitStub = jest.fn();
 
-        const config = new Configuration(jest.fn(), null, {});
-        const nestedConfig = config.createNested("nested", {});
-        setEmitOptionChangedFunc(nestedConfig, { $emit: emitStub, $props: {} }, innerChanges);
+            const config = new Configuration(jest.fn(), null, {});
+            const nestedConfig = config.createNested("option", {}, true);
+            setEmitOptionChangedFunc(nestedConfig, { $emit: emitStub, $props: {} }, innerChanges);
 
-        config.onOptionChanged(
-            ["nested", "option2"],
-            { value: "value", previousValue: "old value", component: null }
-        );
+            config.onOptionChanged(
+                testCase.optionPath,
+                testCase.args
+            );
 
-        expect(emitStub).toHaveBeenCalledTimes(1);
-        expect(emitStub).toHaveBeenCalledWith("update:option2", "value");
-        expect(innerChanges).toEqual({option2: "value"});
+            expect(emitStub).toHaveBeenCalledTimes(1);
+            expect(emitStub).toHaveBeenCalledWith("update:nested-option", "new value");
+            expect(innerChanges).toEqual({ "nested-option": "new value" });
+        });
     });
 
-    it("emits from nested collection configuration", () => {
-        const innerChanges = {};
-        const emitStub = jest.fn();
+    [
+        {
+            optionPath: ["option"],
+            args: { value: "value", previousValue: "value", component: null }
+        },
+        {
+            optionPath: ["option"],
+            args: { value: [], previousValue: [], component: null }
+        },
+    ].map((testCase) => {
+        it("does not emit", () => {
+            const innerChanges = {};
+            const emitStub = jest.fn();
 
-        const config = new Configuration(jest.fn(), null, {});
-        const nestedConfig = config.createNested("items[0]", {});
-        setEmitOptionChangedFunc(nestedConfig, { $emit: emitStub, $props: {} }, innerChanges);
+            const config = new Configuration(jest.fn(), null, {});
+            setEmitOptionChangedFunc(config, { $emit: emitStub, $props: {} }, innerChanges);
 
-        config.onOptionChanged(
-            ["items[0]", "option2"],
-            { value: "value", previousValue: "old value", component: null }
-        );
+            config.onOptionChanged(
+                testCase.optionPath,
+                testCase.args
+            );
 
-        expect(emitStub).toHaveBeenCalledTimes(1);
-        expect(emitStub).toHaveBeenCalledWith("update:option2", "value");
-        expect(innerChanges).toEqual({option2: "value"});
-    });
-
-    it("does not emit with empty array change", () => {
-        const innerChanges = {};
-        const emitStub = jest.fn();
-
-        const config = new Configuration(jest.fn(), null, {});
-        config.init(["option1"]);
-        setEmitOptionChangedFunc(config, { $emit: emitStub, $props: {} }, innerChanges);
-
-        config.onOptionChanged(
-            ["option1"],
-            { value: [], previousValue: [], component: null }
-        );
-
-        expect(emitStub).toHaveBeenCalledTimes(0);
+            expect(emitStub).toHaveBeenCalledTimes(0);
+        });
     });
 
 });
