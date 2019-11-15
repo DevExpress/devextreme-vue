@@ -519,4 +519,27 @@ describe("onOptionChanged", () => {
         });
     });
 
+    // https://github.com/DevExpress/devextreme-vue/issues/330
+    it("emits once", () => {
+        const emitStubRoot = jest.fn();
+        const emitStubNested = jest.fn();
+
+        const config = new Configuration(jest.fn(), null, {});
+        setEmitOptionChangedFunc(config, { $emit: emitStubRoot, $props: {} }, {});
+        const nestedConfig1 = config.createNested("option", {}, true);
+        setEmitOptionChangedFunc(nestedConfig1, { $emit: emitStubNested, $props: {} }, {});
+        const subNestedConfig = nestedConfig1.createNested("option", {}, false);
+        setEmitOptionChangedFunc(subNestedConfig, { $emit: emitStubNested, $props: {} }, {});
+        const nestedConfig2 = config.createNested("option", {}, true);
+        setEmitOptionChangedFunc(nestedConfig2, { $emit: emitStubNested, $props: {} }, {});
+
+        config.onOptionChanged(
+            ["option"],
+            { value: "new value", previousValue: "old value", component: null }
+        );
+
+        expect(emitStubRoot).toHaveBeenCalledTimes(1);
+        expect(emitStubNested).toHaveBeenCalledTimes(0);
+    });
+
 });
