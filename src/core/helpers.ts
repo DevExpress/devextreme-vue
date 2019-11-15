@@ -48,3 +48,35 @@ export function allKeysAreEqual(obj1: object, obj2: object) {
 
     return true;
 }
+
+export function getOptionInfo(name: string): IOptionInfo | ICollectionOptionInfo {
+    const parts = name.split("[");
+
+    if (parts.length === 1) {
+        return {
+            isCollection: false,
+            name,
+            fullName: name
+        };
+    }
+
+    return {
+        isCollection: true,
+        name: parts[0],
+        fullName: name,
+        index: Number(parts[1].slice(0, -1))
+    };
+}
+
+interface IOptionInfo {
+    isCollection: false;
+    name: string;
+    fullName: string;
+}
+
+interface ICollectionOptionInfo {
+    isCollection: true;
+    name: string;
+    fullName: string;
+    index: number;
+}
