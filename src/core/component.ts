@@ -163,7 +163,7 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
             const instance = new this.$_WidgetClass(element, options);
             thisComponent.$_instance = instance;
 
-            instance.on("optionChanged", (args) => config.onOptionChanged(args.fullName.split("."), args));
+            instance.on("optionChanged", (args) => config.onOptionChanged(args));
             setEmitOptionChangedFunc(config, this, innerChanges);
             bindOptionWatchers(config, this, innerChanges);
             this.$_createEmitters(instance);

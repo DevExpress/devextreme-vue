@@ -10,6 +10,7 @@ interface ExpectedChild {
 }
 
 interface IOptionChangedArgs {
+    fullName: string;
     value: any;
     previousValue: any;
     component: any;
@@ -121,33 +122,13 @@ class Configuration {
         this._prevNestedConfigOptions = value;
     }
 
-    public onOptionChanged(optionRelativePath: string[], args: IOptionChangedArgs): void {
-        if (optionRelativePath.length === 0) {
+    public onOptionChanged(args: IOptionChangedArgs) {
+        if (isEqual(args.value, args.previousValue)) {
             return;
         }
 
-        const optionInfo = getOptionInfo(optionRelativePath[0]);
-        let optionValue: any;
-        if (optionInfo.isCollection || optionRelativePath.length > 1) {
-            for (const nestedConfig of this._nestedConfigurations) {
-                if (nestedConfig.fullName === optionInfo.fullName) {
-                    nestedConfig.onOptionChanged(optionRelativePath.slice(1), args);
-                    return;
-                }
-            }
-
-            optionValue = args.component.option(
-                this.fullPath ? `${this.fullPath}.${optionInfo.name}` : optionInfo.name
-            );
-        } else {
-            optionValue = args.value;
-        }
-
-        if (this._emitOptionChanged && !isEqual(args.value, args.previousValue)) {
-            this._emitOptionChanged(optionInfo.name, optionValue);
-        }
+        this._onOptionChanged(args.fullName.split("."), args);
     }
-
     public cleanNested() {
         this._nestedConfigurations = [];
     }
@@ -224,6 +205,47 @@ class Configuration {
         this._nestedConfigurations.forEach((c) => c._name && (blackList[c._name] = true));
 
         return this._options.filter((o) => !blackList[o]);
+    }
+
+    private _onOptionChanged(
+        optionRelPath: string[],
+        args: { value: any, component: any }
+    ): void {
+        if (optionRelPath.length === 0) {
+            return;
+        }
+
+        const optionInfo = getOptionInfo(optionRelPath[0]);
+        if (optionInfo.isCollection || optionRelPath.length > 1) {
+            const nestedConfig = this._getNestedConfig(optionInfo.fullName);
+            if (nestedConfig) {
+                nestedConfig._onOptionChanged(optionRelPath.slice(1), args);
+                return;
+            }
+
+            this._tryEmitOptionChanged(
+                optionInfo.name,
+                args.component.option(this.fullPath ? `${this.fullPath}.${optionInfo.name}` : optionInfo.name)
+            );
+        } else {
+            this._tryEmitOptionChanged(optionInfo.name, args.value);
+        }
+    }
+
+    private _getNestedConfig(fullName: string): Configuration | undefined {
+        for (const nestedConfig of this._nestedConfigurations) {
+            if (nestedConfig.fullName === fullName) {
+                return nestedConfig;
+            }
+        }
+
+        return undefined;
+    }
+
+    private _tryEmitOptionChanged(name: string, value: any): void {
+        if (this._emitOptionChanged) {
+            this._emitOptionChanged(name, value);
+        }
     }
 }
 
