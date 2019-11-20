@@ -107,8 +107,7 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
                     });
 
                     if (!hasOption) {
-                        const value = Array.isArray(prevOptions[prevName]) ? [] : {};
-                        this.$_instance.option(prevName, value);
+                        this.$_instance.resetOption(prevName);
                     }
                 });
             }
