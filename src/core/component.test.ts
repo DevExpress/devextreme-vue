@@ -12,6 +12,7 @@ const Vue = VueType.default || VueType;
 const eventHandlers: { [index: string]: (e?: any) => void } = {};
 const Widget = {
     option: jest.fn(),
+    resetOption: jest.fn(),
     dispose: jest.fn(),
     on: (event: string, handler: (e: any) => void) => {
         eventHandlers[event] = handler;
@@ -884,7 +885,7 @@ describe("nested option", () => {
         });
     });
 
-    it("remove all nested component", (done) => {
+    it("reset nested component", (done) => {
         const vm = new Vue({
             template:
                 `<test-component>` +
@@ -902,7 +903,7 @@ describe("nested option", () => {
         vm.$data.showNest = false;
 
         Vue.nextTick(() => {
-            expect(Widget.option).toHaveBeenCalledWith("nestedOption", {});
+            expect(Widget.resetOption).toHaveBeenCalledWith("nestedOption");
             done();
         });
     });
