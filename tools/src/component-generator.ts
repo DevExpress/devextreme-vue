@@ -155,8 +155,7 @@ const renderComponent: (model: {
     defaultExport: string;
     namedExports: string[];
 }) => string = createTempate(
-`import * as VueType from "vue";\n` +
-`const Vue = VueType.default || VueType;\n` +
+`import Vue from "vue";\n` +
 `import <#= it.widgetImport.name #><#? it.props #>, { IOptions }<#?#> from "devextreme/<#= it.widgetImport.path #>";\n` +
 
 `<#~ it.namedImports :namedImport #>` +

@@ -3,8 +3,7 @@ import generate, { renderProps } from "./component-generator";
 it("generates", () => {
     //#region EXPECTED
     const EXPECTED = `
-import * as VueType from "vue";
-const Vue = VueType.default || VueType;
+import Vue from "vue";
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 
@@ -52,8 +51,7 @@ export {
 it("generates component with model", () => {
     //#region EXPECTED
     const EXPECTED = `
-import * as VueType from "vue";
-const Vue = VueType.default || VueType;
+import Vue from "vue";
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 
@@ -103,8 +101,7 @@ export {
 it("generates option", () => {
     //#region EXPECTED
     const EXPECTED = `
-import * as VueType from "vue";
-const Vue = VueType.default || VueType;
+import Vue from "vue";
 import WIDGET, { IOptions } from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 
@@ -160,8 +157,7 @@ export {
 it("generates nested option component", () => {
     //#region EXPECTED
     const EXPECTED = `
-import * as VueType from "vue";
-const Vue = VueType.default || VueType;
+import Vue from "vue";
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
@@ -229,8 +225,7 @@ export {
 it("generates nested collection option component", () => {
     //#region EXPECTED
     const EXPECTED = `
-import * as VueType from "vue";
-const Vue = VueType.default || VueType;
+import Vue from "vue";
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
@@ -299,8 +294,7 @@ export {
 it("generates expectedChildren info", () => {
     //#region EXPECTED
     const EXPECTED = `
-import * as VueType from "vue";
-const Vue = VueType.default || VueType;
+import Vue from "vue";
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
@@ -486,8 +480,7 @@ describe("props generation", () => {
     it("generates nested component with predefined value", () => {
         //#region EXPECTED
         const EXPECTED = `
-import * as VueType from "vue";
-const Vue = VueType.default || VueType;
+import Vue from "vue";
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
@@ -561,8 +554,7 @@ export {
     it("generates nested component with several predefined values", () => {
         //#region EXPECTED
         const EXPECTED = `
-import * as VueType from "vue";
-const Vue = VueType.default || VueType;
+import Vue from "vue";
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
