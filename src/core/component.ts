@@ -52,7 +52,7 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
     },
 
     render(createElement: (...args) => VNode): VNode {
-        const children: VNode[] = [];
+        let children: VNode[] = [];
 
         if (this.$_config.cleanNested) {
             this.$_config.cleanNested();
@@ -62,14 +62,10 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
         this.$_processChildren(children);
 
         if (this.$vnode && this.$vnode.componentOptions.children && this.$_hasTranscludedContent) {
-            return createElement("div", {
-                attrs: { id: this.$attrs.id }},
-                [createElement("div", {}, children)]);
+            children = [createElement("div", {}, getNodes(children)), ...getConfigurationNodes(children)];
         }
 
-        return createElement("div", {
-            attrs: { id: this.$attrs.id }
-        }, children);
+        return getElement(createElement, children, this.$attrs.id);
     },
 
     beforeUpdate() {
@@ -235,6 +231,22 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
         }
     }
 });
+
+function getElement(createElement, children, id) {
+    return createElement("div", {
+        attrs: { id }
+    }, children);
+}
+
+function getConfigurationNodes(nodes: VNode[]) {
+    return nodes.filter((node) => node.componentOptions &&
+        (node.componentOptions as any as IExtensionComponentNode).$_hasOwner);
+}
+
+function getNodes(nodes: VNode[]) {
+    return nodes.filter((node) => !node.componentOptions ||
+        !(node.componentOptions as any as IExtensionComponentNode).$_hasOwner);
+}
 
 function cleanWidgetNode(node: Node) {
     const removedNodes: Element[] = [];
