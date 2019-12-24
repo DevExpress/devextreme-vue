@@ -49,6 +49,14 @@ const TestComponent = Vue.extend({
     }
 });
 
+const TestComponentWithContent = Vue.extend({
+    extends: DxComponent,
+    beforeCreate() {
+        (this as any as IWidgetComponent).$_hasTranscludedContent = true;
+        (this as any as IWidgetComponent).$_WidgetClass = WidgetClass;
+    }
+});
+
 function skipIntegrationOptions(options: {
     integrationOptions: object,
     onInitializing: () => void
@@ -1176,6 +1184,27 @@ describe("template", () => {
         expect(
             Widget.option.mock.calls.find((call) => call[0] === "integrationOptions.templates")
         ).toBeUndefined();
+    });
+
+    it("should wrap hidden elenents", (done) => {
+        const vm = new Vue({
+            template: `<test-component-with-content>
+                            <div v-if="showTemplate">Template</div>
+                        </test-component-with-content>`,
+            components: {
+                TestComponentWithContent
+            },
+            data: {
+                showTemplate: false
+            }
+        }).$mount();
+
+        vm.$data.showTemplate = true;
+
+        Vue.nextTick(() => {
+            expect(vm.$el.innerHTML).toBe("<div><div>Template</div></div>");
+            done();
+        });
     });
 
     it("renders", () => {

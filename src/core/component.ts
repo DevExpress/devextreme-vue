@@ -19,6 +19,7 @@ interface IWidgetComponent extends IConfigurable {
     $_WidgetClass: any;
     $_pendingOptions: Record<string, any>;
     $_templatesManager: TemplatesManager;
+    $_hasTranscludedContent: boolean;
 }
 
 interface IBaseComponent extends IVue, IWidgetComponent, IEventBusHolder {
@@ -59,13 +60,16 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
         pullAllChildren(this.$slots.default, children, this.$_config);
 
         this.$_processChildren(children);
-        return createElement(
-            "div",
-            {
-                attrs: { id: this.$attrs.id }
-            },
-            children
-        );
+
+        if (this.$vnode && this.$vnode.componentOptions.children && this.$_hasTranscludedContent) {
+            return createElement('div', {
+                attrs: { id: this.$attrs.id }},
+                [createElement("div", {}, children)]);
+        }
+
+        return createElement('div', {
+            attrs: { id: this.$attrs.id }
+        }, children);
     },
 
     beforeUpdate() {
