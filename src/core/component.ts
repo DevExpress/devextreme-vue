@@ -62,12 +62,12 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
         this.$_processChildren(children);
 
         if (this.$vnode && this.$vnode.componentOptions.children && this.$_hasTranscludedContent) {
-            return createElement('div', {
+            return createElement("div", {
                 attrs: { id: this.$attrs.id }},
                 [createElement("div", {}, children)]);
         }
 
-        return createElement('div', {
+        return createElement("div", {
             attrs: { id: this.$attrs.id }
         }, children);
     },
