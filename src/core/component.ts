@@ -19,6 +19,7 @@ interface IWidgetComponent extends IConfigurable {
     $_WidgetClass: any;
     $_pendingOptions: Record<string, any>;
     $_templatesManager: TemplatesManager;
+    $_hasTranscludedContent: boolean;
 }
 
 interface IBaseComponent extends IVue, IWidgetComponent, IEventBusHolder {
@@ -51,7 +52,7 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
     },
 
     render(createElement: (...args) => VNode): VNode {
-        const children: VNode[] = [];
+        let children: VNode[] = [];
 
         if (this.$_config.cleanNested) {
             this.$_config.cleanNested();
@@ -59,13 +60,15 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
         pullAllChildren(this.$slots.default, children, this.$_config);
 
         this.$_processChildren(children);
-        return createElement(
-            "div",
-            {
-                attrs: { id: this.$attrs.id }
-            },
-            children
-        );
+
+        if (this.$vnode && this.$vnode.componentOptions.children && this.$_hasTranscludedContent) {
+            const nodes = splitNodes(children);
+            children = [createElement("div", {}, nodes.domNodes), ...nodes.configNodes];
+        }
+
+        return createElement("div", {
+            attrs: { id: this.$attrs.id }
+        }, children);
     },
 
     beforeUpdate() {
@@ -231,6 +234,24 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
         }
     }
 });
+
+function splitNodes(nodes: VNode[]) {
+    const domNodes: VNode[] = [];
+    const configNodes: VNode[] = [];
+
+    for (const node of nodes) {
+        if (node.componentOptions && (node.componentOptions as any as IExtensionComponentNode).$_hasOwner) {
+            configNodes.push(node);
+        } else {
+            domNodes.push(node);
+        }
+    }
+
+    return {
+        domNodes,
+        configNodes
+    };
+}
 
 function cleanWidgetNode(node: Node) {
     const removedNodes: Element[] = [];
