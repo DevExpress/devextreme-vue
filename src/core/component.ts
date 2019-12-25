@@ -239,11 +239,12 @@ function splitNodes(nodes: VNode[]) {
     const domNodes: VNode[] = [];
     const configNodes: VNode[] = [];
 
-    for(var node of nodes) {
-        if(node.componentOptions && (node.componentOptions as any as IExtensionComponentNode).$_hasOwner)
+    for (const node of nodes) {
+        if (node.componentOptions && (node.componentOptions as any as IExtensionComponentNode).$_hasOwner) {
             configNodes.push(node);
-        else
+        } else {
             domNodes.push(node);
+        }
     }
 
     return {
