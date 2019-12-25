@@ -1207,6 +1207,32 @@ describe("template", () => {
         });
     });
 
+    it("should wrap only content", () => {
+        const NestedItem = Vue.extend({
+            extends: DxConfiguration,
+            props: {
+                prop1: Number,
+                template: String
+            }
+        });
+        (NestedItem as any as IConfigurationComponent).$_optionName = "items";
+        (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
+
+        const vm = new Vue({
+            template: `<test-component-with-content>
+                            <nested-item>
+                            </nested-item>
+                            <div>Template</div>
+                        </test-component-with-content>`,
+            components: {
+                TestComponentWithContent,
+                NestedItem
+            },
+        }).$mount();
+
+        expect(vm.$el.innerHTML).toBe("<div> <div>Template</div></div><!---->");
+    });
+
     it("renders", () => {
         new Vue({
             template: `<test-component>
