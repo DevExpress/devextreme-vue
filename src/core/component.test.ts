@@ -1199,6 +1199,8 @@ describe("template", () => {
             }
         }).$mount();
 
+        expect(vm.$el.innerHTML).toBe("<div></div>");
+
         vm.$data.showTemplate = true;
 
         Vue.nextTick(() => {

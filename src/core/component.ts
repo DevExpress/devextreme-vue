@@ -62,10 +62,13 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
         this.$_processChildren(children);
 
         if (this.$vnode && this.$vnode.componentOptions.children && this.$_hasTranscludedContent) {
-            children = [createElement("div", {}, getNodes(children)), ...getConfigurationNodes(children)];
+            const nodes = splitNodes(children);
+            children = [createElement("div", {}, nodes.domNodes), ...nodes.configNodes];
         }
 
-        return getElement(createElement, children, this.$attrs.id);
+        return createElement("div", {
+            attrs: { id: this.$attrs.id }
+        }, children);
     },
 
     beforeUpdate() {
@@ -232,20 +235,21 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
     }
 });
 
-function getElement(createElement, children, id) {
-    return createElement("div", {
-        attrs: { id }
-    }, children);
-}
+function splitNodes(nodes: VNode[]) {
+    const domNodes: VNode[] = [];
+    const configNodes: VNode[] = [];
 
-function getConfigurationNodes(nodes: VNode[]) {
-    return nodes.filter((node) => node.componentOptions &&
-        (node.componentOptions as any as IExtensionComponentNode).$_hasOwner);
-}
+    for(var node of nodes) {
+        if(node.componentOptions && (node.componentOptions as any as IExtensionComponentNode).$_hasOwner)
+            configNodes.push(node);
+        else
+            domNodes.push(node);
+    }
 
-function getNodes(nodes: VNode[]) {
-    return nodes.filter((node) => !node.componentOptions ||
-        !(node.componentOptions as any as IExtensionComponentNode).$_hasOwner);
+    return {
+        domNodes,
+        configNodes
+    };
 }
 
 function cleanWidgetNode(node: Node) {
