@@ -11,6 +11,7 @@ interface IConfigurationOwner {
 
 interface IConfigurationComponent extends IConfigurationOwner {
     $_optionName: string;
+    $_isNested: boolean;
     $_isCollectionItem: boolean;
     $_predefinedProps: Record<string, any>;
 }

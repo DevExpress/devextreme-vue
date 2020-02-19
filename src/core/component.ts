@@ -5,7 +5,7 @@ import * as events from "devextreme/events";
 
 import { pullAllChildren } from "./children-processing";
 import Configuration, { bindOptionWatchers, setEmitOptionChangedFunc } from "./configuration";
-import { IConfigurable, initBinding } from "./configuration-component";
+import { IConfigurable, IConfigurationComponent, initBinding } from "./configuration-component";
 import { DX_REMOVE_EVENT, DX_TEMPLATE_WRAPPER_CLASS } from "./constants";
 import { IExtension, IExtensionComponentNode } from "./extension-component";
 import { camelize, forEachChildNode, toComparable } from "./helpers";
@@ -244,7 +244,8 @@ function splitNodes(nodes: VNode[]) {
     const configNodes: VNode[] = [];
 
     for (const node of nodes) {
-        if (node.componentOptions && (node.componentOptions as any as IExtensionComponentNode).$_hasOwner) {
+
+        if (node.componentOptions && (node.componentOptions.Ctor as any as IConfigurationComponent).$_isNested) {
             configNodes.push(node);
         } else {
             domNodes.push(node);
