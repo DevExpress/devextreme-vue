@@ -1225,6 +1225,7 @@ describe("template", () => {
                             <nested-item>
                             </nested-item>
                             <div>Template</div>
+                            <test-component-with-content></test-component-with-content>
                         </test-component-with-content>`,
             components: {
                 TestComponentWithContent,
@@ -1232,7 +1233,7 @@ describe("template", () => {
             },
         }).$mount();
 
-        expect(vm.$el.innerHTML).toBe("<div class=\"dx-template-wrapper\"> <div>Template</div></div><!---->");
+        expect(vm.$el.innerHTML).toBe("<div class=\"dx-template-wrapper\"> <div>Template</div> <div></div></div><!---->");
     });
 
     it("renders", () => {
