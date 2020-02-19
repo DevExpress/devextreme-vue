@@ -188,6 +188,7 @@ const NESTED_COMPONENT: any = Vue.extend({
   }
 });
 (NESTED_COMPONENT as any).$_optionName = "NESTED_OPTION_NAME";
+(NESTED_COMPONENT as any).$_isNested = true;
 
 export default COMPONENT;
 export {
@@ -257,6 +258,7 @@ const NESTED_COMPONENT: any = Vue.extend({
   }
 });
 (NESTED_COMPONENT as any).$_optionName = "NESTED_OPTION_NAME";
+(NESTED_COMPONENT as any).$_isNested = true;
 (NESTED_COMPONENT as any).$_isCollectionItem = true;
 
 export default COMPONENT;
@@ -331,6 +333,7 @@ const NESTED_COMPONENT: any = Vue.extend({
   }
 });
 (NESTED_COMPONENT as any).$_optionName = "NESTED_OPTION_NAME";
+(NESTED_COMPONENT as any).$_isNested = true;
 (NESTED_COMPONENT as any).$_expectedChildren = {
   EXPECTED_3: { isCollectionItem: true, optionName: "ghi" },
   EXPECTED_4: { isCollectionItem: false, optionName: "jkl" }
@@ -514,6 +517,7 @@ const NESTED_COMPONENT: any = Vue.extend({
   }
 });
 (NESTED_COMPONENT as any).$_optionName = "NESTED_OPTION_NAME";
+(NESTED_COMPONENT as any).$_isNested = true;
 (NESTED_COMPONENT as any).$_predefinedProps = {
   PROP_1: "PREDEFINED_VALUE"
 };
@@ -589,6 +593,7 @@ const NESTED_COMPONENT: any = Vue.extend({
   }
 });
 (NESTED_COMPONENT as any).$_optionName = "NESTED_OPTION_NAME";
+(NESTED_COMPONENT as any).$_isNested = true;
 (NESTED_COMPONENT as any).$_predefinedProps = {
   PROP_1: "PREDEFINED_VALUE_1",
   PROP_2: "PREDEFINED_VALUE_2"

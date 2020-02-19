@@ -1217,6 +1217,7 @@ describe("template", () => {
                 template: String
             }
         });
+        (NestedItem as any as IConfigurationComponent).$_isNested = true;
         (NestedItem as any as IConfigurationComponent).$_optionName = "items";
         (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
 

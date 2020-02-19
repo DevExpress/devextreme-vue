@@ -245,7 +245,7 @@ function splitNodes(nodes: VNode[]) {
 
     for (const node of nodes) {
 
-        if (node.componentOptions && (node.componentOptions.Ctor as any as IConfigurationComponent).$_optionName) {
+        if (node.componentOptions && (node.componentOptions.Ctor as any as IConfigurationComponent).$_isNested) {
             configNodes.push(node);
         } else {
             domNodes.push(node);

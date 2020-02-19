@@ -226,6 +226,7 @@ L0 + `});\n` +
         L1 + `}\n` +
         `});\n` +
         `(<#= nested.name #> as any).$_optionName = "<#= nested.optionName #>";\n` +
+        `(<#= nested.name #> as any).$_isNested = true;\n` +
 
         `<#? nested.isCollectionItem #>` +
             `(<#= nested.name #> as any).$_isCollectionItem = true;\n` +
