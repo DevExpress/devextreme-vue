@@ -39,6 +39,7 @@
     "dasherize": "^2.0.0",
     "del": "^3.0.0",
     "devextreme": "~19.2.5",
+    "devextreme-internal-tools": "^1.0.0",
     "dot": "^1.1.2",
     "gulp": "^4.0.0",
     "gulp-header": "^2.0.5",
@@ -60,8 +61,5 @@
     "webpack": "^4.29.2",
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.1.14"
-  },
-  "dependencies": {
-    "devextreme-internal-tools": "^1.2.51"
   }
 }
