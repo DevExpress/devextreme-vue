@@ -17,7 +17,8 @@
     "pack": "gulp npm.pack",
     "serve": "webpack-dev-server",
     "test": "jest",
-    "test-watch": "jest --watch"
+    "test-watch": "jest --watch",
+    "update-integration-meta": "dx-tools update-integration-meta"
   },
   "keywords": [
     "vue",
@@ -38,6 +39,7 @@
     "dasherize": "^2.0.0",
     "del": "^3.0.0",
     "devextreme": "~19.2.5",
+    "devextreme-internal-tools": "^1.0.0",
     "dot": "^1.1.2",
     "gulp": "^4.0.0",
     "gulp-header": "^2.0.5",
