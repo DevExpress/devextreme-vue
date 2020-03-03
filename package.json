@@ -18,7 +18,7 @@
     "serve": "webpack-dev-server",
     "test": "jest",
     "test-watch": "jest --watch",
-    "update-integration-meta": "dx-tools update-integration-meta"
+    "update-integration-meta": "dx-tools update-integration-meta --output-path=./tools/integration-data.json"
   },
   "keywords": [
     "vue",
