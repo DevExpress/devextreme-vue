@@ -6,7 +6,7 @@ import * as events from "devextreme/events";
 import { pullAllChildren } from "./children-processing";
 import Configuration, { bindOptionWatchers, setEmitOptionChangedFunc } from "./configuration";
 import { IConfigurable, initBinding } from "./configuration-component";
-import { DX_REMOVE_EVENT, DX_TEMPLATE_WRAPPER_CLASS } from "./constants";
+import { DX_REMOVE_EVENT } from "./constants";
 import { IExtension, IExtensionComponentNode } from "./extension-component";
 import { camelize, forEachChildNode, toComparable } from "./helpers";
 import {
@@ -63,11 +63,7 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
 
         if (this.$vnode && this.$vnode.componentOptions.children && this.$_hasTranscludedContent) {
             const nodes = splitNodes(children);
-            children = [
-                createElement("div", {
-                    attrs: { class: DX_TEMPLATE_WRAPPER_CLASS }},
-                    nodes.domNodes),
-                ...nodes.configNodes];
+            children = [createElement("div", {}, nodes.domNodes), ...nodes.configNodes];
         }
 
         return createElement("div", {

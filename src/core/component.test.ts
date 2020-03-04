@@ -1199,12 +1199,12 @@ describe("template", () => {
             }
         }).$mount();
 
-        expect(vm.$el.innerHTML).toBe("<div class=\"dx-template-wrapper\"></div>");
+        expect(vm.$el.innerHTML).toBe("<div></div>");
 
         vm.$data.showTemplate = true;
 
         Vue.nextTick(() => {
-            expect(vm.$el.innerHTML).toBe("<div class=\"dx-template-wrapper\"><div>Template</div></div>");
+            expect(vm.$el.innerHTML).toBe("<div><div>Template</div></div>");
             done();
         });
     });
@@ -1232,7 +1232,7 @@ describe("template", () => {
             },
         }).$mount();
 
-        expect(vm.$el.innerHTML).toBe("<div class=\"dx-template-wrapper\"> <div>Template</div></div><!---->");
+        expect(vm.$el.innerHTML).toBe("<div> <div>Template</div></div><!---->");
     });
 
     it("renders", () => {
