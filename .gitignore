@@ -5,3 +5,4 @@ src/*
 !src/core
 src/index.ts
 tools/bin/
+artifacts/
