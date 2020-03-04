@@ -6,7 +6,6 @@ const simpleWidget: IWidget = {
     exportPath: "",
     isEditor: false,
     isExtension: false,
-    hasTranscludedContent: true,
     name: "dxTestWidget",
     nesteds: [],
     options: [],
