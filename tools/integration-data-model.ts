@@ -6,6 +6,7 @@ export interface IModel {
 export interface IWidget {
   complexOptions: IComplexProp[];
   exportPath: string;
+  hasTranscludedContent: boolean;
   isEditor: boolean;
   isExtension: boolean;
   name: string;
