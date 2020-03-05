@@ -20,8 +20,6 @@ interface IComponent {
     hasModel?: boolean;
     nestedComponents?: INestedComponent[];
     expectedChildren?: Record<string, IExpectedChild>;
-    hasTranscludedContent?: boolean;
-
 }
 
 interface INestedComponent {
@@ -152,7 +150,6 @@ const renderComponent: (model: {
     configComponent: string;
     renderedProps?: string;
     hasModel?: boolean;
-    hasTranscludedContent?: boolean;
     nestedComponents?: INestedComponentModel[];
     expectedChildren?: IExpectedChildModel[];
     defaultExport: string;
@@ -199,9 +196,6 @@ L1 + `computed: {` +
 L1 + `},` +
 
 L1 + `beforeCreate() {` +
-`<#? it.hasTranscludedContent #>` +
-    L2 + `(this as any).$_hasTranscludedContent = <#= it.hasTranscludedContent #>;` +
-`<#?#>` +
     L2 + `(this as any).$_WidgetClass = <#= it.widgetImport.name #>;` +
 
     `<#? it.expectedChildren #>` +
@@ -226,7 +220,6 @@ L0 + `});\n` +
         L1 + `}\n` +
         `});\n` +
         `(<#= nested.name #> as any).$_optionName = "<#= nested.optionName #>";\n` +
-        `(<#= nested.name #> as any).$_isNested = true;\n` +
 
         `<#? nested.isCollectionItem #>` +
             `(<#= nested.name #> as any).$_isCollectionItem = true;\n` +

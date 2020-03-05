@@ -110,8 +110,7 @@ function mapWidget(
       nestedComponents: raw.complexOptions
         ? raw.complexOptions.map((o) => mapNestedComponent(o, customTypeHash))
         : undefined,
-      expectedChildren: mapExpectedChildren(raw.nesteds),
-      hasTranscludedContent: !!raw.hasTranscludedContent
+        expectedChildren: mapExpectedChildren(raw.nesteds)
     }
   };
 }

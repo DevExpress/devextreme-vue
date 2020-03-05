@@ -49,14 +49,6 @@ const TestComponent = Vue.extend({
     }
 });
 
-const TestComponentWithContent = Vue.extend({
-    extends: DxComponent,
-    beforeCreate() {
-        (this as any as IWidgetComponent).$_hasTranscludedContent = true;
-        (this as any as IWidgetComponent).$_WidgetClass = WidgetClass;
-    }
-});
-
 function skipIntegrationOptions(options: {
     integrationOptions: object,
     onInitializing: () => void
@@ -1184,83 +1176,6 @@ describe("template", () => {
         expect(
             Widget.option.mock.calls.find((call) => call[0] === "integrationOptions.templates")
         ).toBeUndefined();
-    });
-
-    it("should wrap hidden elenents", (done) => {
-        const vm = new Vue({
-            template: `<test-component-with-content>
-                            <div v-if="showTemplate">Template</div>
-                        </test-component-with-content>`,
-            components: {
-                TestComponentWithContent
-            },
-            data: {
-                showTemplate: false
-            }
-        }).$mount();
-
-        expect(vm.$el.innerHTML).toBe("<div class=\"dx-template-wrapper\"></div>");
-
-        vm.$data.showTemplate = true;
-
-        Vue.nextTick(() => {
-            expect(vm.$el.innerHTML).toBe("<div class=\"dx-template-wrapper\"><div>Template</div></div>");
-            done();
-        });
-    });
-
-    it("should wrap only content", () => {
-        const NestedItem = Vue.extend({
-            extends: DxConfiguration,
-            props: {
-                prop1: Number,
-                template: String
-            }
-        });
-        (NestedItem as any as IConfigurationComponent).$_isNested = true;
-        (NestedItem as any as IConfigurationComponent).$_optionName = "items";
-        (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
-
-        const vm = new Vue({
-            template: `<test-component-with-content>
-                            <nested-item>
-                            </nested-item>
-                            <div>Template</div>
-                        </test-component-with-content>`,
-            components: {
-                TestComponentWithContent,
-                NestedItem
-            },
-        }).$mount();
-
-        expect(vm.$el.innerHTML).toBe("<div class=\"dx-template-wrapper\"> <div>Template</div></div><!---->");
-    });
-
-    it("should wrap components", () => {
-        const NestedItem = Vue.extend({
-            extends: DxConfiguration,
-            props: {
-                prop1: Number,
-                template: String
-            }
-        });
-        (NestedItem as any as IConfigurationComponent).$_isNested = true;
-        (NestedItem as any as IConfigurationComponent).$_optionName = "items";
-        (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
-
-        const vm = new Vue({
-            template: `<test-component-with-content>
-                            <nested-item>
-                            </nested-item>
-                            <test-component-with-content></test-component-with-content>
-                        </test-component-with-content>`,
-            components: {
-                TestComponentWithContent,
-                NestedItem
-            },
-        }).$mount();
-
-        expect(vm.$el.innerHTML).toBe("<div class=\"dx-template-wrapper\"> <div></div></div><!---->");
     });
 
     it("renders", () => {
