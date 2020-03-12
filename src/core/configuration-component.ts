@@ -19,7 +19,7 @@ interface IConfigurable extends IConfigurationOwner {
     $_config: Configuration;
 }
 
-function initBinding(vueInstance) {
+function getConfig(vueInstance) {
     if (!vueInstance.$vnode) {
         return;
     }
@@ -27,20 +27,29 @@ function initBinding(vueInstance) {
     const componentOptions = (vueInstance.$vnode.componentOptions as any as IConfigurable);
     const config = componentOptions && componentOptions.$_config;
 
+    return config;
+}
+
+function initOptionChangedFunc(vueInstance) {
+    const config = getConfig(vueInstance);
+
     if (!config) {
         return;
     }
 
     const innerChanges = {};
     config.init(Object.keys(vueInstance.$props));
-    bindOptionWatchers(config, vueInstance, innerChanges);
     setEmitOptionChangedFunc(config, vueInstance, innerChanges);
 }
 
 const DxConfiguration: VueConstructor = Vue.extend({
 
     beforeMount() {
-        initBinding(this);
+        const innerChanges = {};
+        const config = getConfig(this) as Configuration;
+
+        initOptionChangedFunc(this);
+        bindOptionWatchers(config, this, innerChanges);
     },
 
     mounted() {
@@ -58,4 +67,4 @@ const DxConfiguration: VueConstructor = Vue.extend({
     }
 });
 
-export { DxConfiguration, IConfigurable, IConfigurationComponent, initBinding };
+export { DxConfiguration, IConfigurable, IConfigurationComponent, initOptionChangedFunc };

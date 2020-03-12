@@ -713,6 +713,31 @@ describe("nested option", () => {
         });
     });
 
+    it("watches should be initialized once", (done) => {
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <nested :prop1="value" />` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                Nested
+            },
+            props: ["value"],
+            propsData: {
+                value: 123
+            }
+        }).$mount();
+
+        vm.$props.value = 456;
+
+        Vue.nextTick(() => {
+            const nestedConfig = (vm.$children[0] as any ).$children[0].$vnode;
+            expect(nestedConfig.componentInstance._watchers.length).toEqual(3);
+            done();
+        });
+    });
+
     it("should reinit binding and optionChanged functions for nested components after changes", (done) => {
         const vm = new Vue({
             template:
