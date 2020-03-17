@@ -1,5 +1,5 @@
 import * as VueType from "vue";
-import { VNode, VueConstructor } from "vue";
+import IVue, { VNode, VueConstructor } from "vue";
 
 const Vue = VueType.default || VueType;
 
@@ -19,37 +19,31 @@ interface IConfigurable extends IConfigurationOwner {
     $_config: Configuration;
 }
 
-function getConfig(vueInstance) {
+function getConfig(vueInstance: Pick<IVue, "$vnode">): Configuration | undefined {
     if (!vueInstance.$vnode) {
         return;
     }
 
     const componentOptions = (vueInstance.$vnode.componentOptions as any as IConfigurable);
-    const config = componentOptions && componentOptions.$_config;
 
-    return config;
+    return componentOptions && componentOptions.$_config;
 }
 
-function initOptionChangedFunc(vueInstance) {
-    const config = getConfig(vueInstance);
-
+function initOptionChangedFunc(config, vueInstance: Pick<IVue, "$vnode" | "$props" | "$emit">) {
     if (!config) {
         return;
     }
 
-    const innerChanges = {};
     config.init(Object.keys(vueInstance.$props));
-    setEmitOptionChangedFunc(config, vueInstance, innerChanges);
+    setEmitOptionChangedFunc(config, vueInstance);
 }
 
 const DxConfiguration: VueConstructor = Vue.extend({
 
     beforeMount() {
-        const innerChanges = {};
         const config = getConfig(this) as Configuration;
-
-        initOptionChangedFunc(this);
-        bindOptionWatchers(config, this, innerChanges);
+        initOptionChangedFunc(config, this);
+        bindOptionWatchers(config, this);
     },
 
     mounted() {
@@ -67,4 +61,4 @@ const DxConfiguration: VueConstructor = Vue.extend({
     }
 });
 
-export { DxConfiguration, IConfigurable, IConfigurationComponent, initOptionChangedFunc };
+export { DxConfiguration, IConfigurable, IConfigurationComponent, initOptionChangedFunc, getConfig };
