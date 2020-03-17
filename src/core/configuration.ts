@@ -29,7 +29,6 @@ class Configuration {
     private _prevNestedConfigOptions: any;
     private _emitOptionChanged: EmitOptionChangedFunc;
     private _componentsCountChanged: boolean;
-    private _innerChanges: Record<string, any>;
 
     private _options: string[];
 
@@ -51,7 +50,6 @@ class Configuration {
         this._expectedChildren = expectedChildren || {};
         this._ownerConfig = ownerConfig;
         this._componentsCountChanged = false;
-        this._innerChanges = {};
 
         this.updateValue = this.updateValue.bind(this);
     }
@@ -72,10 +70,6 @@ class Configuration {
 
     public set hasOptionsToUpdate(value: boolean) {
         this._componentsCountChanged = value;
-    }
-
-    public get innerChanges(): Record<string, any> {
-        return this._innerChanges;
     }
 
     public get fullPath(): string | null {
@@ -257,15 +251,16 @@ class Configuration {
 
 function bindOptionWatchers(
     config: Configuration,
-    vueInstance: Pick<Vue, "$watch">): void {
+    vueInstance: Pick<Vue, "$watch">,
+    innerChanges: Record<string, any>): void {
     const targets = config.getOptionsToWatch();
     if (targets) {
         targets.forEach((optionName: string) => {
             vueInstance.$watch(optionName, (value) => {
-                if (config.innerChanges[optionName] !== value) {
+                if (innerChanges[optionName] !== value) {
                     config.updateValue(optionName, value);
                 }
-                delete config.innerChanges[optionName];
+                delete innerChanges[optionName];
             });
         });
     }
@@ -273,10 +268,11 @@ function bindOptionWatchers(
 
 function setEmitOptionChangedFunc(
     config: Configuration,
-    vueInstance: Pick<Vue, "$emit" | "$props">): void {
+    vueInstance: Pick<Vue, "$emit" | "$props">,
+    innerChanges: Record<string, any>): void {
     config.emitOptionChanged = (name: string, value: string) => {
         if (!isEqual(value, vueInstance.$props[name])) {
-            config.innerChanges[name] = value;
+            innerChanges[name] = value;
             vueInstance.$emit("update:" + name, value);
         }
     };

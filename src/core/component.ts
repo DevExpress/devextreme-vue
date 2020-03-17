@@ -5,7 +5,7 @@ import * as events from "devextreme/events";
 
 import { pullAllChildren } from "./children-processing";
 import Configuration, { bindOptionWatchers, setEmitOptionChangedFunc } from "./configuration";
-import { getConfig, IConfigurable, initOptionChangedFunc } from "./configuration-component";
+import { getConfig, getInnerChanges, IConfigurable, initOptionChangedFunc } from "./configuration-component";
 import { DX_REMOVE_EVENT } from "./constants";
 import { IExtension, IExtensionComponentNode } from "./extension-component";
 import { camelize, forEachChildNode, toComparable } from "./helpers";
@@ -73,7 +73,7 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
     },
 
     updated() {
-        this.$children.forEach((child: IVue) => initOptionChangedFunc(getConfig(child), child));
+        this.$children.forEach((child: IVue) => initOptionChangedFunc(getConfig(child), child, getInnerChanges(child)));
         this.$_templatesManager.discover();
 
         this.$_instance.beginUpdate();
@@ -139,6 +139,7 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
             this.$options.propsData && { ...this.$options.propsData },
             this.$_expectedChildren
         );
+        (this as IBaseComponent).$_innerChanges = {};
 
         this.$_config.init(this.$props && Object.keys(this.$props));
     },
@@ -162,8 +163,8 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
             thisComponent.$_instance = instance;
 
             instance.on("optionChanged", (args) => config.onOptionChanged(args));
-            setEmitOptionChangedFunc(config, this);
-            bindOptionWatchers(config, this);
+            setEmitOptionChangedFunc(config, this, this.$_innerChanges);
+            bindOptionWatchers(config, this, this.$_innerChanges);
             this.$_createEmitters(instance);
         },
 

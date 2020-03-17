@@ -17,6 +17,7 @@ interface IConfigurationComponent extends IConfigurationOwner {
 
 interface IConfigurable extends IConfigurationOwner {
     $_config: Configuration;
+    $_innerChanges: any;
 }
 
 function getConfig(vueInstance: Pick<IVue, "$vnode">): Configuration | undefined {
@@ -29,21 +30,31 @@ function getConfig(vueInstance: Pick<IVue, "$vnode">): Configuration | undefined
     return componentOptions && componentOptions.$_config;
 }
 
-function initOptionChangedFunc(config, vueInstance: Pick<IVue, "$vnode" | "$props" | "$emit">) {
+function getInnerChanges(vueInstance: Pick<IVue, "$vnode">): any {
+    if (!vueInstance.$vnode) {
+        return;
+    }
+
+    const componentOptions = (vueInstance.$vnode.componentOptions as any as IConfigurable);
+
+    return componentOptions && componentOptions.$_innerChanges;
+}
+
+function initOptionChangedFunc(config, vueInstance: Pick<IVue, "$vnode" | "$props" | "$emit">, innerChanges: any) {
     if (!config) {
         return;
     }
 
     config.init(Object.keys(vueInstance.$props));
-    setEmitOptionChangedFunc(config, vueInstance);
+    setEmitOptionChangedFunc(config, vueInstance, innerChanges);
 }
 
 const DxConfiguration: VueConstructor = Vue.extend({
-
     beforeMount() {
         const config = getConfig(this) as Configuration;
-        initOptionChangedFunc(config, this);
-        bindOptionWatchers(config, this);
+        const innerChanges = getInnerChanges(this);
+        initOptionChangedFunc(config, this, innerChanges);
+        bindOptionWatchers(config, this, innerChanges);
     },
 
     mounted() {
@@ -61,4 +72,4 @@ const DxConfiguration: VueConstructor = Vue.extend({
     }
 });
 
-export { DxConfiguration, IConfigurable, IConfigurationComponent, initOptionChangedFunc, getConfig };
+export { DxConfiguration, IConfigurable, IConfigurationComponent, initOptionChangedFunc, getConfig, getInnerChanges };
