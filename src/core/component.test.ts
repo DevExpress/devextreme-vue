@@ -713,7 +713,7 @@ describe("nested option", () => {
         });
     });
 
-    it("watches should be initialized once", (done) => {
+    it("should initialize watchers once", (done) => {
         const vm = new Vue({
             template:
                 `<test-component>` +
@@ -729,11 +729,13 @@ describe("nested option", () => {
             }
         }).$mount();
 
+        const nestedConfig = (vm.$children[0] as any ).$children[0].$vnode;
+        const expected = nestedConfig.componentInstance._watchers.length;
+
         vm.$props.value = 456;
 
         Vue.nextTick(() => {
-            const nestedConfig = (vm.$children[0] as any ).$children[0].$vnode;
-            expect(nestedConfig.componentInstance._watchers.length).toEqual(3);
+            expect(nestedConfig.componentInstance._watchers.length).toEqual(expected);
             done();
         });
     });
