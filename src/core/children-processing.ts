@@ -30,6 +30,7 @@ function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Co
         );
 
         (node.componentOptions as any as IConfigurable).$_config = config;
+        (node.componentOptions as any as IConfigurable).$_innerChanges = {};
 
         if (node.componentOptions.children) {
             pullConfigComponents(node.componentOptions.children as VNode[], nodes, config);

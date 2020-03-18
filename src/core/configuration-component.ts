@@ -1,5 +1,5 @@
 import * as VueType from "vue";
-import { VNode, VueConstructor } from "vue";
+import IVue, { VNode, VueConstructor } from "vue";
 
 const Vue = VueType.default || VueType;
 
@@ -17,30 +17,44 @@ interface IConfigurationComponent extends IConfigurationOwner {
 
 interface IConfigurable extends IConfigurationOwner {
     $_config: Configuration;
+    $_innerChanges: any;
 }
 
-function initBinding(vueInstance) {
+function getConfig(vueInstance: Pick<IVue, "$vnode">): Configuration | undefined {
     if (!vueInstance.$vnode) {
         return;
     }
 
     const componentOptions = (vueInstance.$vnode.componentOptions as any as IConfigurable);
-    const config = componentOptions && componentOptions.$_config;
 
+    return componentOptions && componentOptions.$_config;
+}
+
+function getInnerChanges(vueInstance: Pick<IVue, "$vnode">): any {
+    if (!vueInstance.$vnode) {
+        return;
+    }
+
+    const componentOptions = (vueInstance.$vnode.componentOptions as any as IConfigurable);
+
+    return componentOptions && componentOptions.$_innerChanges;
+}
+
+function initOptionChangedFunc(config, vueInstance: Pick<IVue, "$vnode" | "$props" | "$emit">, innerChanges: any) {
     if (!config) {
         return;
     }
 
-    const innerChanges = {};
     config.init(Object.keys(vueInstance.$props));
-    bindOptionWatchers(config, vueInstance, innerChanges);
     setEmitOptionChangedFunc(config, vueInstance, innerChanges);
 }
 
 const DxConfiguration: VueConstructor = Vue.extend({
-
     beforeMount() {
-        initBinding(this);
+        const config = getConfig(this) as Configuration;
+        const innerChanges = getInnerChanges(this);
+        initOptionChangedFunc(config, this, innerChanges);
+        bindOptionWatchers(config, this, innerChanges);
     },
 
     mounted() {
@@ -58,4 +72,4 @@ const DxConfiguration: VueConstructor = Vue.extend({
     }
 });
 
-export { DxConfiguration, IConfigurable, IConfigurationComponent, initBinding };
+export { DxConfiguration, IConfigurable, IConfigurationComponent, initOptionChangedFunc, getConfig, getInnerChanges };

@@ -713,6 +713,33 @@ describe("nested option", () => {
         });
     });
 
+    it("should initialize watchers once", (done) => {
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <nested :prop1="value" />` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                Nested
+            },
+            props: ["value"],
+            propsData: {
+                value: 123
+            }
+        }).$mount();
+
+        const nestedConfig = (vm.$children[0] as any ).$children[0].$vnode;
+        const expected = nestedConfig.componentInstance._watchers.length;
+
+        vm.$props.value = 456;
+
+        Vue.nextTick(() => {
+            expect(nestedConfig.componentInstance._watchers.length).toEqual(expected);
+            done();
+        });
+    });
+
     it("should reinit binding and optionChanged functions for nested components after changes", (done) => {
         const vm = new Vue({
             template:
