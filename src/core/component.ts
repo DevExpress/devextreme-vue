@@ -278,12 +278,14 @@ const DxComponent: VueConstructor = BaseComponent.extend({
         this.$_instance.endUpdate();
 
         restoreNodes(this.$el, nodes);
-        this.$children.forEach((child: IVue) => {
-            const childExtension = child as any as IExtension;
-            if (childExtension.$_isExtension) {
-                childExtension.attachTo(this.$el);
-            }
-        });
+        if (this.$slots && this.$slots.default) {
+            this.$slots.default.forEach((child: VNode) => {
+                const childExtension = child.componentInstance as any as IExtension;
+                if (childExtension && childExtension.$_isExtension) {
+                    childExtension.attachTo(this.$el);
+                }
+            });
+        }
     }
 });
 
