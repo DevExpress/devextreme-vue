@@ -1371,6 +1371,29 @@ describe("template", () => {
         expect(vm.$children[0].$children.length).toEqual(0);
     });
 
+    it("destroyed component should remove updated subscription", (done) => {
+        const vm = new Vue({
+            template: `<test-component :prop1="value">
+                            <template #item="{data}">Template {{data.text}}</template>
+                        </test-component>`,
+            components: {
+                TestComponent
+            },
+            props: ["value"],
+            propsData: {
+                value: 123
+            }
+        }).$mount();
+
+        const container = document.createElement("div");
+        renderItemTemplate({ text: "with data" }, container);
+        events.triggerHandler(container.children[0], "dxremove");
+        renderItemTemplate({ text: "with data" }, container);
+
+        expect((vm.$children[0] as any).eventBus._events.updated.length).toBe(1);
+        done();
+    });
+
     describe("with DOM", () => {
         let fixture;
 

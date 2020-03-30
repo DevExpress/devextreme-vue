@@ -90,6 +90,9 @@ function mountTemplate(
             }
 
             return content[0];
+        },
+        destroyed: function() {
+            (this as IVue & IEventBusHolder).eventBus.$off("updated")
         }
     });
 }
