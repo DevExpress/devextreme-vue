@@ -1392,7 +1392,7 @@ describe("template", () => {
 
         const subscriptions = (vm.$children[0] as any).eventBus._events;
 
-        for(let subscription of subscriptions) {
+        for (const subscription of subscriptions) {
             expect(subscription.length).toBe(1);
         }
 

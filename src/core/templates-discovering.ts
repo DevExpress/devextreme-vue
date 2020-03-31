@@ -92,7 +92,7 @@ function mountTemplate(
             return content[0];
         },
         destroyed() {
-            //T857821
+            // T857821
             (this as IEventBusHolder).eventBus.$off("updated");
         }
     });
