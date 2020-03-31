@@ -1371,7 +1371,7 @@ describe("template", () => {
         expect(vm.$children[0].$children.length).toEqual(0);
     });
 
-    it("destroyed component should remove updated subscription", (done) => {
+    it("destroyed component should remove subscriptions", (done) => {
         const vm = new Vue({
             template: `<test-component :prop1="value">
                             <template #item="{data}">Template {{data.text}}</template>
