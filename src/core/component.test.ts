@@ -1390,7 +1390,12 @@ describe("template", () => {
         events.triggerHandler(container.children[0], "dxremove");
         renderItemTemplate({ text: "with data" }, container);
 
-        expect((vm.$children[0] as any).eventBus._events.updated.length).toBe(1);
+        const subscriptions = (vm.$children[0] as any).eventBus._events;
+
+        for(let subscription of subscriptions) {
+            expect(subscription.length).toBe(1);
+        }
+
         done();
     });
 
