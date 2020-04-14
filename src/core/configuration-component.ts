@@ -49,6 +49,20 @@ function initOptionChangedFunc(config, vueInstance: Pick<IVue, "$vnode" | "$prop
     setEmitOptionChangedFunc(config, vueInstance, innerChanges);
 }
 
+function getComponentInfo(vueInstance: Pick<IVue, "$vnode">, removed?: boolean) {
+    const config = getConfig(vueInstance) as Configuration;
+    const name = config.name;
+    const parentPath =  config.ownerConfig && config.ownerConfig.fullPath;
+    const optionPath = parentPath ? `${parentPath}.${name}` : name;
+
+    return {
+        optionPath,
+        isCollection: config.isCollectionItem,
+        fullPath: config.fullPath,
+        removed
+    };
+}
+
 const DxConfiguration: VueConstructor = Vue.extend({
     beforeMount() {
         const config = getConfig(this) as Configuration;
@@ -59,12 +73,12 @@ const DxConfiguration: VueConstructor = Vue.extend({
 
     mounted() {
         if ((this.$parent as any).$_instance) {
-            (this.$parent as any).$_config.componentsCountChanged = true;
+            (this.$parent as any).$_config.componentsCountChanged.push(getComponentInfo(this));
         }
     },
 
     beforeDestroy() {
-        (this.$parent as any).$_config.componentsCountChanged = true;
+        (this.$parent as any).$_config.componentsCountChanged.push(getComponentInfo(this, true));
     },
 
     render(createElement: (...args) => VNode): VNode {

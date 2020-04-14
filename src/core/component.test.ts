@@ -841,15 +841,18 @@ describe("nested option", () => {
     });
 
     it("remove nested component by condition", (done) => {
+        const nestedCollectionItem = buildTestConfigCtor();
+        (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
+        (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
         const vm = new Vue({
             template:
                 `<test-component>` +
-                `  <nested v-if="showNest" :prop1="123" />` +
-                `  <nested :prop1="321" />` +
+                `  <nested-collection-item v-if="showNest" :prop1="123" />` +
+                `  <nested-collection-item :prop1="321" />` +
                 `</test-component>`,
             components: {
                 TestComponent,
-                Nested
+                nestedCollectionItem
             },
             data: {
                 showNest: true
@@ -859,7 +862,74 @@ describe("nested option", () => {
         vm.$data.showNest = false;
 
         Vue.nextTick(() => {
-            expect(Widget.option).toHaveBeenCalledWith("nestedOption", { prop1: 321 });
+            expect(Widget.option).toHaveBeenCalledWith("nestedOption", [{ prop1: 321 }]);
+            done();
+        });
+    });
+
+    it("should update only part of collection components", (done) => {
+        const nestedCollectionItem = buildTestConfigCtor();
+        (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
+        (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <nested-collection-item>` +
+                `     <nested-collection-item>` +
+                `       <nested-collection-item v-if="showNest" :prop1="123">` +
+                `       </nested-collection-item>` +
+                `       <nested-collection-item :prop1="321">` +
+                `       </nested-collection-item>` +
+                `     </nested-collection-item>` +
+                `  </nested-collection-item>` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                nestedCollectionItem
+            },
+            data: {
+                showNest: true
+            }
+        }).$mount();
+
+        vm.$data.showNest = false;
+
+        Vue.nextTick(() => {
+            expect(Widget.option)
+                .toHaveBeenCalledWith("nestedOption[0].nestedOption[0].nestedOption", [{ prop1: 321 }]);
+            done();
+        });
+    });
+
+    it("should update only part of collection components (remove all subnested)", (done) => {
+        const nestedCollectionItem = buildTestConfigCtor();
+        (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
+        (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+        const vm = new Vue({
+            template:
+                `<test-component>` +
+                `  <nested-collection-item>` +
+                `     <nested-collection-item>` +
+                `       <nested-collection-item v-if="showNest" :prop1="123">` +
+                `       </nested-collection-item>` +
+                `       <nested-collection-item v-if="showNest" :prop1="321">` +
+                `       </nested-collection-item>` +
+                `     </nested-collection-item>` +
+                `  </nested-collection-item>` +
+                `</test-component>`,
+            components: {
+                TestComponent,
+                nestedCollectionItem
+            },
+            data: {
+                showNest: true
+            }
+        }).$mount();
+
+        vm.$data.showNest = false;
+
+        Vue.nextTick(() => {
+            expect(Widget.option).toHaveBeenCalledWith("nestedOption[0].nestedOption[0].nestedOption", undefined);
             done();
         });
     });
@@ -912,7 +982,7 @@ describe("nested option", () => {
         });
     });
 
-    it("reset nested component", (done) => {
+    fit("reset nested component", (done) => {
         const vm = new Vue({
             template:
                 `<test-component>` +
