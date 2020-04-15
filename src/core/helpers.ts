@@ -50,10 +50,9 @@ export function allKeysAreEqual(obj1: object, obj2: object) {
 }
 
 export function getOptionValue(options, optionPath) {
-    const path = optionPath.split(".");
     let value = options;
 
-    path.forEach((p) => {
+    optionPath.split(".").forEach((p) => {
         const optionInfo = getOptionInfo(p);
         value = optionInfo.isCollection ?
             value[optionInfo.name] && value[optionInfo.name][optionInfo.index] :

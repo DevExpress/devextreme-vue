@@ -982,7 +982,7 @@ describe("nested option", () => {
         });
     });
 
-    fit("reset nested component", (done) => {
+    it("reset nested component", (done) => {
         const vm = new Vue({
             template:
                 `<test-component>` +

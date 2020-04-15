@@ -20,6 +20,12 @@ interface IConfigurable extends IConfigurationOwner {
     $_innerChanges: any;
 }
 
+interface IComponentInfo {
+    optionPath: string;
+    isCollection: boolean;
+    removed?: boolean;
+}
+
 function getConfig(vueInstance: Pick<IVue, "$vnode">): Configuration | undefined {
     if (!vueInstance.$vnode) {
         return;
@@ -49,16 +55,13 @@ function initOptionChangedFunc(config, vueInstance: Pick<IVue, "$vnode" | "$prop
     setEmitOptionChangedFunc(config, vueInstance, innerChanges);
 }
 
-function getComponentInfo(vueInstance: Pick<IVue, "$vnode">, removed?: boolean) {
-    const config = getConfig(vueInstance) as Configuration;
-    const name = config.name;
-    const parentPath =  config.ownerConfig && config.ownerConfig.fullPath;
-    const optionPath = parentPath ? `${parentPath}.${name}` : name;
+function getComponentInfo({name, isCollectionItem, ownerConfig }: Configuration, removed?: boolean): IComponentInfo {
+    const parentPath =  ownerConfig && ownerConfig.fullPath;
+    const optionPath = parentPath ? `${parentPath}.${name}` : name || "";
 
     return {
         optionPath,
-        isCollection: config.isCollectionItem,
-        fullPath: config.fullPath,
+        isCollection: isCollectionItem,
         removed
     };
 }
@@ -73,12 +76,14 @@ const DxConfiguration: VueConstructor = Vue.extend({
 
     mounted() {
         if ((this.$parent as any).$_instance) {
-            (this.$parent as any).$_config.componentsCountChanged.push(getComponentInfo(this));
+            (this.$parent as any).$_config.componentsCountChanged
+                .push(getComponentInfo(getConfig(this) as Configuration));
         }
     },
 
     beforeDestroy() {
-        (this.$parent as any).$_config.componentsCountChanged.push(getComponentInfo(this, true));
+        (this.$parent as any).$_config.componentsCountChanged
+            .push(getComponentInfo(getConfig(this) as Configuration, true));
     },
 
     render(createElement: (...args) => VNode): VNode {
@@ -86,4 +91,12 @@ const DxConfiguration: VueConstructor = Vue.extend({
     }
 });
 
-export { DxConfiguration, IConfigurable, IConfigurationComponent, initOptionChangedFunc, getConfig, getInnerChanges };
+export {
+    DxConfiguration,
+    IComponentInfo,
+    IConfigurable,
+    IConfigurationComponent,
+    initOptionChangedFunc,
+    getConfig,
+    getInnerChanges
+};

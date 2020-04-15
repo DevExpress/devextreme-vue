@@ -1,4 +1,5 @@
 import { Vue } from "vue/types/vue";
+import { IComponentInfo } from "./configuration-component";
 import { getOptionInfo, isEqual } from "./helpers";
 
 type UpdateFunc = (name: string, value: any) => void;
@@ -28,7 +29,7 @@ class Configuration {
     private _nestedConfigurations: Configuration[];
     private _prevNestedConfigOptions: any;
     private _emitOptionChanged: EmitOptionChangedFunc;
-    private _componentsCountChanged: any[];
+    private _componentChanges: IComponentInfo[];
 
     private _options: string[];
 
@@ -49,7 +50,7 @@ class Configuration {
         this._collectionItemIndex = collectionItemIndex;
         this._expectedChildren = expectedChildren || {};
         this._ownerConfig = ownerConfig;
-        this._componentsCountChanged = [];
+        this._componentChanges = [];
 
         this.updateValue = this.updateValue.bind(this);
     }
@@ -64,12 +65,12 @@ class Configuration {
             : this._name;
     }
 
-    public get componentsCountChanged(): any[] {
-        return this._componentsCountChanged;
+    public get componentsCountChanged(): IComponentInfo[] {
+        return this._componentChanges;
     }
 
     public cleanComponentsCountChanged() {
-        this._componentsCountChanged = [];
+        this._componentChanges = [];
     }
 
     public get fullPath(): string | null {

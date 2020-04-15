@@ -124,13 +124,13 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
 
     methods: {
         $_applyConfigurationChanges(): void {
-            this.$_config.componentsCountChanged.forEach((component) => {
+            this.$_config.componentsCountChanged.forEach(({ optionPath, isCollection, removed }) => {
                 const options = this.$_config.getNestedOptionValues();
 
-                if (!component.isCollection && component.removed) {
-                    this.$_instance.resetOption(component.optionPath);
+                if (!isCollection && removed) {
+                    this.$_instance.resetOption(optionPath);
                 } else {
-                    this.$_instance.option(component.optionPath, getOptionValue(options, component.optionPath));
+                    this.$_instance.option(optionPath, getOptionValue(options, optionPath));
                 }
             });
 
