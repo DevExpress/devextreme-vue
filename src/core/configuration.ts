@@ -1,4 +1,5 @@
 import { Vue } from "vue/types/vue";
+import { IComponentInfo } from "./configuration-component";
 import { getOptionInfo, isEqual } from "./helpers";
 
 type UpdateFunc = (name: string, value: any) => void;
@@ -28,7 +29,7 @@ class Configuration {
     private _nestedConfigurations: Configuration[];
     private _prevNestedConfigOptions: any;
     private _emitOptionChanged: EmitOptionChangedFunc;
-    private _componentsCountChanged: boolean;
+    private _componentChanges: IComponentInfo[];
 
     private _options: string[];
 
@@ -49,7 +50,7 @@ class Configuration {
         this._collectionItemIndex = collectionItemIndex;
         this._expectedChildren = expectedChildren || {};
         this._ownerConfig = ownerConfig;
-        this._componentsCountChanged = false;
+        this._componentChanges = [];
 
         this.updateValue = this.updateValue.bind(this);
     }
@@ -64,18 +65,22 @@ class Configuration {
             : this._name;
     }
 
-    public get hasOptionsToUpdate(): boolean {
-        return this._componentsCountChanged;
+    public get componentsCountChanged(): IComponentInfo[] {
+        return this._componentChanges;
     }
 
-    public set hasOptionsToUpdate(value: boolean) {
-        this._componentsCountChanged = value;
+    public cleanComponentsCountChanged() {
+        this._componentChanges = [];
     }
 
     public get fullPath(): string | null {
         return this._ownerConfig && this._ownerConfig.fullPath
             ? `${this._ownerConfig.fullPath}.${this.fullName}`
             : this.fullName;
+    }
+
+    public get ownerConfig(): Pick<Configuration, "fullPath"> | undefined {
+        return this._ownerConfig;
     }
 
     public get options(): string[] {

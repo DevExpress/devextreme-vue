@@ -8,7 +8,7 @@ import Configuration, { bindOptionWatchers, setEmitOptionChangedFunc } from "./c
 import { getConfig, getInnerChanges, IConfigurable, initOptionChangedFunc } from "./configuration-component";
 import { DX_REMOVE_EVENT } from "./constants";
 import { IExtension, IExtensionComponentNode } from "./extension-component";
-import { camelize, forEachChildNode, toComparable } from "./helpers";
+import { camelize, forEachChildNode, getOptionValue, toComparable } from "./helpers";
 import {
     IEventBusHolder
 } from "./templates-discovering";
@@ -23,6 +23,7 @@ interface IWidgetComponent extends IConfigurable {
 
 interface IBaseComponent extends IVue, IWidgetComponent, IEventBusHolder {
     $_isExtension: boolean;
+    $_applyConfigurationChanges: () => void;
     $_createWidget: (element: any) => void;
     $_getIntegrationOptions: () => void;
     $_getExtraIntegrationOptions: () => void;
@@ -95,31 +96,8 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
         }
         (this as IBaseComponent).$_pendingOptions = {};
 
-        if (this.$_config.componentsCountChanged) {
-            const options = this.$_config.getNestedOptionValues();
-            const prevOptions = this.$_config.prevNestedOptions;
-            const optionsList = Object.keys(options);
-            const prevOptionsList = Object.keys(prevOptions);
-            if (optionsList.length < prevOptionsList.length) {
-                prevOptionsList.forEach((prevName) => {
-                    const hasOption = optionsList.some((name) => {
-                        return prevName === name;
-                    });
+        this.$_applyConfigurationChanges();
 
-                    if (!hasOption) {
-                        this.$_instance.resetOption(prevName);
-                    }
-                });
-            }
-
-            for (const name in options) {
-                if (options.hasOwnProperty(name)) {
-                    this.$_instance.option(name, options[name]);
-                }
-            }
-
-            this.$_config.componentsCountChanged = false;
-        }
         this.$_instance.endUpdate();
         this.eventBus.$emit("updated");
     },
@@ -145,6 +123,19 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
     },
 
     methods: {
+        $_applyConfigurationChanges(): void {
+            this.$_config.componentsCountChanged.forEach(({ optionPath, isCollection, removed }) => {
+                const options = this.$_config.getNestedOptionValues();
+
+                if (!isCollection && removed) {
+                    this.$_instance.resetOption(optionPath);
+                } else {
+                    this.$_instance.option(optionPath, getOptionValue(options, optionPath));
+                }
+            });
+
+            this.$_config.cleanComponentsCountChanged();
+        },
         $_createWidget(element: any): void {
             const thisComponent = this as IBaseComponent;
 

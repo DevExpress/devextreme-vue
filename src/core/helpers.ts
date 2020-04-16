@@ -49,6 +49,19 @@ export function allKeysAreEqual(obj1: object, obj2: object) {
     return true;
 }
 
+export function getOptionValue(options, optionPath) {
+    let value = options;
+
+    optionPath.split(".").forEach((p) => {
+        const optionInfo = getOptionInfo(p);
+        value = optionInfo.isCollection ?
+            value[optionInfo.name] && value[optionInfo.name][optionInfo.index] :
+            value[optionInfo.name];
+    });
+
+    return value;
+}
+
 export function getOptionInfo(name: string): IOptionInfo | ICollectionOptionInfo {
     const parts = name.split("[");
 
