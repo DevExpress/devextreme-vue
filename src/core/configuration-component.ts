@@ -57,7 +57,7 @@ function initOptionChangedFunc(config, vueInstance: Pick<IVue, "$vnode" | "$prop
 
 function getComponentInfo({name, isCollectionItem, ownerConfig }: Configuration, removed?: boolean): IComponentInfo {
     const parentPath =  ownerConfig && ownerConfig.fullPath;
-    const optionPath = parentPath ? `${parentPath}.${name}` : name || "";
+    const optionPath = name && parentPath ? `${parentPath}.${name}` : name || "";
 
     return {
         optionPath,
