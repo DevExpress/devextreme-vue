@@ -7,6 +7,7 @@ import {
 } from "./templates-discovering";
 
 import * as events from "devextreme/events";
+import * as domAdapter from "devextreme/core/dom_adapter"
 import { DX_REMOVE_EVENT, DX_TEMPLATE_WRAPPER_CLASS } from "./constants";
 import { allKeysAreEqual } from "./helpers";
 
@@ -74,9 +75,8 @@ class TemplatesManager {
                 );
 
                 const element = mountedTemplate.$el;
-                if (element.classList) {
-                    element.classList.add(DX_TEMPLATE_WRAPPER_CLASS);
-                }
+
+                domAdapter.setClass(element, DX_TEMPLATE_WRAPPER_CLASS, true);
 
                 if (element.nodeType === Node.TEXT_NODE) {
                     const removalListener = document.createElement(container.nodeName === "TABLE" ? "tbody" : "span");
