@@ -6,8 +6,8 @@ import {
     mountTemplate
 } from "./templates-discovering";
 
+import * as domAdapter from "devextreme/core/dom_adapter";
 import * as events from "devextreme/events";
-import * as domAdapter from "devextreme/core/dom_adapter"
 import { DX_REMOVE_EVENT, DX_TEMPLATE_WRAPPER_CLASS } from "./constants";
 import { allKeysAreEqual } from "./helpers";
 
