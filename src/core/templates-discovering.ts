@@ -4,6 +4,7 @@ import { ScopedSlot } from "vue/types/vnode";
 
 import { IConfigurable } from "./configuration-component";
 import { TEMPLATE_MULTIPLE_ROOTS_ERROR } from "./errors";
+import { ComponentManager } from "./vue-strategy/component-manager";
 
 const TEMPLATE_PROP = "template";
 const Vue = VueType.default || VueType;
@@ -31,12 +32,13 @@ function hasTemplate(component: IVue) {
 
 function discover(component: IVue): Record<string, ScopedSlot> {
     const templates: Record<string, ScopedSlot> = {};
-    for (const slotName in component.$scopedSlots) {
+    const namedTeplates = ComponentManager.getNamedTemplates(component);
+    for (const slotName in namedTeplates) {
         if (slotName === "default" && component.$slots.default) {
             continue;
         }
 
-        const slot = component.$scopedSlots[slotName];
+        const slot = namedTeplates[slotName];
         if (!slot) {
             continue;
         }
@@ -50,7 +52,7 @@ function discover(component: IVue): Record<string, ScopedSlot> {
             continue;
         }
 
-        const defaultSlot = childComponent.$scopedSlots.default;
+        const defaultSlot = ComponentManager.getNamedTemplates(childComponent).default;
         if (!defaultSlot || !hasTemplate(childComponent)) {
             continue;
         }

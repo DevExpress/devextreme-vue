@@ -9,6 +9,7 @@ import { getConfig, getInnerChanges, IConfigurable, initOptionChangedFunc } from
 import { DX_REMOVE_EVENT } from "./constants";
 import { IExtension, IExtensionComponentNode } from "./extension-component";
 import { camelize, forEachChildNode, getOptionValue, toComparable } from "./helpers";
+import { ComponentManager } from "./vue-strategy/component-manager";
 import {
     IEventBusHolder
 } from "./templates-discovering";
@@ -21,7 +22,7 @@ interface IWidgetComponent extends IConfigurable {
     $_templatesManager: TemplatesManager;
 }
 
-interface IBaseComponent extends IVue, IWidgetComponent, IEventBusHolder {
+export interface IBaseComponent extends IVue, IWidgetComponent, IEventBusHolder {
     $_isExtension: boolean;
     $_applyConfigurationChanges: () => void;
     $_createWidget: (element: any) => void;
@@ -35,7 +36,7 @@ interface IBaseComponent extends IVue, IWidgetComponent, IEventBusHolder {
 
 const Vue = VueType.default || VueType;
 
-const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
+const BaseComponent: VueConstructor<any> = ComponentManager.create({
 
     inheritAttrs: false,
 
@@ -57,7 +58,7 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
         if (this.$_config.cleanNested) {
             this.$_config.cleanNested();
         }
-        pullAllChildren(this.$slots.default, children, this.$_config);
+        pullAllChildren(ComponentManager.getDefaultSlots(this), children, this.$_config);
 
         this.$_processChildren(children);
         return createElement(
@@ -111,10 +112,11 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
     },
 
     created(): void {
+        const props = ComponentManager.getProps(this);
         (this as IBaseComponent).$_config = new Configuration(
             (n: string, v: any) => this.$_pendingOptions[n] = v,
             null,
-            this.$options.propsData && { ...this.$options.propsData },
+            props && { ...props },
             this.$_expectedChildren
         );
         (this as IBaseComponent).$_innerChanges = {};
@@ -124,42 +126,44 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
 
     methods: {
         $_applyConfigurationChanges(): void {
-            this.$_config.componentsCountChanged.forEach(({ optionPath, isCollection, removed }) => {
-                const options = this.$_config.getNestedOptionValues();
+            const thisComponent = this as any as IBaseComponent;
+            thisComponent.$_config.componentsCountChanged.forEach(({ optionPath, isCollection, removed }) => {
+                const options = thisComponent.$_config.getNestedOptionValues();
 
                 if (!isCollection && removed) {
-                    this.$_instance.resetOption(optionPath);
+                    thisComponent.$_instance.resetOption(optionPath);
                 } else {
-                    this.$_instance.option(optionPath, getOptionValue(options, optionPath));
+                    thisComponent.$_instance.option(optionPath, getOptionValue(options, optionPath));
                 }
             });
 
-            this.$_config.cleanComponentsCountChanged();
+            thisComponent.$_config.cleanComponentsCountChanged();
         },
         $_createWidget(element: any): void {
-            const thisComponent = this as IBaseComponent;
+            const thisComponent = this as any as IBaseComponent;
 
             thisComponent.$_pendingOptions = {};
-            thisComponent.$_templatesManager = new TemplatesManager(this);
+            thisComponent.$_templatesManager = new TemplatesManager(thisComponent);
 
-            const config = this.$_config;
+            const config = thisComponent.$_config;
             const options: object = {
-                ...this.$options.propsData,
+                ...thisComponent.$options.propsData,
                 ...config.initialValues,
                 ...config.getNestedOptionValues(),
                 ...this.$_getIntegrationOptions()
             };
 
-            const instance = new this.$_WidgetClass(element, options);
+            const instance = new thisComponent.$_WidgetClass(element, options);
             thisComponent.$_instance = instance;
 
             instance.on("optionChanged", (args) => config.onOptionChanged(args));
-            setEmitOptionChangedFunc(config, this, this.$_innerChanges);
-            bindOptionWatchers(config, this, this.$_innerChanges);
+            setEmitOptionChangedFunc(config, thisComponent, thisComponent.$_innerChanges);
+            bindOptionWatchers(config, thisComponent, thisComponent.$_innerChanges);
             this.$_createEmitters(instance);
         },
 
         $_getIntegrationOptions(): object {
+            const thisComponent = this as any as IBaseComponent;
             const result: Record<string, any> = {
                 integrationOptions:  {
                     watchMethod: this.$_getWatchMethod(),
@@ -167,15 +171,15 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
                 ...this.$_getExtraIntegrationOptions(),
             };
 
-            if (this.$_templatesManager.isDirty) {
-                const templates = this.$_templatesManager.templates;
+            if (thisComponent.$_templatesManager.isDirty) {
+                const templates = thisComponent.$_templatesManager.templates;
 
                 result.integrationOptions.templates = templates;
                 for (const name of Object.keys(templates)) {
                     result[name] = name;
                 }
 
-                this.$_templatesManager.resetDirtyFlag();
+                thisComponent.$_templatesManager.resetDirtyFlag();
             }
 
             return result;
@@ -187,12 +191,13 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
             options: { deep: boolean, skipImmediate: boolean }
         ) => any {
             return (valueGetter, valueChangeCallback, options) => {
+                const thisComponent = this as any as IBaseComponent;
                 options = options || {};
                 if (!options.skipImmediate) {
                     valueChangeCallback(valueGetter());
                 }
 
-                return this.$watch(() => {
+                return thisComponent.$watch(() => {
                     return valueGetter();
                 }, (newValue, oldValue) => {
                     if (toComparable(oldValue) !== toComparable(newValue) || options.deep) {
@@ -213,10 +218,11 @@ const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
         },
 
         $_createEmitters(instance: any): void {
-            Object.keys(this.$listeners).forEach((listenerName: string) => {
+            const thisComponent = this as any as IBaseComponent;
+            Object.keys(thisComponent.$listeners).forEach((listenerName: string) => {
                 const eventName = camelize(listenerName);
                 instance.on(eventName, (e: any) => {
-                    this.$emit(listenerName, e);
+                    thisComponent.$emit(listenerName, e);
                 });
             });
         }
@@ -243,7 +249,8 @@ function restoreNodes(el: Element, nodes: Element[]) {
     });
 }
 
-const DxComponent: VueConstructor = BaseComponent.extend({
+const DxComponent: VueConstructor = ComponentManager.create({
+    mixins: [BaseComponent],
     methods: {
         $_getExtraIntegrationOptions(): object {
             return {
@@ -270,7 +277,7 @@ const DxComponent: VueConstructor = BaseComponent.extend({
 
         restoreNodes(this.$el, nodes);
         if (this.$slots && this.$slots.default) {
-            this.$slots.default.forEach((child: VNode) => {
+            ComponentManager.getDefaultSlots(this).forEach((child: VNode) => {
                 const childExtension = child.componentInstance as any as IExtension;
                 if (childExtension && childExtension.$_isExtension) {
                     childExtension.attachTo(this.$el);
