@@ -1,6 +1,6 @@
 {
   "name": "devextreme-vue",
-  "version": "19.2.9",
+  "version": "20.1.4",
   "description": "DevExtreme Vue UI and Visualization Components",
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
     "serve": "webpack-dev-server",
     "test": "jest",
     "test-watch": "jest --watch",
-    "update-integration-meta": "dx-tools update-integration-meta --output-path ./tools/integration-data.json"
+    "update-integration-meta": "dx-tools update-integration-meta --output-path=./tools/integration-data.json"
   },
   "keywords": [
     "vue",
@@ -28,7 +28,7 @@
   "author": "Developer Express Inc.",
   "license": "MIT",
   "peerDependencies": {
-    "devextreme": "~19.2.9",
+    "devextreme": "~20.1.4",
     "vue": "^2.5.16"
   },
   "devDependencies": {
@@ -38,7 +38,7 @@
     "css-loader": "^2.1.1",
     "dasherize": "^2.0.0",
     "del": "^3.0.0",
-    "devextreme": "~19.2.9",
+    "devextreme": "~20.1.4",
     "devextreme-internal-tools": "stable",
     "dot": "^1.1.2",
     "gulp": "^4.0.0",
