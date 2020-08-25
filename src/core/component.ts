@@ -1,5 +1,8 @@
 import * as VueType from "vue";
 import IVue, { VNode, VueConstructor } from "vue";
+import * as mittType from "mitt";
+
+const mitt = mittType.default || mittType;
 
 import * as events from "devextreme/events";
 
@@ -43,7 +46,7 @@ const BaseComponent: VueConstructor<any> = ComponentManager.create({
 
     data() {
         return {
-            eventBus: new Vue()
+            eventBus: mitt()
         };
     },
 
@@ -101,7 +104,7 @@ const BaseComponent: VueConstructor<any> = ComponentManager.create({
         this.$_applyConfigurationChanges();
 
         this.$_instance.endUpdate();
-        this.eventBus.$emit("updated");
+        this.eventBus.emit("updated");
     },
 
     beforeDestroy(): void {

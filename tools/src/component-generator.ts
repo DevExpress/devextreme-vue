@@ -177,7 +177,7 @@ const renderComponent: (model: {
 `}` + `\n` +
 
 `const <#= it.component #> = ComponentManager.create({` +
-L1 + `mixins: [<#= it.baseComponent #>, BaseComponent],` +
+L1 + `mixins: [BaseComponent, <#= it.baseComponent #>],` +
 
 `<#? it.props #>` +
     L1 + `props: {\n` +
