@@ -1,5 +1,6 @@
 import { VueConstructor } from "vue";
-import { BaseComponent } from "./component";
+import { IBaseComponent } from "./component";
+import { ComponentManager } from "./vue-strategy/component-manager";
 
 interface IExtension {
     $_isExtension: boolean;
@@ -10,7 +11,7 @@ interface IExtensionComponentNode {
     $_hasOwner: boolean;
 }
 
-const DxExtensionComponent: VueConstructor = BaseComponent.extend({
+const DxExtensionComponent: VueConstructor = ComponentManager.create({
     created(): void {
         this.$_isExtension = true;
     },
@@ -24,7 +25,7 @@ const DxExtensionComponent: VueConstructor = BaseComponent.extend({
 
     methods: {
         attachTo(element: any) {
-            this.$_createWidget(element);
+            (this as any as IBaseComponent).$_createWidget(element);
         }
     }
 });

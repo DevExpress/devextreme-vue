@@ -18,4 +18,24 @@ export class vue2Strategy {
     getNamedTemplates(component) {
         return component.$scopedSlots;
     }
+
+    mount(options) {
+        return new Vue(options);
+    }
+    
+    destroy(component) {
+        return component.$destroy.bind(component);
+    }
+
+    getComponentOptions(component) {
+        return component.componentOptions
+    }
+    
+    getComponentCtor(component) {
+        return component.componentOptions && component.componentOptions.Ctor
+    }
+    
+    getVNodeProps(node) {
+        return node.componentOptions.propsData;
+    }
 }

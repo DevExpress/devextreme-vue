@@ -14,6 +14,7 @@ import {
     IEventBusHolder
 } from "./templates-discovering";
 import { TemplatesManager } from "./templates-manager";
+import { isVue3 } from "./vue-strategy/version";
 
 interface IWidgetComponent extends IConfigurable {
     $_instance: any;
@@ -52,9 +53,9 @@ const BaseComponent: VueConstructor<any> = ComponentManager.create({
         };
     },
 
-    render(createElement: (...args) => VNode): VNode {
+    render(h: (...args) => VNode): VNode {
         const children: VNode[] = [];
-
+        const createElement = isVue3() ? (Vue as any).h : h;
         if (this.$_config.cleanNested) {
             this.$_config.cleanNested();
         }
@@ -250,7 +251,7 @@ function restoreNodes(el: Element, nodes: Element[]) {
 }
 
 const DxComponent: VueConstructor = ComponentManager.create({
-    mixins: [BaseComponent],
+    
     methods: {
         $_getExtraIntegrationOptions(): object {
             return {

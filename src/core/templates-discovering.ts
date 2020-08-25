@@ -1,4 +1,3 @@
-import * as VueType from "vue";
 import IVue, { CreateElement } from "vue";
 import { ScopedSlot } from "vue/types/vnode";
 
@@ -7,7 +6,6 @@ import { TEMPLATE_MULTIPLE_ROOTS_ERROR } from "./errors";
 import { ComponentManager } from "./vue-strategy/component-manager";
 
 const TEMPLATE_PROP = "template";
-const Vue = VueType.default || VueType;
 
 interface IEventBusHolder {
     eventBus: IVue;
@@ -71,7 +69,7 @@ function mountTemplate(
     name: string,
     placeholder: Element
 ): IVue {
-    return new Vue({
+    return ComponentManager.mount({
         el: placeholder,
         name,
         inject: ["eventBus"],

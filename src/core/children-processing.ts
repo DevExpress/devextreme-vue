@@ -1,6 +1,7 @@
 import { VNode } from "vue";
 import Configuration from "./configuration";
 import { IConfigurable, IConfigurationComponent } from "./configuration-component";
+import { ComponentManager } from "./vue-strategy/component-manager";
 
 function pullAllChildren(directChildren: VNode[], allChildren: VNode[], config: Configuration): void {
     if (!directChildren || directChildren.length === 0) { return; }
@@ -14,12 +15,12 @@ function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Co
         nodes.push(node);
         if (!node.componentOptions) { return; }
 
-        const configComponent = node.componentOptions.Ctor as any as IConfigurationComponent;
+        const configComponent = ComponentManager.getComponentCtor(node) as any as IConfigurationComponent;
         if (!configComponent.$_optionName) { return; }
 
         const initialValues = {
             ...configComponent.$_predefinedProps,
-            ...node.componentOptions.propsData
+            ...ComponentManager.getVNodeProps(node)
         };
 
         const config = ownerConfig.createNested(
@@ -29,11 +30,11 @@ function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Co
             configComponent.$_expectedChildren
         );
 
-        (node.componentOptions as any as IConfigurable).$_config = config;
-        (node.componentOptions as any as IConfigurable).$_innerChanges = {};
+        (ComponentManager.getComponentOptions(node) as any as IConfigurable).$_config = config;
+        (ComponentManager.getComponentOptions(node) as any as IConfigurable).$_innerChanges = {};
 
-        if (node.componentOptions.children) {
-            pullConfigComponents(node.componentOptions.children as VNode[], nodes, config);
+        if (ComponentManager.getComponentOptions(node).children) {
+            pullConfigComponents(ComponentManager.getComponentOptions(node).children as VNode[], nodes, config);
         }
     });
 }

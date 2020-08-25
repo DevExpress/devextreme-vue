@@ -1,7 +1,5 @@
-import * as VueType from "vue";
 import IVue, { VNode, VueConstructor } from "vue";
-
-const Vue = VueType.default || VueType;
+import { ComponentManager } from "./vue-strategy/component-manager";
 
 import Configuration, { bindOptionWatchers, ExpectedChild, setEmitOptionChangedFunc } from "./configuration";
 
@@ -66,7 +64,7 @@ function getComponentInfo({name, isCollectionItem, ownerConfig }: Configuration,
     };
 }
 
-const DxConfiguration: VueConstructor = Vue.extend({
+const DxConfiguration: VueConstructor = ComponentManager.create({
     beforeMount() {
         const config = getConfig(this) as Configuration;
         const innerChanges = getInnerChanges(this);

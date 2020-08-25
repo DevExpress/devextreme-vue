@@ -10,6 +10,7 @@ import * as domAdapter from "devextreme/core/dom_adapter";
 import * as events from "devextreme/events";
 import { DX_REMOVE_EVENT, DX_TEMPLATE_WRAPPER_CLASS } from "./constants";
 import { allKeysAreEqual } from "./helpers";
+import { ComponentManager } from "./vue-strategy/component-manager";
 
 class TemplatesManager {
     private _component: IVue;
@@ -82,9 +83,9 @@ class TemplatesManager {
                     const removalListener = document.createElement(container.nodeName === "TABLE" ? "tbody" : "span");
                     removalListener.style.display = "none";
                     container.appendChild(removalListener);
-                    events.one(removalListener, DX_REMOVE_EVENT, mountedTemplate.$destroy.bind(mountedTemplate));
+                    events.one(removalListener, DX_REMOVE_EVENT, ComponentManager.destroy(mountedTemplate));
                 } else {
-                    events.one(element, DX_REMOVE_EVENT, mountedTemplate.$destroy.bind(mountedTemplate));
+                    events.one(element, DX_REMOVE_EVENT, ComponentManager.destroy(mountedTemplate));
                 }
 
                 return element;
