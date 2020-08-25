@@ -155,8 +155,8 @@ const renderComponent: (model: {
     defaultExport: string;
     namedExports: string[];
 }) => string = createTempate(
-`import * as VueType from "vue";\n` +
-`const Vue = VueType.default || VueType;\n` +
+`import { ComponentManager } from "./core/vue-strategy/component-manager";\n` +
+`import { BaseComponent } from "./core/component";\n` +
 `import <#= it.widgetImport.name #><#? it.props #>, { IOptions }<#?#> from "devextreme/<#= it.widgetImport.path #>";\n` +
 
 `<#~ it.namedImports :namedImport #>` +
@@ -176,8 +176,8 @@ const renderComponent: (model: {
     L1 + `readonly instance?: <#= it.widgetImport.name #>;` + `\n` +
 `}` + `\n` +
 
-`const <#= it.component #> = Vue.extend({` +
-L1 + `extends: <#= it.baseComponent #>,` +
+`const <#= it.component #> = ComponentManager.create({` +
+L1 + `mixins: [<#= it.baseComponent #>, BaseComponent],` +
 
 `<#? it.props #>` +
     L1 + `props: {\n` +
@@ -213,7 +213,7 @@ L0 + `});\n` +
 `<#? it.nestedComponents #>` +
     `\n` +
     `<#~ it.nestedComponents : nested #>` +
-        `const <#= nested.name #>: any = Vue.extend({` +
+        `const <#= nested.name #>: any = ComponentManager.create({` +
         L1 + `extends: <#= it.configComponent #>,` +
         L1 + `props: {\n` +
         `<#= nested.renderedProps #>` +
