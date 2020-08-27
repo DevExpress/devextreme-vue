@@ -3,29 +3,13 @@ const Vue = VueType.default || VueType;
 
 export class vue3Strategy {
     constructor() {}
-
-    getComponentOptions(component) {
-        return component.type;
-    }
-
-    getNestedComponentOptions(component) {
-        return component.type;
-    }
-    
-    getComponentData(component) {
-        return component.type.data && component.type.data();
-    }
-
-    getVNodeOptions(component) {
+    vNodeComponentOptions(component) {
         if(component.$) {
             return component.$.vnode.type;
         }
 
         return component.type;
     }
-
-
-    ////////////
 
     configurationChildren(component) {
         const configComponents = [];
@@ -45,6 +29,10 @@ export class vue3Strategy {
                 configComponents.push(child);
             }
         });
+    }
+
+    configurationOptions(component) {
+        return this.componentOptions(component);
     }
 
     componentOptions(component) {
@@ -84,7 +72,7 @@ export class vue3Strategy {
     }
 
     configurationProps(node) {
-        const options = this.getVNodeOptions(node);
+        const options = this.vNodeComponentOptions(node);
         if(!options && !options.props) {
             return {};
         }

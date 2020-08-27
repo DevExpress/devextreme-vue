@@ -1,5 +1,5 @@
 import { VueConstructor } from "vue";
-import { IBaseComponent } from "./component";
+import { IBaseComponent, BaseComponent } from "./component";
 import { ComponentManager } from "./vue-strategy/component-manager";
 
 interface IExtension {
@@ -12,13 +12,20 @@ interface IExtensionComponentNode {
 }
 
 const DxExtensionComponent: VueConstructor = ComponentManager.create({
+    extends: BaseComponent,
     created(): void {
-        this.$_isExtension = true;
+        const vNodeOptions = ComponentManager.vNodeComponentOptions(this);
+        if(vNodeOptions) {
+            vNodeOptions.$_isExtension = true;
+            vNodeOptions.$_componentInstance = this;
+        } else {
+            this.$_isExtension = true;
+        }
     },
 
     mounted() {
         this.$el.setAttribute("isExtension", "true");
-        const componentOptions = ComponentManager.getVNodeOptions(this);
+        const componentOptions = ComponentManager.vNodeComponentOptions(this);
         if (componentOptions && (componentOptions as any as IExtensionComponentNode).$_hasOwner) { return; }
 
         this.attachTo(this.$el);

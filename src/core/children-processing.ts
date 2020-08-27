@@ -15,7 +15,7 @@ function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Co
         nodes.push(node);
         if (!ComponentManager.componentOptions(node)) { return; }
 
-        const configComponent = ComponentManager.getNestedComponentOptions(node) as any as IConfigurationComponent;
+        const configComponent = ComponentManager.configurationOptions(node) as any as IConfigurationComponent;
         if (!configComponent.$_optionName ) { return; }
 
         const componentChildren = ComponentManager.configurationChildren(node);
@@ -31,8 +31,8 @@ function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Co
             configComponent.$_expectedChildren
         );
 
-        (ComponentManager.getComponentOptions(node) as any as IConfigurable).$_config = config;
-        (ComponentManager.getComponentOptions(node) as any as IConfigurable).$_innerChanges = {};
+        (ComponentManager.componentOptions(node) as any as IConfigurable).$_config = config;
+        (ComponentManager.componentOptions(node) as any as IConfigurable).$_innerChanges = {};
 
         if (componentChildren) {
             pullConfigComponents(componentChildren as VNode[], nodes, config);

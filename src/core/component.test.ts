@@ -1,5 +1,5 @@
 import * as VueType from "vue";
-import { DxComponent, IWidgetComponent, BaseComponent } from "../core/component";
+import { DxComponent, IWidgetComponent } from "../core/component";
 import { DxConfiguration, IConfigurable, IConfigurationComponent } from "../core/configuration-component";
 import { DxExtensionComponent } from "../core/extension-component";
 
@@ -36,7 +36,7 @@ function createWidget(_, options) {
 const WidgetClass = jest.fn(createWidget);
 
 const TestComponent = Vue.extend({
-    mixins: [BaseComponent, DxComponent],
+    extends: DxComponent,
     beforeCreate() {
         (this as any as IWidgetComponent).$_WidgetClass = WidgetClass;
     },
@@ -539,7 +539,7 @@ describe("configuration", () => {
             const expected = {};
 
             const WidgetComponent = Vue.extend({
-                mixins: [BaseComponent, DxComponent],
+                extends: DxComponent,
                 beforeCreate() {
                     (this as any as IWidgetComponent).$_WidgetClass = WidgetClass;
                     (this as any as IWidgetComponent).$_expectedChildren = expected;
@@ -1804,7 +1804,7 @@ describe("events emitting", () => {
 describe("extension component", () => {
     const ExtensionWidgetClass = jest.fn(createWidget);
     const TestExtensionComponent = Vue.extend({
-        mixins: [BaseComponent, DxExtensionComponent],
+        extends: DxExtensionComponent,
         beforeCreate() {
             (this as any as IWidgetComponent).$_WidgetClass = ExtensionWidgetClass;
         }

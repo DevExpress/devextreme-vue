@@ -29,7 +29,7 @@ interface IComponentInfo {
 }
 
 function getConfig(vueInstance: Pick<IVue, "$vnode">): Configuration | undefined {
-    const componentOptions = (ComponentManager.getVNodeOptions(vueInstance) as any as IConfigurable);
+    const componentOptions = (ComponentManager.vNodeComponentOptions(vueInstance) as any as IConfigurable);
     if (!componentOptions) {
         return;
     }
@@ -38,7 +38,7 @@ function getConfig(vueInstance: Pick<IVue, "$vnode">): Configuration | undefined
 }
 
 function getInnerChanges(vueInstance: Pick<IVue, "$vnode">): any {
-    const componentOptions = (ComponentManager.getVNodeOptions(vueInstance) as any as IConfigurable);
+    const componentOptions = (ComponentManager.vNodeComponentOptions(vueInstance) as any as IConfigurable);
     if (!componentOptions) {
         return;
     }
@@ -50,7 +50,7 @@ function initOptionChangedFunc(config, vueInstance: Pick<IVue, "$vnode" | "$prop
     if (!config) {
         return;
     }
-    
+
     config.init(Object.keys(ComponentManager.configurationProps(vueInstance)));
     setEmitOptionChangedFunc(config, vueInstance, innerChanges);
 }
@@ -88,7 +88,8 @@ const DxConfiguration: VueConstructor = ComponentManager.create({
 
     render(h: (...args) => VNode): VNode {
         const createElement = isVue3() ? (Vue as any).h : h;
-        return createElement();
+        const element = isVue3() ? "div" : "";
+        return createElement(element);
     }
 });
 

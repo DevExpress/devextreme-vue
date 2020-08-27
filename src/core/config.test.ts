@@ -1,5 +1,5 @@
 import * as VueType from "vue";
-import { DxComponent, IWidgetComponent, BaseComponent } from "../core/component";
+import { DxComponent, IWidgetComponent } from "../core/component";
 import config, { getOption } from "../core/config";
 
 const Vue = VueType.default || VueType;
@@ -16,7 +16,7 @@ const Widget = {
 const WidgetClass = jest.fn(() => Widget);
 
 const TestComponent = Vue.extend({
-    mixins: [BaseComponent, DxComponent],
+    extends: DxComponent,
     beforeCreate() {
         (this as any as IWidgetComponent).$_WidgetClass = WidgetClass;
     }

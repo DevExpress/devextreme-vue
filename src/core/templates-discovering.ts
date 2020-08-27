@@ -13,7 +13,7 @@ interface IEventBusHolder {
 }
 
 function asConfigurable(component: IVue): IConfigurable | undefined {
-    const componentOptions = (ComponentManager.getVNodeOptions(component) as any as IConfigurable);
+    const componentOptions = (ComponentManager.vNodeComponentOptions(component) as any as IConfigurable);
     if (!componentOptions) {
         return;
     }
@@ -65,7 +65,7 @@ function discover(component: IVue): Record<string, ScopedSlot> {
 function clearConfiguration(content: any[]) {
     let newContent: any[] = [];
     content.forEach(item => {
-        const configurable = ComponentManager.getVNodeOptions(item);
+        const configurable = ComponentManager.vNodeComponentOptions(item);
         if(!configurable || !configurable.$_optionName) {
             newContent.push(item);
         }

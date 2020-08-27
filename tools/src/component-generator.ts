@@ -35,6 +35,7 @@ interface INestedComponentModel {
     name: string;
     optionName: string;
     renderedProps?: string;
+    props?: string[];
     isCollectionItem: boolean;
     predefinedProps: Array<{
         name: string;
@@ -124,6 +125,7 @@ function createNestedComponentModel(component: INestedComponent): INestedCompone
         renderedProps: component.props
             ? renderProps(component.props)
             : undefined,
+        props: component.props ? getPropsList(component.props) : undefined,
         isCollectionItem: component.isCollectionItem,
         expectedChildren: formatExpectedChildren(component.expectedChildren),
         predefinedProps
@@ -156,7 +158,6 @@ const renderComponent: (model: {
     namedExports: string[];
 }) => string = createTempate(
 `import { ComponentManager } from "./core/vue-strategy/component-manager";\n` +
-`import { BaseComponent } from "./core/component";\n` +
 `import <#= it.widgetImport.name #><#? it.props #>, { IOptions }<#?#> from "devextreme/<#= it.widgetImport.path #>";\n` +
 
 `<#~ it.namedImports :namedImport #>` +
@@ -177,11 +178,21 @@ const renderComponent: (model: {
 `}` + `\n` +
 
 `const <#= it.component #> = ComponentManager.create({` +
-L1 + `mixins: [BaseComponent, <#= it.baseComponent #>],` +
+L1 + `extends: <#= it.baseComponent #>,` +
 
 `<#? it.props #>` +
     L1 + `props: {\n` +
     `<#= it.renderedProps #>` +
+    L1 + `},` +
+`<#?#>` +
+
+`<#? it.props #>` +
+    L1 + `emits: {\n` +
+        L1 + `"update:isActive": null,` +
+        L1 + `"update:hoveredElement": null,` +
+    `<#~ it.props: prop #>` +
+        L1 + `"update:<#= prop.name #>": null,` +
+    `<#~#>` +
     L1 + `},` +
 `<#?#>` +
 
@@ -215,6 +226,16 @@ L0 + `});\n` +
     `<#~ it.nestedComponents : nested #>` +
         `const <#= nested.name #>: any = ComponentManager.create({` +
         L1 + `extends: <#= it.configComponent #>,` +
+        L1 + `$_dx: {},` +
+        `<#? nested.props #>` +
+        L1 + `emits: {\n` +
+                L1 + `"update:isActive": null,` +
+                L1 + `"update:hoveredElement": null,` +
+            `<#~ nested.props: prop #>` +
+                L1 + `"update:<#= prop #>": null,` +
+            `<#~#>` +
+            L1 + `},` +
+        `<#?#>` +
         L1 + `props: {\n` +
         `<#= nested.renderedProps #>` +
         L1 + `}\n` +
@@ -265,6 +286,12 @@ function compareImports(a: IImport, b: IImport): number {
     if (!a.path.startsWith(".") && b.path.startsWith(".")) { return -1; }
 
     return compareStrings(a.path, b.path);
+}
+
+function getPropsList(props: IProp[]) {
+    return props.map(item => {
+        return item.name;
+    });
 }
 
 function renderProps(props: IProp[]): string {

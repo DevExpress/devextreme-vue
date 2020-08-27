@@ -135,7 +135,7 @@ const BaseComponent: VueConstructor<any> = ComponentManager.create({
 
             const config = thisComponent.$_config;
             const options: object = {
-                ...thisComponent.$options.propsData,
+                ...ComponentManager.usedProps(thisComponent),
                 ...config.initialValues,
                 ...config.getNestedOptionValues(),
                 ...this.$_getIntegrationOptions()
@@ -240,7 +240,7 @@ function restoreNodes(el: Element, nodes: Element[]) {
 }
 
 const DxComponent: VueConstructor = ComponentManager.create({
-    
+    extends: BaseComponent,
     methods: {
         $_getExtraIntegrationOptions(): object {
             return {
@@ -252,7 +252,7 @@ const DxComponent: VueConstructor = ComponentManager.create({
 
         $_processChildren(children: VNode[]): void {
             children.forEach((childNode: VNode) => {
-                const componentOptions = ComponentManager.getComponentOptions(childNode);
+                const componentOptions = ComponentManager.componentOptions(childNode);
                 if (!componentOptions || typeof componentOptions !== 'object') { return; }
 
                 (componentOptions as any as IExtensionComponentNode).$_hasOwner = true;
@@ -269,9 +269,9 @@ const DxComponent: VueConstructor = ComponentManager.create({
         restoreNodes(this.$el, nodes);
         if (this.$slots && this.$slots.default) {
             ComponentManager.defaultSlots(this).forEach((child: VNode) => {
-                const childExtension = child.componentInstance as any as IExtension;
+                const childExtension = ComponentManager.vNodeComponentOptions(child) as any || child.componentInstance as any as IExtension;
                 if (childExtension && childExtension.$_isExtension) {
-                    childExtension.attachTo(this.$el);
+                    childExtension.$_componentInstance.attachTo(this.$el);
                 }
             });
         }
