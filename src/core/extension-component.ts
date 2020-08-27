@@ -18,7 +18,8 @@ const DxExtensionComponent: VueConstructor = ComponentManager.create({
 
     mounted() {
         this.$el.setAttribute("isExtension", "true");
-        if (this.$vnode && (this.$vnode.componentOptions as any as IExtensionComponentNode).$_hasOwner) { return; }
+        const componentOptions = ComponentManager.getVNodeOptions(this);
+        if (componentOptions && (componentOptions as any as IExtensionComponentNode).$_hasOwner) { return; }
 
         this.attachTo(this.$el);
     },

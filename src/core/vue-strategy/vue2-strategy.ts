@@ -3,20 +3,55 @@ const Vue = VueType.default || VueType;
 
 export class vue2Strategy {
     constructor() {}
-    create(config) {
-        return Vue.extend(config);
+
+    getComponentOptions(component) {
+        return component.componentOptions
     }
-    getProps(component) {
-        return component.$options.propsData;
+    
+    getNestedComponentOptions(component) {
+        return component.componentOptions && component.componentOptions.Ctor
     }
-    getDefaultSlots(component) {
-        if(!component.$slots.default) {
+
+    getVNode(component) {
+        return component.$vnode;
+    }
+
+    getVNodeOptions(component) {
+        if(!component.$vnode) {
             return;
         }
-        return component.$slots.default;
+        return component.$vnode.componentOptions;
     }
-    getNamedTemplates(component) {
-        return component.$scopedSlots;
+
+    ///////
+    configurationChildren(component) {
+        const configComponents = [];
+        const children = component.componentOptions.children;
+        if(!children) {
+            return;
+        }
+        this.findConfigurationComponents(component.componentOptions.children, configComponents);
+        return configComponents;
+    }
+
+    findConfigurationComponents(allCildren, configComponents) {
+        allCildren.forEach(child => {
+            if(child.componentOptions) {
+                configComponents.push(child);
+            }
+        });
+    }
+
+    componentOptions(component) {
+        return component.componentOptions
+    }
+
+    usedConfigurationProps(node) {
+        return node.componentOptions.propsData;
+    }
+
+    create(config) {
+        return Vue.extend(config);
     }
 
     mount(options) {
@@ -27,15 +62,34 @@ export class vue2Strategy {
         return component.$destroy.bind(component);
     }
 
-    getComponentOptions(component) {
-        return component.componentOptions
+    usedProps(component) {
+        return component.$options.propsData;
     }
-    
-    getComponentCtor(component) {
-        return component.componentOptions && component.componentOptions.Ctor
+
+    defaultSlots(component) {
+        if(!component.$slots.default) {
+            return;
+        }
+        return component.$slots.default;
     }
-    
-    getVNodeProps(node) {
-        return node.componentOptions.propsData;
+
+    declaredTemplates(component) {
+        return component.$scopedSlots
+    }
+
+    configurationProps(node) {
+        return node.$props;
+    }
+
+    configurationTemplate(component) {
+        return component.$vnode.data && component.$vnode.data.scopedSlots;
+    }
+
+    configurationDefaultTemplate(component) {
+        return component.$scopedSlots && component.$scopedSlots.default;
+    }
+
+    children(component) {
+        return component.$children;
     }
 }

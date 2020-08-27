@@ -1,7 +1,11 @@
+import * as VueType from "vue";
 import IVue, { VNode, VueConstructor } from "vue";
 import { ComponentManager } from "./vue-strategy/component-manager";
+import { isVue3 } from "./vue-strategy/version";
 
 import Configuration, { bindOptionWatchers, ExpectedChild, setEmitOptionChangedFunc } from "./configuration";
+
+const Vue = VueType.default || VueType;
 
 interface IConfigurationOwner {
     $_expectedChildren: Record<string, ExpectedChild>;
@@ -25,31 +29,29 @@ interface IComponentInfo {
 }
 
 function getConfig(vueInstance: Pick<IVue, "$vnode">): Configuration | undefined {
-    if (!vueInstance.$vnode) {
+    const componentOptions = (ComponentManager.getVNodeOptions(vueInstance) as any as IConfigurable);
+    if (!componentOptions) {
         return;
     }
 
-    const componentOptions = (vueInstance.$vnode.componentOptions as any as IConfigurable);
-
-    return componentOptions && componentOptions.$_config;
+    return componentOptions.$_config;
 }
 
 function getInnerChanges(vueInstance: Pick<IVue, "$vnode">): any {
-    if (!vueInstance.$vnode) {
+    const componentOptions = (ComponentManager.getVNodeOptions(vueInstance) as any as IConfigurable);
+    if (!componentOptions) {
         return;
     }
 
-    const componentOptions = (vueInstance.$vnode.componentOptions as any as IConfigurable);
-
-    return componentOptions && componentOptions.$_innerChanges;
+    return componentOptions.$_innerChanges;
 }
 
 function initOptionChangedFunc(config, vueInstance: Pick<IVue, "$vnode" | "$props" | "$emit">, innerChanges: any) {
     if (!config) {
         return;
     }
-
-    config.init(Object.keys(vueInstance.$props));
+    
+    config.init(Object.keys(ComponentManager.configurationProps(vueInstance)));
     setEmitOptionChangedFunc(config, vueInstance, innerChanges);
 }
 
@@ -84,7 +86,8 @@ const DxConfiguration: VueConstructor = ComponentManager.create({
             .push(getComponentInfo(getConfig(this) as Configuration, true));
     },
 
-    render(createElement: (...args) => VNode): VNode {
+    render(h: (...args) => VNode): VNode {
+        const createElement = isVue3() ? (Vue as any).h : h;
         return createElement();
     }
 });

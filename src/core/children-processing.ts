@@ -13,14 +13,15 @@ function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Co
 
     children.forEach((node) => {
         nodes.push(node);
-        if (!node.componentOptions) { return; }
+        if (!ComponentManager.componentOptions(node)) { return; }
 
-        const configComponent = ComponentManager.getComponentCtor(node) as any as IConfigurationComponent;
-        if (!configComponent.$_optionName) { return; }
+        const configComponent = ComponentManager.getNestedComponentOptions(node) as any as IConfigurationComponent;
+        if (!configComponent.$_optionName ) { return; }
 
+        const componentChildren = ComponentManager.configurationChildren(node);
         const initialValues = {
             ...configComponent.$_predefinedProps,
-            ...ComponentManager.getVNodeProps(node)
+            ...ComponentManager.usedConfigurationProps(node)
         };
 
         const config = ownerConfig.createNested(
@@ -33,8 +34,8 @@ function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Co
         (ComponentManager.getComponentOptions(node) as any as IConfigurable).$_config = config;
         (ComponentManager.getComponentOptions(node) as any as IConfigurable).$_innerChanges = {};
 
-        if (ComponentManager.getComponentOptions(node).children) {
-            pullConfigComponents(ComponentManager.getComponentOptions(node).children as VNode[], nodes, config);
+        if (componentChildren) {
+            pullConfigComponents(componentChildren as VNode[], nodes, config);
         }
     });
 }

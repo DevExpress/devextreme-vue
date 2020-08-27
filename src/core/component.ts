@@ -1,8 +1,5 @@
 import * as VueType from "vue";
 import IVue, { VNode, VueConstructor } from "vue";
-import * as mittType from "mitt";
-
-const mitt = mittType.default || mittType;
 
 import * as events from "devextreme/events";
 
@@ -44,25 +41,13 @@ const BaseComponent: VueConstructor<any> = ComponentManager.create({
 
     inheritAttrs: false,
 
-    data() {
-        return {
-            eventBus: mitt()
-        };
-    },
-
-    provide() {
-        return {
-            eventBus: this.eventBus
-        };
-    },
-
     render(h: (...args) => VNode): VNode {
         const children: VNode[] = [];
         const createElement = isVue3() ? (Vue as any).h : h;
         if (this.$_config.cleanNested) {
             this.$_config.cleanNested();
         }
-        pullAllChildren(ComponentManager.getDefaultSlots(this), children, this.$_config);
+        pullAllChildren(ComponentManager.defaultSlots(this), children, this.$_config);
 
         this.$_processChildren(children);
         return createElement(
@@ -79,7 +64,7 @@ const BaseComponent: VueConstructor<any> = ComponentManager.create({
     },
 
     updated() {
-        this.$children.forEach((child: IVue) => initOptionChangedFunc(getConfig(child), child, getInnerChanges(child)));
+        ComponentManager.children(this).forEach((child: IVue) => initOptionChangedFunc(getConfig(child), child, getInnerChanges(child)));
         this.$_templatesManager.discover();
 
         this.$_instance.beginUpdate();
@@ -104,7 +89,6 @@ const BaseComponent: VueConstructor<any> = ComponentManager.create({
         this.$_applyConfigurationChanges();
 
         this.$_instance.endUpdate();
-        this.eventBus.emit("updated");
     },
 
     beforeDestroy(): void {
@@ -116,7 +100,7 @@ const BaseComponent: VueConstructor<any> = ComponentManager.create({
     },
 
     created(): void {
-        const props = ComponentManager.getProps(this);
+        const props = ComponentManager.usedProps(this);
         (this as IBaseComponent).$_config = new Configuration(
             (n: string, v: any) => this.$_pendingOptions[n] = v,
             null,
@@ -223,12 +207,14 @@ const BaseComponent: VueConstructor<any> = ComponentManager.create({
 
         $_createEmitters(instance: any): void {
             const thisComponent = this as any as IBaseComponent;
-            Object.keys(thisComponent.$listeners).forEach((listenerName: string) => {
-                const eventName = camelize(listenerName);
-                instance.on(eventName, (e: any) => {
-                    thisComponent.$emit(listenerName, e);
+            if(thisComponent.$listeners) {
+                Object.keys(thisComponent.$listeners).forEach((listenerName: string) => {
+                    const eventName = camelize(listenerName);
+                    instance.on(eventName, (e: any) => {
+                        thisComponent.$emit(listenerName, e);
+                    });
                 });
-            });
+            }
         }
     }
 });
@@ -266,9 +252,10 @@ const DxComponent: VueConstructor = ComponentManager.create({
 
         $_processChildren(children: VNode[]): void {
             children.forEach((childNode: VNode) => {
-                if (!childNode.componentOptions) { return; }
+                const componentOptions = ComponentManager.getComponentOptions(childNode);
+                if (!componentOptions || typeof componentOptions !== 'object') { return; }
 
-                (childNode.componentOptions as any as IExtensionComponentNode).$_hasOwner = true;
+                (componentOptions as any as IExtensionComponentNode).$_hasOwner = true;
             });
         },
     },
@@ -281,7 +268,7 @@ const DxComponent: VueConstructor = ComponentManager.create({
 
         restoreNodes(this.$el, nodes);
         if (this.$slots && this.$slots.default) {
-            ComponentManager.getDefaultSlots(this).forEach((child: VNode) => {
+            ComponentManager.defaultSlots(this).forEach((child: VNode) => {
                 const childExtension = child.componentInstance as any as IExtension;
                 if (childExtension && childExtension.$_isExtension) {
                     childExtension.attachTo(this.$el);

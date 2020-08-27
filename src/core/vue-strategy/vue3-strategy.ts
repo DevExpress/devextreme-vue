@@ -3,20 +3,64 @@ const Vue = VueType.default || VueType;
 
 export class vue3Strategy {
     constructor() {}
-    create(config) {
-        return (Vue as any).defineComponent(config);
+
+    getComponentOptions(component) {
+        return component.type;
     }
-    getProps(component) {
-        return component.$.vnode.props;
+
+    getNestedComponentOptions(component) {
+        return component.type;
     }
-    getDefaultSlots(component) {
-        if(!component.$slots.default) {
+    
+    getComponentData(component) {
+        return component.type.data && component.type.data();
+    }
+
+    getVNodeOptions(component) {
+        if(component.$) {
+            return component.$.vnode.type;
+        }
+
+        return component.type;
+    }
+
+
+    ////////////
+
+    configurationChildren(component) {
+        const configComponents = [];
+        if(!component.children) {
             return;
         }
-        return component.$slots.default();
+        this.findConfigurationComponents(component.children.default(), configComponents);
+        return configComponents;
     }
-    getNamedTemplates(component) {
-        return component.$slots;
+
+    findConfigurationComponents(allCildren, configComponents) {
+        allCildren.forEach(child => {
+            if(child.type && typeof child.type === "object") {
+                child.type = {...child.type};
+                delete child.type.$_config;
+                delete child.type.$_innerChanges;
+                configComponents.push(child);
+            }
+        });
+    }
+
+    componentOptions(component) {
+        return component.type;
+    }
+
+    usedProps(component) {
+        return component.$.vnode.props;
+    }
+
+    usedConfigurationProps(node) {
+        return node.props;
+    }
+
+    create(config) {
+        return (Vue as any).defineComponent(config);
     }
 
     mount(options) {
@@ -27,15 +71,72 @@ export class vue3Strategy {
         return component.$.appContext.app.unmount.bind(component);
     }
 
-    getComponentOptions(component) {
-        return component.type;
+    defaultSlots(component) {
+        const templates = this.declaredTemplates(component);
+        if(!templates.default) {
+            return;
+        }
+        return templates.default();
     }
-    
-    getComponentData(component) {
-        return component.type.data && component.type.data();
+
+    declaredTemplates(component) {
+        return component.$slots;
     }
-    
-    getNodeProps(node) {
-        return node.props;
+
+    configurationProps(node) {
+        const options = this.getVNodeOptions(node);
+        if(!options && !options.props) {
+            return {};
+        }
+        return options.props;
+    }
+
+    configurationTemplate(node) {
+        return this.configurationDefaultTemplate(node);
+    }
+
+    configurationDefaultTemplate(node) {
+        if(!node.children || node.children === "object" || !node.children.default) {
+            return;
+        }
+        this.hasInlineTemplate(node.children.default());
+
+        return this.hasInlineTemplate(node.children.default()) ? node.children.default : null;
+    }
+
+    hasInlineTemplate(allCildren) {
+        let hasTemplate = false;
+        allCildren.forEach(child => {
+            if(!(child.type && typeof child.type === "object" && child.type.$_optionName)) {
+                hasTemplate = true;
+            }
+        });
+        return hasTemplate;
+    }
+
+    children(component) {
+        const allChildren = [];
+        if(!this.hasChildren(component)) {
+            return allChildren;
+        }
+        this.getVNodeChildren(component.$.vnode.children.default(), allChildren, component.$_config.nested);
+        return allChildren;
+    }
+
+    getVNodeChildren(children, allChildren, nested) {
+        children.forEach((child, index) => {
+            if(child.type && typeof child.type === "object") {
+                child.type = {...child.type};
+                child.type.$_config = nested[index];
+                allChildren.push(child);
+                if(child.children && child.children.default) {
+                    this.getVNodeChildren(child.children.default(), allChildren, nested[index].nested);
+                }
+            }
+        });
+    }
+
+    hasChildren(component) {
+        return component.$.vnode && component.$.vnode.children && component.$.vnode.children.default
     }
 }

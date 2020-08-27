@@ -13,25 +13,24 @@ interface IEventBusHolder {
 }
 
 function asConfigurable(component: IVue): IConfigurable | undefined {
-    if (!component.$vnode) {
+    const componentOptions = (ComponentManager.getVNodeOptions(component) as any as IConfigurable);
+    if (!componentOptions) {
+        return;
+    }
+    if (!componentOptions.$_config || !componentOptions.$_config.name) {
         return undefined;
     }
 
-    const configurable = component.$vnode.componentOptions as any as IConfigurable;
-    if (!configurable.$_config || !configurable.$_config.name) {
-        return undefined;
-    }
-
-    return configurable;
+    return componentOptions;
 }
 
 function hasTemplate(component: IVue) {
-    return TEMPLATE_PROP in component.$props && (component.$vnode.data && component.$vnode.data.scopedSlots);
+    return TEMPLATE_PROP in ComponentManager.configurationProps(component) && ComponentManager.configurationTemplate(component);
 }
 
 function discover(component: IVue): Record<string, ScopedSlot> {
     const templates: Record<string, ScopedSlot> = {};
-    const namedTeplates = ComponentManager.getNamedTemplates(component);
+    const namedTeplates = ComponentManager.declaredTemplates(component);
     for (const slotName in namedTeplates) {
         if (slotName === "default" && component.$slots.default) {
             continue;
@@ -44,14 +43,14 @@ function discover(component: IVue): Record<string, ScopedSlot> {
 
         templates[slotName] = slot;
     }
-
-    for (const childComponent of component.$children) {
+    const componentChildren = ComponentManager.children(component);
+    for (const childComponent of componentChildren) {
         const configurable = asConfigurable(childComponent);
         if (!configurable) {
             continue;
         }
 
-        const defaultSlot = ComponentManager.getNamedTemplates(childComponent).default;
+        const defaultSlot = ComponentManager.configurationDefaultTemplate(childComponent);
         if (!defaultSlot || !hasTemplate(childComponent)) {
             continue;
         }
@@ -63,8 +62,15 @@ function discover(component: IVue): Record<string, ScopedSlot> {
     return templates;
 }
 
-function updateHandler(this: IVue & IEventBusHolder) {
-    this.$forceUpdate();
+function clearConfiguration(content: any[]) {
+    let newContent: any[] = [];
+    content.forEach(item => {
+        const configurable = ComponentManager.getVNodeOptions(item);
+        if(!configurable || !configurable.$_optionName) {
+            newContent.push(item);
+        }
+    });
+    return newContent;
 }
 
 function mountTemplate(
@@ -77,26 +83,17 @@ function mountTemplate(
     return ComponentManager.mount({
         el: placeholder,
         name,
-        inject: ["eventBus"],
         parent,
-        created(this: IVue & IEventBusHolder) {
-            this.eventBus.on("updated", updateHandler.bind(this));
-        },
         render: (createElement: CreateElement) => {
-            const content = getSlot()(data) as any;
+            const content = clearConfiguration(getSlot()(data) as any);
             if (!content) {
                 return createElement("div");
             }
-
             if (content.length > 1) {
                 throw new Error(TEMPLATE_MULTIPLE_ROOTS_ERROR);
             }
 
             return content[0];
-        },
-        destroyed() {
-            // T857821
-            (this as IEventBusHolder).eventBus.off("updated", updateHandler);
         }
     });
 }
