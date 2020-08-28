@@ -157,12 +157,11 @@ const renderComponent: (model: {
     defaultExport: string;
     namedExports: string[];
 }) => string = createTempate(
-`import { ComponentManager } from "./core/vue-strategy/component-manager";\n` +
 `import <#= it.widgetImport.name #><#? it.props #>, { IOptions }<#?#> from "devextreme/<#= it.widgetImport.path #>";\n` +
-
 `<#~ it.namedImports :namedImport #>` +
 `import { <#= namedImport.name #> } from "<#= namedImport.path #>";\n` +
-`<#~#>` + `\n` +
+`<#~#>` +
+`import { vueContext } from "./core/vue-strategy/component-manager";\n` + `\n` +
 
 `<#? it.props #>` +
     `type AccessibleOptions = Pick<IOptions,` +
@@ -177,7 +176,7 @@ const renderComponent: (model: {
     L1 + `readonly instance?: <#= it.widgetImport.name #>;` + `\n` +
 `}` + `\n` +
 
-`const <#= it.component #> = ComponentManager.create({` +
+`const <#= it.component #> = vueContext.create({` +
 L1 + `extends: <#= it.baseComponent #>,` +
 
 `<#? it.props #>` +
@@ -187,11 +186,11 @@ L1 + `extends: <#= it.baseComponent #>,` +
 `<#?#>` +
 
 `<#? it.props #>` +
-    L1 + `emits: {\n` +
-        L1 + `"update:isActive": null,` +
-        L1 + `"update:hoveredElement": null,` +
+    L1 + `emits: {` +
+        L2 + `"update:isActive": null,` +
+        L2 + `"update:hoveredElement": null,` +
     `<#~ it.props: prop #>` +
-        L1 + `"update:<#= prop.name #>": null,` +
+        L2 + `"update:<#= prop.name #>": null,` +
     `<#~#>` +
     L1 + `},` +
 `<#?#>` +
@@ -224,14 +223,14 @@ L0 + `});\n` +
 `<#? it.nestedComponents #>` +
     `\n` +
     `<#~ it.nestedComponents : nested #>` +
-        `const <#= nested.name #>: any = ComponentManager.create({` +
+        `const <#= nested.name #>: any = vueContext.create({` +
         L1 + `extends: <#= it.configComponent #>,` +
         `<#? nested.props #>` +
-        L1 + `emits: {\n` +
-                L1 + `"update:isActive": null,` +
-                L1 + `"update:hoveredElement": null,` +
+        L1 + `emits: {` +
+                L2 + `"update:isActive": null,` +
+                L2 + `"update:hoveredElement": null,` +
             `<#~ nested.props: prop #>` +
-                L1 + `"update:<#= prop #>": null,` +
+                L2 + `"update:<#= prop #>": null,` +
             `<#~#>` +
             L1 + `},` +
         `<#?#>` +
@@ -288,7 +287,7 @@ function compareImports(a: IImport, b: IImport): number {
 }
 
 function getPropsList(props: IProp[]) {
-    return props.map(item => {
+    return props.map((item) => {
         return item.name;
     });
 }

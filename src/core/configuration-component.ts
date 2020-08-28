@@ -1,5 +1,5 @@
 import IVue, { VNode, VueConstructor } from "vue";
-import { ComponentManager } from "./vue-strategy/component-manager";
+import { vueContext } from "./vue-strategy/component-manager";
 import { isVue3 } from "./vue-strategy/version";
 
 import Configuration, { bindOptionWatchers, ExpectedChild, setEmitOptionChangedFunc } from "./configuration";
@@ -26,7 +26,7 @@ interface IComponentInfo {
 }
 
 function getConfig(vueInstance: Pick<IVue, "$vnode"> | VNode): Configuration | undefined {
-    const componentOptions = (ComponentManager.vNodeComponentOptions(vueInstance, false) as any as IConfigurable);
+    const componentOptions = (vueContext.vNodeComponentOptions(vueInstance, false) as any as IConfigurable);
     if (!componentOptions) {
         return;
     }
@@ -35,7 +35,7 @@ function getConfig(vueInstance: Pick<IVue, "$vnode"> | VNode): Configuration | u
 }
 
 function getInnerChanges(vueInstance: any): any {
-    const componentOptions = (ComponentManager.vNodeComponentOptions(vueInstance, false) as any as IConfigurable);
+    const componentOptions = (vueContext.vNodeComponentOptions(vueInstance, false) as any as IConfigurable);
     if (!componentOptions) {
         return;
     }
@@ -43,13 +43,18 @@ function getInnerChanges(vueInstance: any): any {
     return componentOptions.$_innerChanges || (vueInstance as any).$_innerChanges;
 }
 
+function getVueInstance(component) {
+    const type = component.type;
+    return type && type.$_componentInstance ? type.$_componentInstance : component;
+}
+
 function initOptionChangedFunc(config, component: Pick<IVue, "$vnode" | "$props" | "$emit"> | any, innerChanges: any) {
     if (!config) {
         return;
     }
 
-    config.init(Object.keys(ComponentManager.configurationProps(component)));
-    const vueInstance = component.type && component.type.$_componentInstance ? component.type.$_componentInstance : component;
+    config.init(Object.keys(vueContext.configurationProps(component)));
+    const vueInstance = getVueInstance(component);
     setEmitOptionChangedFunc(config, vueInstance, innerChanges);
 }
 
@@ -64,10 +69,10 @@ function getComponentInfo({name, isCollectionItem, ownerConfig }: Configuration,
     };
 }
 
-const DxConfiguration: VueConstructor = ComponentManager.create({
+const DxConfiguration: VueConstructor = vueContext.create({
     updated() {
-        const vNodeOptions = ComponentManager.vNodeComponentOptions(this, false);
-        if(vNodeOptions && vNodeOptions.type) {
+        const vNodeOptions = vueContext.vNodeComponentOptions(this, false);
+        if (vNodeOptions && vNodeOptions.type) {
             vNodeOptions.type.$_componentInstance = this;
         }
     },

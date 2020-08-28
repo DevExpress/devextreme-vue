@@ -1,7 +1,7 @@
 import { VNode } from "vue";
 import Configuration from "./configuration";
 import { IConfigurationComponent } from "./configuration-component";
-import { ComponentManager } from "./vue-strategy/component-manager";
+import { vueContext } from "./vue-strategy/component-manager";
 
 function pullAllChildren(directChildren: VNode[], allChildren: VNode[], config: Configuration): void {
     if (!directChildren || directChildren.length === 0) { return; }
@@ -13,15 +13,15 @@ function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Co
 
     children.forEach((node) => {
         nodes.push(node);
-        if (!ComponentManager.componentOptions(node)) { return; }
+        if (!vueContext.componentOptions(node)) { return; }
 
-        const configComponent = ComponentManager.configurationOptions(node) as any as IConfigurationComponent;
+        const configComponent = vueContext.configurationOptions(node) as any as IConfigurationComponent;
         if (!configComponent.$_optionName ) { return; }
 
-        const componentChildren = ComponentManager.configurationChildren(node);
+        const componentChildren = vueContext.configurationChildren(node);
         const initialValues = {
             ...configComponent.$_predefinedProps,
-            ...ComponentManager.usedConfigurationProps(node)
+            ...vueContext.usedConfigurationProps(node)
         };
 
         const config = ownerConfig.createNested(
@@ -30,8 +30,8 @@ function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Co
             configComponent.$_isCollectionItem,
             configComponent.$_expectedChildren
         );
-        (ComponentManager.componentOptions(node) as any).$_config = config;
-        (ComponentManager.componentOptions(node) as any).$_innerChanges = {};
+        (vueContext.componentOptions(node) as any).$_config = config;
+        (vueContext.componentOptions(node) as any).$_innerChanges = {};
 
         if (componentChildren) {
             pullConfigComponents(componentChildren as VNode[], nodes, config);

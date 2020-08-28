@@ -1,6 +1,6 @@
 import { VueConstructor } from "vue";
-import { IBaseComponent, BaseComponent } from "./component";
-import { ComponentManager } from "./vue-strategy/component-manager";
+import { BaseComponent, IBaseComponent } from "./component";
+import { vueContext } from "./vue-strategy/component-manager";
 
 interface IExtension {
     $_isExtension: boolean;
@@ -11,11 +11,11 @@ interface IExtensionComponentNode {
     $_hasOwner: boolean;
 }
 
-const DxExtensionComponent: VueConstructor = ComponentManager.create({
+const DxExtensionComponent: VueConstructor = vueContext.create({
     extends: BaseComponent,
     created(): void {
-        const vNodeOptions = ComponentManager.vNodeComponentOptions(this, true);
-        if(vNodeOptions) {
+        const vNodeOptions = vueContext.vNodeComponentOptions(this, true);
+        if (vNodeOptions) {
             vNodeOptions.$_isExtension = true;
             vNodeOptions.$_componentInstance = this;
         } else {
@@ -25,7 +25,7 @@ const DxExtensionComponent: VueConstructor = ComponentManager.create({
 
     mounted() {
         this.$el.setAttribute("isExtension", "true");
-        const componentOptions = ComponentManager.vNodeComponentOptions(this, false);
+        const componentOptions = vueContext.vNodeComponentOptions(this, false);
         if (componentOptions && (componentOptions as any as IExtensionComponentNode).$_hasOwner) { return; }
 
         this.attachTo(this.$el);

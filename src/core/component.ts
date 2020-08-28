@@ -1,7 +1,11 @@
+import * as mitt from "mitt";
 import * as VueType from "vue";
 import IVue, { VNode, VueConstructor } from "vue";
 
 import * as events from "devextreme/events";
+
+import { vueContext } from "./vue-strategy/component-manager";
+import { isVue3 } from "./vue-strategy/version";
 
 import { pullAllChildren } from "./children-processing";
 import Configuration, { bindOptionWatchers, setEmitOptionChangedFunc } from "./configuration";
@@ -9,13 +13,10 @@ import { getConfig, getInnerChanges, IConfigurable, initOptionChangedFunc } from
 import { DX_REMOVE_EVENT } from "./constants";
 import { IExtension, IExtensionComponentNode } from "./extension-component";
 import { camelize, forEachChildNode, getOptionValue, toComparable } from "./helpers";
-import { ComponentManager } from "./vue-strategy/component-manager";
-import * as mitt from "mitt"
 import {
     IEventBusHolder
 } from "./templates-discovering";
 import { TemplatesManager } from "./templates-manager";
-import { isVue3 } from "./vue-strategy/version";
 
 interface IWidgetComponent extends IConfigurable {
     $_instance: any;
@@ -38,20 +39,20 @@ export interface IBaseComponent extends IVue, IWidgetComponent, IEventBusHolder 
 
 const Vue = VueType.default || VueType;
 
-const BaseComponent: VueConstructor<any> = ComponentManager.create({
-
+const BaseComponent: VueConstructor<any> = vueContext.create({
     inheritAttrs: false,
+
     data() {
         const emit = mitt.default || mitt;
-        return {	
+        return {
             eventBus: emit()
-        };	
-    },	
+        };
+    },
 
-    provide() {	
-        return {	
-            eventBus: this.eventBus	
-        };	
+    provide() {
+        return {
+            eventBus: this.eventBus
+        };
     },
 
     render(h: (...args) => VNode): VNode {
@@ -60,7 +61,7 @@ const BaseComponent: VueConstructor<any> = ComponentManager.create({
         if (this.$_config.cleanNested) {
             this.$_config.cleanNested();
         }
-        pullAllChildren(ComponentManager.defaultSlots(this), children, this.$_config);
+        pullAllChildren(vueContext.defaultSlots(this), children, this.$_config);
 
         this.$_processChildren(children);
         return createElement(
@@ -77,7 +78,9 @@ const BaseComponent: VueConstructor<any> = ComponentManager.create({
     },
 
     updated() {
-        ComponentManager.childrenToUpdate(this).forEach((child: IVue) => initOptionChangedFunc(getConfig(child), child, getInnerChanges(child)));
+        vueContext.childrenToUpdate(this).forEach((child: IVue) => {
+            initOptionChangedFunc(getConfig(child), child, getInnerChanges(child));
+        });
         this.$_templatesManager.discover();
 
         this.$_instance.beginUpdate();
@@ -114,7 +117,7 @@ const BaseComponent: VueConstructor<any> = ComponentManager.create({
     },
 
     created(): void {
-        const props = ComponentManager.usedProps(this);
+        const props = vueContext.usedProps(this);
         (this as IBaseComponent).$_config = new Configuration(
             (n: string, v: any) => this.$_pendingOptions[n] = v,
             null,
@@ -149,7 +152,7 @@ const BaseComponent: VueConstructor<any> = ComponentManager.create({
 
             const config = thisComponent.$_config;
             const options: object = {
-                ...ComponentManager.usedProps(thisComponent),
+                ...vueContext.usedProps(thisComponent),
                 ...config.initialValues,
                 ...config.getNestedOptionValues(),
                 ...this.$_getIntegrationOptions()
@@ -221,7 +224,7 @@ const BaseComponent: VueConstructor<any> = ComponentManager.create({
 
         $_createEmitters(instance: any): void {
             const thisComponent = this as any as IBaseComponent;
-            if(thisComponent.$listeners) {
+            if (thisComponent.$listeners) {
                 Object.keys(thisComponent.$listeners).forEach((listenerName: string) => {
                     const eventName = camelize(listenerName);
                     instance.on(eventName, (e: any) => {
@@ -253,7 +256,7 @@ function restoreNodes(el: Element, nodes: Element[]) {
     });
 }
 
-const DxComponent: VueConstructor = ComponentManager.create({
+const DxComponent: VueConstructor = vueContext.create({
     extends: BaseComponent,
     methods: {
         $_getExtraIntegrationOptions(): object {
@@ -266,8 +269,8 @@ const DxComponent: VueConstructor = ComponentManager.create({
 
         $_processChildren(children: VNode[]): void {
             children.forEach((childNode: VNode) => {
-                const componentOptions = ComponentManager.componentOptions(childNode);
-                if (!componentOptions || typeof componentOptions !== 'object') { return; }
+                const componentOptions = vueContext.componentOptions(childNode);
+                if (!componentOptions || typeof componentOptions !== "object") { return; }
 
                 (componentOptions as any as IExtensionComponentNode).$_hasOwner = true;
             });
@@ -282,9 +285,9 @@ const DxComponent: VueConstructor = ComponentManager.create({
 
         restoreNodes(this.$el, nodes);
         if (this.$slots && this.$slots.default) {
-            ComponentManager.defaultSlots(this).forEach((child: VNode) => {
-                const childExtension = ComponentManager.vNodeComponentOptions(child, true) as any || child.componentInstance as any as IExtension;
-                if (childExtension && childExtension.$_isExtension) {
+            vueContext.defaultSlots(this).forEach((child: VNode) => {
+                const childExtension = vueContext.vNodeComponentOptions(child, true) || child.componentInstance;
+                if (childExtension && (childExtension as any as IExtension).$_isExtension) {
                     childExtension.$_componentInstance.attachTo(this.$el);
                 }
             });

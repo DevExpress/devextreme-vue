@@ -1,90 +1,89 @@
 import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 
-export class vue2Strategy {
-    constructor() {}
-    configurationChildren(component) {
+export class Vue2Strategy {
+    public configurationChildren(component) {
         const configComponents = [];
         const children = component.componentOptions.children;
-        if(!children) {
+        if (!children) {
             return;
         }
         this.findConfigurationComponents(component.componentOptions.children, configComponents);
         return configComponents;
     }
 
-    vNodeComponentOptions(component) {
-        if(!component.$vnode) {
+    public vNodeComponentOptions(component) {
+        if (!component.$vnode) {
             return this.componentOptions(component);
         }
         return component.$vnode.componentOptions;
     }
 
-    childrenToUpdate(component) {
+    public childrenToUpdate(component) {
         return this.children(component);
     }
 
-    findConfigurationComponents(allCildren, configComponents) {
-        allCildren.forEach(child => {
-            if(child.componentOptions) {
-                configComponents.push(child);
-            }
-        });
-    }
-
-    configurationOptions(component) {
+    public configurationOptions(component) {
         const componentOptions = this.componentOptions(component);
         return componentOptions && componentOptions.Ctor;
     }
 
-    componentOptions(component) {
+    public componentOptions(component) {
         return component.componentOptions;
     }
 
-    usedConfigurationProps(node) {
+    public usedConfigurationProps(node) {
         return node.componentOptions.propsData;
     }
 
-    create(config) {
+    public create(config) {
         return Vue.extend(config);
     }
 
-    mount(options) {
+    public mount(options) {
         return new Vue(options);
     }
-    
-    destroy(component) {
+
+    public destroy(component) {
         return component.$destroy.bind(component);
     }
 
-    usedProps(component) {
+    public usedProps(component) {
         return component.$options.propsData;
     }
 
-    defaultSlots(component) {
-        if(!component.$slots.default) {
+    public defaultSlots(component) {
+        if (!component.$slots.default) {
             return;
         }
         return component.$slots.default;
     }
 
-    declaredTemplates(component) {
-        return component.$scopedSlots
+    public declaredTemplates(component) {
+        return component.$scopedSlots;
     }
 
-    configurationProps(node) {
+    public configurationProps(node) {
         return node.$props;
     }
 
-    configurationTemplate(component) {
+    public configurationTemplate(component) {
         return component.$vnode.data && component.$vnode.data.scopedSlots;
     }
 
-    configurationDefaultTemplate(component) {
+    public configurationDefaultTemplate(component) {
         return component.$scopedSlots && component.$scopedSlots.default;
     }
 
-    children(component) {
+    public children(component) {
         return component.$children;
+    }
+
+    private findConfigurationComponents(allCildren, configComponents) {
+        allCildren.forEach((child) => {
+            if (child.componentOptions) {
+                configComponents.push(child);
+            }
+        });
     }
 }

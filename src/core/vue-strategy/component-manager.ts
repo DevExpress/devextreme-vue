@@ -1,14 +1,23 @@
-import { vue2Strategy } from "./vue2-strategy";
-import { vue3Strategy } from "./vue3-strategy";
 import { isVue3 } from "./version";
+import { Vue2Strategy } from "./vue2-strategy";
+import { Vue3Strategy } from "./vue3-strategy";
 
-const VueStrategy = isVue3() ? vue3Strategy :  vue2Strategy;
-let ComponentManager;
-
-if(!ComponentManager) {
-    ComponentManager = new VueStrategy();
+function getCurrentStrategy() {
+    const currentStrategy = isVue3() ? Vue3Strategy : Vue2Strategy;
+    return new currentStrategy();
 }
 
-export {
-    ComponentManager
+class VueStrategy {
+    private context;
+
+    constructor(context) {
+        this.context = context;
+    }
+
+    public getContext() {
+        return this.context;
+    }
 }
+
+const vueStrategy = new VueStrategy(getCurrentStrategy());
+export const vueContext = vueStrategy.getContext();

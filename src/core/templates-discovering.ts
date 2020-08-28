@@ -1,10 +1,9 @@
+import { Emitter } from "mitt";
 import IVue, { CreateElement } from "vue";
 import { ScopedSlot } from "vue/types/vnode";
-import { Emitter } from "mitt";
-
 import { IConfigurable } from "./configuration-component";
 import { TEMPLATE_MULTIPLE_ROOTS_ERROR } from "./errors";
-import { ComponentManager } from "./vue-strategy/component-manager";
+import { vueContext } from "./vue-strategy/component-manager";
 
 const TEMPLATE_PROP = "template";
 
@@ -13,7 +12,7 @@ interface IEventBusHolder {
 }
 
 function asConfigurable(component: IVue): IConfigurable | undefined {
-    const componentOptions = (ComponentManager.vNodeComponentOptions(component, false) as any as IConfigurable);
+    const componentOptions = (vueContext.vNodeComponentOptions(component, false) as any as IConfigurable);
     if (!componentOptions) {
         return;
     }
@@ -25,12 +24,12 @@ function asConfigurable(component: IVue): IConfigurable | undefined {
 }
 
 function hasTemplate(component: IVue) {
-    return TEMPLATE_PROP in ComponentManager.configurationProps(component) && ComponentManager.configurationTemplate(component);
+    return TEMPLATE_PROP in vueContext.configurationProps(component) && vueContext.configurationTemplate(component);
 }
 
 function discover(component: IVue): Record<string, ScopedSlot> {
     const templates: Record<string, ScopedSlot> = {};
-    const namedTeplates = ComponentManager.declaredTemplates(component);
+    const namedTeplates = vueContext.declaredTemplates(component);
     for (const slotName in namedTeplates) {
         if (slotName === "default" && component.$slots.default) {
             continue;
@@ -43,14 +42,14 @@ function discover(component: IVue): Record<string, ScopedSlot> {
 
         templates[slotName] = slot;
     }
-    const componentChildren = ComponentManager.children(component);
+    const componentChildren = vueContext.children(component);
     for (const childComponent of componentChildren) {
         const configurable = asConfigurable(childComponent);
         if (!configurable) {
             continue;
         }
 
-        const defaultSlot = ComponentManager.configurationDefaultTemplate(childComponent);
+        const defaultSlot = vueContext.configurationDefaultTemplate(childComponent);
         if (!defaultSlot || !hasTemplate(childComponent)) {
             continue;
         }
@@ -63,10 +62,10 @@ function discover(component: IVue): Record<string, ScopedSlot> {
 }
 
 function clearConfiguration(content: any[]) {
-    let newContent: any[] = [];
-    content.forEach(item => {
-        const configurable = ComponentManager.vNodeComponentOptions(item);
-        if(!configurable || !configurable.$_optionName) {
+    const newContent: any[] = [];
+    content.forEach((item) => {
+        const configurable = vueContext.vNodeComponentOptions(item);
+        if (!configurable || !configurable.$_optionName) {
             newContent.push(item);
         }
     });
@@ -84,13 +83,13 @@ function mountTemplate(
     name: string,
     placeholder: Element
 ): IVue {
-    return ComponentManager.mount({
+    return vueContext.mount({
         el: placeholder,
         name,
         inject: ["eventBus"],
         parent,
-        created(this: IVue & IEventBusHolder) {	
-            this.eventBus.on("updated", updatedHandler.bind(this));	
+        created(this: IVue & IEventBusHolder) {
+            this.eventBus.on("updated", updatedHandler.bind(this));
         },
         render: (createElement: CreateElement) => {
             const content = clearConfiguration(getSlot()(data) as any);
@@ -103,9 +102,9 @@ function mountTemplate(
 
             return content[0];
         },
-        destroyed() {	
-            // T857821	
-            (this as IEventBusHolder).eventBus.off("updated", updatedHandler);	
+        destroyed() {
+            // T857821
+            (this as IEventBusHolder).eventBus.off("updated", updatedHandler);
         }
     });
 }

@@ -1,7 +1,7 @@
 import { Vue } from "vue/types/vue";
 import { IComponentInfo } from "./configuration-component";
 import { getOptionInfo, isEqual } from "./helpers";
-import { ComponentManager } from "./vue-strategy/component-manager"
+import { vueContext } from "./vue-strategy/component-manager";
 
 type UpdateFunc = (name: string, value: any) => void;
 type EmitOptionChangedFunc = (name: string, value: any) => void;
@@ -277,7 +277,7 @@ function setEmitOptionChangedFunc(
     vueInstance: any,
     innerChanges: Record<string, any>): void {
     config.emitOptionChanged = (name: string, value: string) => {
-        const props = vueInstance.$props || ComponentManager.usedConfigurationProps(vueInstance);
+        const props = vueInstance.$props || vueContext.usedConfigurationProps(vueInstance);
         if (props && !isEqual(value, props[name]) && vueInstance.$emit) {
             innerChanges[name] = value;
             vueInstance.$emit("update:" + name, value);

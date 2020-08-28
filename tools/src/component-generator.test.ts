@@ -3,15 +3,14 @@ import generate, { renderProps } from "./component-generator";
 it("generates", () => {
     //#region EXPECTED
     const EXPECTED = `
-import * as VueType from "vue";
-const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
+import { vueContext } from "./core/vue-strategy/component-manager";
 
 interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT = Vue.extend({
+const COMPONENT = vueContext.create({
   extends: BASE_COMPONENT,
   computed: {
     instance(): WIDGET {
@@ -52,15 +51,14 @@ export {
 it("generates component with model", () => {
     //#region EXPECTED
     const EXPECTED = `
-import * as VueType from "vue";
-const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
+import { vueContext } from "./core/vue-strategy/component-manager";
 
 interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT = Vue.extend({
+const COMPONENT = vueContext.create({
   extends: BASE_COMPONENT,
   model: { prop: "value", event: "update:value" },
   computed: {
@@ -103,10 +101,9 @@ export {
 it("generates option", () => {
     //#region EXPECTED
     const EXPECTED = `
-import * as VueType from "vue";
-const Vue = VueType.default || VueType;
 import WIDGET, { IOptions } from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
+import { vueContext } from "./core/vue-strategy/component-manager";
 
 type AccessibleOptions = Pick<IOptions,
   "PROP"
@@ -115,10 +112,15 @@ type AccessibleOptions = Pick<IOptions,
 interface COMPONENT extends AccessibleOptions {
   readonly instance?: WIDGET;
 }
-const COMPONENT = Vue.extend({
+const COMPONENT = vueContext.create({
   extends: BASE_COMPONENT,
   props: {
     PROP: {}
+  },
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:PROP": null,
   },
   computed: {
     instance(): WIDGET {
@@ -160,16 +162,15 @@ export {
 it("generates nested option component", () => {
     //#region EXPECTED
     const EXPECTED = `
-import * as VueType from "vue";
-const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
+import { vueContext } from "./core/vue-strategy/component-manager";
 
 interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT = Vue.extend({
+const COMPONENT = vueContext.create({
   extends: BASE_COMPONENT,
   computed: {
     instance(): WIDGET {
@@ -181,8 +182,13 @@ const COMPONENT = Vue.extend({
   }
 });
 
-const NESTED_COMPONENT: any = Vue.extend({
+const NESTED_COMPONENT: any = vueContext.create({
   extends: CONFIG_COMPONENT,
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:PROP": null,
+  },
   props: {
     PROP: {}
   }
@@ -229,16 +235,15 @@ export {
 it("generates nested collection option component", () => {
     //#region EXPECTED
     const EXPECTED = `
-import * as VueType from "vue";
-const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
+import { vueContext } from "./core/vue-strategy/component-manager";
 
 interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT = Vue.extend({
+const COMPONENT = vueContext.create({
   extends: BASE_COMPONENT,
   computed: {
     instance(): WIDGET {
@@ -250,8 +255,13 @@ const COMPONENT = Vue.extend({
   }
 });
 
-const NESTED_COMPONENT: any = Vue.extend({
+const NESTED_COMPONENT: any = vueContext.create({
   extends: CONFIG_COMPONENT,
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:PROP": null,
+  },
   props: {
     PROP: {}
   }
@@ -299,16 +309,15 @@ export {
 it("generates expectedChildren info", () => {
     //#region EXPECTED
     const EXPECTED = `
-import * as VueType from "vue";
-const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
+import { vueContext } from "./core/vue-strategy/component-manager";
 
 interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT = Vue.extend({
+const COMPONENT = vueContext.create({
   extends: BASE_COMPONENT,
   computed: {
     instance(): WIDGET {
@@ -324,8 +333,13 @@ const COMPONENT = Vue.extend({
   }
 });
 
-const NESTED_COMPONENT: any = Vue.extend({
+const NESTED_COMPONENT: any = vueContext.create({
   extends: CONFIG_COMPONENT,
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:PROP": null,
+  },
   props: {
     PROP: {}
   }
@@ -486,16 +500,15 @@ describe("props generation", () => {
     it("generates nested component with predefined value", () => {
         //#region EXPECTED
         const EXPECTED = `
-import * as VueType from "vue";
-const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
+import { vueContext } from "./core/vue-strategy/component-manager";
 
 interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT = Vue.extend({
+const COMPONENT = vueContext.create({
   extends: BASE_COMPONENT,
   computed: {
     instance(): WIDGET {
@@ -507,8 +520,13 @@ const COMPONENT = Vue.extend({
   }
 });
 
-const NESTED_COMPONENT: any = Vue.extend({
+const NESTED_COMPONENT: any = vueContext.create({
   extends: CONFIG_COMPONENT,
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:PROP": null,
+  },
   props: {
     PROP: {}
   }
@@ -561,16 +579,15 @@ export {
     it("generates nested component with several predefined values", () => {
         //#region EXPECTED
         const EXPECTED = `
-import * as VueType from "vue";
-const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
+import { vueContext } from "./core/vue-strategy/component-manager";
 
 interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT = Vue.extend({
+const COMPONENT = vueContext.create({
   extends: BASE_COMPONENT,
   computed: {
     instance(): WIDGET {
@@ -582,8 +599,13 @@ const COMPONENT = Vue.extend({
   }
 });
 
-const NESTED_COMPONENT: any = Vue.extend({
+const NESTED_COMPONENT: any = vueContext.create({
   extends: CONFIG_COMPONENT,
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:PROP": null,
+  },
   props: {
     PROP: {}
   }
