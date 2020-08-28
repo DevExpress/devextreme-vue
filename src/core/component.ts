@@ -64,7 +64,7 @@ const BaseComponent: VueConstructor<any> = ComponentManager.create({
     },
 
     updated() {
-        ComponentManager.children(this).forEach((child: IVue) => initOptionChangedFunc(getConfig(child), child, getInnerChanges(child)));
+        ComponentManager.childrenToUpdate(this).forEach((child: IVue) => initOptionChangedFunc(getConfig(child), child, getInnerChanges(child)));
         this.$_templatesManager.discover();
 
         this.$_instance.beginUpdate();
@@ -269,7 +269,7 @@ const DxComponent: VueConstructor = ComponentManager.create({
         restoreNodes(this.$el, nodes);
         if (this.$slots && this.$slots.default) {
             ComponentManager.defaultSlots(this).forEach((child: VNode) => {
-                const childExtension = ComponentManager.vNodeComponentOptions(child) as any || child.componentInstance as any as IExtension;
+                const childExtension = ComponentManager.vNodeComponentOptions(child, true) as any || child.componentInstance as any as IExtension;
                 if (childExtension && childExtension.$_isExtension) {
                     childExtension.$_componentInstance.attachTo(this.$el);
                 }

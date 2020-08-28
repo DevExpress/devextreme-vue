@@ -226,7 +226,6 @@ L0 + `});\n` +
     `<#~ it.nestedComponents : nested #>` +
         `const <#= nested.name #>: any = ComponentManager.create({` +
         L1 + `extends: <#= it.configComponent #>,` +
-        L1 + `$_dx: {},` +
         `<#? nested.props #>` +
         L1 + `emits: {\n` +
                 L1 + `"update:isActive": null,` +

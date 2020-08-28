@@ -14,7 +14,7 @@ interface IExtensionComponentNode {
 const DxExtensionComponent: VueConstructor = ComponentManager.create({
     extends: BaseComponent,
     created(): void {
-        const vNodeOptions = ComponentManager.vNodeComponentOptions(this);
+        const vNodeOptions = ComponentManager.vNodeComponentOptions(this, true);
         if(vNodeOptions) {
             vNodeOptions.$_isExtension = true;
             vNodeOptions.$_componentInstance = this;
@@ -25,7 +25,7 @@ const DxExtensionComponent: VueConstructor = ComponentManager.create({
 
     mounted() {
         this.$el.setAttribute("isExtension", "true");
-        const componentOptions = ComponentManager.vNodeComponentOptions(this);
+        const componentOptions = ComponentManager.vNodeComponentOptions(this, false);
         if (componentOptions && (componentOptions as any as IExtensionComponentNode).$_hasOwner) { return; }
 
         this.attachTo(this.$el);

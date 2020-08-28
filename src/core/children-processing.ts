@@ -1,6 +1,6 @@
 import { VNode } from "vue";
 import Configuration from "./configuration";
-import { IConfigurable, IConfigurationComponent } from "./configuration-component";
+import { IConfigurationComponent } from "./configuration-component";
 import { ComponentManager } from "./vue-strategy/component-manager";
 
 function pullAllChildren(directChildren: VNode[], allChildren: VNode[], config: Configuration): void {
@@ -30,9 +30,8 @@ function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Co
             configComponent.$_isCollectionItem,
             configComponent.$_expectedChildren
         );
-
-        (ComponentManager.componentOptions(node) as any as IConfigurable).$_config = config;
-        (ComponentManager.componentOptions(node) as any as IConfigurable).$_innerChanges = {};
+        (ComponentManager.componentOptions(node) as any).$_config = config;
+        (ComponentManager.componentOptions(node) as any).$_innerChanges = {};
 
         if (componentChildren) {
             pullConfigComponents(componentChildren as VNode[], nodes, config);

@@ -13,7 +13,7 @@ interface IEventBusHolder {
 }
 
 function asConfigurable(component: IVue): IConfigurable | undefined {
-    const componentOptions = (ComponentManager.vNodeComponentOptions(component) as any as IConfigurable);
+    const componentOptions = (ComponentManager.vNodeComponentOptions(component, false) as any as IConfigurable);
     if (!componentOptions) {
         return;
     }

@@ -1,11 +1,16 @@
 import * as VueType from "vue";
+import { pullAllChildren } from "../children-processing";
 const Vue = VueType.default || VueType;
 
 export class vue3Strategy {
     constructor() {}
-    vNodeComponentOptions(component) {
+    vNodeComponentOptions(component, type) {
         if(component.$) {
-            return component.$.vnode.type;
+            if(type) {
+                return component.$.vnode.type;
+            } else {
+                return component.$.vnode;
+            }
         }
 
         return component.type;
@@ -23,20 +28,28 @@ export class vue3Strategy {
     findConfigurationComponents(allCildren, configComponents) {
         allCildren.forEach(child => {
             if(child.type && typeof child.type === "object") {
-                child.type = {...child.type};
-                delete child.type.$_config;
-                delete child.type.$_innerChanges;
+                delete child.$_config;
+                delete child.$_innerChanges;
                 configComponents.push(child);
             }
         });
     }
 
+    childrenToUpdate(component) {
+        const children = [];
+        if (component.$_config.cleanNested) {
+            component.$_config.cleanNested();
+        }
+        pullAllChildren(this.defaultSlots(component), children, component.$_config);
+        return children;
+    }
+
     configurationOptions(component) {
-        return this.componentOptions(component);
+        return this.componentOptions(component).type;
     }
 
     componentOptions(component) {
-        return component.type;
+        return component;
     }
 
     usedProps(component) {
@@ -72,7 +85,7 @@ export class vue3Strategy {
     }
 
     configurationProps(node) {
-        const options = this.vNodeComponentOptions(node);
+        const options = this.vNodeComponentOptions(node, true);
         if(!options && !options.props) {
             return {};
         }
@@ -112,14 +125,19 @@ export class vue3Strategy {
     }
 
     getVNodeChildren(children, allChildren, nested) {
+        let nodeDetected = false;
         children.forEach((child, index) => {
+            const id = nodeDetected ? index - 1 : index;
             if(child.type && typeof child.type === "object") {
                 child.type = {...child.type};
-                child.type.$_config = nested[index];
+                child.type.$_config = nested[id];
+                child.$_config = nested[id];
                 allChildren.push(child);
                 if(child.children && child.children.default) {
-                    this.getVNodeChildren(child.children.default(), allChildren, nested[index].nested);
+                    this.getVNodeChildren(child.children.default(), allChildren, nested[id].nested);
                 }
+            } else {
+                nodeDetected = true;
             }
         });
     }

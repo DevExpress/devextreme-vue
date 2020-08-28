@@ -274,7 +274,7 @@ function bindOptionWatchers(
 
 function setEmitOptionChangedFunc(
     config: Configuration,
-    vueInstance: Pick<Vue, "$emit" | "$props">,
+    vueInstance: any,
     innerChanges: Record<string, any>): void {
     config.emitOptionChanged = (name: string, value: string) => {
         const props = vueInstance.$props || ComponentManager.usedConfigurationProps(vueInstance);

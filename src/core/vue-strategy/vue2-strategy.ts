@@ -20,6 +20,10 @@ export class vue2Strategy {
         return component.$vnode.componentOptions;
     }
 
+    childrenToUpdate(component) {
+        return this.children(component);
+    }
+
     findConfigurationComponents(allCildren, configComponents) {
         allCildren.forEach(child => {
             if(child.componentOptions) {
