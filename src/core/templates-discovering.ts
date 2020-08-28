@@ -1,6 +1,6 @@
 import IVue, { CreateElement } from "vue";
 import { ScopedSlot } from "vue/types/vnode";
-import { Emitter } from "mitt"
+import { Emitter } from "mitt";
 
 import { IConfigurable } from "./configuration-component";
 import { TEMPLATE_MULTIPLE_ROOTS_ERROR } from "./errors";
@@ -73,6 +73,10 @@ function clearConfiguration(content: any[]) {
     return newContent;
 }
 
+function updatedHandler(this: IVue) {
+    this.$forceUpdate();
+}
+
 function mountTemplate(
     getSlot: () => ScopedSlot,
     parent: IVue,
@@ -83,7 +87,11 @@ function mountTemplate(
     return ComponentManager.mount({
         el: placeholder,
         name,
+        inject: ["eventBus"],
         parent,
+        created(this: IVue & IEventBusHolder) {	
+            this.eventBus.on("updated", updatedHandler.bind(this));	
+        },
         render: (createElement: CreateElement) => {
             const content = clearConfiguration(getSlot()(data) as any);
             if (!content) {
@@ -94,6 +102,10 @@ function mountTemplate(
             }
 
             return content[0];
+        },
+        destroyed() {	
+            // T857821	
+            (this as IEventBusHolder).eventBus.off("updated", updatedHandler);	
         }
     });
 }

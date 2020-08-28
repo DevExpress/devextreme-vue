@@ -10,6 +10,7 @@ import { DX_REMOVE_EVENT } from "./constants";
 import { IExtension, IExtensionComponentNode } from "./extension-component";
 import { camelize, forEachChildNode, getOptionValue, toComparable } from "./helpers";
 import { ComponentManager } from "./vue-strategy/component-manager";
+import * as mitt from "mitt"
 import {
     IEventBusHolder
 } from "./templates-discovering";
@@ -40,6 +41,18 @@ const Vue = VueType.default || VueType;
 const BaseComponent: VueConstructor<any> = ComponentManager.create({
 
     inheritAttrs: false,
+    data() {
+        const emit = mitt.default || mitt;
+        return {	
+            eventBus: emit()
+        };	
+    },	
+
+    provide() {	
+        return {	
+            eventBus: this.eventBus	
+        };	
+    },
 
     render(h: (...args) => VNode): VNode {
         const children: VNode[] = [];
@@ -89,6 +102,7 @@ const BaseComponent: VueConstructor<any> = ComponentManager.create({
         this.$_applyConfigurationChanges();
 
         this.$_instance.endUpdate();
+        this.eventBus.emit("updated");
     },
 
     beforeDestroy(): void {
