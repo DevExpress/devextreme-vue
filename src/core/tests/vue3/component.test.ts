@@ -1,4 +1,3 @@
-import "../../__mocks__/version";
 // import * as VueType from "vue";
 import { DxComponent, IWidgetComponent } from "../../component";
 // import { createApp } from "vue";
