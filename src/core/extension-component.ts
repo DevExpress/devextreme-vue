@@ -1,4 +1,3 @@
-import { VueConstructor } from "vue";
 import { BaseComponent, IBaseComponent } from "./component";
 import { vueContext } from "./vue-strategy/component-manager";
 
@@ -11,7 +10,7 @@ interface IExtensionComponentNode {
     $_hasOwner: boolean;
 }
 
-const DxExtensionComponent: VueConstructor = vueContext.create({
+const DxExtensionComponent: any = vueContext.create({
     extends: BaseComponent,
     created(): void {
         const vNodeOptions = vueContext.vNodeComponentOptions(this, true);

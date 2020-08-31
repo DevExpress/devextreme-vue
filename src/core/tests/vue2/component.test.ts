@@ -1,7 +1,7 @@
 import * as VueType from "vue";
-import { DxComponent, IWidgetComponent } from "../core/component";
-import { DxConfiguration, IConfigurable, IConfigurationComponent } from "../core/configuration-component";
-import { DxExtensionComponent } from "../core/extension-component";
+import { DxComponent, IWidgetComponent } from "../../component";
+import { DxConfiguration, IConfigurable, IConfigurationComponent } from "../../configuration-component";
+import { DxExtensionComponent } from "../../extension-component";
 
 import * as events from "devextreme/events";
 

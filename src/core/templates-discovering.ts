@@ -1,6 +1,4 @@
 import { Emitter } from "mitt";
-import IVue, { CreateElement } from "vue";
-import { ScopedSlot } from "vue/types/vnode";
 import { IConfigurable } from "./configuration-component";
 import { TEMPLATE_MULTIPLE_ROOTS_ERROR } from "./errors";
 import { vueContext } from "./vue-strategy/component-manager";
@@ -11,7 +9,7 @@ interface IEventBusHolder {
     eventBus: Emitter;
 }
 
-function asConfigurable(component: IVue): IConfigurable | undefined {
+function asConfigurable(component: any): IConfigurable | undefined {
     const componentOptions = (vueContext.vNodeComponentOptions(component, false) as any as IConfigurable);
     if (!componentOptions) {
         return;
@@ -23,12 +21,12 @@ function asConfigurable(component: IVue): IConfigurable | undefined {
     return componentOptions;
 }
 
-function hasTemplate(component: IVue) {
+function hasTemplate(component: any) {
     return TEMPLATE_PROP in vueContext.configurationProps(component) && vueContext.configurationTemplate(component);
 }
 
-function discover(component: IVue): Record<string, ScopedSlot> {
-    const templates: Record<string, ScopedSlot> = {};
+function discover(component: any): Record<string, any> {
+    const templates: Record<string, any> = {};
     const namedTeplates = vueContext.declaredTemplates(component);
     for (const slotName in namedTeplates) {
         if (slotName === "default" && component.$slots.default) {
@@ -72,26 +70,26 @@ function clearConfiguration(content: any[]) {
     return newContent;
 }
 
-function updatedHandler(this: IVue) {
+function updatedHandler(this: any) {
     this.$forceUpdate();
 }
 
 function mountTemplate(
-    getSlot: () => ScopedSlot,
-    parent: IVue,
+    getSlot: () => any,
+    parent: any,
     data: any,
     name: string,
     placeholder: Element
-): IVue {
+): any {
     return vueContext.mount({
         el: placeholder,
         name,
         inject: ["eventBus"],
         parent,
-        created(this: IVue & IEventBusHolder) {
+        created(this: any & IEventBusHolder) {
             this.eventBus.on("updated", updatedHandler.bind(this));
         },
-        render: (createElement: CreateElement) => {
+        render: (createElement: any) => {
             const content = clearConfiguration(getSlot()(data) as any);
             if (!content) {
                 return createElement("div");

@@ -1,6 +1,6 @@
 import * as VueType from "vue";
-import { DxComponent, IWidgetComponent } from "../core/component";
-import config, { getOption } from "../core/config";
+import { DxComponent, IWidgetComponent } from "../../component";
+import config, { getOption } from "../../config";
 
 const Vue = VueType.default || VueType;
 

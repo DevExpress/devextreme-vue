@@ -1,6 +1,6 @@
 import * as VueType from "vue";
 import { pullAllChildren } from "../children-processing";
-const Vue = VueType.default || VueType;
+const Vue = VueType;
 
 export class Vue3Strategy {
     public vNodeComponentOptions(component, type) {

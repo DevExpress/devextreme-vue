@@ -1,4 +1,4 @@
-import IVue, { VNode, VueConstructor } from "vue";
+import { VNode } from "vue";
 import { vueContext } from "./vue-strategy/component-manager";
 import { isVue3 } from "./vue-strategy/version";
 
@@ -25,7 +25,7 @@ interface IComponentInfo {
     removed?: boolean;
 }
 
-function getConfig(vueInstance: Pick<IVue, "$vnode"> | VNode): Configuration | undefined {
+function getConfig(vueInstance: any): Configuration | undefined {
     const componentOptions = (vueContext.vNodeComponentOptions(vueInstance, false) as any as IConfigurable);
     if (!componentOptions) {
         return;
@@ -48,7 +48,7 @@ function getVueInstance(component) {
     return type && type.$_componentInstance ? type.$_componentInstance : component;
 }
 
-function initOptionChangedFunc(config, component: Pick<IVue, "$vnode" | "$props" | "$emit"> | any, innerChanges: any) {
+function initOptionChangedFunc(config, component: any, innerChanges: any) {
     if (!config) {
         return;
     }
@@ -69,7 +69,7 @@ function getComponentInfo({name, isCollectionItem, ownerConfig }: Configuration,
     };
 }
 
-const DxConfiguration: VueConstructor = vueContext.create({
+const DxConfiguration: any = vueContext.create({
     updated() {
         const vNodeOptions = vueContext.vNodeComponentOptions(this, false);
         if (vNodeOptions && vNodeOptions.type) {

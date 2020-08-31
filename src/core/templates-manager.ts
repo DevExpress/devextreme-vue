@@ -1,5 +1,3 @@
-import IVue from "vue";
-import { ScopedSlot } from "vue/types/vnode";
 import { getOption } from "./config";
 import {
     discover as discoverSlots,
@@ -13,12 +11,12 @@ import { allKeysAreEqual } from "./helpers";
 import { vueContext } from "./vue-strategy/component-manager";
 
 class TemplatesManager {
-    private _component: IVue;
-    private _slots: Record<string, ScopedSlot> = {};
+    private _component: any;
+    private _slots: Record<string, any> = {};
     private _templates: Record<string, object> = {};
     private _isDirty: boolean = false;
 
-    constructor(component: IVue) {
+    constructor(component: any) {
         this._component = component;
         this.discover();
     }

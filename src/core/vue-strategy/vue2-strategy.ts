@@ -1,5 +1,5 @@
 import * as VueType from "vue";
-const Vue = VueType.default || VueType;
+const Vue = (VueType as any).default || VueType;
 
 export class Vue2Strategy {
     public configurationChildren(component) {

@@ -3,7 +3,7 @@ import Configuration, {
     ExpectedChild,
     setEmitOptionChangedFunc,
     UpdateFunc
-} from "./configuration";
+} from "../../configuration";
 
 function createRootConfig(updateFunc: UpdateFunc): Configuration {
     return new Configuration(updateFunc, null, {});

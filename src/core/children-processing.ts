@@ -30,7 +30,9 @@ function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Co
             configComponent.$_isCollectionItem,
             configComponent.$_expectedChildren
         );
-        (vueContext.componentOptions(node) as any).$_config = config;
+        const componentOpt = vueContext.componentOptions(node);
+        Object.defineProperty(componentOpt, "$_config", { value: config })
+        // (vueContext.componentOptions(node) as any).$_config = config;
         (vueContext.componentOptions(node) as any).$_innerChanges = {};
 
         if (componentChildren) {

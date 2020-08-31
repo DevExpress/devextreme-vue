@@ -1,8 +1,8 @@
 
 import * as VueType from "vue";
-import { discover } from "./templates-discovering";
-import { TemplatesManager } from "./templates-manager";
-jest.mock("./templates-discovering");
+import { discover } from "../../templates-discovering";
+import { TemplatesManager } from "../../templates-manager";
+jest.mock("../../templates-discovering");
 
 const Vue = VueType.default || VueType;
 const discoverMock1 = () => ({});

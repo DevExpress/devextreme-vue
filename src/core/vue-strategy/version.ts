@@ -1,9 +1,8 @@
 import * as VueType from "vue";
-import { VueConstructor } from "vue";
-const Vue = VueType.default || VueType;
+const Vue = (VueType as any).default || VueType;
 
 export function getVueVersion() {
-    const currentVersion = (Vue as VueConstructor).version;
+    const currentVersion = (Vue as any).version;
     return Number(currentVersion.split(".")[0]);
 }
 

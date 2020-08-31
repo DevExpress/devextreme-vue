@@ -1,4 +1,3 @@
-import { Vue } from "vue/types/vue";
 import { IComponentInfo } from "./configuration-component";
 import { getOptionInfo, isEqual } from "./helpers";
 import { vueContext } from "./vue-strategy/component-manager";
@@ -257,7 +256,7 @@ class Configuration {
 
 function bindOptionWatchers(
     config: Configuration,
-    vueInstance: Pick<Vue, "$watch">,
+    vueInstance: any,
     innerChanges: Record<string, any>): void {
     const targets = config.getOptionsToWatch();
     if (targets) {
