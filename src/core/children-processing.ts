@@ -16,7 +16,7 @@ function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Co
         if (!vueContext.componentOptions(node)) { return; }
 
         const componentInfo = vueContext.componentInfo(node) as any as IConfigurationComponent;
-        if (!componentInfo.$_optionName ) { return; }
+        if (!componentInfo) { return; }
 
         const componentChildren = vueContext.configurationChildren(node);
         const initialValues = {

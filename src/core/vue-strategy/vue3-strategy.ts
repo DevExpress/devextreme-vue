@@ -39,7 +39,7 @@ export class Vue3Strategy {
 
     public componentInfo(component) {
         const options = this.configurationOptions(component);
-        return options && options.data();
+        return options.data && options.data();
     }
 
     public componentOptions(component) {
