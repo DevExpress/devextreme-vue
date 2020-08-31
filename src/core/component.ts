@@ -119,7 +119,7 @@ const BaseComponent: any = vueContext.create({
     created(): void {
         const props = vueContext.usedProps(this);
         (this as IBaseComponent).$_config = new Configuration(
-            (n: string, v: any) => { this.$_pendingOptions[n] = v },
+            (n: string, v: any) => { this.$_pendingOptions[n] = v; },
             null,
             props && { ...props },
             this.$_expectedChildren

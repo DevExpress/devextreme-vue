@@ -183,6 +183,11 @@ const COMPONENT = vueContext.create({
 });
 
 const NESTED_COMPONENT: any = vueContext.create({
+  data() {
+    return {
+      $_optionName: "NESTED_OPTION_NAME",
+    };
+  },
   extends: CONFIG_COMPONENT,
   emits: {
     "update:isActive": null,
@@ -193,7 +198,6 @@ const NESTED_COMPONENT: any = vueContext.create({
     PROP: {}
   }
 });
-(NESTED_COMPONENT as any).$_optionName = "NESTED_OPTION_NAME";
 
 export default COMPONENT;
 export {
@@ -256,6 +260,12 @@ const COMPONENT = vueContext.create({
 });
 
 const NESTED_COMPONENT: any = vueContext.create({
+  data() {
+    return {
+      $_optionName: "NESTED_OPTION_NAME",
+      $_isCollectionItem: true,
+    };
+  },
   extends: CONFIG_COMPONENT,
   emits: {
     "update:isActive": null,
@@ -266,8 +276,6 @@ const NESTED_COMPONENT: any = vueContext.create({
     PROP: {}
   }
 });
-(NESTED_COMPONENT as any).$_optionName = "NESTED_OPTION_NAME";
-(NESTED_COMPONENT as any).$_isCollectionItem = true;
 
 export default COMPONENT;
 export {
@@ -334,6 +342,15 @@ const COMPONENT = vueContext.create({
 });
 
 const NESTED_COMPONENT: any = vueContext.create({
+  data() {
+    return {
+      $_optionName: "NESTED_OPTION_NAME",
+      $_expectedChildren: {
+        EXPECTED_3: { isCollectionItem: true, optionName: "ghi" },
+        EXPECTED_4: { isCollectionItem: false, optionName: "jkl" }
+      }
+    };
+  },
   extends: CONFIG_COMPONENT,
   emits: {
     "update:isActive": null,
@@ -344,11 +361,6 @@ const NESTED_COMPONENT: any = vueContext.create({
     PROP: {}
   }
 });
-(NESTED_COMPONENT as any).$_optionName = "NESTED_OPTION_NAME";
-(NESTED_COMPONENT as any).$_expectedChildren = {
-  EXPECTED_3: { isCollectionItem: true, optionName: "ghi" },
-  EXPECTED_4: { isCollectionItem: false, optionName: "jkl" }
-};
 
 export default COMPONENT;
 export {
@@ -521,6 +533,14 @@ const COMPONENT = vueContext.create({
 });
 
 const NESTED_COMPONENT: any = vueContext.create({
+  data() {
+    return {
+      $_optionName: "NESTED_OPTION_NAME",
+      $_predefinedProps: {
+        PROP_1: "PREDEFINED_VALUE"
+      },
+    };
+  },
   extends: CONFIG_COMPONENT,
   emits: {
     "update:isActive": null,
@@ -531,10 +551,6 @@ const NESTED_COMPONENT: any = vueContext.create({
     PROP: {}
   }
 });
-(NESTED_COMPONENT as any).$_optionName = "NESTED_OPTION_NAME";
-(NESTED_COMPONENT as any).$_predefinedProps = {
-  PROP_1: "PREDEFINED_VALUE"
-};
 
 export default COMPONENT;
 export {
@@ -600,6 +616,15 @@ const COMPONENT = vueContext.create({
 });
 
 const NESTED_COMPONENT: any = vueContext.create({
+  data() {
+    return {
+      $_optionName: "NESTED_OPTION_NAME",
+      $_predefinedProps: {
+        PROP_1: "PREDEFINED_VALUE_1",
+        PROP_2: "PREDEFINED_VALUE_2"
+      },
+    };
+  },
   extends: CONFIG_COMPONENT,
   emits: {
     "update:isActive": null,
@@ -610,11 +635,6 @@ const NESTED_COMPONENT: any = vueContext.create({
     PROP: {}
   }
 });
-(NESTED_COMPONENT as any).$_optionName = "NESTED_OPTION_NAME";
-(NESTED_COMPONENT as any).$_predefinedProps = {
-  PROP_1: "PREDEFINED_VALUE_1",
-  PROP_2: "PREDEFINED_VALUE_2"
-};
 
 export default COMPONENT;
 export {

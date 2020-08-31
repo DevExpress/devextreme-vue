@@ -37,6 +37,11 @@ export class Vue3Strategy {
         return this.componentOptions(component).type;
     }
 
+    public componentInfo(component) {
+        const options = this.configurationOptions(component);
+        return options && options.data();
+    }
+
     public componentOptions(component) {
         return component;
     }

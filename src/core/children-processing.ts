@@ -15,24 +15,23 @@ function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Co
         nodes.push(node);
         if (!vueContext.componentOptions(node)) { return; }
 
-        const configComponent = vueContext.configurationOptions(node) as any as IConfigurationComponent;
-        if (!configComponent.$_optionName ) { return; }
+        const componentInfo = vueContext.componentInfo(node) as any as IConfigurationComponent;
+        if (!componentInfo.$_optionName ) { return; }
 
         const componentChildren = vueContext.configurationChildren(node);
         const initialValues = {
-            ...configComponent.$_predefinedProps,
+            ...componentInfo.$_predefinedProps,
             ...vueContext.usedConfigurationProps(node)
         };
 
         const config = ownerConfig.createNested(
-            configComponent.$_optionName,
+            componentInfo.$_optionName,
             initialValues,
-            configComponent.$_isCollectionItem,
-            configComponent.$_expectedChildren
+            componentInfo.$_isCollectionItem,
+            componentInfo.$_expectedChildren
         );
-        const componentOpt = vueContext.componentOptions(node);
-        Object.defineProperty(componentOpt, "$_config", { value: config })
-        // (vueContext.componentOptions(node) as any).$_config = config;
+
+        (vueContext.componentOptions(node) as any).$_config = config;
         (vueContext.componentOptions(node) as any).$_innerChanges = {};
 
         if (componentChildren) {

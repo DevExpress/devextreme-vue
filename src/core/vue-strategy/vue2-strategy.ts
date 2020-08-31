@@ -28,6 +28,11 @@ export class Vue2Strategy {
         return componentOptions && componentOptions.Ctor;
     }
 
+    public componentInfo(component) {
+        const componentOptions = this.componentOptions(component);
+        return componentOptions && componentOptions.Ctor.options.data();
+    }
+
     public componentOptions(component) {
         return component.componentOptions;
     }
