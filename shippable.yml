@@ -15,7 +15,7 @@ build:
     - npm run lint
     - npm run pack
     - npm run test
-    - npm i vue@3.0.0-0 @vue/test-utils@2.0.0-0
+    - npm i vue@next @vue/test-utils@next
     - npm run test
   cache: true
   cache_dir_list:
