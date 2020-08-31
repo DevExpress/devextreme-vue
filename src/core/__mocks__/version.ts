@@ -1,1 +1,0 @@
-jest.mock('../vue-strategy/version', () => ({ isVue3: jest.fn(() => true)}));
