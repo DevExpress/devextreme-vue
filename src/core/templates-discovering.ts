@@ -1,8 +1,11 @@
 import { Emitter } from "mitt";
+import * as VueType from "vue";
 import { IConfigurable } from "./configuration-component";
 import { TEMPLATE_MULTIPLE_ROOTS_ERROR } from "./errors";
 import { vueContext } from "./vue-strategy/component-manager";
+import { isVue3 } from "./vue-strategy/version";
 
+const Vue = (VueType as any).default || VueType;
 const TEMPLATE_PROP = "template";
 
 interface IEventBusHolder {
@@ -81,17 +84,14 @@ function mountTemplate(
     name: string,
     placeholder: Element
 ): any {
-    return vueContext.mount({
+    return vueContext.mountTemplate({
         el: placeholder,
         name,
-        inject: ["eventBus"],
         parent,
-        created(this: any & IEventBusHolder) {
-            this.eventBus.on("updated", updatedHandler.bind(this));
-        },
-        render: (createElement: any) => {
+        render: (h: any) => {
             const content = clearConfiguration(getSlot()(data) as any);
             if (!content) {
+                const createElement = isVue3() ? () => Vue.h : h;
                 return createElement("div");
             }
             if (content.length > 1) {
@@ -99,12 +99,8 @@ function mountTemplate(
             }
 
             return content[0];
-        },
-        destroyed() {
-            // T857821
-            (this as IEventBusHolder).eventBus.off("updated", updatedHandler);
         }
-    });
+    }, updatedHandler);
 }
 
 export {

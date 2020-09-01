@@ -1,6 +1,6 @@
-import * as VueType from "vue";
+import * as Vue from "vue";
 import { pullAllChildren } from "../children-processing";
-const Vue = VueType;
+import { IEventBusHolder } from "../templates-discovering";
 
 export class Vue3Strategy {
     public vNodeComponentOptions(component, type) {
@@ -58,7 +58,16 @@ export class Vue3Strategy {
         return (Vue as any).defineComponent(config);
     }
 
-    public mount(options) {
+    public mountTemplate(options, updatedHandler) {
+        const templateMixin = this.create({
+            created(this: any & IEventBusHolder) {
+                options.parent.eventBus.on("updated", updatedHandler.bind(this));
+            },
+            unmounted() {
+                options.parent.eventBus.off("updated", updatedHandler);
+            }
+        });
+        options.mixins = [templateMixin];
         return (Vue as any).createApp(options).mount(options.el);
     }
 
@@ -101,7 +110,7 @@ export class Vue3Strategy {
 
     public children(component) {
         const allChildren = [];
-        if (!this.hasChildren(component)) {
+        if (!this.hasChildren(component) || !component.$_config) {
             return allChildren;
         }
         this.getVNodeChildren(component.$.vnode.children.default(), allChildren, component.$_config.nested);
@@ -121,7 +130,7 @@ export class Vue3Strategy {
     private hasInlineTemplate(allCildren) {
         let hasTemplate = false;
         allCildren.forEach((child) => {
-            if (!(child.type && typeof child.type === "object" && child.type.$_optionName)) {
+            if (!(child.type && typeof child.type === "object" && child.type.data().$_optionName)) {
                 hasTemplate = true;
             }
         });

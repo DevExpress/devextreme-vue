@@ -1,4 +1,5 @@
 import * as VueType from "vue";
+import { IEventBusHolder } from "../templates-discovering";
 const Vue = (VueType as any).default || VueType;
 
 export class Vue2Strategy {
@@ -45,7 +46,17 @@ export class Vue2Strategy {
         return Vue.extend(config);
     }
 
-    public mount(options) {
+    public mountTemplate(options, updatedHandler) {
+        const templateMixin = this.create({
+            inject: ["eventBus"],
+            created(this: any & IEventBusHolder) {
+                (this as IEventBusHolder).eventBus.on("updated", updatedHandler.bind(this));
+            },
+            destroyed() {
+                (this as IEventBusHolder).eventBus.off("updated", updatedHandler);
+            }
+        });
+        options.mixins = [templateMixin];
         return new Vue(options);
     }
 

@@ -1,19 +1,12 @@
-// import * as VueType from "vue";
-import { DxComponent, IWidgetComponent } from "../../component";
-// import { createApp } from "vue";
-import { vueContext } from "../../vue-strategy/component-manager";
-jest.mock("../../vue-strategy/version", () => ({ isVue3: jest.fn(() => true)}));
 import { mount } from "@vue/test-utils";
-// import { nextTick } from "vue";
-import {
-    // DxConfiguration,
-    IConfigurable } from "../../configuration-component";
+import * as events from "devextreme/events";
+import { nextTick } from "vue";
 
-// import { DxExtensionComponent } from "../../extension-component";
+import { DxComponent, IWidgetComponent } from "../../component";
+import { DxConfiguration, IConfigurable } from "../../configuration-component";
+import { vueContext } from "../../vue-strategy/component-manager";
 
-// import * as events from "devextreme/events";
-
-// import { mount } from "@vue/test-utils";
+jest.mock("../../vue-strategy/version", () => ({ isVue3: jest.fn(() => true)}));
 
 const eventHandlers = {};
 const Widget = {
@@ -59,27 +52,29 @@ const TestComponent = vueContext.create({
 function skipIntegrationOptions(options: {
     integrationOptions: object,
     onInitializing: () => void,
-    ref: string
+    ref: string,
+    id: string,
 }): Record<string, any> {
     const result = {...options };
     delete result.integrationOptions;
     delete result.onInitializing;
     delete result.ref;
+    delete result.id;
     return result;
 }
 
-// function buildTestConfigCtor(options): any {
-//     return vueContext.create({
-//         data() {
-//             return options;
-//         },
-//         extends: DxConfiguration,
-//         props: {
-//             prop1: Number,
-//             prop2: String
-//         }
-//     });
-// }
+function buildTestConfigCtor(options): any {
+    return vueContext.create({
+        data() {
+            return options;
+        },
+        extends: DxConfiguration,
+        props: {
+            prop1: Number,
+            prop2: String
+        }
+    });
+}
 
 jest.setTimeout(1000);
 beforeEach(() => {
@@ -164,6 +159,9 @@ describe("component rendering", () => {
     });
 
     describe("configuration", () => {
+
+        const Nested = buildTestConfigCtor({ $_optionName: "nestedOption" });
+
         it("creates configuration", () => {
             const wrapper = mount(TestComponent);
 
@@ -182,267 +180,953 @@ describe("component rendering", () => {
             expect(pendingOptions[name]).toEqual(value);
         });
 
-        // it("initializes nested config", () => {
-        //     const vm = vueContext.create({
-        //         template:
-        //             `<test-component id="component1">` +
-        //             `  <nested :prop1="123" />` +
-        //             `</test-component>`,
-        //         components: {
-        //             TestComponent,
-        //             Nested
-        //         }
-        //     });
+        it("initializes nested config", () => {
+            const vm = vueContext.create({
+                template:
+                    `<test-component id="component">` +
+                    `  <nested :prop1="123" />` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    Nested
+                }
+            });
 
-        //     const wrapper = mount(vm);
+            const wrapper = mount(vm);
 
-        //     const config = (wrapper.vm.$slots[0] as any as IConfigurable).$_config;
-        //     expect(config.nested).toHaveLength(1);
-        //     expect(config.nested[0].name).toBe("nestedOption");
-        //     expect(config.nested[0].options).toEqual(["prop1", "prop2"]);
-        //     expect(config.nested[0].initialValues).toEqual({ prop1: 123 });
-        //     expect(config.nested[0].isCollectionItem).toBeFalsy();
-        // });
+            const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+            expect(config.nested).toHaveLength(1);
+            expect(config.nested[0].name).toBe("nestedOption");
+            expect(config.nested[0].options).toEqual(["prop1", "prop2"]);
+            expect(config.nested[0].initialValues).toEqual({ prop1: 123 });
+            expect(config.nested[0].isCollectionItem).toBeFalsy();
+        });
 
-        // it("initializes nested config (collectionItem)", () => {
-        //     const nestedCollectionItem = buildTestConfigCtor();
-        //     (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
-        //     (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+        it("initializes nested config (collectionItem)", () => {
+            const nestedCollectionItem = buildTestConfigCtor(
+                { $_optionName: "nestedOption",
+                $_isCollectionItem: true
+            });
 
-        //     const vm = new Vue({
-        //         template:
-        //             `<test-component>` +
-        //             `  <nested-collection-item :prop1="123" />` +
-        //             `</test-component>`,
-        //         components: {
-        //             TestComponent,
-        //             nestedCollectionItem
-        //         }
-        //     }).$mount();
+            const vm = vueContext.create({
+                template:
+                    `<test-component id="component">` +
+                    `  <nested-collection-item :prop1="123" />` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    nestedCollectionItem
+                }
+            });
 
-        //     const config = (vm.$children[0] as any as IConfigurable).$_config;
-        //     expect(config.nested).toHaveLength(1);
-        //     expect(config.nested[0].name).toBe("nestedOption");
-        //     expect(config.nested[0].options).toEqual(["prop1", "prop2"]);
-        //     expect(config.nested[0].initialValues).toEqual({ prop1: 123 });
-        //     expect(config.nested[0].isCollectionItem).toBeTruthy();
-        //     expect(config.nested[0].collectionItemIndex).toBe(0);
-        // });
+            const wrapper = mount(vm);
 
-        // it("initializes nested config (several collectionItems)", () => {
-        //     const nestedCollectionItem = buildTestConfigCtor();
-        //     (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
-        //     (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+            const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+            expect(config.nested).toHaveLength(1);
+            expect(config.nested[0].name).toBe("nestedOption");
+            expect(config.nested[0].options).toEqual(["prop1", "prop2"]);
+            expect(config.nested[0].initialValues).toEqual({ prop1: 123 });
+            expect(config.nested[0].isCollectionItem).toBeTruthy();
+            expect(config.nested[0].collectionItemIndex).toBe(0);
+        });
 
-        //     const vm = new Vue({
-        //         template:
-        //             `<test-component>` +
-        //             `  <nested-collection-item :prop1="123" />` +
-        //             `  <nested-collection-item :prop1="456" prop2="abc" />` +
-        //             `  <nested-collection-item prop2="def" />` +
-        //             `</test-component>`,
-        //         components: {
-        //             TestComponent,
-        //             nestedCollectionItem
-        //         }
-        //     }).$mount();
+        it("initializes nested config (several collectionItems)", () => {
+            const nestedCollectionItem = buildTestConfigCtor({
+                $_optionName: "nestedOption",
+                $_isCollectionItem: true
+            });
 
-        //     const config = (vm.$children[0] as any as IConfigurable).$_config;
-        //     expect(config.nested).toHaveLength(3);
+            const vm = vueContext.create({
+                template:
+                    `<test-component id="component">` +
+                    `  <nested-collection-item :prop1="123" />` +
+                    `  <nested-collection-item :prop1="456" prop2="abc" />` +
+                    `  <nested-collection-item prop2="def" />` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    nestedCollectionItem
+                }
+            });
 
-        //     expect(config.nested[0].name).toBe("nestedOption");
-        //     expect(config.nested[0].options).toEqual(["prop1", "prop2"]);
-        //     expect(config.nested[0].initialValues).toEqual({ prop1: 123 });
-        //     expect(config.nested[0].isCollectionItem).toBeTruthy();
-        //     expect(config.nested[0].collectionItemIndex).toBe(0);
+            const wrapper = mount(vm);
 
-        //     expect(config.nested[1].name).toBe("nestedOption");
-        //     expect(config.nested[1].options).toEqual(["prop1", "prop2"]);
-        //     expect(config.nested[1].initialValues).toEqual({ prop1: 456, prop2: "abc" });
-        //     expect(config.nested[1].isCollectionItem).toBeTruthy();
-        //     expect(config.nested[1].collectionItemIndex).toBe(1);
+            const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+            expect(config.nested).toHaveLength(3);
 
-        //     expect(config.nested[2].name).toBe("nestedOption");
-        //     expect(config.nested[2].options).toEqual(["prop1", "prop2"]);
-        //     expect(config.nested[2].initialValues).toEqual({ prop2: "def" });
-        //     expect(config.nested[2].isCollectionItem).toBeTruthy();
-        //     expect(config.nested[2].collectionItemIndex).toBe(2);
-        // });
+            expect(config.nested[0].name).toBe("nestedOption");
+            expect(config.nested[0].options).toEqual(["prop1", "prop2"]);
+            expect(config.nested[0].initialValues).toEqual({ prop1: 123 });
+            expect(config.nested[0].isCollectionItem).toBeTruthy();
+            expect(config.nested[0].collectionItemIndex).toBe(0);
 
-        // it("initializes nested config predefined prop", () => {
-        //     const predefinedValue = {};
-        //     const NestedWithPredefined = buildTestConfigCtor();
-        //     (NestedWithPredefined as any as IConfigurationComponent).$_optionName = "nestedOption";
-        //     (NestedWithPredefined as any as IConfigurationComponent).$_predefinedProps = {
-        //         predefinedProp: predefinedValue
-        //     };
+            expect(config.nested[1].name).toBe("nestedOption");
+            expect(config.nested[1].options).toEqual(["prop1", "prop2"]);
+            expect(config.nested[1].initialValues).toEqual({ prop1: 456, prop2: "abc" });
+            expect(config.nested[1].isCollectionItem).toBeTruthy();
+            expect(config.nested[1].collectionItemIndex).toBe(1);
 
-        //     const vm = new Vue({
-        //         template:
-        //             `<test-component>` +
-        //             `  <nested-with-predefined />` +
-        //             `</test-component>`,
-        //         components: {
-        //             TestComponent,
-        //             NestedWithPredefined
-        //         }
-        //     }).$mount();
+            expect(config.nested[2].name).toBe("nestedOption");
+            expect(config.nested[2].options).toEqual(["prop1", "prop2"]);
+            expect(config.nested[2].initialValues).toEqual({ prop2: "def" });
+            expect(config.nested[2].isCollectionItem).toBeTruthy();
+            expect(config.nested[2].collectionItemIndex).toBe(2);
+        });
 
-        //     const config = (vm.$children[0] as any as IConfigurable).$_config;
-        //     const initialValues = config.getNestedOptionValues();
-        //     expect(initialValues).toHaveProperty("nestedOption");
-        //     expect(initialValues!.nestedOption).toHaveProperty("predefinedProp");
-        //     expect(initialValues!.nestedOption!.predefinedProp).toBe(predefinedValue);
-        // });
+        it("initializes nested config predefined prop", () => {
+            const predefinedValue = {};
+            const NestedWithPredefined = buildTestConfigCtor({ $_optionName: "nestedOption", $_predefinedProps: {
+                predefinedProp: predefinedValue
+            } });
 
-        // it("initializes sub-nested config", () => {
-        //     const subNested = buildTestConfigCtor();
-        //     (subNested as any as IConfigurationComponent).$_optionName = "subNestedOption";
+            const vm = vueContext.create({
+                template:
+                    `<test-component id="component">` +
+                    `  <nested-with-predefined />` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    NestedWithPredefined
+                }
+            });
 
-        //     const vm = new Vue({
-        //         template:
-        //             `<test-component>` +
-        //             `  <nested :prop1="123">` +
-        //             `    <sub-nested prop2="abc"/>` +
-        //             `  </nested>` +
-        //             `</test-component>`,
-        //         components: {
-        //             TestComponent,
-        //             Nested,
-        //             subNested
-        //         }
-        //     }).$mount();
+            const wrapper = mount(vm);
 
-        //     const config = (vm.$children[0] as any as IConfigurable).$_config;
-        //     expect(config.nested).toHaveLength(1);
+            const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+            const initialValues = config.getNestedOptionValues();
+            expect(initialValues).toHaveProperty("nestedOption");
+            expect(initialValues!.nestedOption).toHaveProperty("predefinedProp");
+            expect(initialValues!.nestedOption!.predefinedProp).toBe(predefinedValue);
+        });
 
-        //     const nestedConfig = config.nested[0];
-        //     expect(nestedConfig.nested).toHaveLength(1);
+        it("initializes sub-nested config", () => {
+            const subNested = buildTestConfigCtor({ $_optionName: "subNestedOption" });
 
-        //     expect(nestedConfig.nested[0].name).toBe("subNestedOption");
-        //     expect(nestedConfig.nested[0].options).toEqual(["prop1", "prop2"]);
-        //     expect(nestedConfig.nested[0].initialValues).toEqual({ prop2: "abc" });
-        //     expect(nestedConfig.nested[0].isCollectionItem).toBeFalsy();
-        // });
+            const vm = vueContext.create({
+                template:
+                    `<test-component id="component">` +
+                    `  <nested :prop1="123">` +
+                    `    <sub-nested prop2="abc"/>` +
+                    `  </nested>` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    Nested,
+                    subNested
+                }
+            });
 
-        // it("initializes sub-nested config (collectionItem)", () => {
-        //     const nestedCollectionItem = buildTestConfigCtor();
-        //     (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "subNestedOption";
-        //     (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+            const wrapper = mount(vm);
 
-        //     const vm = new Vue({
-        //         template:
-        //             `<test-component>` +
-        //             `  <nested>` +
-        //             `    <nested-collection-item :prop1="123"/>` +
-        //             `  </nested>` +
-        //             `</test-component>`,
-        //         components: {
-        //             TestComponent,
-        //             Nested,
-        //             nestedCollectionItem
-        //         }
-        //     }).$mount();
+            const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+            expect(config.nested).toHaveLength(1);
 
-        //     const config = (vm.$children[0] as any as IConfigurable).$_config;
-        //     expect(config.nested).toHaveLength(1);
+            const nestedConfig = config.nested[0];
+            expect(nestedConfig.nested).toHaveLength(1);
 
-        //     const nestedConfig = config.nested[0];
-        //     expect(nestedConfig.nested).toHaveLength(1);
+            expect(nestedConfig.nested[0].name).toBe("subNestedOption");
+            expect(nestedConfig.nested[0].options).toEqual(["prop1", "prop2"]);
+            expect(nestedConfig.nested[0].initialValues).toEqual({ prop2: "abc" });
+            expect(nestedConfig.nested[0].isCollectionItem).toBeFalsy();
+        });
 
-        //     expect(nestedConfig.nested[0].name).toBe("subNestedOption");
-        //     expect(nestedConfig.nested[0].options).toEqual(["prop1", "prop2"]);
-        //     expect(nestedConfig.nested[0].initialValues).toEqual({ prop1: 123 });
-        //     expect(nestedConfig.nested[0].isCollectionItem).toBeTruthy();
-        //     expect(nestedConfig.nested[0].collectionItemIndex).toBe(0);
-        // });
+        it("initializes sub-nested config (collectionItem)", () => {
+            const subNested = buildTestConfigCtor({ $_optionName: "subNestedOption", $_isCollectionItem: true });
 
-        // it("initializes sub-nested config (multiple collectionItems)", () => {
-        //     const nestedCollectionItem = buildTestConfigCtor();
-        //     (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "subNestedOption";
-        //     (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+            const vm = vueContext.create({
+                template:
+                    `<test-component id="component">` +
+                    `  <nested :prop1="123">` +
+                    `    <sub-nested prop2="abc"/>` +
+                    `  </nested>` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    Nested,
+                    subNested
+                }
+            });
 
-        //     const vm = new Vue({
-        //         template:
-        //             `<test-component>` +
-        //             `  <nested>` +
-        //             `    <nested-collection-item :prop1="123" />` +
-        //             `    <nested-collection-item :prop1="456" prop2="abc" />` +
-        //             `    <nested-collection-item prop2="def" />` +
-        //             `  </nested>` +
-        //             `</test-component>`,
-        //         components: {
-        //             TestComponent,
-        //             Nested,
-        //             nestedCollectionItem
-        //         }
-        //     }).$mount();
+            const wrapper = mount(vm);
 
-        //     const config = (vm.$children[0] as any as IConfigurable).$_config;
-        //     expect(config.nested).toHaveLength(1);
+            const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+            expect(config.nested).toHaveLength(1);
 
-        //     const nestedConfig = config.nested[0];
-        //     expect(nestedConfig.nested).toHaveLength(3);
+            const nestedConfig = config.nested[0];
+            expect(nestedConfig.nested).toHaveLength(1);
 
-        //     expect(nestedConfig.nested[0].name).toBe("subNestedOption");
-        //     expect(nestedConfig.nested[0].options).toEqual(["prop1", "prop2"]);
-        //     expect(nestedConfig.nested[0].initialValues).toEqual({ prop1: 123 });
-        //     expect(nestedConfig.nested[0].isCollectionItem).toBeTruthy();
-        //     expect(nestedConfig.nested[0].collectionItemIndex).toBe(0);
+            expect(nestedConfig.nested[0].name).toBe("subNestedOption");
+            expect(nestedConfig.nested[0].options).toEqual(["prop1", "prop2"]);
+            expect(nestedConfig.nested[0].initialValues).toEqual({ prop2: "abc" });
+            expect(nestedConfig.nested[0].isCollectionItem).toBeTruthy();
+            expect(nestedConfig.nested[0].collectionItemIndex).toBe(0);
+        });
 
-        //     expect(nestedConfig.nested[1].name).toBe("subNestedOption");
-        //     expect(nestedConfig.nested[1].options).toEqual(["prop1", "prop2"]);
-        //     expect(nestedConfig.nested[1].initialValues).toEqual({ prop1: 456, prop2: "abc" });
-        //     expect(nestedConfig.nested[1].isCollectionItem).toBeTruthy();
-        //     expect(nestedConfig.nested[1].collectionItemIndex).toBe(1);
+        it("initializes sub-nested config (multiple collectionItems)", () => {
+            const nestedCollectionItem = buildTestConfigCtor({
+                $_optionName: "subNestedOption",
+                $_isCollectionItem: true
+            });
 
-        //     expect(nestedConfig.nested[2].name).toBe("subNestedOption");
-        //     expect(nestedConfig.nested[2].options).toEqual(["prop1", "prop2"]);
-        //     expect(nestedConfig.nested[2].initialValues).toEqual({ prop2: "def" });
-        //     expect(nestedConfig.nested[2].isCollectionItem).toBeTruthy();
-        //     expect(nestedConfig.nested[2].collectionItemIndex).toBe(2);
-        // });
+            const vm = vueContext.create({
+                template:
+                    `<test-component id="component">` +
+                    `  <nested>` +
+                    `    <nested-collection-item :prop1="123" />` +
+                    `    <nested-collection-item :prop1="456" prop2="abc" />` +
+                    `    <nested-collection-item prop2="def" />` +
+                    `  </nested>` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    Nested,
+                    nestedCollectionItem
+                }
+            });
 
-        // describe("expectedChildren", () => {
+            const wrapper = mount(vm);
 
-        //     it("initialized for widget component", () => {
-        //         const expected = {};
+            const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+            expect(config.nested).toHaveLength(1);
 
-        //         const WidgetComponent = Vue.extend({
-        //             extends: DxComponent,
-        //             beforeCreate() {
-        //                 (this as any as IWidgetComponent).$_WidgetClass = WidgetClass;
-        //                 (this as any as IWidgetComponent).$_expectedChildren = expected;
-        //             }
-        //         });
+            const nestedConfig = config.nested[0];
+            expect(nestedConfig.nested).toHaveLength(3);
 
-        //         const vm = new WidgetComponent();
+            expect(nestedConfig.nested[0].name).toBe("subNestedOption");
+            expect(nestedConfig.nested[0].options).toEqual(["prop1", "prop2"]);
+            expect(nestedConfig.nested[0].initialValues).toEqual({ prop1: 123 });
+            expect(nestedConfig.nested[0].isCollectionItem).toBeTruthy();
+            expect(nestedConfig.nested[0].collectionItemIndex).toBe(0);
 
-        //         expect((vm as IWidgetComponent).$_config.expectedChildren).toBe(expected);
-        //     });
+            expect(nestedConfig.nested[1].name).toBe("subNestedOption");
+            expect(nestedConfig.nested[1].options).toEqual(["prop1", "prop2"]);
+            expect(nestedConfig.nested[1].initialValues).toEqual({ prop1: 456, prop2: "abc" });
+            expect(nestedConfig.nested[1].isCollectionItem).toBeTruthy();
+            expect(nestedConfig.nested[1].collectionItemIndex).toBe(1);
 
-        //     it("initialized for config component", () => {
-        //         const expected = {};
+            expect(nestedConfig.nested[2].name).toBe("subNestedOption");
+            expect(nestedConfig.nested[2].options).toEqual(["prop1", "prop2"]);
+            expect(nestedConfig.nested[2].initialValues).toEqual({ prop2: "def" });
+            expect(nestedConfig.nested[2].isCollectionItem).toBeTruthy();
+            expect(nestedConfig.nested[2].collectionItemIndex).toBe(2);
+        });
 
-        //         const ConfigComponent = buildTestConfigCtor();
-        //         (ConfigComponent as any as IConfigurationComponent).$_optionName = "nestedOption";
-        //         (ConfigComponent as any as IConfigurationComponent).$_expectedChildren = expected;
+        describe("expectedChildren", () => {
 
-        //         const vm = new Vue({
-        //             template:
-        //                 `<test-component>` +
-        //                 `  <config-component />` +
-        //                 `</test-component>`,
-        //             components: {
-        //                 TestComponent,
-        //                 ConfigComponent
-        //             }
-        //         }).$mount();
+            it("initialized for widget component", () => {
+                const expected = {};
 
-        //         const widgetConfig = (vm.$children[0] as any as IConfigurable).$_config;
-        //         expect(widgetConfig.nested[0].expectedChildren).toBe(expected);
-        //     });
-        // });
+                const WidgetComponent = vueContext.create({
+                    extends: DxComponent,
+                    beforeCreate() {
+                        (this as any as IWidgetComponent).$_WidgetClass = WidgetClass;
+                        (this as any as IWidgetComponent).$_expectedChildren = expected;
+                    }
+                });
 
+                const wrapper = mount(WidgetComponent);
+
+                expect((wrapper.vm as any as IWidgetComponent).$_config.expectedChildren).toBe(expected);
+            });
+
+            it("initialized for config component", () => {
+                const expected = {};
+                const ConfigComponent = buildTestConfigCtor({
+                    $_optionName: "nestedOption",
+                    $_expectedChildren: expected
+                });
+
+                const vm = vueContext.create({
+                    template:
+                        `<test-component id="component">` +
+                        `  <config-component />` +
+                        `</test-component>`,
+                    components: {
+                        TestComponent,
+                        ConfigComponent
+                    }
+                });
+
+                const wrapper = mount(vm);
+
+                const widgetConfig = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+                expect(widgetConfig.nested[0].expectedChildren).toBe(expected);
+            });
+        });
+
+    });
+
+    describe("nested option", () => {
+
+        const Nested = buildTestConfigCtor({ $_optionName: "nestedOption" });
+
+        it("pulls initital values", () => {
+            const vm = vueContext.create({
+                template:
+                    `<test-component id="component">` +
+                    `  <nested :prop1="123" />` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    Nested
+                }
+            });
+
+            const wrapper = mount(vm);
+            const component = wrapper.getComponent("#component");
+
+            expect(WidgetClass.mock.calls[0][0]).toBe(component.vm.$el);
+
+            expect(skipIntegrationOptions(WidgetClass.mock.calls[0][1])).toEqual({
+                nestedOption: {
+                    prop1: 123
+                }
+            });
+        });
+
+        it("watches option changes", (done) => {
+            const vm = vueContext.create({
+                template:
+                    `<test-component>` +
+                    `  <nested :prop1="value" />` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    Nested
+                },
+                props: ["value"]
+            });
+
+            const wrapper = mount(vm, {
+                props: {
+                    value: 123
+                }
+            });
+
+            wrapper.setProps({ value: 456 });
+
+            nextTick(() => {
+                expect(Widget.option).toHaveBeenCalledTimes(1);
+                expect(Widget.option).toHaveBeenCalledWith("nestedOption.prop1", 456);
+                done();
+            });
+        });
+
+        it("add nested component by condition", (done) => {
+            const vm = vueContext.create({
+                template:
+                    `<test-component>` +
+                    `  <nested v-if="showNest" :prop1="123" />` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    Nested
+                },
+                props: {
+                    showNest: false
+                }
+            });
+
+            const wrapper = mount(vm);
+
+            wrapper.setProps({ showNest: true });
+
+            nextTick(() => {
+                expect(Widget.option).toHaveBeenCalledWith("nestedOption", { key: 0, prop1: 123 });
+                done();
+            });
+        });
+
+        it("remove nested component by condition", (done) => {
+            const nestedCollectionItem = buildTestConfigCtor({
+                $_optionName: "nestedOption",
+                $_isCollectionItem: true
+            });
+            const vm = vueContext.create({
+                template:
+                    `<test-component>` +
+                    `  <nested-collection-item v-if="show" :prop1="123" />` +
+                    `  <nested-collection-item :prop1="321" />` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    nestedCollectionItem
+                },
+                props: {
+                    show: {
+                        type: Boolean,
+                        default: true
+                    }
+                }
+            });
+
+            const wrapper = mount(vm);
+
+            wrapper.setProps({ show: false });
+
+            nextTick(() => {
+                expect(Widget.option).toHaveBeenCalledWith("nestedOption", [{ prop1: 321 }]);
+                done();
+            });
+        });
+
+        it("should update only part of collection components", (done) => {
+            const nestedCollectionItem = buildTestConfigCtor({
+                $_optionName: "nestedOption",
+                $_isCollectionItem: true
+            });
+            const vm = vueContext.create({
+                template:
+                    `<test-component>` +
+                    `  <nested-collection-item>` +
+                    `     <nested-collection-item>` +
+                    `       <nested-collection-item v-if="show" :prop1="123">` +
+                    `       </nested-collection-item>` +
+                    `       <nested-collection-item :prop1="321">` +
+                    `       </nested-collection-item>` +
+                    `     </nested-collection-item>` +
+                    `  </nested-collection-item>` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    nestedCollectionItem
+                },
+                props: {
+                    show: {
+                        type: Boolean,
+                        default: true
+                    }
+                }
+            });
+
+            const wrapper = mount(vm);
+
+            wrapper.setProps({ show: false });
+
+            nextTick(() => {
+                expect(Widget.option)
+                    .toHaveBeenCalledWith("nestedOption[0].nestedOption[0].nestedOption", [{ prop1: 321 }]);
+                done();
+            });
+        });
+
+        it("should update only part of collection components (remove all subnested)", (done) => {
+            const nestedCollectionItem = buildTestConfigCtor({
+                $_optionName: "nestedOption",
+                $_isCollectionItem: true
+            });
+            const vm = vueContext.create({
+                template:
+                    `<test-component>` +
+                    `  <nested-collection-item>` +
+                    `     <nested-collection-item>` +
+                    `       <nested-collection-item v-if="show" :prop1="123">` +
+                    `       </nested-collection-item>` +
+                    `       <nested-collection-item v-if="show" :prop1="321">` +
+                    `       </nested-collection-item>` +
+                    `     </nested-collection-item>` +
+                    `  </nested-collection-item>` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    nestedCollectionItem
+                },
+                props: {
+                    show: {
+                        type: Boolean,
+                        default: true
+                    }
+                }
+            });
+
+            const wrapper = mount(vm);
+
+            wrapper.setProps({ show: false });
+
+            nextTick(() => {
+                expect(Widget.option).toHaveBeenCalledWith("nestedOption[0].nestedOption[0].nestedOption", undefined);
+                done();
+            });
+        });
+
+        it("reset nested component", (done) => {
+            const vm = vueContext.create({
+                template:
+                    `<test-component>` +
+                    `  <nested v-if="show" :prop1="123" />` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    Nested
+                },
+                props: {
+                    show: {
+                        type: Boolean,
+                        default: true
+                    }
+                }
+            });
+
+            const wrapper = mount(vm);
+
+            wrapper.setProps({ show: false });
+
+            nextTick(() => {
+                expect(Widget.resetOption).toHaveBeenCalledWith("nestedOption");
+                done();
+            });
+        });
+    });
+
+    function renderTemplate(name: string, model?: object, container?: any, index?: number): Element {
+        model = model || {};
+        container = container || document.createElement("div");
+        const render = WidgetClass.mock.calls[0][1].integrationOptions.templates[name].render;
+        return render({
+            container,
+            model,
+            index
+        });
+    }
+
+    describe("template", () => {
+
+        const DX_TEMPLATE_WRAPPER = "dx-template-wrapper";
+        const componentWithTemplate = vueContext.create({
+            template: `<test-component :prop1='prop1Value'>
+                         <template #test v-if='renderTemplate'>content</template>
+                       </test-component>`,
+            components: {
+                TestComponent
+            },
+            props: {
+                renderTemplate: {
+                    type: Boolean,
+                    value: false
+                },
+                prop1Value: {
+                    type: Number,
+                    value: 1
+                }
+            }
+        });
+
+        function renderItemTemplate(model?: object, container?: any, index?: number): Element {
+            return renderTemplate("item", model, container, index);
+        }
+
+        it("passes integrationOptions to widget", () => {
+            const vm = vueContext.create({
+                template: `<test-component>
+                             <template #item>
+                               <div>1</div>
+                             </template>
+                             <template #content>
+                               <div>1</div>
+                             </template>
+                             <div>1</div>
+                           </test-component>`,
+                components: {
+                    TestComponent
+                }
+            });
+
+            mount(vm);
+            const integrationOptions = WidgetClass.mock.calls[0][1].integrationOptions;
+
+            expect(integrationOptions).toBeDefined();
+            expect(integrationOptions.templates).toBeDefined();
+
+            expect(integrationOptions.templates.item).toBeDefined();
+            expect(typeof integrationOptions.templates.item.render).toBe("function");
+
+            expect(integrationOptions.templates.content).toBeDefined();
+            expect(typeof integrationOptions.templates.content.render).toBe("function");
+
+            expect(integrationOptions.templates.default).toBeUndefined();
+        });
+
+        it("passes 'integrationOptions.templates' on update", () => {
+            const wrapper = mount(componentWithTemplate);
+
+            wrapper.setProps({
+                renderTemplate: true
+            });
+
+            nextTick(() => {
+                expect(Widget.option.mock.calls[0][0]).toEqual("integrationOptions.templates");
+                expect(Widget.option.mock.calls[0][1].test.render).toBeInstanceOf(Function);
+            });
+        });
+
+        it("passes 'integrationOptions.templates' on update before other options", () => {
+            const wrapper = mount(componentWithTemplate);
+
+            wrapper.setProps({
+                renderTemplate: true,
+                prop1Value: 2
+            });
+
+            nextTick(() => {
+                expect(Widget.option.mock.calls[0][0]).toEqual("integrationOptions.templates");
+                expect(Widget.option.mock.calls[1]).toEqual([ "test", "test" ]);
+                expect(Widget.option.mock.calls[2]).toEqual([ "prop1", 2 ]);
+            });
+        });
+
+        it("renders", () => {
+            const vm = vueContext.create({
+                template: `<test-component>
+                                <template #item>
+                                    <div>Template</div>
+                                </template>
+                            </test-component>`,
+                components: {
+                    TestComponent
+                }
+            });
+            mount(vm);
+            const renderedTemplate = renderItemTemplate();
+
+            expect(renderedTemplate.nodeName).toBe("DIV");
+            expect(renderedTemplate.className).toBe(DX_TEMPLATE_WRAPPER);
+            expect(renderedTemplate.innerHTML).toBe("Template");
+        });
+
+        it("renders scoped slot", () => {
+            const vm = vueContext.create({
+                template: `<test-component>
+                                <template #item="{ data: { text }, index }">
+                                    Template {{text}} and index {{index}}
+                                </template>
+                            </test-component>`,
+                components: {
+                    TestComponent
+                }
+            });
+            mount(vm);
+            const renderedTemplate = renderItemTemplate({ text: "with data" }, undefined, 5);
+            expect(renderedTemplate.textContent).toContain("Template with data and index 5");
+        });
+
+        it("preserves custom-attrs", () => {
+            const vm = vueContext.create({
+                template: `<test-component>
+                                <template #item="{ data: { text } }">
+                                    <div custom-attr=123>Template {{text}}</div>
+                                </template>
+                            </test-component>`,
+                components: {
+                    TestComponent
+                }
+            });
+            mount(vm);
+            const renderedTemplate = renderItemTemplate({});
+
+            expect(renderedTemplate.attributes).toHaveProperty("custom-attr");
+            expect(renderedTemplate.attributes["custom-attr"].value).toBe("123");
+        });
+
+        it("doesn't throw on dxremove", () => {
+            const vm = vueContext.create({
+                template: `<test-component>
+                                <template #item="{ data: { text } }">
+                                    Template {{text}}
+                                </template>
+                            </test-component>`,
+                components: {
+                    TestComponent
+                }
+            });
+
+            mount(vm);
+
+            const renderedTemplate = renderItemTemplate({ text: "with data" });
+
+            expect(() => events.triggerHandler(renderedTemplate, "dxremove")).not.toThrow();
+        });
+
+        it("destroyed component should remove subscriptions", (done) => {
+            const vm = vueContext.create({
+                template: `<test-component id="component" :prop1="value">
+                                <template #item="{data}">Template {{data.text}}</template>
+                            </test-component>`,
+                components: {
+                    TestComponent
+                },
+                props: ["value"]
+            });
+
+            const wrapper = mount(vm, {
+                props: {
+                    value: 123
+                }
+            });
+
+            const container = document.createElement("div");
+            renderItemTemplate({ text: "with data" }, container);
+            events.triggerHandler(container.children[0], "dxremove");
+            renderItemTemplate({ text: "with data" }, container);
+
+            const subscriptions = (wrapper.getComponent("#component").vm as any).eventBus.all;
+
+            for (const subscription of subscriptions) {
+                expect(subscription.length).toBe(1);
+            }
+
+            done();
+        });
+
+        describe("static items", () => {
+            it("passes integrationOptions to widget", () => {
+                const NestedItem = vueContext.create({
+                    data() {
+                        return {
+                            $_optionName: "items",
+                            $_isCollectionItem: true
+                        };
+                    },
+                    extends: DxConfiguration,
+                    props: {
+                        prop1: Number,
+                        template: String
+                    }
+                });
+
+                const vm = vueContext.create({
+                    template: `<test-component>
+                                <nested-item>
+                                    <template #default>
+                                        <div>1</div>
+                                    </template>
+                                </nested-item>
+                            </test-component>`,
+                    components: {
+                        TestComponent,
+                        NestedItem
+                    }
+                });
+
+                mount(vm);
+
+                const integrationOptions = WidgetClass.mock.calls[0][1].integrationOptions;
+
+                expect(integrationOptions).toBeDefined();
+                expect(integrationOptions.templates).toBeDefined();
+
+                expect(integrationOptions.templates["items[0].template"]).toBeDefined();
+                expect(typeof integrationOptions.templates["items[0].template"].render).toBe("function");
+            });
+
+            it("passes node of nested component as template", () => {
+                const NestedItem = vueContext.create({
+                    data() {
+                        return {
+                            $_optionName: "items",
+                            $_isCollectionItem: true
+                        };
+                    },
+                    extends: DxConfiguration,
+                    props: {
+                        prop1: Number,
+                        template: String
+                    }
+                });
+
+                const vm = vueContext.create({
+                    template: `<test-component>
+                                <nested-item>
+                                    <div>1</div>
+                                </nested-item>
+                            </test-component>`,
+                    components: {
+                        TestComponent,
+                        NestedItem
+                    }
+                });
+
+                mount(vm);
+
+                const integrationOptions = WidgetClass.mock.calls[0][1].integrationOptions;
+                expect(integrationOptions.templates["items[0].template"]).toBeDefined();
+                expect(typeof integrationOptions.templates["items[0].template"].render).toBe("function");
+            });
+
+            it("passes node of nested component as template (exclude nested component)", () => {
+                const NestedItem = vueContext.create({
+                    data() {
+                        return {
+                            $_optionName: "items",
+                            $_isCollectionItem: true
+                        };
+                    },
+                    extends: DxConfiguration,
+                    props: {
+                        prop1: Number,
+                        template: String
+                    }
+                });
+
+                const vm = vueContext.create({
+                    template: `<test-component>
+                                <nested-item>
+                                    <nested-item></nested-item>
+                                    <div>1</div>
+                                </nested-item>
+                            </test-component>`,
+                    components: {
+                        TestComponent,
+                        NestedItem
+                    }
+                });
+
+                mount(vm);
+
+                const integrationOptions = WidgetClass.mock.calls[0][1].integrationOptions;
+                expect(integrationOptions.templates["items[0].template"]).toBeDefined();
+                expect(typeof integrationOptions.templates["items[0].template"].render).toBe("function");
+            });
+
+            it("passes node of nested component as template (tree of components)", () => {
+                const NestedItem = vueContext.create({
+                    data() {
+                        return {
+                            $_optionName: "items",
+                            $_isCollectionItem: true
+                        };
+                    },
+                    extends: DxConfiguration,
+                    props: {
+                        prop1: Number,
+                        template: String
+                    }
+                });
+
+                const vm = vueContext.create({
+                    template: `<test-component>
+                                <nested-item>
+                                    <nested-item>
+                                        <div>1</div>
+                                    </nested-item>
+                                    <div>1</div>
+                                </nested-item>
+                            </test-component>`,
+                    components: {
+                        TestComponent,
+                        NestedItem
+                    }
+                });
+
+                mount(vm);
+
+                const integrationOptions = WidgetClass.mock.calls[0][1].integrationOptions;
+                expect(integrationOptions.templates["items[0].template"]).toBeDefined();
+                expect(typeof integrationOptions.templates["items[0].template"].render).toBe("function");
+                expect(integrationOptions.templates["items[0].items[0].template"]).toBeDefined();
+                expect(typeof integrationOptions.templates["items[0].items[0].template"].render).toBe("function");
+            });
+
+            it("doesn't pass integrationOptions to widget if template prop is absent", () => {
+                const NestedItem = vueContext.create({
+                    data() {
+                        return {
+                            $_optionName: "items",
+                            $_isCollectionItem: true
+                        };
+                    },
+                    extends: DxConfiguration,
+                    props: {
+                        prop1: Number
+                    }
+                });
+
+                const vm = vueContext.create({
+                    template: `<test-component>
+                                <nested-item>
+                                    <div>1</div>
+                                </nested-item>
+                            </test-component>`,
+                    components: {
+                        TestComponent,
+                        NestedItem
+                    }
+                });
+
+                mount(vm);
+
+                const integrationOptions = WidgetClass.mock.calls[0][1].integrationOptions;
+
+                expect(integrationOptions).toBeDefined();
+                expect(integrationOptions.templates).toBeUndefined();
+            });
+
+            it("renders template containing text only (vue 3)", () => {
+                const NestedItem = vueContext.create({
+                    data() {
+                        return {
+                            $_optionName: "item"
+                        };
+                    },
+                    extends: DxConfiguration,
+                    props: {
+                        prop1: Number,
+                        template: String
+                    }
+                });
+
+                const wrapper =  vueContext.create({
+                    template: `<test-component>
+                                <nested-item>
+                                    <template #default>abc</template>
+                                </nested-item>
+                            </test-component>`,
+                    components: {
+                        TestComponent,
+                        NestedItem
+                    }
+                });
+
+                mount(wrapper);
+
+                const renderedTemplate = renderTemplate("item.template");
+
+                expect(renderedTemplate.textContent).toBe("abc");
+            });
+
+            it("doesn't pass integrationOptions to widget if nested item has sub nested item", () => {
+                const NestedItem = vueContext.create({
+                    data() {
+                        return {
+                            $_optionName: "items",
+                            $_isCollectionItem: true
+                        };
+                    },
+                    extends: DxConfiguration,
+                    props: {
+                        prop1: Number,
+                        template: String
+                    }
+                });
+
+                const subNested = buildTestConfigCtor({ $_optionName: "subNestedOption" });
+
+                const vm = vueContext.create({
+                    template: `<test-component>
+                                <nested-item>
+                                    <sub-nested prop2="abc"/>
+                                </nested-item>
+                            </test-component>`,
+                    components: {
+                        TestComponent,
+                        subNested,
+                        NestedItem
+                    }
+                });
+
+                mount(vm);
+
+                expect(WidgetClass.mock.calls[0][1].integrationOptions.templates).toBeUndefined();
+            });
+        });
     });
 });

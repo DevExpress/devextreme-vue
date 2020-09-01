@@ -546,5 +546,4 @@ describe("onOptionChanged", () => {
         expect(emitStubRoot).toHaveBeenCalledTimes(1);
         expect(emitStubNested).toHaveBeenCalledTimes(0);
     });
-
 });

@@ -116,6 +116,14 @@ const BaseComponent: any = vueContext.create({
         }
     },
 
+    beforeUnmount(): void {
+        const instance = this.$_instance;
+        if (instance) {
+            events.triggerHandler(this.$el, DX_REMOVE_EVENT);
+            instance.dispose();
+        }
+    },
+
     created(): void {
         const props = vueContext.usedProps(this);
         (this as IBaseComponent).$_config = new Configuration(

@@ -95,6 +95,11 @@ const DxConfiguration: any = vueContext.create({
             .push(getComponentInfo(getConfig(this) as Configuration, true));
     },
 
+    beforeUnmount() {
+        (this.$parent as any).$_config.componentsCountChanged
+            .push(getComponentInfo(getConfig(this) as Configuration, true));
+    },
+
     render(h: (...args) => VNode): VNode | null {
         const createElement = isVue3() ? () => null : h;
         return createElement();

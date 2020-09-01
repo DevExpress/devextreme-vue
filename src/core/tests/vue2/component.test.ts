@@ -1585,37 +1585,6 @@ describe("static items", () => {
         expect(renderedTemplate.innerHTML).toBe("1");
     });
 
-    it("renders template containing text only (vue 3)", () => {
-        const NestedItem = Vue.extend({
-            data() {
-                return {
-                    $_optionName: "item"
-                };
-            },
-            extends: DxConfiguration,
-            props: {
-                prop1: Number,
-                template: String
-            }
-        });
-
-        new Vue({
-            template: `<test-component>
-                         <nested-item>
-                            <template #default>abc</template>
-                         </nested-item>
-                       </test-component>`,
-            components: {
-                TestComponent,
-                NestedItem
-            }
-        }).$mount();
-
-        const renderedTemplate = renderTemplate("item.template");
-
-        expect(renderedTemplate.textContent).toBe("abc");
-    });
-
     it("renders template with several root elements (vue 3)", () => {
         const NestedItem = Vue.extend({
             extends: DxConfiguration,
