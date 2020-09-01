@@ -1,8 +1,9 @@
 import * as Vue from "vue";
 import { pullAllChildren } from "../children-processing";
 import { IEventBusHolder } from "../templates-discovering";
+import { IVueStrategy } from "./index";
 
-export class Vue3Strategy {
+export class Vue3Strategy implements IVueStrategy {
     public vNodeComponentOptions(component, type) {
         if (component.$) {
             if (type) {
@@ -22,6 +23,14 @@ export class Vue3Strategy {
         }
         this.findConfigurationComponents(component.children.default(), configComponents);
         return configComponents;
+    }
+
+    public childExtension(component) {
+        const vNode = this.vNodeComponentOptions(component, true);
+        if (!vNode.$_isExtension) { return; }
+
+        vNode.attachTo = vNode.$_componentInstance.attachTo;
+        return vNode;
     }
 
     public childrenToUpdate(component) {
@@ -54,12 +63,20 @@ export class Vue3Strategy {
         return node.props;
     }
 
-    public create(config) {
+    public createComponent(config) {
         return (Vue as any).defineComponent(config);
     }
 
+    public markAsExtention(component) {
+        const vNodeOptions = this.vNodeComponentOptions(component, true);
+        if (!vNodeOptions) { return; }
+
+        vNodeOptions.$_isExtension = true;
+        vNodeOptions.$_componentInstance = component;
+    }
+
     public mountTemplate(options, updatedHandler) {
-        const templateMixin = this.create({
+        const templateMixin = this.createComponent({
             created(this: any & IEventBusHolder) {
                 options.parent.eventBus.on("updated", updatedHandler.bind(this));
             },
@@ -87,6 +104,10 @@ export class Vue3Strategy {
         return component.$slots;
     }
 
+    public componentInstance(component) {
+        return component.type ? component.type.$_componentInstance : {};
+    }
+
     public configurationProps(node) {
         const options = this.vNodeComponentOptions(node, true);
         if (!options && !options.props) {
@@ -103,7 +124,6 @@ export class Vue3Strategy {
         if (!node.children || node.children === "object" || !node.children.default) {
             return;
         }
-        this.hasInlineTemplate(node.children.default());
 
         return this.hasInlineTemplate(node.children.default()) ? node.children.default : null;
     }
@@ -115,6 +135,14 @@ export class Vue3Strategy {
         }
         this.getVNodeChildren(component.$.vnode.children.default(), allChildren, component.$_config.nested);
         return allChildren;
+    }
+
+    public saveComponentInstance(component) {
+        const vNodeOptions = this.vNodeComponentOptions(component, true);
+
+        if (vNodeOptions) {
+            vNodeOptions.$_componentInstance = component;
+        }
     }
 
     private findConfigurationComponents(allCildren, configComponents) {

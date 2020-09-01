@@ -35,7 +35,7 @@ describe("templates-discovering (vue 3)", () => {
 
 function getDiscoveredTemplates(template: string): string[] {
     let actual;
-    const vm = vueContext.create({
+    const vm = vueContext.createComponent({
         template: `<container>${template}</container>`,
         components: {
             container: {

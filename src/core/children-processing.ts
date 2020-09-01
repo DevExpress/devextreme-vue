@@ -1,6 +1,6 @@
 import { VNode } from "vue";
 import Configuration from "./configuration";
-import { IConfigurationComponent } from "./configuration-component";
+import { IConfigurable, IConfigurationComponent } from "./configuration-component";
 import { vueContext } from "./vue-strategy";
 
 function pullAllChildren(directChildren: VNode[], allChildren: VNode[], config: Configuration): void {
@@ -13,7 +13,8 @@ function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Co
 
     children.forEach((node) => {
         nodes.push(node);
-        if (!vueContext.componentOptions(node)) { return; }
+        const componentOptions = vueContext.componentOptions(node);
+        if (!componentOptions) { return; }
 
         const componentInfo = vueContext.componentInfo(node) as any as IConfigurationComponent;
         if (!componentInfo) { return; }
@@ -31,8 +32,8 @@ function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Co
             componentInfo.$_expectedChildren
         );
 
-        (vueContext.componentOptions(node) as any).$_config = config;
-        (vueContext.componentOptions(node) as any).$_innerChanges = {};
+        (componentOptions as IConfigurable).$_config = config;
+        (componentOptions as IConfigurable).$_innerChanges = {};
 
         if (componentChildren) {
             pullConfigComponents(componentChildren as VNode[], nodes, config);

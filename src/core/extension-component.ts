@@ -3,6 +3,7 @@ import { vueContext } from "./vue-strategy";
 
 interface IExtension {
     $_isExtension: boolean;
+    $_componentInstance: any;
     attachTo(element: any);
 }
 
@@ -10,21 +11,15 @@ interface IExtensionComponentNode {
     $_hasOwner: boolean;
 }
 
-const DxExtensionComponent: any = vueContext.create({
+const DxExtensionComponent: any = vueContext.createComponent({
     extends: BaseComponent,
     created(): void {
-        const vNodeOptions = vueContext.vNodeComponentOptions(this, true);
-        if (vNodeOptions) {
-            vNodeOptions.$_isExtension = true;
-            vNodeOptions.$_componentInstance = this;
-        } else {
-            this.$_isExtension = true;
-        }
+        vueContext.markAsExtention(this);
     },
 
     mounted() {
         this.$el.setAttribute("isExtension", "true");
-        const componentOptions = vueContext.vNodeComponentOptions(this, false);
+        const componentOptions = vueContext.vNodeComponentOptions(this);
         if (componentOptions && (componentOptions as any as IExtensionComponentNode).$_hasOwner) { return; }
 
         this.attachTo(this.$el);

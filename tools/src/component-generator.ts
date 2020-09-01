@@ -176,7 +176,7 @@ const renderComponent: (model: {
     L1 + `readonly instance?: <#= it.widgetImport.name #>;` + `\n` +
 `}` + `\n` +
 
-`const <#= it.component #> = vueContext.create({` +
+`const <#= it.component #> = vueContext.createComponent({` +
 L1 + `extends: <#= it.baseComponent #>,` +
 
 `<#? it.props #>` +
@@ -223,7 +223,7 @@ L0 + `});\n` +
 `<#? it.nestedComponents #>` +
     `\n` +
     `<#~ it.nestedComponents : nested #>` +
-        `const <#= nested.name #>: any = vueContext.create({` +
+        `const <#= nested.name #>: any = vueContext.createComponent({` +
         L1 + `data() {` +
             L2 + `return {` +
                 L3 + `$_optionName: "<#= nested.optionName #>",` +

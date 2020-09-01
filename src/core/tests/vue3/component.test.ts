@@ -4,6 +4,7 @@ import { nextTick } from "vue";
 
 import { DxComponent, IWidgetComponent } from "../../component";
 import { DxConfiguration, IConfigurable } from "../../configuration-component";
+import { DxExtensionComponent } from "../../extension-component";
 import { vueContext } from "../../vue-strategy";
 
 jest.mock("../../vue-strategy/version", () => ({ isVue3: jest.fn(() => true)}));
@@ -34,7 +35,7 @@ function createWidget(_, options) {
 }
 const WidgetClass = jest.fn(createWidget);
 
-const TestComponent = vueContext.create({
+const TestComponent = vueContext.createComponent({
     extends: DxComponent,
     beforeCreate() {
         this.$_WidgetClass = WidgetClass;
@@ -64,7 +65,7 @@ function skipIntegrationOptions(options: {
 }
 
 function buildTestConfigCtor(options): any {
-    return vueContext.create({
+    return vueContext.createComponent({
         data() {
             return options;
         },
@@ -96,7 +97,7 @@ describe("component rendering", () => {
     });
 
     it("passes id to element", () => {
-        const vm = vueContext.create({
+        const vm = vueContext.createComponent({
             template: "<test-component id='my-id'/>",
             components: {
                 TestComponent
@@ -107,7 +108,7 @@ describe("component rendering", () => {
     });
 
     it("creates nested component", () => {
-        mount(vueContext.create({
+        mount(vueContext.createComponent({
             template: "<test-component><test-component/></test-component>",
             components: {
                 TestComponent
@@ -181,7 +182,7 @@ describe("component rendering", () => {
         });
 
         it("initializes nested config", () => {
-            const vm = vueContext.create({
+            const vm = vueContext.createComponent({
                 template:
                     `<test-component id="component">` +
                     `  <nested :prop1="123" />` +
@@ -208,7 +209,7 @@ describe("component rendering", () => {
                 $_isCollectionItem: true
             });
 
-            const vm = vueContext.create({
+            const vm = vueContext.createComponent({
                 template:
                     `<test-component id="component">` +
                     `  <nested-collection-item :prop1="123" />` +
@@ -236,7 +237,7 @@ describe("component rendering", () => {
                 $_isCollectionItem: true
             });
 
-            const vm = vueContext.create({
+            const vm = vueContext.createComponent({
                 template:
                     `<test-component id="component">` +
                     `  <nested-collection-item :prop1="123" />` +
@@ -279,7 +280,7 @@ describe("component rendering", () => {
                 predefinedProp: predefinedValue
             } });
 
-            const vm = vueContext.create({
+            const vm = vueContext.createComponent({
                 template:
                     `<test-component id="component">` +
                     `  <nested-with-predefined />` +
@@ -302,7 +303,7 @@ describe("component rendering", () => {
         it("initializes sub-nested config", () => {
             const subNested = buildTestConfigCtor({ $_optionName: "subNestedOption" });
 
-            const vm = vueContext.create({
+            const vm = vueContext.createComponent({
                 template:
                     `<test-component id="component">` +
                     `  <nested :prop1="123">` +
@@ -333,7 +334,7 @@ describe("component rendering", () => {
         it("initializes sub-nested config (collectionItem)", () => {
             const subNested = buildTestConfigCtor({ $_optionName: "subNestedOption", $_isCollectionItem: true });
 
-            const vm = vueContext.create({
+            const vm = vueContext.createComponent({
                 template:
                     `<test-component id="component">` +
                     `  <nested :prop1="123">` +
@@ -368,7 +369,7 @@ describe("component rendering", () => {
                 $_isCollectionItem: true
             });
 
-            const vm = vueContext.create({
+            const vm = vueContext.createComponent({
                 template:
                     `<test-component id="component">` +
                     `  <nested>` +
@@ -416,7 +417,7 @@ describe("component rendering", () => {
             it("initialized for widget component", () => {
                 const expected = {};
 
-                const WidgetComponent = vueContext.create({
+                const WidgetComponent = vueContext.createComponent({
                     extends: DxComponent,
                     beforeCreate() {
                         (this as any as IWidgetComponent).$_WidgetClass = WidgetClass;
@@ -436,7 +437,7 @@ describe("component rendering", () => {
                     $_expectedChildren: expected
                 });
 
-                const vm = vueContext.create({
+                const vm = vueContext.createComponent({
                     template:
                         `<test-component id="component">` +
                         `  <config-component />` +
@@ -461,7 +462,7 @@ describe("component rendering", () => {
         const Nested = buildTestConfigCtor({ $_optionName: "nestedOption" });
 
         it("pulls initital values", () => {
-            const vm = vueContext.create({
+            const vm = vueContext.createComponent({
                 template:
                     `<test-component id="component">` +
                     `  <nested :prop1="123" />` +
@@ -485,7 +486,7 @@ describe("component rendering", () => {
         });
 
         it("watches option changes", (done) => {
-            const vm = vueContext.create({
+            const vm = vueContext.createComponent({
                 template:
                     `<test-component>` +
                     `  <nested :prop1="value" />` +
@@ -513,7 +514,7 @@ describe("component rendering", () => {
         });
 
         it("add nested component by condition", (done) => {
-            const vm = vueContext.create({
+            const vm = vueContext.createComponent({
                 template:
                     `<test-component>` +
                     `  <nested v-if="showNest" :prop1="123" />` +
@@ -542,7 +543,7 @@ describe("component rendering", () => {
                 $_optionName: "nestedOption",
                 $_isCollectionItem: true
             });
-            const vm = vueContext.create({
+            const vm = vueContext.createComponent({
                 template:
                     `<test-component>` +
                     `  <nested-collection-item v-if="show" :prop1="123" />` +
@@ -575,7 +576,7 @@ describe("component rendering", () => {
                 $_optionName: "nestedOption",
                 $_isCollectionItem: true
             });
-            const vm = vueContext.create({
+            const vm = vueContext.createComponent({
                 template:
                     `<test-component>` +
                     `  <nested-collection-item>` +
@@ -615,7 +616,7 @@ describe("component rendering", () => {
                 $_optionName: "nestedOption",
                 $_isCollectionItem: true
             });
-            const vm = vueContext.create({
+            const vm = vueContext.createComponent({
                 template:
                     `<test-component>` +
                     `  <nested-collection-item>` +
@@ -650,7 +651,7 @@ describe("component rendering", () => {
         });
 
         it("reset nested component", (done) => {
-            const vm = vueContext.create({
+            const vm = vueContext.createComponent({
                 template:
                     `<test-component>` +
                     `  <nested v-if="show" :prop1="123" />` +
@@ -692,7 +693,7 @@ describe("component rendering", () => {
     describe("template", () => {
 
         const DX_TEMPLATE_WRAPPER = "dx-template-wrapper";
-        const componentWithTemplate = vueContext.create({
+        const componentWithTemplate = vueContext.createComponent({
             template: `<test-component :prop1='prop1Value'>
                          <template #test v-if='renderTemplate'>content</template>
                        </test-component>`,
@@ -716,7 +717,7 @@ describe("component rendering", () => {
         }
 
         it("passes integrationOptions to widget", () => {
-            const vm = vueContext.create({
+            const vm = vueContext.createComponent({
                 template: `<test-component>
                              <template #item>
                                <div>1</div>
@@ -775,7 +776,7 @@ describe("component rendering", () => {
         });
 
         it("renders", () => {
-            const vm = vueContext.create({
+            const vm = vueContext.createComponent({
                 template: `<test-component>
                                 <template #item>
                                     <div>Template</div>
@@ -794,7 +795,7 @@ describe("component rendering", () => {
         });
 
         it("renders scoped slot", () => {
-            const vm = vueContext.create({
+            const vm = vueContext.createComponent({
                 template: `<test-component>
                                 <template #item="{ data: { text }, index }">
                                     Template {{text}} and index {{index}}
@@ -810,7 +811,7 @@ describe("component rendering", () => {
         });
 
         it("preserves custom-attrs", () => {
-            const vm = vueContext.create({
+            const vm = vueContext.createComponent({
                 template: `<test-component>
                                 <template #item="{ data: { text } }">
                                     <div custom-attr=123>Template {{text}}</div>
@@ -828,7 +829,7 @@ describe("component rendering", () => {
         });
 
         it("doesn't throw on dxremove", () => {
-            const vm = vueContext.create({
+            const vm = vueContext.createComponent({
                 template: `<test-component>
                                 <template #item="{ data: { text } }">
                                     Template {{text}}
@@ -847,7 +848,7 @@ describe("component rendering", () => {
         });
 
         it("destroyed component should remove subscriptions", (done) => {
-            const vm = vueContext.create({
+            const vm = vueContext.createComponent({
                 template: `<test-component id="component" :prop1="value">
                                 <template #item="{data}">Template {{data.text}}</template>
                             </test-component>`,
@@ -879,7 +880,7 @@ describe("component rendering", () => {
 
         describe("static items", () => {
             it("passes integrationOptions to widget", () => {
-                const NestedItem = vueContext.create({
+                const NestedItem = vueContext.createComponent({
                     data() {
                         return {
                             $_optionName: "items",
@@ -893,7 +894,7 @@ describe("component rendering", () => {
                     }
                 });
 
-                const vm = vueContext.create({
+                const vm = vueContext.createComponent({
                     template: `<test-component>
                                 <nested-item>
                                     <template #default>
@@ -919,7 +920,7 @@ describe("component rendering", () => {
             });
 
             it("passes node of nested component as template", () => {
-                const NestedItem = vueContext.create({
+                const NestedItem = vueContext.createComponent({
                     data() {
                         return {
                             $_optionName: "items",
@@ -933,7 +934,7 @@ describe("component rendering", () => {
                     }
                 });
 
-                const vm = vueContext.create({
+                const vm = vueContext.createComponent({
                     template: `<test-component>
                                 <nested-item>
                                     <div>1</div>
@@ -953,7 +954,7 @@ describe("component rendering", () => {
             });
 
             it("passes node of nested component as template (exclude nested component)", () => {
-                const NestedItem = vueContext.create({
+                const NestedItem = vueContext.createComponent({
                     data() {
                         return {
                             $_optionName: "items",
@@ -967,7 +968,7 @@ describe("component rendering", () => {
                     }
                 });
 
-                const vm = vueContext.create({
+                const vm = vueContext.createComponent({
                     template: `<test-component>
                                 <nested-item>
                                     <nested-item></nested-item>
@@ -988,7 +989,7 @@ describe("component rendering", () => {
             });
 
             it("passes node of nested component as template (tree of components)", () => {
-                const NestedItem = vueContext.create({
+                const NestedItem = vueContext.createComponent({
                     data() {
                         return {
                             $_optionName: "items",
@@ -1002,7 +1003,7 @@ describe("component rendering", () => {
                     }
                 });
 
-                const vm = vueContext.create({
+                const vm = vueContext.createComponent({
                     template: `<test-component>
                                 <nested-item>
                                     <nested-item>
@@ -1027,7 +1028,7 @@ describe("component rendering", () => {
             });
 
             it("doesn't pass integrationOptions to widget if template prop is absent", () => {
-                const NestedItem = vueContext.create({
+                const NestedItem = vueContext.createComponent({
                     data() {
                         return {
                             $_optionName: "items",
@@ -1040,7 +1041,7 @@ describe("component rendering", () => {
                     }
                 });
 
-                const vm = vueContext.create({
+                const vm = vueContext.createComponent({
                     template: `<test-component>
                                 <nested-item>
                                     <div>1</div>
@@ -1061,7 +1062,7 @@ describe("component rendering", () => {
             });
 
             it("renders template containing text only (vue 3)", () => {
-                const NestedItem = vueContext.create({
+                const NestedItem = vueContext.createComponent({
                     data() {
                         return {
                             $_optionName: "item"
@@ -1074,7 +1075,7 @@ describe("component rendering", () => {
                     }
                 });
 
-                const wrapper =  vueContext.create({
+                const wrapper =  vueContext.createComponent({
                     template: `<test-component>
                                 <nested-item>
                                     <template #default>abc</template>
@@ -1094,7 +1095,7 @@ describe("component rendering", () => {
             });
 
             it("doesn't pass integrationOptions to widget if nested item has sub nested item", () => {
-                const NestedItem = vueContext.create({
+                const NestedItem = vueContext.createComponent({
                     data() {
                         return {
                             $_optionName: "items",
@@ -1110,7 +1111,7 @@ describe("component rendering", () => {
 
                 const subNested = buildTestConfigCtor({ $_optionName: "subNestedOption" });
 
-                const vm = vueContext.create({
+                const vm = vueContext.createComponent({
                     template: `<test-component>
                                 <nested-item>
                                     <sub-nested prop2="abc"/>
@@ -1128,5 +1129,114 @@ describe("component rendering", () => {
                 expect(WidgetClass.mock.calls[0][1].integrationOptions.templates).toBeUndefined();
             });
         });
+    });
+    describe("extension component", () => {
+        const ExtensionWidgetClass = jest.fn(createWidget);
+        const TestExtensionComponent = vueContext.createComponent({
+            extends: DxExtensionComponent,
+            beforeCreate() {
+                (this as any as IWidgetComponent).$_WidgetClass = ExtensionWidgetClass;
+            }
+        });
+
+        it("renders once if mounted manually and targets self element", () => {
+            const component = mount(TestExtensionComponent);
+
+            const expectedElement = component.vm.$el;
+            const actualElement = ExtensionWidgetClass.mock.calls[0][0];
+
+            expect(ExtensionWidgetClass).toHaveBeenCalledTimes(1);
+            expect(actualElement).toBe(expectedElement);
+        });
+
+        it("renders once without parent element and targets self element", () => {
+            const vm = vueContext.createComponent({
+                template: `<test-extension-component id="component" />`,
+                components: {
+                    TestExtensionComponent
+                }
+            });
+
+            const wrapper = mount(vm);
+
+            const expectedElement = wrapper.getComponent("#component").vm.$el;
+            const actualElement = ExtensionWidgetClass.mock.calls[0][0];
+
+            expect(ExtensionWidgetClass).toHaveBeenCalledTimes(1);
+            expect(actualElement).toBe(expectedElement);
+        });
+
+        it("renders once inside component and targets parent element", () => {
+            const vm = vueContext.createComponent({
+                template: `<test-component id="component">
+                                <test-extension-component/>
+                            </test-component>`,
+                components: {
+                    TestComponent,
+                    TestExtensionComponent
+                }
+            });
+
+            mount(vm);
+
+            const expectedElement = WidgetClass.mock.calls[0][0];
+            const actualElement = ExtensionWidgetClass.mock.calls[0][0];
+
+            expect(ExtensionWidgetClass).toHaveBeenCalledTimes(1);
+            expect(actualElement).toBe(expectedElement);
+        });
+
+        it("should remove extension component from dom", () => {
+            let childCount;
+            WidgetClass.mockImplementationOnce((element: HTMLElement, options: any) => {
+                childCount = element.childElementCount;
+                return createWidget(element, options);
+            });
+
+            mount(vueContext.createComponent({
+                template: `<test-component>
+                                <test-extension-component/>
+                            </test-component>`,
+                components: {
+                    TestComponent,
+                    TestExtensionComponent
+                }
+            }));
+
+            expect(childCount).toBe(0);
+        });
+
+        it("destroys correctly", () => {
+            const component = mount(TestExtensionComponent);
+
+            expect(component.unmount.bind(component)).not.toThrow();
+        });
+    });
+});
+
+describe("disposing", () => {
+
+    it("call dispose", () => {
+        const component = mount(TestComponent);
+
+        component.unmount();
+
+        expect(Widget.dispose).toBeCalled();
+    });
+
+    it("fires dxremove", () => {
+        const handleDxRemove = jest.fn();
+        const component = mount(TestComponent);
+
+        events.on(component.vm.$el, "dxremove", handleDxRemove);
+        component.unmount();
+
+        expect(handleDxRemove).toHaveBeenCalledTimes(1);
+    });
+
+    it("destroys correctly", () => {
+        const component = mount(TestComponent);
+
+        expect(component.unmount.bind(component)).not.toThrow();
     });
 });

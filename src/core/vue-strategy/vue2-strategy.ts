@@ -1,8 +1,9 @@
 import * as VueType from "vue";
 import { IEventBusHolder } from "../templates-discovering";
+import { IVueStrategy } from "./index";
 const Vue = (VueType as any).default || VueType;
 
-export class Vue2Strategy {
+export class Vue2Strategy implements IVueStrategy {
     public configurationChildren(component) {
         const configComponents = [];
         const children = component.componentOptions.children;
@@ -18,6 +19,10 @@ export class Vue2Strategy {
             return this.componentOptions(component);
         }
         return component.$vnode.componentOptions;
+    }
+
+    public childExtension(component) {
+        return component.componentInstance;
     }
 
     public childrenToUpdate(component) {
@@ -42,12 +47,16 @@ export class Vue2Strategy {
         return node.componentOptions.propsData;
     }
 
-    public create(config) {
+    public createComponent(config) {
         return Vue.extend(config);
     }
 
+    public markAsExtention(component) {
+        component.$_isExtension = true;
+    }
+
     public mountTemplate(options, updatedHandler) {
-        const templateMixin = this.create({
+        const templateMixin = this.createComponent({
             inject: ["eventBus"],
             created(this: any & IEventBusHolder) {
                 (this as IEventBusHolder).eventBus.on("updated", updatedHandler.bind(this));
@@ -79,6 +88,10 @@ export class Vue2Strategy {
         return component.$scopedSlots;
     }
 
+    public componentInstance(component) {
+        return component;
+    }
+
     public configurationProps(node) {
         return node.$props;
     }
@@ -93,6 +106,10 @@ export class Vue2Strategy {
 
     public children(component) {
         return component.$children;
+    }
+
+    public saveComponentInstance() {
+        return;
     }
 
     private findConfigurationComponents(allCildren, configComponents) {

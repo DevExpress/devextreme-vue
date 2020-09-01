@@ -1,8 +1,9 @@
 import { Emitter } from "mitt";
 import * as VueType from "vue";
 import { IConfigurable } from "./configuration-component";
+import { isVue3, vueContext } from "./vue-strategy";
+
 import { TEMPLATE_MULTIPLE_ROOTS_ERROR } from "./errors";
-import { vueContext, isVue3 } from "./vue-strategy";
 
 const Vue = (VueType as any).default || VueType;
 const TEMPLATE_PROP = "template";
@@ -12,7 +13,7 @@ interface IEventBusHolder {
 }
 
 function asConfigurable(component: any): IConfigurable | undefined {
-    const componentOptions = (vueContext.vNodeComponentOptions(component, false) as any as IConfigurable);
+    const componentOptions = (vueContext.vNodeComponentOptions(component) as any as IConfigurable);
     if (!componentOptions) {
         return;
     }

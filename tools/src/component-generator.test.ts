@@ -5,12 +5,12 @@ it("generates", () => {
     const EXPECTED = `
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
-import { vueContext } from "./core/vue-strategy/component-manager";
+import { vueContext } from "./core/vue-strategy";
 
 interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT = vueContext.create({
+const COMPONENT = vueContext.createComponent({
   extends: BASE_COMPONENT,
   computed: {
     instance(): WIDGET {
@@ -53,12 +53,12 @@ it("generates component with model", () => {
     const EXPECTED = `
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
-import { vueContext } from "./core/vue-strategy/component-manager";
+import { vueContext } from "./core/vue-strategy";
 
 interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT = vueContext.create({
+const COMPONENT = vueContext.createComponent({
   extends: BASE_COMPONENT,
   model: { prop: "value", event: "update:value" },
   computed: {
@@ -103,7 +103,7 @@ it("generates option", () => {
     const EXPECTED = `
 import WIDGET, { IOptions } from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
-import { vueContext } from "./core/vue-strategy/component-manager";
+import { vueContext } from "./core/vue-strategy";
 
 type AccessibleOptions = Pick<IOptions,
   "PROP"
@@ -112,7 +112,7 @@ type AccessibleOptions = Pick<IOptions,
 interface COMPONENT extends AccessibleOptions {
   readonly instance?: WIDGET;
 }
-const COMPONENT = vueContext.create({
+const COMPONENT = vueContext.createComponent({
   extends: BASE_COMPONENT,
   props: {
     PROP: {}
@@ -165,12 +165,12 @@ it("generates nested option component", () => {
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
-import { vueContext } from "./core/vue-strategy/component-manager";
+import { vueContext } from "./core/vue-strategy";
 
 interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT = vueContext.create({
+const COMPONENT = vueContext.createComponent({
   extends: BASE_COMPONENT,
   computed: {
     instance(): WIDGET {
@@ -182,7 +182,7 @@ const COMPONENT = vueContext.create({
   }
 });
 
-const NESTED_COMPONENT: any = vueContext.create({
+const NESTED_COMPONENT: any = vueContext.createComponent({
   data() {
     return {
       $_optionName: "NESTED_OPTION_NAME",
@@ -242,12 +242,12 @@ it("generates nested collection option component", () => {
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
-import { vueContext } from "./core/vue-strategy/component-manager";
+import { vueContext } from "./core/vue-strategy";
 
 interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT = vueContext.create({
+const COMPONENT = vueContext.createComponent({
   extends: BASE_COMPONENT,
   computed: {
     instance(): WIDGET {
@@ -259,7 +259,7 @@ const COMPONENT = vueContext.create({
   }
 });
 
-const NESTED_COMPONENT: any = vueContext.create({
+const NESTED_COMPONENT: any = vueContext.createComponent({
   data() {
     return {
       $_optionName: "NESTED_OPTION_NAME",
@@ -320,12 +320,12 @@ it("generates expectedChildren info", () => {
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
-import { vueContext } from "./core/vue-strategy/component-manager";
+import { vueContext } from "./core/vue-strategy";
 
 interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT = vueContext.create({
+const COMPONENT = vueContext.createComponent({
   extends: BASE_COMPONENT,
   computed: {
     instance(): WIDGET {
@@ -341,7 +341,7 @@ const COMPONENT = vueContext.create({
   }
 });
 
-const NESTED_COMPONENT: any = vueContext.create({
+const NESTED_COMPONENT: any = vueContext.createComponent({
   data() {
     return {
       $_optionName: "NESTED_OPTION_NAME",
@@ -515,12 +515,12 @@ describe("props generation", () => {
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
-import { vueContext } from "./core/vue-strategy/component-manager";
+import { vueContext } from "./core/vue-strategy";
 
 interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT = vueContext.create({
+const COMPONENT = vueContext.createComponent({
   extends: BASE_COMPONENT,
   computed: {
     instance(): WIDGET {
@@ -532,7 +532,7 @@ const COMPONENT = vueContext.create({
   }
 });
 
-const NESTED_COMPONENT: any = vueContext.create({
+const NESTED_COMPONENT: any = vueContext.createComponent({
   data() {
     return {
       $_optionName: "NESTED_OPTION_NAME",
@@ -598,12 +598,12 @@ export {
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
-import { vueContext } from "./core/vue-strategy/component-manager";
+import { vueContext } from "./core/vue-strategy";
 
 interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT = vueContext.create({
+const COMPONENT = vueContext.createComponent({
   extends: BASE_COMPONENT,
   computed: {
     instance(): WIDGET {
@@ -615,7 +615,7 @@ const COMPONENT = vueContext.create({
   }
 });
 
-const NESTED_COMPONENT: any = vueContext.create({
+const NESTED_COMPONENT: any = vueContext.createComponent({
   data() {
     return {
       $_optionName: "NESTED_OPTION_NAME",

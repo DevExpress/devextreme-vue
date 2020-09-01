@@ -4,7 +4,7 @@ import { VNode } from "vue";
 
 import * as events from "devextreme/events";
 
-import { vueContext, isVue3 } from "./vue-strategy";
+import { isVue3, vueContext } from "./vue-strategy";
 
 import { pullAllChildren } from "./children-processing";
 import Configuration, { bindOptionWatchers, setEmitOptionChangedFunc } from "./configuration";
@@ -38,7 +38,7 @@ export interface IBaseComponent extends IWidgetComponent, IEventBusHolder {
 
 const Vue = (VueType as any).default || VueType;
 
-const BaseComponent: any = vueContext.create({
+const BaseComponent = vueContext.createComponent({
     inheritAttrs: false,
 
     data() {
@@ -263,7 +263,7 @@ function restoreNodes(el: Element, nodes: Element[]) {
     });
 }
 
-const DxComponent: any = vueContext.create({
+const DxComponent = vueContext.createComponent({
     extends: BaseComponent,
     methods: {
         $_getExtraIntegrationOptions(): object {
@@ -293,9 +293,9 @@ const DxComponent: any = vueContext.create({
         restoreNodes(this.$el, nodes);
         if (this.$slots && this.$slots.default) {
             vueContext.defaultSlots(this).forEach((child: any) => {
-                const childExtension = vueContext.vNodeComponentOptions(child, true) || child.componentInstance;
-                if (childExtension && (childExtension as any as IExtension).$_isExtension) {
-                    childExtension.$_componentInstance.attachTo(this.$el);
+                const childExtension = vueContext.childExtension(child);
+                if (childExtension && (childExtension as IExtension).$_isExtension) {
+                    childExtension.attachTo(this.$el);
                 }
             });
         }
