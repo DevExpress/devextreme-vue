@@ -66,7 +66,7 @@ function clearConfiguration(content: any[]) {
     const newContent: any[] = [];
     content.forEach((item) => {
         const configurable = vueContext.vNodeComponentOptions(item);
-        if (!configurable || !configurable.$_optionName) {
+        if (!configurable || !(configurable.data && configurable.data().$_optionName)) {
             newContent.push(item);
         }
     });
