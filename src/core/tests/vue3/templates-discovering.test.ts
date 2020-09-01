@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import { discover } from "../../templates-discovering";
-import { vueContext } from "../../vue-strategy/component-manager";
+import { vueContext } from "../../vue-strategy";
 
 describe("templates-discovering (vue 3)", () => {
 

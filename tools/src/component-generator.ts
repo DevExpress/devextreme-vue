@@ -161,7 +161,7 @@ const renderComponent: (model: {
 `<#~ it.namedImports :namedImport #>` +
 `import { <#= namedImport.name #> } from "<#= namedImport.path #>";\n` +
 `<#~#>` +
-`import { vueContext } from "./core/vue-strategy/component-manager";\n` + `\n` +
+`import { vueContext } from "./core/vue-strategy";\n` + `\n` +
 
 `<#? it.props #>` +
     `type AccessibleOptions = Pick<IOptions,` +

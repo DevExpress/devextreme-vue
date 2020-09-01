@@ -21,3 +21,4 @@ class VueStrategy {
 
 const vueStrategy = new VueStrategy(getCurrentStrategy());
 export const vueContext = vueStrategy.getContext();
+export { isVue3 }

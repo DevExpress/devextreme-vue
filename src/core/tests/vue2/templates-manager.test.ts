@@ -4,7 +4,7 @@ import { discover } from "../../templates-discovering";
 import { TemplatesManager } from "../../templates-manager";
 jest.mock("../../templates-discovering");
 
-const Vue = VueType.default || VueType;
+const Vue = (VueType as any).default || VueType;
 const discoverMock1 = () => ({});
 const discoverMock2 = () => ({template1: jest.fn()});
 const discoverMock3 = () => ({template1: jest.fn(), template2: jest.fn()});

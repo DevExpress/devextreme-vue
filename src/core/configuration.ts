@@ -1,6 +1,6 @@
 import { IComponentInfo } from "./configuration-component";
 import { getOptionInfo, isEqual } from "./helpers";
-import { vueContext } from "./vue-strategy/component-manager";
+import { vueContext } from "./vue-strategy";
 
 type UpdateFunc = (name: string, value: any) => void;
 type EmitOptionChangedFunc = (name: string, value: any) => void;

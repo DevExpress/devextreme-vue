@@ -7,7 +7,7 @@ import * as events from "devextreme/events";
 
 import { mount } from "@vue/test-utils";
 
-const Vue = VueType.default || VueType;
+const Vue = (VueType as any).default || VueType;
 
 const eventHandlers: { [index: string]: (e?: any) => void } = {};
 const Widget = {

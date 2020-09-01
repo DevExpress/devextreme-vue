@@ -1,6 +1,5 @@
 import { VNode } from "vue";
-import { vueContext } from "./vue-strategy/component-manager";
-import { isVue3 } from "./vue-strategy/version";
+import { vueContext, isVue3 } from "./vue-strategy";
 
 import Configuration, { bindOptionWatchers, ExpectedChild, setEmitOptionChangedFunc } from "./configuration";
 

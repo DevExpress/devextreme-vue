@@ -2,8 +2,7 @@ import { Emitter } from "mitt";
 import * as VueType from "vue";
 import { IConfigurable } from "./configuration-component";
 import { TEMPLATE_MULTIPLE_ROOTS_ERROR } from "./errors";
-import { vueContext } from "./vue-strategy/component-manager";
-import { isVue3 } from "./vue-strategy/version";
+import { vueContext, isVue3 } from "./vue-strategy";
 
 const Vue = (VueType as any).default || VueType;
 const TEMPLATE_PROP = "template";

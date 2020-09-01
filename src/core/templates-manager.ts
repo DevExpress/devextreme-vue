@@ -8,7 +8,7 @@ import * as domAdapter from "devextreme/core/dom_adapter";
 import * as events from "devextreme/events";
 import { DX_REMOVE_EVENT, DX_TEMPLATE_WRAPPER_CLASS } from "./constants";
 import { allKeysAreEqual } from "./helpers";
-import { vueContext } from "./vue-strategy/component-manager";
+import { vueContext } from "./vue-strategy";
 
 class TemplatesManager {
     private _component: any;

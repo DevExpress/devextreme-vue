@@ -4,8 +4,7 @@ import { VNode } from "vue";
 
 import * as events from "devextreme/events";
 
-import { vueContext } from "./vue-strategy/component-manager";
-import { isVue3 } from "./vue-strategy/version";
+import { vueContext, isVue3 } from "./vue-strategy";
 
 import { pullAllChildren } from "./children-processing";
 import Configuration, { bindOptionWatchers, setEmitOptionChangedFunc } from "./configuration";

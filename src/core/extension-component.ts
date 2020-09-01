@@ -1,5 +1,5 @@
 import { BaseComponent, IBaseComponent } from "./component";
-import { vueContext } from "./vue-strategy/component-manager";
+import { vueContext } from "./vue-strategy";
 
 interface IExtension {
     $_isExtension: boolean;

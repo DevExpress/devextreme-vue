@@ -4,7 +4,7 @@ import { nextTick } from "vue";
 
 import { DxComponent, IWidgetComponent } from "../../component";
 import { DxConfiguration, IConfigurable } from "../../configuration-component";
-import { vueContext } from "../../vue-strategy/component-manager";
+import { vueContext } from "../../vue-strategy";
 
 jest.mock("../../vue-strategy/version", () => ({ isVue3: jest.fn(() => true)}));
 
