@@ -50,7 +50,7 @@ function initOptionChangedFunc(config, component: any, innerChanges: any) {
 
     config.init(Object.keys(vueContext.configurationProps(component)));
     const componentInstance = vueContext.componentInstance(component);
-    if(componentInstance) {
+    if (componentInstance) {
         setEmitOptionChangedFunc(config, componentInstance, innerChanges);
     }
 }
