@@ -105,7 +105,7 @@ export class Vue3Strategy implements IVueStrategy {
     }
 
     public componentInstance(component) {
-        return component.type ? component.type.$_componentInstance : {};
+        return component.type ? component.type.$_componentInstance : component;
     }
 
     public configurationProps(node) {

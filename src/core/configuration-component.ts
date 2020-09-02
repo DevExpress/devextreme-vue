@@ -49,7 +49,10 @@ function initOptionChangedFunc(config, component: any, innerChanges: any) {
     }
 
     config.init(Object.keys(vueContext.configurationProps(component)));
-    setEmitOptionChangedFunc(config, vueContext.componentInstance(component), innerChanges);
+    const componentInstance = vueContext.componentInstance(component);
+    if(componentInstance) {
+        setEmitOptionChangedFunc(config, componentInstance, innerChanges);
+    }
 }
 
 function getComponentInfo({name, isCollectionItem, ownerConfig }: Configuration, removed?: boolean): IComponentInfo {
