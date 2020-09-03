@@ -1,4 +1,4 @@
-import { Component, VNode } from "vue";
+import { VNode } from "vue";
 import { IConfigurationComponent } from "../configuration-component";
 import { IExtension } from "../extension-component";
 import { isVue3 } from "./version";
@@ -19,7 +19,7 @@ export interface IVueStrategy {
     configurationDefaultTemplate: (component: any) => () => any | undefined;
     configurationProps: (component: any) => Props;
     configurationTemplate: (component: any) => () => any | undefined;
-    createComponent: (component: any) => Component;
+    createComponent: (component: any) => any;
     declaredTemplates: (component: any) => Slots;
     defaultSlots: (component: any) => VNode[];
     destroy: (component: any) => any;

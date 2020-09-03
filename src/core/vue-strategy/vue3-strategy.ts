@@ -1,5 +1,5 @@
 import * as Vue from "vue";
-import { Component, VNode } from "vue";
+import { VNode } from "vue";
 import { IConfigurationComponent } from "../configuration-component";
 import { IEventBusHolder } from "../templates-discovering";
 import { IVueStrategy, Props, Slots } from "./index";
@@ -7,25 +7,14 @@ import { IVueStrategy, Props, Slots } from "./index";
 import { pullAllChildren } from "../children-processing";
 
 export class Vue3Strategy implements IVueStrategy {
-    public vNodeComponentOptions(component, type) {
-        if (component.$) {
-            if (type) {
-                return component.$.vnode.type;
-            } else {
-                return component.$.vnode;
-            }
-        }
 
-        return component.type;
-    }
-
-    public configurationChildren(component): VNode[] {
-        const configComponents = [];
-        if (!component.children) {
-            return [];
+    public children(component): VNode[] {
+        const allChildren = [];
+        if (!this.hasChildren(component) || !component.$_config) {
+            return allChildren;
         }
-        this.findConfigurationComponents(component.children.default(), configComponents);
-        return configComponents;
+        this.getVNodeChildren(component.$.vnode.children.default(), allChildren, component.$_config.nested);
+        return allChildren;
     }
 
     public childExtension(component) {
@@ -50,20 +39,61 @@ export class Vue3Strategy implements IVueStrategy {
         return options.data && options.data();
     }
 
+    public componentInstance(component) {
+        return component.type ? component.type.$_componentInstance : component;
+    }
+
     public componentOptions(component) {
         return component;
     }
 
-    public usedProps(component): Props {
-        return component.$.vnode.props;
+    public configurationChildren(component): VNode[] {
+        const configComponents = [];
+        if (!component.children) {
+            return [];
+        }
+        this.findConfigurationComponents(component.children.default(), configComponents);
+        return configComponents;
     }
 
-    public usedConfigurationProps(node): Props {
-        return node.props;
+    public configurationDefaultTemplate(node): any {
+        if (!node.children || node.children === "object" || !node.children.default) {
+            return;
+        }
+
+        return this.hasInlineTemplate(node.children.default()) ? node.children.default : undefined;
     }
 
-    public createComponent(config): Component {
+    public configurationProps(node): Props {
+        const options = this.vNodeComponentOptions(node, true);
+        if (!options && !options.props) {
+            return {};
+        }
+        return options.props;
+    }
+
+    public configurationTemplate(node): () => any | undefined {
+        return this.configurationDefaultTemplate(node);
+    }
+
+    public createComponent(config): any {
         return (Vue as any).defineComponent(config);
+    }
+
+    public declaredTemplates(component): Slots {
+        return component.$slots;
+    }
+
+    public defaultSlots(component): VNode[] {
+        const templates = this.declaredTemplates(component);
+        if (!templates.default) {
+            return [];
+        }
+        return templates.default();
+    }
+
+    public destroy(component) {
+        return component.$.appContext.app.unmount.bind(component);
     }
 
     public markAsExtention(component) {
@@ -87,53 +117,12 @@ export class Vue3Strategy implements IVueStrategy {
         return (Vue as any).createApp(options).mount(options.el);
     }
 
-    public destroy(component) {
-        return component.$.appContext.app.unmount.bind(component);
+    public usedProps(component): Props {
+        return component.$.vnode.props;
     }
 
-    public defaultSlots(component): VNode[] {
-        const templates = this.declaredTemplates(component);
-        if (!templates.default) {
-            return [];
-        }
-        return templates.default();
-    }
-
-    public declaredTemplates(component): Slots {
-        return component.$slots;
-    }
-
-    public componentInstance(component) {
-        return component.type ? component.type.$_componentInstance : component;
-    }
-
-    public configurationProps(node): Props {
-        const options = this.vNodeComponentOptions(node, true);
-        if (!options && !options.props) {
-            return {};
-        }
-        return options.props;
-    }
-
-    public configurationTemplate(node): () => any | undefined {
-        return this.configurationDefaultTemplate(node);
-    }
-
-    public configurationDefaultTemplate(node): any {
-        if (!node.children || node.children === "object" || !node.children.default) {
-            return;
-        }
-
-        return this.hasInlineTemplate(node.children.default()) ? node.children.default : undefined;
-    }
-
-    public children(component): VNode[] {
-        const allChildren = [];
-        if (!this.hasChildren(component) || !component.$_config) {
-            return allChildren;
-        }
-        this.getVNodeChildren(component.$.vnode.children.default(), allChildren, component.$_config.nested);
-        return allChildren;
+    public usedConfigurationProps(node): Props {
+        return node.props;
     }
 
     public saveComponentInstance(component) {
@@ -142,6 +131,18 @@ export class Vue3Strategy implements IVueStrategy {
         if (vNodeOptions) {
             vNodeOptions.$_componentInstance = component;
         }
+    }
+
+    public vNodeComponentOptions(component, type) {
+        if (component.$) {
+            if (type) {
+                return component.$.vnode.type;
+            } else {
+                return component.$.vnode;
+            }
+        }
+
+        return component.type;
     }
 
     private findConfigurationComponents(allCildren, configComponents) {
