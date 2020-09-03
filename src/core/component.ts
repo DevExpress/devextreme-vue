@@ -1,6 +1,6 @@
 import * as mitt from "mitt";
 import * as VueType from "vue";
-import { VNode } from "vue";
+import { Component, VNode } from "vue";
 
 import * as events from "devextreme/events";
 
@@ -38,7 +38,7 @@ export interface IBaseComponent extends IWidgetComponent, IEventBusHolder {
 
 const Vue = (VueType as any).default || VueType;
 
-const BaseComponent = vueContext.createComponent({
+const BaseComponent: Component = vueContext.createComponent({
     inheritAttrs: false,
 
     data() {
@@ -263,7 +263,7 @@ function restoreNodes(el: Element, nodes: Element[]) {
     });
 }
 
-const DxComponent = vueContext.createComponent({
+const DxComponent: Component = vueContext.createComponent({
     extends: BaseComponent,
     methods: {
         $_getExtraIntegrationOptions(): object {
