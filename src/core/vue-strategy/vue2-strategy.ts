@@ -1,5 +1,5 @@
 import * as VueType from "vue";
-import { VNode, VNodeComponentOptions } from "vue";
+import { VNode } from "vue";
 import { IConfigurationComponent } from "../configuration-component";
 import { IEventBusHolder } from "../templates-discovering";
 import { IVueStrategy, Props, Slots } from "./index";
@@ -29,7 +29,7 @@ export class Vue2Strategy implements IVueStrategy {
         return component;
     }
 
-    public componentOptions(component): VNodeComponentOptions {
+    public componentOptions(component): any {
         return component.componentOptions;
     }
 
