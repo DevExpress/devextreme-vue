@@ -10,11 +10,11 @@ export declare type Slots = Record<string, () => any>;
 
 export interface IVueStrategy {
     children: (component: any) => VNode[];
-    childExtension: (component: any) => IExtension;
-    childrenToUpdate: (component: any) => VNode[];
-    componentInfo: (component: any) => IConfigurationComponent;
-    componentInstance: (component: any) => any;
-    componentOptions: (component: any) => any;
+    getExtension: (component: any) => IExtension;
+    getChildrenToUpdate: (component: any) => VNode[];
+    getComponentInfo: (component: any) => IConfigurationComponent;
+    getComponentInstance: (component: any) => any;
+    getComponentOptions: (component: any) => any;
     configurationChildren: (component: any) => VNode[];
     configurationDefaultTemplate: (component: any) => () => any | undefined;
     configurationProps: (component: any) => Props;

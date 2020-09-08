@@ -12,24 +12,24 @@ export class Vue2Strategy implements IVueStrategy {
         return component.$children;
     }
 
-    public childExtension(component) {
+    public getExtension(component) {
         return component.componentInstance;
     }
 
-    public childrenToUpdate(component): VNode[] {
+    public getChildrenToUpdate(component): VNode[] {
         return this.children(component);
     }
 
-    public componentInfo(component): IConfigurationComponent {
-        const componentOptions = this.componentOptions(component);
+    public getComponentInfo(component): IConfigurationComponent {
+        const componentOptions = this.getComponentOptions(component);
         return componentOptions && (componentOptions.Ctor as any).options.data();
     }
 
-    public componentInstance(component) {
+    public getComponentInstance(component) {
         return component;
     }
 
-    public componentOptions(component): any {
+    public getComponentOptions(component): any {
         return component.componentOptions;
     }
 
@@ -106,7 +106,7 @@ export class Vue2Strategy implements IVueStrategy {
 
     public vNodeComponentOptions(component) {
         if (!component.$vnode) {
-            return this.componentOptions(component);
+            return this.getComponentOptions(component);
         }
         return component.$vnode.componentOptions;
     }

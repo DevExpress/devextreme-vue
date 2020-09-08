@@ -77,7 +77,7 @@ const BaseComponent = vueContext.createComponent({
     },
 
     updated() {
-        vueContext.childrenToUpdate(this).forEach((child: any) => {
+        vueContext.getChildrenToUpdate(this).forEach((child: any) => {
             initOptionChangedFunc(getConfig(child), child, getInnerChanges(child));
         });
         this.$_templatesManager.discover();
@@ -276,7 +276,7 @@ const DxComponent = vueContext.createComponent({
 
         $_processChildren(children: VNode[]): void {
             children.forEach((childNode: VNode) => {
-                const componentOptions = vueContext.componentOptions(childNode);
+                const componentOptions = vueContext.getComponentOptions(childNode);
                 if (!componentOptions || typeof componentOptions !== "object") { return; }
 
                 (componentOptions as any as IExtensionComponentNode).$_hasOwner = true;
@@ -293,7 +293,7 @@ const DxComponent = vueContext.createComponent({
         restoreNodes(this.$el, nodes);
         if (this.$slots && this.$slots.default) {
             vueContext.defaultSlots(this).forEach((child: any) => {
-                const childExtension = vueContext.childExtension(child);
+                const childExtension = vueContext.getExtension(child);
                 if (childExtension && (childExtension as IExtension).$_isExtension) {
                     childExtension.attachTo(this.$el);
                 }

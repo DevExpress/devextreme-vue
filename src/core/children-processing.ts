@@ -13,10 +13,10 @@ function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Co
 
     children.forEach((node) => {
         nodes.push(node);
-        const componentOptions = vueContext.componentOptions(node);
+        const componentOptions = vueContext.getComponentOptions(node);
         if (!componentOptions) { return; }
 
-        const componentInfo = vueContext.componentInfo(node) as any as IConfigurationComponent;
+        const componentInfo = vueContext.getComponentInfo(node) as any as IConfigurationComponent;
         if (!componentInfo) { return; }
 
         const componentChildren = vueContext.configurationChildren(node);

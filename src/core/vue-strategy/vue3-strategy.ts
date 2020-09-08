@@ -18,7 +18,7 @@ export class Vue3Strategy implements IVueStrategy {
         return allChildren;
     }
 
-    public childExtension(component) {
+    public getExtension(component) {
         const vNode = this.vNodeComponentOptions(component, true);
         if (!vNode.$_isExtension) { return; }
 
@@ -26,25 +26,26 @@ export class Vue3Strategy implements IVueStrategy {
         return vNode;
     }
 
-    public childrenToUpdate(component): VNode[] {
+    public getChildrenToUpdate(component): VNode[] {
         const children = [];
-        if (component.$_config.cleanNested) {
-            component.$_config.cleanNested();
+        if (!this.hasChildren(component) || !component.$_config) {
+            return children;
         }
+        component.$_config.cleanNested();
         pullAllChildren(this.defaultSlots(component), children, component.$_config);
         return children;
     }
 
-    public componentInfo(component): IConfigurationComponent {
+    public getComponentInfo(component): IConfigurationComponent {
         const options = this.configurationOptions(component);
         return options.data && options.data();
     }
 
-    public componentInstance(component) {
+    public getComponentInstance(component) {
         return component.type ? component.type.$_componentInstance : component;
     }
 
-    public componentOptions(component) {
+    public getComponentOptions(component) {
         return component;
     }
 
@@ -178,21 +179,25 @@ export class Vue3Strategy implements IVueStrategy {
         children.forEach((child, index) => {
             const id = nodeDetected ? index - 1 : index;
             if (child.type && typeof child.type === "object") {
-                child.type = {...child.type};
-                child.type.$_config = nested[id];
-                child.$_config = nested[id];
-                allChildren.push(child);
-                if (child.children && child.children.default) {
-                    this.getVNodeChildren(child.children.default(), allChildren, nested[id].nested);
-                }
+                this.restorConfigData(child, allChildren, nested, id);
             } else {
                 nodeDetected = true;
             }
         });
     }
 
+    private restorConfigData(child, allChildren, nested, id) {
+        child.type = {...child.type};
+        child.type.$_config = nested[id];
+        child.$_config = nested[id];
+        allChildren.push(child);
+        if (child.children && child.children.default) {
+            this.getVNodeChildren(child.children.default(), allChildren, nested[id].nested);
+        }
+    }
+
     private configurationOptions(component) {
-        return this.componentOptions(component).type;
+        return this.getComponentOptions(component).type;
     }
 
     private hasChildren(component) {
