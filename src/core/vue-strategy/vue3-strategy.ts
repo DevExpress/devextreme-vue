@@ -1,9 +1,9 @@
 import * as Vue from "vue";
 import { VNode } from "vue";
 import { IConfigurationComponent } from "../configuration-component";
+import { camelize } from "../helpers";
 import { IEventBusHolder } from "../templates-discovering";
 import { IVueStrategy, Props, Slots } from "./index";
-import { camelize } from "../helpers";
 
 import { pullAllChildren } from "../children-processing";
 
