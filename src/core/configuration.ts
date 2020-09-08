@@ -1,6 +1,6 @@
 import { IComponentInfo } from "./configuration-component";
 import { getOptionInfo, isEqual } from "./helpers";
-import { vueContext } from "./vue-strategy";
+import { IVue, vueContext } from "./vue-strategy";
 
 type UpdateFunc = (name: string, value: any) => void;
 type EmitOptionChangedFunc = (name: string, value: any) => void;
@@ -256,7 +256,7 @@ class Configuration {
 
 function bindOptionWatchers(
     config: Configuration,
-    vueInstance: any,
+    vueInstance: Pick<Vue, "$watch">,
     innerChanges: Record<string, any>): void {
     const targets = config.getOptionsToWatch();
     if (targets) {
@@ -273,7 +273,7 @@ function bindOptionWatchers(
 
 function setEmitOptionChangedFunc(
     config: Configuration,
-    vueInstance: any,
+    vueInstance: Pick<IVue, "$emit" | "$props">,
     innerChanges: Record<string, any>): void {
     config.emitOptionChanged = (name: string, value: string) => {
         const props = vueInstance.$props || vueContext.usedConfigurationProps(vueInstance);

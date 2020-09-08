@@ -1,9 +1,9 @@
 import { BaseComponent, IBaseComponent } from "./component";
-import { vueContext } from "./vue-strategy";
+import { IVue, vueContext } from "./vue-strategy";
 
 interface IExtension {
     $_isExtension: boolean;
-    $_componentInstance: any;
+    $_componentInstance: IVue;
     attachTo(element: any);
 }
 
@@ -19,7 +19,7 @@ const DxExtensionComponent: any = vueContext.createComponent({
 
     mounted() {
         this.$el.setAttribute("isExtension", "true");
-        const componentOptions = vueContext.vNodeComponentOptions(this);
+        const componentOptions = vueContext.getNodeOptions(this);
         if (componentOptions && (componentOptions as any as IExtensionComponentNode).$_hasOwner) { return; }
 
         this.attachTo(this.$el);

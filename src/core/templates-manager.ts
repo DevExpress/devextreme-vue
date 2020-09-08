@@ -8,15 +8,15 @@ import * as domAdapter from "devextreme/core/dom_adapter";
 import * as events from "devextreme/events";
 import { DX_REMOVE_EVENT, DX_TEMPLATE_WRAPPER_CLASS } from "./constants";
 import { allKeysAreEqual } from "./helpers";
-import { vueContext } from "./vue-strategy";
+import { IVue, vueContext } from "./vue-strategy";
 
 class TemplatesManager {
-    private _component: any;
+    private _component: IVue;
     private _slots: Record<string, any> = {};
     private _templates: Record<string, object> = {};
     private _isDirty: boolean = false;
 
-    constructor(component: any) {
+    constructor(component: IVue) {
         this._component = component;
         this.discover();
     }

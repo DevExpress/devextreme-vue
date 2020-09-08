@@ -1,7 +1,7 @@
 import { Emitter } from "mitt";
 import * as VueType from "vue";
 import { IConfigurable } from "./configuration-component";
-import { isVue3, vueContext } from "./vue-strategy";
+import { isVue3, IVue, vueContext } from "./vue-strategy";
 
 import { TEMPLATE_MULTIPLE_ROOTS_ERROR } from "./errors";
 
@@ -13,7 +13,7 @@ interface IEventBusHolder {
 }
 
 function asConfigurable(component: any): IConfigurable | undefined {
-    const componentOptions = (vueContext.vNodeComponentOptions(component) as any as IConfigurable);
+    const componentOptions = (vueContext.getNodeOptions(component) as any as IConfigurable);
     if (!componentOptions) {
         return;
     }
@@ -65,7 +65,7 @@ function discover(component: any): Record<string, any> {
 function clearConfiguration(content: any[]) {
     const newContent: any[] = [];
     content.forEach((item) => {
-        const configurable = vueContext.vNodeComponentOptions(item);
+        const configurable = vueContext.getNodeOptions(item);
         if (!configurable || !(configurable.data && configurable.data().$_optionName)) {
             newContent.push(item);
         }
@@ -79,11 +79,11 @@ function updatedHandler(this: any) {
 
 function mountTemplate(
     getSlot: () => any,
-    parent: any,
+    parent: IVue,
     data: any,
     name: string,
     placeholder: Element
-): any {
+): IVue {
     return vueContext.mountTemplate({
         el: placeholder,
         name,

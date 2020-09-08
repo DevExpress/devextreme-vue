@@ -28,7 +28,18 @@ export interface IVueStrategy {
     usedConfigurationProps: (component: any) => Props;
     usedProps: (component: any) => Props;
     saveComponentInstance: (component: any) => void;
-    vNodeComponentOptions: (component: any, type?: boolean) => any;
+    getNodeOptions: (component: any, type?: boolean) => any;
+}
+
+export interface IVue {
+    $: any;
+    $el: Element;
+    $vnode: VNode;
+    $watch: (propName: any, handler: (newValue?: any, oldValue?: any) => void, options?: any) => any;
+    $listeners: any;
+    $slots: Record<string, () => any>;
+    $emit: (event: string, value: any) => any;
+    $props: Record<string, any>;
 }
 
 function getCurrentStrategy() {

@@ -19,7 +19,7 @@ export class Vue3Strategy implements IVueStrategy {
     }
 
     public getExtension(component) {
-        const vNode = this.vNodeComponentOptions(component, true);
+        const vNode = this.getNodeType(component);
         if (!vNode.$_isExtension) { return; }
 
         vNode.attachTo = vNode.$_componentInstance.attachTo;
@@ -67,7 +67,7 @@ export class Vue3Strategy implements IVueStrategy {
     }
 
     public configurationProps(node): Props {
-        const options = this.vNodeComponentOptions(node, true);
+        const options = this.getNodeType(node);
         if (!options && !options.props) {
             return {};
         }
@@ -99,7 +99,7 @@ export class Vue3Strategy implements IVueStrategy {
     }
 
     public markAsExtention(component) {
-        const vNodeOptions = this.vNodeComponentOptions(component, true);
+        const vNodeOptions = this.getNodeType(component);
         if (!vNodeOptions) { return; }
 
         vNodeOptions.$_isExtension = true;
@@ -135,23 +135,27 @@ export class Vue3Strategy implements IVueStrategy {
     }
 
     public saveComponentInstance(component) {
-        const vNodeOptions = this.vNodeComponentOptions(component, true);
+        const vNodeOptions = this.getNodeType(component);
 
         if (vNodeOptions) {
             vNodeOptions.$_componentInstance = component;
         }
     }
 
-    public vNodeComponentOptions(component, type) {
+    public getNodeOptions(component) {
         if (component.$) {
-            if (type) {
-                return component.$.vnode.type;
-            } else {
-                return component.$.vnode;
-            }
+            return component.$.vnode;
         }
 
         return component.type;
+    }
+
+    private getNodeType(component) {
+        if (!component.$) {
+            return component.type;
+        }
+
+        return component.$.vnode.type;
     }
 
     private findConfigurationComponents(allCildren, configComponents) {

@@ -104,7 +104,7 @@ export class Vue2Strategy implements IVueStrategy {
         return;
     }
 
-    public vNodeComponentOptions(component) {
+    public getNodeOptions(component) {
         if (!component.$vnode) {
             return this.getComponentOptions(component);
         }

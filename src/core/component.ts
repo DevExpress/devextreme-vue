@@ -4,7 +4,7 @@ import { VNode } from "vue";
 
 import * as events from "devextreme/events";
 
-import { isVue3, vueContext } from "./vue-strategy";
+import { isVue3, IVue, vueContext } from "./vue-strategy";
 
 import { pullAllChildren } from "./children-processing";
 import Configuration, { bindOptionWatchers, setEmitOptionChangedFunc } from "./configuration";
@@ -24,7 +24,7 @@ interface IWidgetComponent extends IConfigurable {
     $_templatesManager: TemplatesManager;
 }
 
-export interface IBaseComponent extends IWidgetComponent, IEventBusHolder {
+export interface IBaseComponent extends IVue, IWidgetComponent, IEventBusHolder {
     $_isExtension: boolean;
     $_applyConfigurationChanges: () => void;
     $_createWidget: (element: any) => void;
@@ -77,7 +77,7 @@ const BaseComponent = vueContext.createComponent({
     },
 
     updated() {
-        vueContext.getChildrenToUpdate(this).forEach((child: any) => {
+        vueContext.getChildrenToUpdate(this).forEach((child: IVue | VNode) => {
             initOptionChangedFunc(getConfig(child), child, getInnerChanges(child));
         });
         this.$_templatesManager.discover();
@@ -203,7 +203,7 @@ const BaseComponent = vueContext.createComponent({
             options: { deep: boolean, skipImmediate: boolean }
         ) => any {
             return (valueGetter, valueChangeCallback, options) => {
-                const thisComponent = this as any;
+                const thisComponent = this as any as IVue;
                 options = options || {};
                 if (!options.skipImmediate) {
                     valueChangeCallback(valueGetter());
@@ -230,7 +230,7 @@ const BaseComponent = vueContext.createComponent({
         },
 
         $_createEmitters(instance: any): void {
-            const thisComponent = this as any;
+            const thisComponent = this as any as IVue;
             if (thisComponent.$listeners) {
                 Object.keys(thisComponent.$listeners).forEach((listenerName: string) => {
                     const eventName = camelize(listenerName);
@@ -292,7 +292,7 @@ const DxComponent = vueContext.createComponent({
 
         restoreNodes(this.$el, nodes);
         if (this.$slots && this.$slots.default) {
-            vueContext.defaultSlots(this).forEach((child: any) => {
+            vueContext.defaultSlots(this).forEach((child: VNode) => {
                 const childExtension = vueContext.getExtension(child);
                 if (childExtension && (childExtension as IExtension).$_isExtension) {
                     childExtension.attachTo(this.$el);
