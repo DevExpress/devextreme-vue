@@ -3,6 +3,7 @@ import { VNode } from "vue";
 import { IConfigurationComponent } from "../configuration-component";
 import { IEventBusHolder } from "../templates-discovering";
 import { IVueStrategy, Props, Slots } from "./index";
+import { camelize } from "../helpers";
 
 import { pullAllChildren } from "../children-processing";
 
@@ -118,7 +119,14 @@ export class Vue3Strategy implements IVueStrategy {
     }
 
     public usedProps(component): Props {
-        return component.$.vnode.props;
+        const props = component.$.vnode.props;
+        const result = {};
+        for (const propName in props) {
+            if (props.hasOwnProperty(propName)) {
+                result[camelize(propName)] = props[propName];
+            }
+        }
+        return result;
     }
 
     public usedConfigurationProps(node): Props {
