@@ -1,6 +1,7 @@
 const vue = require("./node_modules/vue/package.json");
-const testsPath = vue.version.split(".")[0] === "2" ? "<rootDir>/src/core/tests/vue2" : "<rootDir>/src/core/tests/vue3";
-const vuePath = vue.version.split(".")[0] === "2" ? "vue/dist/vue.common.js" : "vue/dist/vue.cjs";
+const vueVersion = vue.version.split(".")[0];
+const testsPath = `<rootDir>/src/core/tests/vue${vueVersion}`;
+const vuePath = vueVersion === "2" ? "vue/dist/vue.common.js" : "vue/dist/vue.cjs";
 module.exports = {
     "roots": [
       testsPath,
