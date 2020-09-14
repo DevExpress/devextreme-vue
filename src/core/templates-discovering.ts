@@ -91,7 +91,7 @@ function mountTemplate(
         render: (h: any) => {
             const content = clearConfiguration(getSlot()(data) as any);
             if (!content) {
-                const createElement = isVue3() ? () => Vue.h : h;
+                const createElement = isVue3() ? Vue.h : h;
                 return createElement("div");
             }
             if (content.length > 1) {
