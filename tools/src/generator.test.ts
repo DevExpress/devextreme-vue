@@ -32,7 +32,6 @@ describe("mapWidget", () => {
             },
             "baseComponentPath",
             "configComponentPath",
-            "extensionComponentPath",
             []
         );
         expect(result.component.props).toEqual([]);
@@ -57,7 +56,6 @@ describe("mapWidget", () => {
             },
             "baseComponentPath",
             "configComponentPath",
-            "extensionComponentPath",
             []
         );
         expect(result.component.nestedComponents).toEqual(

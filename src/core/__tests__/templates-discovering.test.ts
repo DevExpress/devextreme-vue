@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
-import { discover } from "../../templates-discovering";
-import { vueContext } from "../../vue-strategy";
+import { discover } from "../templates-discovering";
+import { defineComponent } from "vue";
 
 describe("templates-discovering (vue 3)", () => {
 
@@ -35,7 +35,7 @@ describe("templates-discovering (vue 3)", () => {
 
 function getDiscoveredTemplates(template: string): string[] {
     let actual;
-    const vm = vueContext.createComponent({
+    const vm = defineComponent({
         template: `<container>${template}</container>`,
         components: {
             container: {

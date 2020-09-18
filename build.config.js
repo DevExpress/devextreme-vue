@@ -21,7 +21,6 @@ module.exports = {
   oldComponentsDir: './src/ui',
   coreComponentsDir: './src/core',
   indexFileName: './src/index.ts',
-  baseComponent: './core/component',
-  configComponent: './core/configuration-component',
-  extensionComponent: './core/extension-component'
+  baseComponent: './core/index',
+  configComponent: './core/index',
 };

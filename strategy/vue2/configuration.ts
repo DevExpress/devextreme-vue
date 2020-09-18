@@ -1,6 +1,6 @@
+import { Vue } from "vue/types/vue";
 import { IComponentInfo } from "./configuration-component";
-import { getOptionInfo, isEqual } from "./helpers";
-import { ComponentPublicInstance as IVue } from "vue";
+import { getOptionInfo, isEqual } from "../../src/core/helpers";
 
 type UpdateFunc = (name: string, value: any) => void;
 type EmitOptionChangedFunc = (name: string, value: any) => void;
@@ -256,7 +256,7 @@ class Configuration {
 
 function bindOptionWatchers(
     config: Configuration,
-    vueInstance: Pick<IVue, "$watch">,
+    vueInstance: Pick<Vue, "$watch">,
     innerChanges: Record<string, any>): void {
     const targets = config.getOptionsToWatch();
     if (targets) {
@@ -273,11 +273,10 @@ function bindOptionWatchers(
 
 function setEmitOptionChangedFunc(
     config: Configuration,
-    vueInstance: Pick<IVue, "$" | "$props" | "$emit">,
+    vueInstance: Pick<Vue, "$emit" | "$props">,
     innerChanges: Record<string, any>): void {
     config.emitOptionChanged = (name: string, value: string) => {
-        const props = vueInstance.$props;
-        if (props && !isEqual(value, props[name]) && vueInstance.$emit) {
+        if (!isEqual(value, vueInstance.$props[name])) {
             innerChanges[name] = value;
             vueInstance.$emit("update:" + name, value);
         }

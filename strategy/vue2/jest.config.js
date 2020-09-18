@@ -1,8 +1,6 @@
-const vuePath = "vue/dist/vue.cjs";
 module.exports = {
     "roots": [
-      "<rootDir>/src/core/__tests__",
-      "<rootDir>/tools"
+      "<rootDir>"
     ],
     "transform": {
       "^.+\\.(j|t)sx?$": "ts-jest"
@@ -18,7 +16,7 @@ module.exports = {
       "node"
     ],
     "moduleNameMapper": {
-      "^vue$": vuePath,
+      "^vue$": "vue/dist/vue.common.js",
       "^@/(.*)$": "<rootDir>/src/$1"
     }
 };

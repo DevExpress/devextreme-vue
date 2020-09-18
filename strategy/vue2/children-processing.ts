@@ -1,7 +1,6 @@
 import { VNode } from "vue";
 import Configuration from "./configuration";
 import { IConfigurable, IConfigurationComponent } from "./configuration-component";
-import { getComponentInfo, configurationChildren } from "./vue-helper";
 
 function pullAllChildren(directChildren: VNode[], allChildren: VNode[], config: Configuration): void {
     if (!directChildren || directChildren.length === 0) { return; }
@@ -13,29 +12,28 @@ function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Co
 
     children.forEach((node) => {
         nodes.push(node);
-        if (!node) { return; }
+        if (!node.componentOptions) { return; }
 
-        const componentInfo = getComponentInfo(node) as any as IConfigurationComponent;
-        if (!componentInfo) { return; }
+        const configComponent = node.componentOptions.Ctor as any as IConfigurationComponent;
+        if (!configComponent.$_optionName) { return; }
 
-        const componentChildren = configurationChildren(node);
         const initialValues = {
-            ...componentInfo.$_predefinedProps,
-            ...node.props
+            ...configComponent.$_predefinedProps,
+            ...node.componentOptions.propsData
         };
 
         const config = ownerConfig.createNested(
-            componentInfo.$_optionName,
+            configComponent.$_optionName,
             initialValues,
-            componentInfo.$_isCollectionItem,
-            componentInfo.$_expectedChildren
+            configComponent.$_isCollectionItem,
+            configComponent.$_expectedChildren
         );
 
-        (node as any as IConfigurable).$_config = config;
-        (node as any as IConfigurable).$_innerChanges = {};
+        (node.componentOptions as any as IConfigurable).$_config = config;
+        (node.componentOptions as any as IConfigurable).$_innerChanges = {};
 
-        if (componentChildren) {
-            pullConfigComponents(componentChildren as VNode[], nodes, config);
+        if (node.componentOptions.children) {
+            pullConfigComponents(node.componentOptions.children as VNode[], nodes, config);
         }
     });
 }

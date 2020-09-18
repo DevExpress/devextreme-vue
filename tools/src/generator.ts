@@ -33,7 +33,6 @@ function generate(
   rawData: IModel,
   baseComponentPath: string,
   configComponentPath: string,
-  extensionComponentPath: string,
   out: {
     componentsDir: string,
     oldComponentsDir: string,
@@ -47,7 +46,6 @@ function generate(
       data,
       baseComponentPath,
       configComponentPath,
-      extensionComponentPath,
       rawData.customTypes
     );
     const widgetFilePath = joinPaths(out.componentsDir, widgetFile.fileName);
@@ -76,7 +74,6 @@ function mapWidget(
   raw: IWidget,
   baseComponentPath: string,
   configComponentPath: string,
-  extensionComponentPath: string,
   customTypes: ICustomType[]
 ): {
   fileName: string,
@@ -98,11 +95,11 @@ function mapWidget(
         path: raw.exportPath
       },
       baseComponent: {
-        name: raw.isExtension ? "DxExtensionComponent" : "DxComponent",
-        path: raw.isExtension ? extensionComponentPath : baseComponentPath,
+        name: raw.isExtension ? "createExtentionComponent" : "createComponent",
+        path: baseComponentPath,
       },
       configComponent: {
-        name: "DxConfiguration",
+        name: "createConfigurationComponent",
         path: configComponentPath
       },
       props: getProps(raw.options, customTypeHash),

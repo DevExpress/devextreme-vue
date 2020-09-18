@@ -160,8 +160,7 @@ const renderComponent: (model: {
 `import <#= it.widgetImport.name #><#? it.props #>, { IOptions }<#?#> from "devextreme/<#= it.widgetImport.path #>";\n` +
 `<#~ it.namedImports :namedImport #>` +
 `import { <#= namedImport.name #> } from "<#= namedImport.path #>";\n` +
-`<#~#>` +
-`import { vueContext } from "./core/vue-strategy";\n` + `\n` +
+`<#~#>` + `\n` +
 
 `<#? it.props #>` +
     `type AccessibleOptions = Pick<IOptions,` +
@@ -176,8 +175,7 @@ const renderComponent: (model: {
     L1 + `readonly instance?: <#= it.widgetImport.name #>;` + `\n` +
 `}` + `\n` +
 
-`const <#= it.component #> = vueContext.createComponent({` +
-L1 + `extends: <#= it.baseComponent #>,` +
+`const <#= it.component #> = <#= it.baseComponent #>({` +
 
 `<#? it.props #>` +
     L1 + `props: {\n` +
@@ -223,7 +221,7 @@ L0 + `});\n` +
 `<#? it.nestedComponents #>` +
     `\n` +
     `<#~ it.nestedComponents : nested #>` +
-        `const <#= nested.name #>: any = vueContext.createComponent({` +
+        `const <#= nested.name #> = <#= it.configComponent #>({` +
         L1 + `data() {` +
             L2 + `return {` +
                 L3 + `$_optionName: "<#= nested.optionName #>",` +
@@ -246,7 +244,6 @@ L0 + `});\n` +
             `<#?#>` +
             L2 + `};` +
         L1 + `},` +
-        L1 + `extends: <#= it.configComponent #>,` +
         `<#? nested.props #>` +
         L1 + `emits: {` +
                 L2 + `"update:isActive": null,` +

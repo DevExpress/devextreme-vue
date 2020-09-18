@@ -1,5 +1,6 @@
 import { BaseComponent, IBaseComponent } from "./component";
-import { IVue, vueContext } from "./vue-strategy";
+import { ComponentPublicInstance as IVue, DefineComponent, defineComponent } from "vue";
+import { markAsExtention, getNodeOptions } from "./vue-helper";
 
 interface IExtension {
     $_isExtension: boolean;
@@ -11,15 +12,15 @@ interface IExtensionComponentNode {
     $_hasOwner: boolean;
 }
 
-const DxExtensionComponent: any = vueContext.createComponent({
+const DxExtensionComponent: DefineComponent = defineComponent({
     extends: BaseComponent,
     created(): void {
-        vueContext.markAsExtention(this);
+        markAsExtention(this);
     },
 
     mounted() {
         this.$el.setAttribute("isExtension", "true");
-        const componentOptions = vueContext.getNodeOptions(this);
+        const componentOptions = getNodeOptions(this);
         if (componentOptions && (componentOptions as any as IExtensionComponentNode).$_hasOwner) { return; }
 
         this.attachTo(this.$el);

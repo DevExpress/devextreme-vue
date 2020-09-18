@@ -1,5 +1,5 @@
 import * as VueType from "vue";
-import { discover } from "../../templates-discovering";
+import { discover } from "./templates-discovering";
 
 const Vue = (VueType as any).default || VueType;
 
@@ -80,7 +80,7 @@ function getDiscoveredTemplates(template: string): string[] {
         components: {
             container: {
                 render(h) {
-                    actual = discover(this);
+                    actual = discover(this as any);
                     return h();
                 }
             },

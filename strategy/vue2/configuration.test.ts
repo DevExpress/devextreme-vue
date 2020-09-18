@@ -3,7 +3,7 @@ import Configuration, {
     ExpectedChild,
     setEmitOptionChangedFunc,
     UpdateFunc
-} from "../../configuration";
+} from "./configuration";
 
 function createRootConfig(updateFunc: UpdateFunc): Configuration {
     return new Configuration(updateFunc, null, {});
@@ -546,4 +546,5 @@ describe("onOptionChanged", () => {
         expect(emitStubRoot).toHaveBeenCalledTimes(1);
         expect(emitStubNested).toHaveBeenCalledTimes(0);
     });
+
 });

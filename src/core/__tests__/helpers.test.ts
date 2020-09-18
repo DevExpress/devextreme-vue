@@ -1,4 +1,4 @@
-import { allKeysAreEqual, getOptionInfo, getOptionValue, isEqual, toComparable } from "../../helpers";
+import { allKeysAreEqual, getOptionInfo, getOptionValue, isEqual, toComparable } from "../helpers";
 
 describe("toComparable", () => {
 

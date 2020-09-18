@@ -1,19 +1,29 @@
 import { Emitter } from "mitt";
-import * as VueType from "vue";
 import { IConfigurable } from "./configuration-component";
-import { isVue3, IVue, vueContext } from "./vue-strategy";
+import {
+    configurationProps,
+    configurationTemplate,
+    declaredTemplates,
+    getChildren,
+    configurationDefaultTemplate,
+    getConfigurationOptions,
+    mount
+} from "./vue-helper";
+
+
+import { h, ComponentPublicInstance, Slot, VNode } from "vue";
 
 import { TEMPLATE_MULTIPLE_ROOTS_ERROR } from "./errors";
+import { IBaseComponent } from "./component";
 
-const Vue = (VueType as any).default || VueType;
 const TEMPLATE_PROP = "template";
 
 interface IEventBusHolder {
     eventBus: Emitter;
 }
 
-function asConfigurable(component: any): IConfigurable | undefined {
-    const componentOptions = (vueContext.getNodeOptions(component) as any as IConfigurable);
+function asConfigurable(component: VNode): IConfigurable | undefined {
+    const componentOptions = (component as any as IConfigurable);
     if (!componentOptions) {
         return;
     }
@@ -24,13 +34,13 @@ function asConfigurable(component: any): IConfigurable | undefined {
     return componentOptions;
 }
 
-function hasTemplate(component: any) {
-    return TEMPLATE_PROP in vueContext.configurationProps(component) && vueContext.configurationTemplate(component);
+function hasTemplate(component: VNode) {
+    return TEMPLATE_PROP in configurationProps(component) && configurationTemplate(component);
 }
 
-function discover(component: any): Record<string, any> {
-    const templates: Record<string, any> = {};
-    const namedTeplates = vueContext.declaredTemplates(component);
+function discover(component: ComponentPublicInstance): Record<string, Slot> {
+    const templates: Record<string, Slot> = {};
+    const namedTeplates = declaredTemplates(component);
     for (const slotName in namedTeplates) {
         if (slotName === "default" && component.$slots.default) {
             continue;
@@ -43,14 +53,14 @@ function discover(component: any): Record<string, any> {
 
         templates[slotName] = slot;
     }
-    const componentChildren = vueContext.children(component);
+    const componentChildren = getChildren(component as IBaseComponent);
     for (const childComponent of componentChildren) {
         const configurable = asConfigurable(childComponent);
         if (!configurable) {
             continue;
         }
 
-        const defaultSlot = vueContext.configurationDefaultTemplate(childComponent);
+        const defaultSlot = configurationDefaultTemplate(childComponent);
         if (!defaultSlot || !hasTemplate(childComponent)) {
             continue;
         }
@@ -62,10 +72,10 @@ function discover(component: any): Record<string, any> {
     return templates;
 }
 
-function clearConfiguration(content: any[]) {
-    const newContent: any[] = [];
+function clearConfiguration(content: VNode[]) {
+    const newContent: VNode[] = [];
     content.forEach((item) => {
-        const configurable = vueContext.getNodeOptions(item);
+        const configurable = getConfigurationOptions(item);
         if (!configurable || !(configurable.data && configurable.data().$_optionName)) {
             newContent.push(item);
         }
@@ -73,26 +83,25 @@ function clearConfiguration(content: any[]) {
     return newContent;
 }
 
-function updatedHandler(this: any) {
+function updatedHandler(this: ComponentPublicInstance) {
     this.$forceUpdate();
 }
 
 function mountTemplate(
-    getSlot: () => any,
-    parent: IVue,
+    getSlot: () => Slot,
+    parent: ComponentPublicInstance,
     data: any,
     name: string,
     placeholder: Element
-): IVue {
-    return vueContext.mountTemplate({
+): ComponentPublicInstance {
+    return mount({
         el: placeholder,
         name,
         parent,
-        render: (h: any) => {
-            const content = clearConfiguration(getSlot()(data) as any);
+        render: (): VNode => {
+            const content = clearConfiguration(getSlot()(data) as VNode[]);
             if (!content) {
-                const createElement = isVue3() ? Vue.h : h;
-                return createElement("div");
+                return h("div");
             }
             if (content.length > 1) {
                 throw new Error(TEMPLATE_MULTIPLE_ROOTS_ERROR);
