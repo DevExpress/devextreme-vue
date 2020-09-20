@@ -1,5 +1,5 @@
-import { defineComponent, VNode, ComponentPublicInstance } from "vue";
-import { getNodeOptions, configurationProps, getComponentInstance, saveComponentInstance } from "./vue-helper";
+import { ComponentPublicInstance, defineComponent } from "vue";
+import { getNodeOptions, getNodeTypeOfComponent, saveComponentInstance } from "./vue-helper";
 
 import Configuration, { bindOptionWatchers, ExpectedChild, setEmitOptionChangedFunc } from "./configuration";
 
@@ -25,7 +25,7 @@ interface IComponentInfo {
     removed?: boolean;
 }
 
-function getConfig(vueInstance: Pick<ComponentPublicInstance, "$"> | VNode): Configuration | undefined {
+function getConfig(vueInstance: Pick<ComponentPublicInstance, "$">): Configuration | undefined {
     const componentOptions = (getNodeOptions(vueInstance) as any as IConfigurable);
     if (!componentOptions) {
         return;
@@ -45,16 +45,16 @@ function getInnerChanges(vueInstance: Pick<ComponentPublicInstance, "$">): any {
 
 function initOptionChangedFunc(
     config,
-    vueInstance: Pick<ComponentPublicInstance, "$" | "$props" | "$emit"> | VNode,
+    props: any,
+    vueInstance: Pick<ComponentPublicInstance, "$" | "$props" | "$emit">,
     innerChanges: any) {
     if (!config) {
         return;
     }
 
-    config.init(Object.keys(configurationProps(vueInstance)));
-    const componentInstance = getComponentInstance(vueInstance);
-    if (componentInstance) {
-        setEmitOptionChangedFunc(config, componentInstance, innerChanges);
+    config.init(Object.keys(props));
+    if (vueInstance) {
+        setEmitOptionChangedFunc(config, vueInstance, innerChanges);
     }
 }
 
@@ -74,10 +74,10 @@ const DxConfiguration = defineComponent({
         saveComponentInstance(this);
     },
     beforeMount() {
-        const thisComponent = this as any as IConfigurationComponent
+        const thisComponent = this as any as IConfigurationComponent;
         const config = getConfig(thisComponent) as Configuration;
         const innerChanges = getInnerChanges(thisComponent);
-        initOptionChangedFunc(config, thisComponent, innerChanges);
+        initOptionChangedFunc(config, getNodeTypeOfComponent(thisComponent).props, thisComponent, innerChanges);
         bindOptionWatchers(config, this, innerChanges);
     },
 

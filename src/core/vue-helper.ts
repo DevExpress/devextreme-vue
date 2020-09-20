@@ -1,9 +1,9 @@
-import { createApp, defineComponent, VNode, ComponentPublicInstance, VNodeProps, Slots, Slot } from "vue";
-import { IConfigurationComponent, IConfigurable } from "./configuration-component";
+import { ComponentPublicInstance, createApp, Slot, Slots, VNode, VNodeProps } from "vue";
 import Configuration from "./configuration";
 import { camelize } from "./helpers";
-import { IEventBusHolder } from "./templates-discovering";
+
 import { IBaseComponent } from "./component";
+import { IConfigurable, IConfigurationComponent } from "./configuration-component";
 
 import { pullAllChildren } from "./children-processing";
 
@@ -26,7 +26,7 @@ export function getExtension(component: VNode) {
     return vNode;
 }
 
-export function getChildrenToUpdate(component: any): IConfigurableNode[] {
+export function getChildrenToUpdate(component: IBaseComponent): IConfigurableNode[] {
     const children = [];
     if (!hasChildren(component) || !component.$_config) {
         return children;
@@ -42,7 +42,7 @@ export function getComponentInfo(component): IConfigurationComponent {
 }
 
 export function getComponentInstance(component) {
-    return component.type ? component.type.$_componentInstance : component;
+    return component.type && component.type.$_componentInstance;
 }
 
 export function configurationChildren(component): VNode[] {
@@ -58,14 +58,6 @@ export function configurationDefaultTemplate(node): Slot | undefined {
     }
 
     return hasInlineTemplate(node.children.default()) ? node.children.default : undefined;
-}
-
-export function configurationProps(node): VNodeProps {
-    const options = getNodeType(node);
-    if (!options && !options.props) {
-        return {};
-    }
-    return options.props;
 }
 
 export function configurationTemplate(node: VNode): Slot | undefined {
@@ -84,29 +76,10 @@ export function defaultSlots(component: ComponentPublicInstance): VNode[] {
     return templates.default();
 }
 
-export function destroy(component: ComponentPublicInstance) {
-    return component.$.appContext.app.unmount.bind(component);
-}
-
-export function markAsExtention(component: ComponentPublicInstance): void {
-    const vNodeOptions = getNodeTypeOfComponent(component);
-    if (!vNodeOptions) { return; }
-
-    vNodeOptions.$_isExtension = true;
-    vNodeOptions.$_componentInstance = component;
-}
-
-export function mount(options, updatedHandler) {
-    const templateMixin = defineComponent({
-        created(this: any & IEventBusHolder) {
-            options.parent.eventBus.on("updated", updatedHandler.bind(this));
-        },
-        unmounted() {
-            options.parent.eventBus.off("updated", updatedHandler);
-        }
-    });
-    options.mixins = [templateMixin];
-    return createApp(options).mount(options.el);
+export function mount(options, parent, el) {
+    const template = createApp(options);
+    template.provide("eventBus", parent.eventBus);
+    return template.mount(el);
 }
 
 export function usedProps(component: ComponentPublicInstance): VNodeProps {
@@ -132,7 +105,7 @@ export function saveComponentInstance(component: ComponentPublicInstance) {
     }
 }
 
-export function getNodeOptions(component: any) {
+export function getNodeOptions(component: Pick<ComponentPublicInstance, "$">) {
     if (component.$) {
         return component.$.vnode;
     }
@@ -141,14 +114,6 @@ export function getNodeOptions(component: any) {
 }
 
 export function getNodeTypeOfComponent(component: Pick<ComponentPublicInstance, "$">): any {
-    return component.$.vnode.type;
-}
-
-function getNodeType(component) {
-    if (!component.$) {
-        return component.type;
-    }
-
     return component.$.vnode.type;
 }
 
@@ -186,7 +151,7 @@ function pullConfigurationChildren(allChildren: VNode[], children: VNode[], nest
 }
 
 function restoreConfigData(child: IConfigurableNode, children: VNode[], nested: Configuration[], id: number): void {
-    if(child.type) {
+    if (child.type) {
         child.$_config = nested[id];
         children.push(child);
         const subChildren = (child.children as any);

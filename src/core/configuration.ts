@@ -1,6 +1,6 @@
+import { ComponentPublicInstance as IVue } from "vue";
 import { IComponentInfo } from "./configuration-component";
 import { getOptionInfo, isEqual } from "./helpers";
-import { ComponentPublicInstance as IVue } from "vue";
 
 type UpdateFunc = (name: string, value: any) => void;
 type EmitOptionChangedFunc = (name: string, value: any) => void;

@@ -1,9 +1,9 @@
 import * as mitt from "mitt";
-import { VNode, defineComponent, h, ComponentPublicInstance, DefineComponent } from "vue";
+import { ComponentPublicInstance, DefineComponent, defineComponent, h, VNode } from "vue";
 
 import * as events from "devextreme/events";
 
-import { defaultSlots, getChildrenToUpdate, usedProps, getExtension } from "./vue-helper";
+import { defaultSlots, getChildrenToUpdate, getComponentInstance, getExtension, usedProps } from "./vue-helper";
 
 import { pullAllChildren } from "./children-processing";
 import Configuration, { bindOptionWatchers, setEmitOptionChangedFunc } from "./configuration";
@@ -74,8 +74,11 @@ const BaseComponent: DefineComponent = defineComponent({
 
     updated() {
         const thisComponent = this as any as IBaseComponent;
-        getChildrenToUpdate(this).forEach((child) => {
-            initOptionChangedFunc(child.$_config, child, child.$_innerChanges);
+        getChildrenToUpdate(thisComponent).forEach((child) => {
+            initOptionChangedFunc(
+                child.$_config,
+                (child.type as any).props || {},
+                getComponentInstance(child), child.$_innerChanges);
         });
         thisComponent.$_templatesManager.discover();
 

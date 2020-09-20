@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
-import { discover } from "../templates-discovering";
 import { defineComponent } from "vue";
+import { discover } from "../templates-discovering";
 
 describe("templates-discovering (vue 3)", () => {
 

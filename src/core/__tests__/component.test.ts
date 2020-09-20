@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import * as events from "devextreme/events";
-import { nextTick, defineComponent } from "vue";
+import { defineComponent, nextTick } from "vue";
 
 import { IWidgetComponent } from "../component";
 import { IConfigurable } from "../configuration-component";

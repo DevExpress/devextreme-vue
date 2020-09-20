@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
+import { defineComponent } from "vue";
 import { DxComponent, IWidgetComponent } from "../component";
 import config, { getOption } from "../config";
-import { defineComponent } from "vue";
 
 const Widget = {
     option: jest.fn(),

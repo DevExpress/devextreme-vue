@@ -1,7 +1,7 @@
 import { VNode } from "vue";
 import Configuration from "./configuration";
 import { IConfigurable, IConfigurationComponent } from "./configuration-component";
-import { getComponentInfo, configurationChildren } from "./vue-helper";
+import { configurationChildren, getComponentInfo } from "./vue-helper";
 
 function pullAllChildren(directChildren: VNode[], allChildren: VNode[], config: Configuration): void {
     if (!directChildren || directChildren.length === 0) { return; }

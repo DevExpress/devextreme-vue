@@ -1,20 +1,18 @@
 import { Emitter } from "mitt";
 import { IConfigurable } from "./configuration-component";
 import {
-    configurationProps,
+    configurationDefaultTemplate,
     configurationTemplate,
     declaredTemplates,
     getChildren,
-    configurationDefaultTemplate,
     getConfigurationOptions,
     mount
 } from "./vue-helper";
 
+import { ComponentPublicInstance, h, Slot, VNode } from "vue";
 
-import { h, ComponentPublicInstance, Slot, VNode } from "vue";
-
-import { TEMPLATE_MULTIPLE_ROOTS_ERROR } from "./errors";
 import { IBaseComponent } from "./component";
+import { TEMPLATE_MULTIPLE_ROOTS_ERROR } from "./errors";
 
 const TEMPLATE_PROP = "template";
 
@@ -35,7 +33,7 @@ function asConfigurable(component: VNode): IConfigurable | undefined {
 }
 
 function hasTemplate(component: VNode) {
-    return TEMPLATE_PROP in configurationProps(component) && configurationTemplate(component);
+    return TEMPLATE_PROP in (component.type as any).props && configurationTemplate(component);
 }
 
 function discover(component: ComponentPublicInstance): Record<string, Slot> {
@@ -95,9 +93,14 @@ function mountTemplate(
     placeholder: Element
 ): ComponentPublicInstance {
     return mount({
-        el: placeholder,
         name,
-        parent,
+        inject: ["eventBus"],
+        created(this: any & IEventBusHolder) {
+            this.eventBus.on("updated", updatedHandler.bind(this));
+        },
+        unmounted() {
+            this.eventBus.off("updated", updatedHandler);
+        },
         render: (): VNode => {
             const content = clearConfiguration(getSlot()(data) as VNode[]);
             if (!content) {
@@ -109,7 +112,7 @@ function mountTemplate(
 
             return content[0];
         }
-    }, updatedHandler);
+    }, parent, placeholder);
 }
 
 export {

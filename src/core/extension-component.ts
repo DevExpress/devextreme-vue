@@ -1,6 +1,6 @@
-import { BaseComponent, IBaseComponent } from "./component";
 import { ComponentPublicInstance as IVue, DefineComponent, defineComponent } from "vue";
-import { markAsExtention, getNodeOptions } from "./vue-helper";
+import { BaseComponent, IBaseComponent } from "./component";
+import { getNodeOptions, getNodeTypeOfComponent } from "./vue-helper";
 
 interface IExtension {
     $_isExtension: boolean;
@@ -15,7 +15,10 @@ interface IExtensionComponentNode {
 const DxExtensionComponent: DefineComponent = defineComponent({
     extends: BaseComponent,
     created(): void {
-        markAsExtention(this);
+        const nodeOptions = getNodeTypeOfComponent(this);
+
+        nodeOptions.$_isExtension = true;
+        nodeOptions.$_componentInstance = this;
     },
 
     mounted() {

@@ -1,3 +1,4 @@
+import { ComponentPublicInstance, Slot } from "vue";
 import { getOption } from "./config";
 import {
     discover as discoverSlots,
@@ -8,8 +9,6 @@ import * as domAdapter from "devextreme/core/dom_adapter";
 import * as events from "devextreme/events";
 import { DX_REMOVE_EVENT, DX_TEMPLATE_WRAPPER_CLASS } from "./constants";
 import { allKeysAreEqual } from "./helpers";
-import { destroy } from "./vue-helper";
-import { ComponentPublicInstance, Slot } from "vue";
 
 class TemplatesManager {
     private _component: ComponentPublicInstance;
@@ -82,9 +81,15 @@ class TemplatesManager {
                     const removalListener = document.createElement(container.nodeName === "TABLE" ? "tbody" : "span");
                     removalListener.style.display = "none";
                     container.appendChild(removalListener);
-                    events.one(removalListener, DX_REMOVE_EVENT, destroy(mountedTemplate));
+                    events.one(
+                        removalListener,
+                        DX_REMOVE_EVENT,
+                        mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate));
                 } else {
-                    events.one(element, DX_REMOVE_EVENT, destroy(mountedTemplate));
+                    events.one(
+                        element,
+                        DX_REMOVE_EVENT,
+                        mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate));
                 }
 
                 return element;
