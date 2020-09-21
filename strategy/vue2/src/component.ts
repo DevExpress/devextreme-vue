@@ -1,13 +1,11 @@
-import * as mitt from "mitt";
-import { ComponentPublicInstance, defineComponent, h, VNode } from "vue";
+import * as VueType from "vue";
+import IVue, { VNode, VueConstructor } from "vue";
 
 import * as events from "devextreme/events";
 
-import { defaultSlots, getChildrenToUpdate, getComponentInstance, getExtension, usedProps } from "./vue-helper";
-
 import { pullAllChildren } from "./children-processing";
 import Configuration, { bindOptionWatchers, setEmitOptionChangedFunc } from "./configuration";
-import { IConfigurable, initOptionChangedFunc } from "./configuration-component";
+import { getConfig, getInnerChanges, IConfigurable, initOptionChangedFunc } from "./configuration-component";
 import { DX_REMOVE_EVENT } from "./constants";
 import { IExtension, IExtensionComponentNode } from "./extension-component";
 import { camelize, forEachChildNode, getOptionValue, toComparable } from "./helpers";
@@ -23,7 +21,7 @@ interface IWidgetComponent extends IConfigurable {
     $_templatesManager: TemplatesManager;
 }
 
-export interface IBaseComponent extends ComponentPublicInstance, IWidgetComponent, IEventBusHolder {
+interface IBaseComponent extends IVue, IWidgetComponent, IEventBusHolder {
     $_isExtension: boolean;
     $_applyConfigurationChanges: () => void;
     $_createWidget: (element: any) => void;
@@ -35,14 +33,16 @@ export interface IBaseComponent extends ComponentPublicInstance, IWidgetComponen
     $_getTemplates: () => object;
 }
 
-function initBaseComponent() {
-    return defineComponent({
+const Vue = VueType.default || VueType;
+
+function initBaseComponent(): VueConstructor<IBaseComponent> {
+    return Vue.extend({
+
         inheritAttrs: false,
 
         data() {
-            const emit = mitt.default || mitt;
             return {
-                eventBus: emit()
+                eventBus: new Vue()
             };
         },
 
@@ -52,65 +52,59 @@ function initBaseComponent() {
             };
         },
 
-        render(): VNode {
-            const thisComponent = this as any as IBaseComponent;
+        render(createElement: (...args) => VNode): VNode {
             const children: VNode[] = [];
-            if (thisComponent.$_config.cleanNested) {
-                thisComponent.$_config.cleanNested();
+
+            if (this.$_config.cleanNested) {
+                this.$_config.cleanNested();
             }
-            pullAllChildren(defaultSlots(this), children, thisComponent.$_config);
+            pullAllChildren(this.$slots.default, children, this.$_config);
 
             this.$_processChildren(children);
-            return h("div",
-            {
-                attrs: { id: this.$attrs.id }
-            },
-            children);
+            return createElement(
+                "div",
+                {
+                    attrs: { id: this.$attrs.id }
+                },
+                children
+            );
         },
 
         beforeUpdate() {
-            const thisComponent = this as any as IBaseComponent;
-            thisComponent.$_config.setPrevNestedOptions(thisComponent.$_config.getNestedOptionValues());
+            this.$_config.setPrevNestedOptions(this.$_config.getNestedOptionValues());
         },
 
         updated() {
-            const thisComponent = this as any as IBaseComponent;
-            getChildrenToUpdate(thisComponent).forEach((child) => {
-                initOptionChangedFunc(
-                    child.$_config,
-                    (child.type as any).props || {},
-                    getComponentInstance(child), child.$_innerChanges);
-            });
-            thisComponent.$_templatesManager.discover();
+            this.$children.forEach((child: IVue) => initOptionChangedFunc(getConfig(child), child, getInnerChanges(child)));
+            this.$_templatesManager.discover();
 
-            thisComponent.$_instance.beginUpdate();
-            if (thisComponent.$_templatesManager.isDirty) {
-                thisComponent.$_instance.option(
+            this.$_instance.beginUpdate();
+            if (this.$_templatesManager.isDirty) {
+                this.$_instance.option(
                     "integrationOptions.templates",
-                    thisComponent.$_templatesManager.templates
+                    this.$_templatesManager.templates
                 );
 
-                for (const name of Object.keys(thisComponent.$_templatesManager.templates)) {
-                    thisComponent.$_instance.option(name, name);
+                for (const name of Object.keys(this.$_templatesManager.templates)) {
+                    this.$_instance.option(name, name);
                 }
 
-                thisComponent.$_templatesManager.resetDirtyFlag();
+                this.$_templatesManager.resetDirtyFlag();
             }
 
-            for (const name of Object.keys(thisComponent.$_pendingOptions)) {
-                thisComponent.$_instance.option(name, thisComponent.$_pendingOptions[name]);
+            for (const name of Object.keys(this.$_pendingOptions)) {
+                this.$_instance.option(name, this.$_pendingOptions[name]);
             }
-            thisComponent.$_pendingOptions = {};
+            (this as IBaseComponent).$_pendingOptions = {};
 
             this.$_applyConfigurationChanges();
 
-            thisComponent.$_instance.endUpdate();
-            this.eventBus.emit("updated");
+            this.$_instance.endUpdate();
+            this.eventBus.$emit("updated");
         },
 
-        beforeUnmount(): void {
-            const thisComponent = this as any as IBaseComponent;
-            const instance = thisComponent.$_instance;
+        beforeDestroy(): void {
+            const instance = this.$_instance;
             if (instance) {
                 events.triggerHandler(this.$el, DX_REMOVE_EVENT);
                 instance.dispose();
@@ -118,59 +112,55 @@ function initBaseComponent() {
         },
 
         created(): void {
-            const thisComponent = this as any as IBaseComponent;
-            const props = usedProps(this);
-            thisComponent.$_config = new Configuration(
-                (n: string, v: any) => { thisComponent.$_pendingOptions[n] = v; },
+            (this as IBaseComponent).$_config = new Configuration(
+                (n: string, v: any) => this.$_pendingOptions[n] = v,
                 null,
-                props && { ...props },
-                thisComponent.$_expectedChildren
+                this.$options.propsData && { ...this.$options.propsData },
+                this.$_expectedChildren
             );
-            thisComponent.$_innerChanges = {};
+            (this as IBaseComponent).$_innerChanges = {};
 
-            thisComponent.$_config.init(this.$props && Object.keys(this.$props));
+            this.$_config.init(this.$props && Object.keys(this.$props));
         },
 
         methods: {
             $_applyConfigurationChanges(): void {
-                const thisComponent = this as any as IBaseComponent;
-                thisComponent.$_config.componentsCountChanged.forEach(({ optionPath, isCollection, removed }) => {
-                    const options = thisComponent.$_config.getNestedOptionValues();
+                this.$_config.componentsCountChanged.forEach(({ optionPath, isCollection, removed }) => {
+                    const options = this.$_config.getNestedOptionValues();
 
                     if (!isCollection && removed) {
-                        thisComponent.$_instance.resetOption(optionPath);
+                        this.$_instance.resetOption(optionPath);
                     } else {
-                        thisComponent.$_instance.option(optionPath, getOptionValue(options, optionPath));
+                        this.$_instance.option(optionPath, getOptionValue(options, optionPath));
                     }
                 });
 
-                thisComponent.$_config.cleanComponentsCountChanged();
+                this.$_config.cleanComponentsCountChanged();
             },
             $_createWidget(element: any): void {
-                const thisComponent = this as any as IBaseComponent;
+                const thisComponent = this as IBaseComponent;
 
                 thisComponent.$_pendingOptions = {};
-                thisComponent.$_templatesManager = new TemplatesManager(this as ComponentPublicInstance);
+                thisComponent.$_templatesManager = new TemplatesManager(this);
 
-                const config = thisComponent.$_config;
+                const config = this.$_config;
                 const options: object = {
-                    ...usedProps(thisComponent),
+                    ...this.$options.propsData,
                     ...config.initialValues,
                     ...config.getNestedOptionValues(),
                     ...this.$_getIntegrationOptions()
                 };
 
-                const instance = new thisComponent.$_WidgetClass(element, options);
+                const instance = new this.$_WidgetClass(element, options);
                 thisComponent.$_instance = instance;
 
                 instance.on("optionChanged", (args) => config.onOptionChanged(args));
-                setEmitOptionChangedFunc(config, thisComponent, thisComponent.$_innerChanges);
-                bindOptionWatchers(config, thisComponent, thisComponent.$_innerChanges);
+                setEmitOptionChangedFunc(config, this, this.$_innerChanges);
+                bindOptionWatchers(config, this, this.$_innerChanges);
                 this.$_createEmitters(instance);
             },
 
             $_getIntegrationOptions(): object {
-                const thisComponent = this as any as IBaseComponent;
                 const result: Record<string, any> = {
                     integrationOptions:  {
                         watchMethod: this.$_getWatchMethod(),
@@ -178,15 +168,15 @@ function initBaseComponent() {
                     ...this.$_getExtraIntegrationOptions(),
                 };
 
-                if (thisComponent.$_templatesManager.isDirty) {
-                    const templates = thisComponent.$_templatesManager.templates;
+                if (this.$_templatesManager.isDirty) {
+                    const templates = this.$_templatesManager.templates;
 
                     result.integrationOptions.templates = templates;
                     for (const name of Object.keys(templates)) {
                         result[name] = name;
                     }
 
-                    thisComponent.$_templatesManager.resetDirtyFlag();
+                    this.$_templatesManager.resetDirtyFlag();
                 }
 
                 return result;
@@ -195,7 +185,7 @@ function initBaseComponent() {
             $_getWatchMethod(): (
                 valueGetter: () => any,
                 valueChangeCallback: (value: any) => void,
-                options: { deep: boolean, skipImmediate: boolean }
+                options: { deep: boolean, skipImmediate: boolean } | any
             ) => any {
                 return (valueGetter, valueChangeCallback, options) => {
                     options = options || {};
@@ -224,14 +214,12 @@ function initBaseComponent() {
             },
 
             $_createEmitters(instance: any): void {
-                if (this.$listeners) {
-                    Object.keys(this.$listeners).forEach((listenerName: string) => {
-                        const eventName = camelize(listenerName);
-                        instance.on(eventName, (e: any) => {
-                            this.$emit(listenerName, e);
-                        });
+                Object.keys(this.$listeners).forEach((listenerName: string) => {
+                    const eventName = camelize(listenerName);
+                    instance.on(eventName, (e: any) => {
+                        this.$emit(listenerName, e);
                     });
-                }
+                });
             }
         }
     });
@@ -258,8 +246,7 @@ function restoreNodes(el: Element, nodes: Element[]) {
 }
 
 function initDxComponent() {
-    return defineComponent({
-        extends: initBaseComponent(),
+    return initBaseComponent().extend({
         methods: {
             $_getExtraIntegrationOptions(): object {
                 return {
@@ -271,25 +258,24 @@ function initDxComponent() {
 
             $_processChildren(children: VNode[]): void {
                 children.forEach((childNode: VNode) => {
-                    if (!childNode || typeof childNode !== "object") { return; }
+                    if (!childNode.componentOptions) { return; }
 
-                    (childNode as any as IExtensionComponentNode).$_hasOwner = true;
+                    (childNode.componentOptions as any as IExtensionComponentNode).$_hasOwner = true;
                 });
             },
         },
 
         mounted(): void {
             const nodes = cleanWidgetNode(this.$el);
-            const thisComponent = this as any as IBaseComponent;
 
             this.$_createWidget(this.$el);
-            thisComponent.$_instance.endUpdate();
+            this.$_instance.endUpdate();
 
             restoreNodes(this.$el, nodes);
             if (this.$slots && this.$slots.default) {
-                defaultSlots(this).forEach((child: VNode) => {
-                    const childExtension = getExtension(child);
-                    if (childExtension && (childExtension as IExtension).$_isExtension) {
+                this.$slots.default.forEach((child: VNode) => {
+                    const childExtension = child.componentInstance as any as IExtension;
+                    if (childExtension && childExtension.$_isExtension) {
                         childExtension.attachTo(this.$el);
                     }
                 });

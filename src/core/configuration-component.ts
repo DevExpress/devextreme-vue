@@ -69,37 +69,39 @@ function getComponentInfo({name, isCollectionItem, ownerConfig }: Configuration,
     };
 }
 
-const DxConfiguration = defineComponent({
-    updated() {
-        saveComponentInstance(this);
-    },
-    beforeMount() {
-        const thisComponent = this as any as IConfigurationComponent;
-        const config = getConfig(thisComponent) as Configuration;
-        const innerChanges = getInnerChanges(thisComponent);
-        initOptionChangedFunc(config, getNodeTypeOfComponent(thisComponent).props, thisComponent, innerChanges);
-        bindOptionWatchers(config, this, innerChanges);
-    },
+function initDxConfiguration() {
+    return defineComponent({
+        updated() {
+            saveComponentInstance(this);
+        },
+        beforeMount() {
+            const thisComponent = this as any as IConfigurationComponent;
+            const config = getConfig(thisComponent) as Configuration;
+            const innerChanges = getInnerChanges(thisComponent);
+            initOptionChangedFunc(config, getNodeTypeOfComponent(thisComponent).props, thisComponent, innerChanges);
+            bindOptionWatchers(config, this, innerChanges);
+        },
 
-    mounted() {
-        if ((this.$parent as any).$_instance) {
+        mounted() {
+            if ((this.$parent as any).$_instance) {
+                (this.$parent as any).$_config.componentsCountChanged
+                    .push(getComponentInfo(getConfig(this as any as IConfigurationComponent) as Configuration));
+            }
+        },
+
+        beforeUnmount() {
             (this.$parent as any).$_config.componentsCountChanged
-                .push(getComponentInfo(getConfig(this as any as IConfigurationComponent) as Configuration));
+                .push(getComponentInfo(getConfig(this as any as IConfigurationComponent) as Configuration, true));
+        },
+
+        render(): null {
+            return null;
         }
-    },
-
-    beforeUnmount() {
-        (this.$parent as any).$_config.componentsCountChanged
-            .push(getComponentInfo(getConfig(this as any as IConfigurationComponent) as Configuration, true));
-    },
-
-    render(): null {
-        return null;
-    }
-});
+    });
+}
 
 export {
-    DxConfiguration,
+    initDxConfiguration,
     IComponentInfo,
     IConfigurable,
     IConfigurationComponent,

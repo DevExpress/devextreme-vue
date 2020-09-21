@@ -12,6 +12,8 @@ module.exports = {
   },
   npm: {
     dist: './npm/',
+    strategySrc: './strategy/vue2/npm/*',
+    strategyDist: './npm/core/strategy/vue2',
     package: 'package.json',
     license: 'LICENSE',
     readme: 'README.md'

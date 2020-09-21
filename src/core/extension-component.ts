@@ -1,5 +1,5 @@
-import { ComponentPublicInstance as IVue, DefineComponent, defineComponent } from "vue";
-import { BaseComponent, IBaseComponent } from "./component";
+import { ComponentPublicInstance as IVue, defineComponent } from "vue";
+import { initBaseComponent, IBaseComponent } from "./component";
 import { getNodeOptions, getNodeTypeOfComponent } from "./vue-helper";
 
 interface IExtension {
@@ -12,32 +12,34 @@ interface IExtensionComponentNode {
     $_hasOwner: boolean;
 }
 
-const DxExtensionComponent: DefineComponent = defineComponent({
-    extends: BaseComponent,
-    created(): void {
-        const nodeOptions = getNodeTypeOfComponent(this);
+function initDxExtensionComponent() {
+    return defineComponent({
+        extends: initBaseComponent(),
+        created(): void {
+            const nodeOptions = getNodeTypeOfComponent(this);
 
-        nodeOptions.$_isExtension = true;
-        nodeOptions.$_componentInstance = this;
-    },
+            nodeOptions.$_isExtension = true;
+            nodeOptions.$_componentInstance = this;
+        },
 
-    mounted() {
-        this.$el.setAttribute("isExtension", "true");
-        const componentOptions = getNodeOptions(this);
-        if (componentOptions && (componentOptions as any as IExtensionComponentNode).$_hasOwner) { return; }
+        mounted() {
+            this.$el.setAttribute("isExtension", "true");
+            const componentOptions = getNodeOptions(this);
+            if (componentOptions && (componentOptions as any as IExtensionComponentNode).$_hasOwner) { return; }
 
-        this.attachTo(this.$el);
-    },
+            this.attachTo(this.$el);
+        },
 
-    methods: {
-        attachTo(element: any) {
-            (this as any as IBaseComponent).$_createWidget(element);
+        methods: {
+            attachTo(element: any) {
+                (this as any as IBaseComponent).$_createWidget(element);
+            }
         }
-    }
-});
+    })
+}
 
 export {
-    DxExtensionComponent,
+    initDxExtensionComponent,
     IExtension,
     IExtensionComponentNode
 };

@@ -66,33 +66,35 @@ function getComponentInfo({name, isCollectionItem, ownerConfig }: Configuration,
     };
 }
 
-const DxConfiguration: VueConstructor = Vue.extend({
-    beforeMount() {
-        const config = getConfig(this) as Configuration;
-        const innerChanges = getInnerChanges(this);
-        initOptionChangedFunc(config, this, innerChanges);
-        bindOptionWatchers(config, this, innerChanges);
-    },
+function initDxConfigurationComponent(): VueConstructor {
+    return Vue.extend({
+        beforeMount() {
+            const config = getConfig(this) as Configuration;
+            const innerChanges = getInnerChanges(this);
+            initOptionChangedFunc(config, this, innerChanges);
+            bindOptionWatchers(config, this, innerChanges);
+        },
 
-    mounted() {
-        if ((this.$parent as any).$_instance) {
+        mounted() {
+            if ((this.$parent as any).$_instance) {
+                (this.$parent as any).$_config.componentsCountChanged
+                    .push(getComponentInfo(getConfig(this) as Configuration));
+            }
+        },
+
+        beforeDestroy() {
             (this.$parent as any).$_config.componentsCountChanged
-                .push(getComponentInfo(getConfig(this) as Configuration));
+                .push(getComponentInfo(getConfig(this) as Configuration, true));
+        },
+
+        render(createElement: (...args) => VNode): VNode {
+            return createElement();
         }
-    },
-
-    beforeDestroy() {
-        (this.$parent as any).$_config.componentsCountChanged
-            .push(getComponentInfo(getConfig(this) as Configuration, true));
-    },
-
-    render(createElement: (...args) => VNode): VNode {
-        return createElement();
-    }
-});
+    });
+}
 
 export {
-    DxConfiguration,
+    initDxConfigurationComponent,
     IComponentInfo,
     IConfigurable,
     IConfigurationComponent,

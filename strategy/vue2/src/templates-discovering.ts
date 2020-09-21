@@ -3,7 +3,7 @@ import IVue, { CreateElement } from "vue";
 import { ScopedSlot } from "vue/types/vnode";
 
 import { IConfigurable } from "./configuration-component";
-import { TEMPLATE_MULTIPLE_ROOTS_ERROR } from "../../src/core/errors";
+import { TEMPLATE_MULTIPLE_ROOTS_ERROR } from "./errors";
 
 const Vue = VueType.default || VueType;
 

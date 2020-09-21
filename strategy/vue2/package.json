@@ -1,17 +1,12 @@
 {
-  "name": "devextreme-vue2",
-  "types": "index.d.ts",
+  "name": "devextreme-vue2-strategy",
   "scripts": {
-    "start": "npm run build && npm run serve",
-    "build": "npm run clean && npm run generate",
+    "start": "npm run test",
     "clean": "gulp clean",
-    "generate": "gulp generate",
     "lint": "gulp lint",
     "pack": "gulp npm.pack",
-    "serve": "webpack-dev-server",
     "test": "jest",
-    "test-watch": "jest --watch",
-    "update-integration-meta": "dx-tools update-integration-meta --output-path ./tools/integration-data.json"
+    "test-watch": "jest --watch"
   },
   "devDependencies": {
     "@types/jest": "^22.2.3",

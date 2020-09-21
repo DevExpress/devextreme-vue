@@ -95,7 +95,7 @@ function mapWidget(
         path: raw.exportPath
       },
       baseComponent: {
-        name: raw.isExtension ? "createExtentionComponent" : "createComponent",
+        name: raw.isExtension ? "createExtensionComponent" : "createComponent",
         path: baseComponentPath,
       },
       configComponent: {

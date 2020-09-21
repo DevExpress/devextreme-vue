@@ -430,7 +430,7 @@ describe("onOptionChanged", () => {
             const emitStub = jest.fn();
 
             const config = new Configuration(jest.fn(), null, {});
-            setEmitOptionChangedFunc(config, { $emit: emitStub, $props: {} }, innerChanges);
+            setEmitOptionChangedFunc(config, ({ $emit: emitStub, $props: {} } as any), innerChanges);
 
             config.onOptionChanged(optionChangedArgs);
 
@@ -460,7 +460,7 @@ describe("onOptionChanged", () => {
 
             const config = new Configuration(jest.fn(), null, {});
             const nestedConfig = config.createNested("option", {});
-            setEmitOptionChangedFunc(nestedConfig, { $emit: emitStub, $props: {} }, innerChanges);
+            setEmitOptionChangedFunc(nestedConfig, ({ $emit: emitStub, $props: {} } as any), innerChanges);
 
             config.onOptionChanged(optionChangedArgs);
 
@@ -490,7 +490,7 @@ describe("onOptionChanged", () => {
 
             const config = new Configuration(jest.fn(), null, {});
             const nestedConfig = config.createNested("option", {}, true);
-            setEmitOptionChangedFunc(nestedConfig, { $emit: emitStub, $props: {} }, innerChanges);
+            setEmitOptionChangedFunc(nestedConfig, ({ $emit: emitStub, $props: {} } as any), innerChanges);
 
             config.onOptionChanged(optionChangedArgs);
 
@@ -519,7 +519,7 @@ describe("onOptionChanged", () => {
             const emitStub = jest.fn();
 
             const config = new Configuration(jest.fn(), null, {});
-            setEmitOptionChangedFunc(config, { $emit: emitStub, $props: {} }, innerChanges);
+            setEmitOptionChangedFunc(config, ({ $emit: emitStub, $props: {} } as any), innerChanges);
 
             config.onOptionChanged(optionChangedArgs);
 
@@ -533,13 +533,13 @@ describe("onOptionChanged", () => {
         const emitStubNested = jest.fn();
 
         const config = new Configuration(jest.fn(), null, {});
-        setEmitOptionChangedFunc(config, { $emit: emitStubRoot, $props: {} }, {});
+        setEmitOptionChangedFunc(config, ({ $emit: emitStubRoot, $props: {} } as any), {});
         const nestedConfig1 = config.createNested("option", {}, true);
-        setEmitOptionChangedFunc(nestedConfig1, { $emit: emitStubNested, $props: {} }, {});
+        setEmitOptionChangedFunc(nestedConfig1, ({ $emit: emitStubRoot, $props: {} } as any), {});
         const subNestedConfig = nestedConfig1.createNested("option", {}, false);
-        setEmitOptionChangedFunc(subNestedConfig, { $emit: emitStubNested, $props: {} }, {});
+        setEmitOptionChangedFunc(subNestedConfig, ({ $emit: emitStubRoot, $props: {} } as any), {});
         const nestedConfig2 = config.createNested("option", {}, true);
-        setEmitOptionChangedFunc(nestedConfig2, { $emit: emitStubNested, $props: {} }, {});
+        setEmitOptionChangedFunc(nestedConfig2, ({ $emit: emitStubRoot, $props: {} } as any), {});
 
         config.onOptionChanged({ fullName: "option", value: "new value", previousValue: "old value", component: null });
 

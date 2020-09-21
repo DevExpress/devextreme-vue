@@ -1,22 +1,11 @@
-import { defineComponent, DefineComponent } from "vue";
-import { DxComponent } from "./component";
-import { DxConfiguration } from "./configuration-component";
-import { DxExtensionComponent } from "./extension-component";
+import { isVue3 } from "./version";
+import vue3Stategy from "./strategy/vue3";
+import vue2Stategy from "./strategy/vue2";
 
-export declare type Props = Record<string, any>;
-export declare type Slots = Record<string, () => any>;
+const strategy = isVue3() ? vue3Stategy : vue2Stategy;
 
-export function createComponent(config: any): DefineComponent {
-    config.extends = DxComponent;
-    return defineComponent(config);
-}
+export const createComponent = strategy.createComponent;
 
-export function createConfigurationComponent(config: any): DefineComponent {
-    config.extends = DxConfiguration;
-    return defineComponent(config);
-}
+export const createConfigurationComponent = strategy.createConfigurationComponent;
 
-export function createExtentionComponent(config: any): DefineComponent {
-    config.extends = DxExtensionComponent;
-    return defineComponent(config);
-}
+export const createExtensionComponent = strategy.createExtensionComponent;

@@ -4,7 +4,7 @@ import { defineComponent, nextTick } from "vue";
 
 import { IWidgetComponent } from "../component";
 import { IConfigurable } from "../configuration-component";
-import { createComponent, createConfigurationComponent, createExtentionComponent } from "../index";
+import { createComponent, createConfigurationComponent, createExtensionComponent } from "../index";
 
 const eventHandlers = {};
 const Widget = {
@@ -1122,7 +1122,7 @@ describe("component rendering", () => {
     });
     describe("extension component", () => {
         const ExtensionWidgetClass = jest.fn(createWidget);
-        const TestExtensionComponent = createExtentionComponent({
+        const TestExtensionComponent = createExtensionComponent({
             beforeCreate() {
                 (this as any as IWidgetComponent).$_WidgetClass = ExtensionWidgetClass;
             }

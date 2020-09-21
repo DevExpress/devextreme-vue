@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import { defineComponent } from "vue";
-import { DxComponent, IWidgetComponent } from "../component";
+import { initDxComponent, IWidgetComponent } from "../component";
 import config, { getOption } from "../config";
 
 const Widget = {
@@ -15,7 +15,7 @@ const Widget = {
 const WidgetClass = jest.fn(() => Widget);
 
 const TestComponent = defineComponent({
-    extends: DxComponent,
+    extends: initDxComponent(),
     beforeCreate() {
         (this as any as IWidgetComponent).$_WidgetClass = WidgetClass;
     }
