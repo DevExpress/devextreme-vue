@@ -4,8 +4,8 @@
     "start": "npm run test",
     "clean": "gulp clean",
     "lint": "gulp lint",
-    "pack": "gulp npm.pack",
-    "test": "jest",
+    "pack": "npm install && gulp npm.pack",
+    "test": "npm install && jest",
     "test-watch": "jest --watch"
   },
   "devDependencies": {

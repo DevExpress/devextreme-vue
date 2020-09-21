@@ -15,8 +15,6 @@ build:
     - npm run lint
     - npm run pack
     - npm run test
-    - npm i vue@next @vue/test-utils@next
-    - npm run test
   cache: true
   cache_dir_list:
     - $SHIPPABLE_BUILD_DIR/node_modules
