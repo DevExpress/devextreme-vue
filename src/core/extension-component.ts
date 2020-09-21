@@ -1,5 +1,5 @@
 import { ComponentPublicInstance as IVue, defineComponent } from "vue";
-import { initBaseComponent, IBaseComponent } from "./component";
+import { IBaseComponent, initBaseComponent } from "./component";
 import { getNodeOptions, getNodeTypeOfComponent } from "./vue-helper";
 
 interface IExtension {
@@ -35,7 +35,7 @@ function initDxExtensionComponent() {
                 (this as any as IBaseComponent).$_createWidget(element);
             }
         }
-    })
+    });
 }
 
 export {

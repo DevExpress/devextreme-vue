@@ -18,4 +18,4 @@ export default {
         config.extends = initDxExtensionComponent();
         return defineComponent(config);
     }
-}
+};

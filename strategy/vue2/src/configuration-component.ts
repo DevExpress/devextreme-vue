@@ -1,9 +1,9 @@
 import * as VueType from "vue";
 import IVue, { VNode, VueConstructor } from "vue";
 
-import Configuration, { bindOptionWatchers, ExpectedChild, setEmitOptionChangedFunc } from "./configuration";
+const Vue = VueType.default || VueType;
 
-const Vue = (VueType as any).default || VueType;
+import Configuration, { bindOptionWatchers, ExpectedChild, setEmitOptionChangedFunc } from "./configuration";
 
 interface IConfigurationOwner {
     $_expectedChildren: Record<string, ExpectedChild>;
@@ -66,35 +66,33 @@ function getComponentInfo({name, isCollectionItem, ownerConfig }: Configuration,
     };
 }
 
-function initDxConfigurationComponent(): VueConstructor {
-    return Vue.extend({
-        beforeMount() {
-            const config = getConfig(this) as Configuration;
-            const innerChanges = getInnerChanges(this);
-            initOptionChangedFunc(config, this, innerChanges);
-            bindOptionWatchers(config, this, innerChanges);
-        },
+const DxConfiguration = (): VueConstructor => Vue.extend({
+    beforeMount() {
+        const config = getConfig(this) as Configuration;
+        const innerChanges = getInnerChanges(this);
+        initOptionChangedFunc(config, this, innerChanges);
+        bindOptionWatchers(config, this, innerChanges);
+    },
 
-        mounted() {
-            if ((this.$parent as any).$_instance) {
-                (this.$parent as any).$_config.componentsCountChanged
-                    .push(getComponentInfo(getConfig(this) as Configuration));
-            }
-        },
-
-        beforeDestroy() {
+    mounted() {
+        if ((this.$parent as any).$_instance) {
             (this.$parent as any).$_config.componentsCountChanged
-                .push(getComponentInfo(getConfig(this) as Configuration, true));
-        },
-
-        render(createElement: (...args) => VNode): VNode {
-            return createElement();
+                .push(getComponentInfo(getConfig(this) as Configuration));
         }
-    });
-}
+    },
+
+    beforeDestroy() {
+        (this.$parent as any).$_config.componentsCountChanged
+            .push(getComponentInfo(getConfig(this) as Configuration, true));
+    },
+
+    render(createElement: (...args) => VNode): VNode {
+        return createElement();
+    }
+});
 
 export {
-    initDxConfigurationComponent,
+    DxConfiguration,
     IComponentInfo,
     IConfigurable,
     IConfigurationComponent,

@@ -1,5 +1,5 @@
 import { VueConstructor } from "vue";
-import { initBaseComponent } from "./component";
+import { BaseComponent } from "./component";
 
 interface IExtension {
     $_isExtension: boolean;
@@ -10,29 +10,27 @@ interface IExtensionComponentNode {
     $_hasOwner: boolean;
 }
 
-function initDxExtensionComponent(): VueConstructor {
-    return initBaseComponent().extend({
-        created(): void {
-            this.$_isExtension = true;
-        },
+const DxExtensionComponent = (): VueConstructor => BaseComponent().extend({
+    created(): void {
+        this.$_isExtension = true;
+    },
 
-        mounted() {
-            this.$el.setAttribute("isExtension", "true");
-            if (this.$vnode && (this.$vnode.componentOptions as any as IExtensionComponentNode).$_hasOwner) { return; }
+    mounted() {
+        this.$el.setAttribute("isExtension", "true");
+        if (this.$vnode && (this.$vnode.componentOptions as any as IExtensionComponentNode).$_hasOwner) { return; }
 
-            this.attachTo(this.$el);
-        },
+        this.attachTo(this.$el);
+    },
 
-        methods: {
-            attachTo(element: any) {
-                this.$_createWidget(element);
-            }
+    methods: {
+        attachTo(element: any) {
+            this.$_createWidget(element);
         }
-    });
-}
+    }
+});
 
 export {
-    initDxExtensionComponent,
+    DxExtensionComponent,
     IExtension,
     IExtensionComponentNode
 };

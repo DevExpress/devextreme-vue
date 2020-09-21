@@ -1,23 +1,23 @@
 import * as VueType from "vue";
 const Vue = VueType.default || VueType;
 
-import { initDxComponent } from "./component";
-import { initDxConfigurationComponent } from "./configuration-component";
-import { initDxExtensionComponent } from "./extension-component";
+import { DxComponent } from "./component";
+import { DxConfiguration } from "./configuration-component";
+import { DxExtensionComponent } from "./extension-component";
 
 export default {
     createComponent(config: any): any {
-        config.extends = initDxComponent();
+        config.extends = DxComponent();
         return Vue.extend(config);
     },
 
     createConfigurationComponent(config: any): any {
-        config.extends = initDxConfigurationComponent();
+        config.extends = DxConfiguration();
         return Vue.extend(config);
     },
 
     createExtensionComponent(config: any): any {
-        config.extends = initDxExtensionComponent();
+        config.extends = DxExtensionComponent();
         return Vue.extend(config);
     }
 }

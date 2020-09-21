@@ -5,9 +5,8 @@ import { ScopedSlot } from "vue/types/vnode";
 import { IConfigurable } from "./configuration-component";
 import { TEMPLATE_MULTIPLE_ROOTS_ERROR } from "./errors";
 
-const Vue = VueType.default || VueType;
-
 const TEMPLATE_PROP = "template";
+const Vue = VueType.default || VueType;
 
 interface IEventBusHolder {
     eventBus: IVue;

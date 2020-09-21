@@ -1,13 +1,13 @@
 import * as VueType from "vue";
-import { initBaseComponent, initDxComponent, IWidgetComponent } from "./component";
-import { initDxConfigurationComponent, IConfigurable, IConfigurationComponent } from "./configuration-component";
-import { initDxExtensionComponent } from "./extension-component";
+import { DxComponent, IWidgetComponent } from "./component";
+import { DxConfiguration, IConfigurable, IConfigurationComponent } from "./configuration-component";
+import { DxExtensionComponent } from "./extension-component";
 
 import * as events from "devextreme/events";
 
 import { mount } from "@vue/test-utils";
 
-const Vue = (VueType as any).default || VueType;
+const Vue = VueType.default || VueType;
 
 const eventHandlers: { [index: string]: (e?: any) => void } = {};
 const Widget = {
@@ -36,7 +36,7 @@ function createWidget(_, options) {
 const WidgetClass = jest.fn(createWidget);
 
 const TestComponent = Vue.extend({
-    extends: initBaseComponent(),
+    extends: DxComponent(),
     beforeCreate() {
         (this as any as IWidgetComponent).$_WidgetClass = WidgetClass;
     },
@@ -59,9 +59,9 @@ function skipIntegrationOptions(options: {
     return result;
 }
 
-function buildTestConfigCtor(): Vue.VueConstructor {
+function buildTestConfigCtor(): VueType.VueConstructor {
     return Vue.extend({
-        extends: initDxConfigurationComponent(),
+        extends: DxConfiguration(),
         props: {
             prop1: Number,
             prop2: String
@@ -273,7 +273,7 @@ describe("configuration", () => {
     it("creates configuration", () => {
         const vm = new TestComponent();
 
-        expect((vm as any as IConfigurable).$_config).not.toBeNull();
+        expect((vm as IConfigurable).$_config).not.toBeNull();
     });
 
     it("passes configuration initialValues to widget ctor", () => {
@@ -287,7 +287,7 @@ describe("configuration", () => {
         };
 
         const vm = new TestComponent();
-        (vm as any as IConfigurable).$_config = {
+        (vm as IConfigurable).$_config = {
             getNestedOptionValues: jest.fn(() => initialValues),
             getOptionsToWatch: jest.fn()
         } as any;
@@ -305,12 +305,12 @@ describe("configuration", () => {
         const vm = new TestComponent();
         vm.$mount();
 
-        const pendingOptions = (vm as any as IWidgetComponent).$_pendingOptions;
+        const pendingOptions = (vm as IWidgetComponent).$_pendingOptions;
 
         const name = "abc";
         const value = {};
 
-        (vm as any as IConfigurable).$_config.updateFunc(name, value);
+        (vm as IConfigurable).$_config.updateFunc(name, value);
         expect(pendingOptions[name]).toEqual(value);
     });
 
@@ -539,7 +539,7 @@ describe("configuration", () => {
             const expected = {};
 
             const WidgetComponent = Vue.extend({
-                extends: initDxComponent(),
+                extends: DxComponent(),
                 beforeCreate() {
                     (this as any as IWidgetComponent).$_WidgetClass = WidgetClass;
                     (this as any as IWidgetComponent).$_expectedChildren = expected;
@@ -548,7 +548,7 @@ describe("configuration", () => {
 
             const vm = new WidgetComponent();
 
-            expect((vm as any as IWidgetComponent).$_config.expectedChildren).toBe(expected);
+            expect((vm as IWidgetComponent).$_config.expectedChildren).toBe(expected);
         });
 
         it("initialized for config component", () => {
@@ -1513,7 +1513,7 @@ describe("template", () => {
 describe("static items", () => {
     it("passes integrationOptions to widget", () => {
         const NestedItem = Vue.extend({
-            extends: initDxConfigurationComponent(),
+            extends: DxConfiguration(),
             props: {
                 prop1: Number,
                 template: String
@@ -1544,7 +1544,7 @@ describe("static items", () => {
 
     it("doesn't pass integrationOptions to widget if template prop is absent", () => {
         const NestedItem = Vue.extend({
-            extends: initDxConfigurationComponent(),
+            extends: DxConfiguration(),
             props: {
                 prop1: Number
             }
@@ -1571,7 +1571,7 @@ describe("static items", () => {
 
     it("renders", () => {
         const NestedItem = Vue.extend({
-            extends: initDxConfigurationComponent(),
+            extends: DxConfiguration(),
             props: {
                 prop1: Number,
                 template: String
@@ -1599,7 +1599,7 @@ describe("static items", () => {
 
     it("renders template containing text only (vue 3)", () => {
         const NestedItem = Vue.extend({
-            extends: initDxConfigurationComponent(),
+            extends: DxConfiguration(),
             props: {
                 prop1: Number,
                 template: String
@@ -1626,7 +1626,7 @@ describe("static items", () => {
 
     it("renders template with several root elements (vue 3)", () => {
         const NestedItem = Vue.extend({
-            extends: initDxConfigurationComponent(),
+            extends: DxConfiguration(),
             props: {
                 prop1: Number,
                 template: String
@@ -1651,7 +1651,7 @@ describe("static items", () => {
 
     it("renders template with single root element (vue 3)", () => {
         const NestedItem = Vue.extend({
-            extends: initDxConfigurationComponent(),
+            extends: DxConfiguration(),
             props: {
                 prop1: Number,
                 template: String
@@ -1678,7 +1678,7 @@ describe("static items", () => {
 
     it("keeps template root element class and id (vue 3)", () => {
         const NestedItem = Vue.extend({
-            extends: initDxConfigurationComponent(),
+            extends: DxConfiguration(),
             props: {
                 prop1: Number,
                 template: String
@@ -1706,7 +1706,7 @@ describe("static items", () => {
 
     it("render nested template", () => {
         const NestedItem = Vue.extend({
-            extends: initDxConfigurationComponent(),
+            extends: DxConfiguration(),
             props: {
                 prop1: Number,
                 template: String
@@ -1739,7 +1739,7 @@ describe("static items", () => {
 
     it("doesn't pass integrationOptions to widget if nested item has sub nested item", () => {
         const NestedItem = Vue.extend({
-            extends: initDxConfigurationComponent(),
+            extends: DxConfiguration(),
             props: {
                 prop1: Number,
                 template: String
@@ -1804,7 +1804,7 @@ describe("events emitting", () => {
 describe("extension component", () => {
     const ExtensionWidgetClass = jest.fn(createWidget);
     const TestExtensionComponent = Vue.extend({
-        extends: initDxExtensionComponent(),
+        extends: DxExtensionComponent(),
         beforeCreate() {
             (this as any as IWidgetComponent).$_WidgetClass = ExtensionWidgetClass;
         }

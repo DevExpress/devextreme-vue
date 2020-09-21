@@ -1,7 +1,7 @@
 import * as VueType from "vue";
 import { discover } from "./templates-discovering";
 
-const Vue = (VueType as any).default || VueType;
+const Vue = VueType.default || VueType;
 
 describe("templates-discovering (vue 2)", () => {
 
@@ -80,7 +80,7 @@ function getDiscoveredTemplates(template: string): string[] {
         components: {
             container: {
                 render(h) {
-                    actual = discover(this as any);
+                    actual = discover(this);
                     return h();
                 }
             },
