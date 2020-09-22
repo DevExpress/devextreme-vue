@@ -224,8 +224,8 @@ function initBaseComponent() {
             },
 
             $_createEmitters(instance: any): void {
-                if (this.$listeners) {
-                    Object.keys(this.$listeners).forEach((listenerName: string) => {
+                if (this.$attrs) {
+                    Object.keys(this.$attrs).forEach((listenerName: string) => {
                         const eventName = camelize(listenerName);
                         instance.on(eventName, (e: any) => {
                             this.$emit(listenerName, e);
