@@ -1,0 +1,1277 @@
+import { mount } from "@vue/test-utils";
+import * as events from "devextreme/events";
+import { defineComponent, nextTick } from "vue";
+
+import { IWidgetComponent } from "../component";
+import { IConfigurable } from "../configuration-component";
+import { createComponent, createConfigurationComponent, createExtensionComponent } from "../index";
+
+const eventHandlers = {};
+const Widget = {
+    option: jest.fn(),
+    resetOption: jest.fn(),
+    dispose: jest.fn(),
+    on: (event, handler) => {
+        eventHandlers[event] = handler;
+    },
+    fire: (event, args) => {
+        if (!eventHandlers[event]) {
+            throw new Error(`no handler registered for '${event}'`);
+        }
+        eventHandlers[event](args);
+    },
+    beginUpdate: jest.fn(),
+    endUpdate: jest.fn(),
+};
+
+function createWidget(_, options) {
+    if (options.onInitializing) {
+        options.onInitializing.call(Widget);
+    }
+    return Widget;
+}
+const WidgetClass = jest.fn(createWidget);
+
+const TestComponent = createComponent({
+    beforeCreate() {
+        this.$_WidgetClass = WidgetClass;
+    },
+    props: {
+        prop1: Number,
+        sampleProp: String
+    },
+    model: {
+        prop: "prop1",
+        event: "update:prop1"
+    }
+});
+
+function skipIntegrationOptions(options: {
+    integrationOptions?: object,
+    onInitializing?: () => void,
+    ref?: string,
+    id?: string,
+}): Record<string, any> {
+    const result = {...options };
+    delete result.integrationOptions;
+    delete result.onInitializing;
+    delete result.ref;
+    delete result.id;
+    return result;
+}
+
+function buildTestConfigCtor(options): any {
+    return createConfigurationComponent({
+        data() {
+            return options;
+        },
+        props: {
+            prop1: Number,
+            prop2: String
+        }
+    });
+}
+
+jest.setTimeout(1000);
+beforeEach(() => {
+    jest.clearAllMocks();
+});
+
+describe("component rendering", () => {
+
+    it("correctly renders", () => {
+        const wrapper = mount(TestComponent);
+        expect(wrapper.html()).toBe("<div attrs=\"[object Object]\"></div>");
+    });
+
+    it("calls widget creation", () => {
+        mount(TestComponent);
+        expect(WidgetClass).toHaveBeenCalledTimes(1);
+        expect(Widget.beginUpdate).toHaveBeenCalledTimes(1);
+        expect(Widget.endUpdate).toHaveBeenCalledTimes(1);
+    });
+
+    it("passes id to element", () => {
+        const vm = defineComponent({
+            template: "<test-component id='my-id'/>",
+            components: {
+                TestComponent
+            }
+        });
+        const wrapper = mount(vm);
+        expect(wrapper.element.id).toBe("my-id");
+    });
+
+    it("creates nested component", () => {
+        mount(defineComponent({
+            template: "<test-component><test-component/></test-component>",
+            components: {
+                TestComponent
+            }
+        }));
+
+        expect(WidgetClass.mock.instances.length).toBe(2);
+        expect(WidgetClass.mock.instances[1]).toEqual({});
+    });
+
+    describe("options", () => {
+
+        it("pass props to option on mounting", () => {
+            const wrapper = mount(TestComponent, {
+                props: {
+                    sampleProp: "default"
+                }
+            });
+
+            expect(WidgetClass.mock.calls[0][0]).toBe(wrapper.element);
+
+            expect(skipIntegrationOptions(WidgetClass.mock.calls[0][1])).toEqual({
+                sampleProp: "default"
+            });
+        });
+
+        it("subscribes to optionChanged", () => {
+            mount(TestComponent, {
+                props: {
+                    sampleProp: "default"
+                }
+            });
+
+            expect(eventHandlers).toHaveProperty("optionChanged");
+        });
+
+        it("watch prop changing", async () => {
+            const wrapper = mount(TestComponent, {
+                props: {
+                    sampleProp: "default"
+                }
+            });
+            await wrapper.setProps({ sampleProp: "new" });
+
+            expect(Widget.option).toHaveBeenCalledTimes(1);
+            expect(Widget.option).toHaveBeenCalledWith("sampleProp", "new");
+        });
+
+    });
+
+    describe("configuration", () => {
+
+        const Nested = buildTestConfigCtor({ $_optionName: "nestedOption" });
+
+        it("creates configuration", () => {
+            const wrapper = mount(TestComponent);
+
+            expect((wrapper.vm as any as IConfigurable).$_config).not.toBeNull();
+        });
+
+        it("updates pendingOptions from a widget component configuration updateFunc", () => {
+            const wrapper = mount(TestComponent);
+
+            const pendingOptions = (wrapper.vm as any as IWidgetComponent).$_pendingOptions;
+
+            const name = "abc";
+            const value = {};
+
+            (wrapper.vm as any as IConfigurable).$_config.updateFunc(name, value);
+            expect(pendingOptions[name]).toEqual(value);
+        });
+
+        it("initializes nested config", () => {
+            const vm = defineComponent({
+                template:
+                    `<test-component id="component">` +
+                    `  <nested :prop1="123" />` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    Nested
+                }
+            });
+
+            const wrapper = mount(vm);
+
+            const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+            expect(config.nested).toHaveLength(1);
+            expect(config.nested[0].name).toBe("nestedOption");
+            expect(config.nested[0].options).toEqual(["prop1", "prop2"]);
+            expect(config.nested[0].initialValues).toEqual({ prop1: 123 });
+            expect(config.nested[0].isCollectionItem).toBeFalsy();
+        });
+
+        it("initializes nested config (collectionItem)", () => {
+            const nestedCollectionItem = buildTestConfigCtor(
+                { $_optionName: "nestedOption",
+                $_isCollectionItem: true
+            });
+
+            const vm = defineComponent({
+                template:
+                    `<test-component id="component">` +
+                    `  <nested-collection-item :prop1="123" />` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    nestedCollectionItem
+                }
+            });
+
+            const wrapper = mount(vm);
+
+            const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+            expect(config.nested).toHaveLength(1);
+            expect(config.nested[0].name).toBe("nestedOption");
+            expect(config.nested[0].options).toEqual(["prop1", "prop2"]);
+            expect(config.nested[0].initialValues).toEqual({ prop1: 123 });
+            expect(config.nested[0].isCollectionItem).toBeTruthy();
+            expect(config.nested[0].collectionItemIndex).toBe(0);
+        });
+
+        it("initializes nested config (several collectionItems)", () => {
+            const nestedCollectionItem = buildTestConfigCtor({
+                $_optionName: "nestedOption",
+                $_isCollectionItem: true
+            });
+
+            const vm = defineComponent({
+                template:
+                    `<test-component id="component">` +
+                    `  <nested-collection-item :prop1="123" />` +
+                    `  <nested-collection-item :prop1="456" prop2="abc" />` +
+                    `  <nested-collection-item prop2="def" />` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    nestedCollectionItem
+                }
+            });
+
+            const wrapper = mount(vm);
+
+            const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+            expect(config.nested).toHaveLength(3);
+
+            expect(config.nested[0].name).toBe("nestedOption");
+            expect(config.nested[0].options).toEqual(["prop1", "prop2"]);
+            expect(config.nested[0].initialValues).toEqual({ prop1: 123 });
+            expect(config.nested[0].isCollectionItem).toBeTruthy();
+            expect(config.nested[0].collectionItemIndex).toBe(0);
+
+            expect(config.nested[1].name).toBe("nestedOption");
+            expect(config.nested[1].options).toEqual(["prop1", "prop2"]);
+            expect(config.nested[1].initialValues).toEqual({ prop1: 456, prop2: "abc" });
+            expect(config.nested[1].isCollectionItem).toBeTruthy();
+            expect(config.nested[1].collectionItemIndex).toBe(1);
+
+            expect(config.nested[2].name).toBe("nestedOption");
+            expect(config.nested[2].options).toEqual(["prop1", "prop2"]);
+            expect(config.nested[2].initialValues).toEqual({ prop2: "def" });
+            expect(config.nested[2].isCollectionItem).toBeTruthy();
+            expect(config.nested[2].collectionItemIndex).toBe(2);
+        });
+
+        it("initializes nested config (using v-for)", () => {
+            const nestedCollectionItem = buildTestConfigCtor({
+                $_optionName: "nestedOption",
+                $_isCollectionItem: true
+            });
+
+            const vm = defineComponent({
+                template:
+                    `<test-component id="component">` +
+                    `  <nested-collection-item v-for="(item, index) in items" :key="index" :prop1="item.value" />` +
+                    `</test-component>`,
+                data() {
+                    return {
+                        items: [{ value: 123 }, { value: 321 }, { value: 432 }]
+                    };
+                },
+                components: {
+                    TestComponent,
+                    nestedCollectionItem
+                }
+            });
+
+            const wrapper = mount(vm);
+
+            const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+            expect(config.nested).toHaveLength(3);
+
+            expect(config.nested[0].name).toBe("nestedOption");
+            expect(config.nested[0].options).toEqual(["prop1", "prop2"]);
+            expect(config.nested[0].initialValues).toEqual({ key: 0, prop1: 123 });
+            expect(config.nested[0].isCollectionItem).toBeTruthy();
+            expect(config.nested[0].collectionItemIndex).toBe(0);
+
+            expect(config.nested[1].name).toBe("nestedOption");
+            expect(config.nested[1].options).toEqual(["prop1", "prop2"]);
+            expect(config.nested[1].initialValues).toEqual({ key: 1, prop1: 321 });
+            expect(config.nested[1].isCollectionItem).toBeTruthy();
+            expect(config.nested[1].collectionItemIndex).toBe(1);
+
+            expect(config.nested[2].name).toBe("nestedOption");
+            expect(config.nested[2].options).toEqual(["prop1", "prop2"]);
+            expect(config.nested[2].initialValues).toEqual({ key: 2, prop1: 432 });
+            expect(config.nested[2].isCollectionItem).toBeTruthy();
+            expect(config.nested[2].collectionItemIndex).toBe(2);
+        });
+
+        it("initializes nested config predefined prop", () => {
+            const predefinedValue = {};
+            const NestedWithPredefined = buildTestConfigCtor({ $_optionName: "nestedOption", $_predefinedProps: {
+                predefinedProp: predefinedValue
+            } });
+
+            const vm = defineComponent({
+                template:
+                    `<test-component id="component">` +
+                    `  <nested-with-predefined />` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    NestedWithPredefined
+                }
+            });
+
+            const wrapper = mount(vm);
+
+            const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+            const initialValues = config.getNestedOptionValues();
+            expect(initialValues).toHaveProperty("nestedOption");
+            expect(initialValues!.nestedOption).toHaveProperty("predefinedProp");
+            expect(initialValues!.nestedOption!.predefinedProp).toBe(predefinedValue);
+        });
+
+        it("initializes sub-nested config", () => {
+            const subNested = buildTestConfigCtor({ $_optionName: "subNestedOption" });
+
+            const vm = defineComponent({
+                template:
+                    `<test-component id="component">` +
+                    `  <nested :prop1="123">` +
+                    `    <sub-nested prop2="abc"/>` +
+                    `  </nested>` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    Nested,
+                    subNested
+                }
+            });
+
+            const wrapper = mount(vm);
+
+            const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+            expect(config.nested).toHaveLength(1);
+
+            const nestedConfig = config.nested[0];
+            expect(nestedConfig.nested).toHaveLength(1);
+
+            expect(nestedConfig.nested[0].name).toBe("subNestedOption");
+            expect(nestedConfig.nested[0].options).toEqual(["prop1", "prop2"]);
+            expect(nestedConfig.nested[0].initialValues).toEqual({ prop2: "abc" });
+            expect(nestedConfig.nested[0].isCollectionItem).toBeFalsy();
+        });
+
+        it("initializes sub-nested config (collectionItem)", () => {
+            const subNested = buildTestConfigCtor({ $_optionName: "subNestedOption", $_isCollectionItem: true });
+
+            const vm = defineComponent({
+                template:
+                    `<test-component id="component">` +
+                    `  <nested :prop1="123">` +
+                    `    <sub-nested prop2="abc"/>` +
+                    `  </nested>` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    Nested,
+                    subNested
+                }
+            });
+
+            const wrapper = mount(vm);
+
+            const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+            expect(config.nested).toHaveLength(1);
+
+            const nestedConfig = config.nested[0];
+            expect(nestedConfig.nested).toHaveLength(1);
+
+            expect(nestedConfig.nested[0].name).toBe("subNestedOption");
+            expect(nestedConfig.nested[0].options).toEqual(["prop1", "prop2"]);
+            expect(nestedConfig.nested[0].initialValues).toEqual({ prop2: "abc" });
+            expect(nestedConfig.nested[0].isCollectionItem).toBeTruthy();
+            expect(nestedConfig.nested[0].collectionItemIndex).toBe(0);
+        });
+
+        it("initializes sub-nested config (multiple collectionItems)", () => {
+            const nestedCollectionItem = buildTestConfigCtor({
+                $_optionName: "subNestedOption",
+                $_isCollectionItem: true
+            });
+
+            const vm = defineComponent({
+                template:
+                    `<test-component id="component">` +
+                    `  <nested>` +
+                    `    <nested-collection-item :prop1="123" />` +
+                    `    <nested-collection-item :prop1="456" prop2="abc" />` +
+                    `    <nested-collection-item prop2="def" />` +
+                    `  </nested>` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    Nested,
+                    nestedCollectionItem
+                }
+            });
+
+            const wrapper = mount(vm);
+
+            const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+            expect(config.nested).toHaveLength(1);
+
+            const nestedConfig = config.nested[0];
+            expect(nestedConfig.nested).toHaveLength(3);
+
+            expect(nestedConfig.nested[0].name).toBe("subNestedOption");
+            expect(nestedConfig.nested[0].options).toEqual(["prop1", "prop2"]);
+            expect(nestedConfig.nested[0].initialValues).toEqual({ prop1: 123 });
+            expect(nestedConfig.nested[0].isCollectionItem).toBeTruthy();
+            expect(nestedConfig.nested[0].collectionItemIndex).toBe(0);
+
+            expect(nestedConfig.nested[1].name).toBe("subNestedOption");
+            expect(nestedConfig.nested[1].options).toEqual(["prop1", "prop2"]);
+            expect(nestedConfig.nested[1].initialValues).toEqual({ prop1: 456, prop2: "abc" });
+            expect(nestedConfig.nested[1].isCollectionItem).toBeTruthy();
+            expect(nestedConfig.nested[1].collectionItemIndex).toBe(1);
+
+            expect(nestedConfig.nested[2].name).toBe("subNestedOption");
+            expect(nestedConfig.nested[2].options).toEqual(["prop1", "prop2"]);
+            expect(nestedConfig.nested[2].initialValues).toEqual({ prop2: "def" });
+            expect(nestedConfig.nested[2].isCollectionItem).toBeTruthy();
+            expect(nestedConfig.nested[2].collectionItemIndex).toBe(2);
+        });
+
+        describe("expectedChildren", () => {
+
+            it("initialized for widget component", () => {
+                const expected = {};
+
+                const WidgetComponent = createComponent({
+                    beforeCreate() {
+                        (this as any as IWidgetComponent).$_WidgetClass = WidgetClass;
+                        (this as any as IWidgetComponent).$_expectedChildren = expected;
+                    }
+                });
+
+                const wrapper = mount(WidgetComponent);
+
+                expect((wrapper.vm as any as IWidgetComponent).$_config.expectedChildren).toBe(expected);
+            });
+
+            it("initialized for config component", () => {
+                const expected = {};
+                const ConfigComponent = buildTestConfigCtor({
+                    $_optionName: "nestedOption",
+                    $_expectedChildren: expected
+                });
+
+                const vm = defineComponent({
+                    template:
+                        `<test-component id="component">` +
+                        `  <config-component />` +
+                        `</test-component>`,
+                    components: {
+                        TestComponent,
+                        ConfigComponent
+                    }
+                });
+
+                const wrapper = mount(vm);
+
+                const widgetConfig = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+                expect(widgetConfig.nested[0].expectedChildren).toBe(expected);
+            });
+        });
+
+    });
+
+    describe("nested option", () => {
+
+        const Nested = buildTestConfigCtor({ $_optionName: "nestedOption" });
+
+        it("pulls initital values", () => {
+            const vm = defineComponent({
+                template:
+                    `<test-component id="component">` +
+                    `  <nested :prop1="123" />` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    Nested
+                }
+            });
+
+            const wrapper = mount(vm);
+            const component = wrapper.getComponent("#component");
+
+            expect(WidgetClass.mock.calls[0][0]).toBe(component.vm.$el);
+
+            expect(skipIntegrationOptions(WidgetClass.mock.calls[0][1])).toEqual({
+                nestedOption: {
+                    prop1: 123
+                }
+            });
+        });
+
+        it("watches option changes", (done) => {
+            const vm = defineComponent({
+                template:
+                    `<test-component>` +
+                    `  <nested :prop1="value" />` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    Nested
+                },
+                props: ["value"]
+            });
+
+            const wrapper = mount(vm, {
+                props: {
+                    value: 123
+                }
+            });
+
+            wrapper.setProps({ value: 456 });
+
+            nextTick(() => {
+                expect(Widget.option).toHaveBeenCalledTimes(1);
+                expect(Widget.option).toHaveBeenCalledWith("nestedOption.prop1", 456);
+                done();
+            });
+        });
+
+        it("add nested component by condition", (done) => {
+            const vm = defineComponent({
+                template:
+                    `<test-component>` +
+                    `  <nested v-if="showNest" :prop1="123" />` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    Nested
+                },
+                props: {
+                    showNest: {
+                        type: Boolean,
+                        value: false
+                    }
+                }
+            });
+
+            const wrapper = mount(vm);
+
+            wrapper.setProps({ showNest: true });
+
+            nextTick(() => {
+                expect(Widget.option).toHaveBeenCalledWith("nestedOption", { key: 0, prop1: 123 });
+                done();
+            });
+        });
+
+        it("remove nested component by condition", (done) => {
+            const nestedCollectionItem = buildTestConfigCtor({
+                $_optionName: "nestedOption",
+                $_isCollectionItem: true
+            });
+            const vm = defineComponent({
+                template:
+                    `<test-component>` +
+                    `  <nested-collection-item v-if="show" :prop1="123" />` +
+                    `  <nested-collection-item :prop1="321" />` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    nestedCollectionItem
+                },
+                props: {
+                    show: {
+                        type: Boolean,
+                        default: true
+                    }
+                }
+            });
+
+            const wrapper = mount(vm);
+
+            wrapper.setProps({ show: false });
+
+            nextTick(() => {
+                expect(Widget.option).toHaveBeenCalledWith("nestedOption", [{ prop1: 321 }]);
+                done();
+            });
+        });
+
+        it("should update only part of collection components", (done) => {
+            const nestedCollectionItem = buildTestConfigCtor({
+                $_optionName: "nestedOption",
+                $_isCollectionItem: true
+            });
+            const vm = defineComponent({
+                template:
+                    `<test-component>` +
+                    `  <nested-collection-item>` +
+                    `     <nested-collection-item>` +
+                    `       <nested-collection-item v-if="show" :prop1="123">` +
+                    `       </nested-collection-item>` +
+                    `       <nested-collection-item :prop1="321">` +
+                    `       </nested-collection-item>` +
+                    `     </nested-collection-item>` +
+                    `  </nested-collection-item>` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    nestedCollectionItem
+                },
+                props: {
+                    show: {
+                        type: Boolean,
+                        default: true
+                    }
+                }
+            });
+
+            const wrapper = mount(vm);
+
+            wrapper.setProps({ show: false });
+
+            nextTick(() => {
+                expect(Widget.option)
+                    .toHaveBeenCalledWith("nestedOption[0].nestedOption[0].nestedOption", [{ prop1: 321 }]);
+                done();
+            });
+        });
+
+        it("should update only part of collection components (remove all subnested)", (done) => {
+            const nestedCollectionItem = buildTestConfigCtor({
+                $_optionName: "nestedOption",
+                $_isCollectionItem: true
+            });
+            const vm = defineComponent({
+                template:
+                    `<test-component>` +
+                    `  <nested-collection-item>` +
+                    `     <nested-collection-item>` +
+                    `       <nested-collection-item v-if="show" :prop1="123">` +
+                    `       </nested-collection-item>` +
+                    `       <nested-collection-item v-if="show" :prop1="321">` +
+                    `       </nested-collection-item>` +
+                    `     </nested-collection-item>` +
+                    `  </nested-collection-item>` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    nestedCollectionItem
+                },
+                props: {
+                    show: {
+                        type: Boolean,
+                        default: true
+                    }
+                }
+            });
+
+            const wrapper = mount(vm);
+
+            wrapper.setProps({ show: false });
+
+            nextTick(() => {
+                expect(Widget.option).toHaveBeenCalledWith("nestedOption[0].nestedOption[0].nestedOption", undefined);
+                done();
+            });
+        });
+
+        it("reset nested component", (done) => {
+            const vm = defineComponent({
+                template:
+                    `<test-component>` +
+                    `  <nested v-if="show" :prop1="123" />` +
+                    `</test-component>`,
+                components: {
+                    TestComponent,
+                    Nested
+                },
+                props: {
+                    show: {
+                        type: Boolean,
+                        default: true
+                    }
+                }
+            });
+
+            const wrapper = mount(vm);
+
+            wrapper.setProps({ show: false });
+
+            nextTick(() => {
+                expect(Widget.resetOption).toHaveBeenCalledWith("nestedOption");
+                done();
+            });
+        });
+    });
+
+    function renderTemplate(name: string, model?: object, container?: any, index?: number): Element {
+        model = model || {};
+        container = container || document.createElement("div");
+        const render = WidgetClass.mock.calls[0][1].integrationOptions.templates[name].render;
+        return render({
+            container,
+            model,
+            index
+        });
+    }
+
+    describe("template", () => {
+
+        const DX_TEMPLATE_WRAPPER = "dx-template-wrapper";
+        const componentWithTemplate = defineComponent({
+            template: `<test-component :prop1='prop1Value'>
+                         <template #test v-if='renderTemplate'>content</template>
+                       </test-component>`,
+            components: {
+                TestComponent
+            },
+            props: {
+                renderTemplate: {
+                    type: Boolean,
+                    value: false
+                },
+                prop1Value: {
+                    type: Number,
+                    value: 1
+                }
+            }
+        });
+
+        function renderItemTemplate(model?: object, container?: any, index?: number): Element {
+            return renderTemplate("item", model, container, index);
+        }
+
+        it("passes integrationOptions to widget", () => {
+            const vm = defineComponent({
+                template: `<test-component>
+                             <template #item>
+                               <div>1</div>
+                             </template>
+                             <template #content>
+                               <div>1</div>
+                             </template>
+                             <div>1</div>
+                           </test-component>`,
+                components: {
+                    TestComponent
+                }
+            });
+
+            mount(vm);
+            const integrationOptions = WidgetClass.mock.calls[0][1].integrationOptions;
+
+            expect(integrationOptions).toBeDefined();
+            expect(integrationOptions.templates).toBeDefined();
+
+            expect(integrationOptions.templates.item).toBeDefined();
+            expect(typeof integrationOptions.templates.item.render).toBe("function");
+
+            expect(integrationOptions.templates.content).toBeDefined();
+            expect(typeof integrationOptions.templates.content.render).toBe("function");
+
+            expect(integrationOptions.templates.default).toBeUndefined();
+        });
+
+        it("passes 'integrationOptions.templates' on update", () => {
+            const wrapper = mount(componentWithTemplate);
+
+            wrapper.setProps({
+                renderTemplate: true
+            });
+
+            nextTick(() => {
+                expect(Widget.option.mock.calls[0][0]).toEqual("integrationOptions.templates");
+                expect(Widget.option.mock.calls[0][1].test.render).toBeInstanceOf(Function);
+            });
+        });
+
+        it("passes 'integrationOptions.templates' on update before other options", () => {
+            const wrapper = mount(componentWithTemplate);
+
+            wrapper.setProps({
+                renderTemplate: true,
+                prop1Value: 2
+            });
+
+            nextTick(() => {
+                expect(Widget.option.mock.calls[0][0]).toEqual("integrationOptions.templates");
+                expect(Widget.option.mock.calls[1]).toEqual([ "test", "test" ]);
+                expect(Widget.option.mock.calls[2]).toEqual([ "prop1", 2 ]);
+            });
+        });
+
+        it("renders", () => {
+            const vm = defineComponent({
+                template: `<test-component>
+                                <template #item>
+                                    <div>Template</div>
+                                </template>
+                            </test-component>`,
+                components: {
+                    TestComponent
+                }
+            });
+            mount(vm);
+            const renderedTemplate = renderItemTemplate();
+
+            expect(renderedTemplate.nodeName).toBe("DIV");
+            expect(renderedTemplate.className).toBe(DX_TEMPLATE_WRAPPER);
+            expect(renderedTemplate.innerHTML).toBe("Template");
+        });
+
+        it("renders scoped slot", () => {
+            const vm = defineComponent({
+                template: `<test-component>
+                                <template #item="{ data: { text }, index }">
+                                    Template {{text}} and index {{index}}
+                                </template>
+                            </test-component>`,
+                components: {
+                    TestComponent
+                }
+            });
+            mount(vm);
+            const renderedTemplate = renderItemTemplate({ text: "with data" }, undefined, 5);
+            expect(renderedTemplate.textContent).toContain("Template with data and index 5");
+        });
+
+        it("preserves custom-attrs", () => {
+            const vm = defineComponent({
+                template: `<test-component>
+                                <template #item="{ data: { text } }">
+                                    <div custom-attr=123>Template {{text}}</div>
+                                </template>
+                            </test-component>`,
+                components: {
+                    TestComponent
+                }
+            });
+            mount(vm);
+            const renderedTemplate = renderItemTemplate({});
+
+            expect(renderedTemplate.attributes).toHaveProperty("custom-attr");
+            expect(renderedTemplate.attributes["custom-attr"].value).toBe("123");
+        });
+
+        it("doesn't throw on dxremove", () => {
+            const vm = defineComponent({
+                template: `<test-component>
+                                <template #item="{ data: { text } }">
+                                    Template {{text}}
+                                </template>
+                            </test-component>`,
+                components: {
+                    TestComponent
+                }
+            });
+
+            mount(vm);
+
+            const renderedTemplate = renderItemTemplate({ text: "with data" });
+
+            expect(() => events.triggerHandler(renderedTemplate, "dxremove")).not.toThrow();
+        });
+
+        it("destroyed component should remove subscriptions", (done) => {
+            const vm = defineComponent({
+                template: `<test-component id="component" :prop1="value">
+                                <template #item="{data}">Template {{data.text}}</template>
+                            </test-component>`,
+                components: {
+                    TestComponent
+                },
+                props: ["value"]
+            });
+
+            const wrapper = mount(vm, {
+                props: {
+                    value: 123
+                }
+            });
+
+            const container = document.createElement("div");
+            renderItemTemplate({ text: "with data" }, container);
+            events.triggerHandler(container.children[0], "dxremove");
+            renderItemTemplate({ text: "with data" }, container);
+
+            const subscriptions = (wrapper.getComponent("#component").vm as any).eventBus.all;
+            // TODO
+            for (const subscription of subscriptions) {
+                expect(subscription.length).toBe(2);
+            }
+
+            done();
+        });
+
+        describe("static items", () => {
+            it("passes integrationOptions to widget", () => {
+                const NestedItem = createConfigurationComponent({
+                    data() {
+                        return {
+                            $_optionName: "items",
+                            $_isCollectionItem: true
+                        };
+                    },
+                    props: {
+                        prop1: Number,
+                        template: String
+                    }
+                });
+
+                const vm = defineComponent({
+                    template: `<test-component>
+                                <nested-item>
+                                    <template #default>
+                                        <div>1</div>
+                                    </template>
+                                </nested-item>
+                            </test-component>`,
+                    components: {
+                        TestComponent,
+                        NestedItem
+                    }
+                });
+
+                mount(vm);
+
+                const integrationOptions = WidgetClass.mock.calls[0][1].integrationOptions;
+
+                expect(integrationOptions).toBeDefined();
+                expect(integrationOptions.templates).toBeDefined();
+
+                expect(integrationOptions.templates["items[0].template"]).toBeDefined();
+                expect(typeof integrationOptions.templates["items[0].template"].render).toBe("function");
+            });
+
+            it("passes node of nested component as template", () => {
+                const NestedItem = createConfigurationComponent({
+                    data() {
+                        return {
+                            $_optionName: "items",
+                            $_isCollectionItem: true
+                        };
+                    },
+                    props: {
+                        prop1: Number,
+                        template: String
+                    }
+                });
+
+                const vm = defineComponent({
+                    template: `<test-component>
+                                <nested-item>
+                                    <div>1</div>
+                                </nested-item>
+                            </test-component>`,
+                    components: {
+                        TestComponent,
+                        NestedItem
+                    }
+                });
+
+                mount(vm);
+
+                const integrationOptions = WidgetClass.mock.calls[0][1].integrationOptions;
+                expect(integrationOptions.templates["items[0].template"]).toBeDefined();
+                expect(typeof integrationOptions.templates["items[0].template"].render).toBe("function");
+            });
+
+            it("passes node of nested component as template (exclude nested component)", () => {
+                const NestedItem = createConfigurationComponent({
+                    data() {
+                        return {
+                            $_optionName: "items",
+                            $_isCollectionItem: true
+                        };
+                    },
+                    props: {
+                        prop1: Number,
+                        template: String
+                    }
+                });
+
+                const vm = defineComponent({
+                    template: `<test-component>
+                                <nested-item>
+                                    <nested-item></nested-item>
+                                    <div>1</div>
+                                </nested-item>
+                            </test-component>`,
+                    components: {
+                        TestComponent,
+                        NestedItem
+                    }
+                });
+
+                mount(vm);
+
+                const integrationOptions = WidgetClass.mock.calls[0][1].integrationOptions;
+                expect(integrationOptions.templates["items[0].template"]).toBeDefined();
+                expect(typeof integrationOptions.templates["items[0].template"].render).toBe("function");
+            });
+
+            it("passes node of nested component as template (tree of components)", () => {
+                const NestedItem = createConfigurationComponent({
+                    data() {
+                        return {
+                            $_optionName: "items",
+                            $_isCollectionItem: true
+                        };
+                    },
+                    props: {
+                        prop1: Number,
+                        template: String
+                    }
+                });
+
+                const vm = defineComponent({
+                    template: `<test-component>
+                                <nested-item>
+                                    <nested-item>
+                                        <div>1</div>
+                                    </nested-item>
+                                    <div>1</div>
+                                </nested-item>
+                            </test-component>`,
+                    components: {
+                        TestComponent,
+                        NestedItem
+                    }
+                });
+
+                mount(vm);
+
+                const integrationOptions = WidgetClass.mock.calls[0][1].integrationOptions;
+                expect(integrationOptions.templates["items[0].template"]).toBeDefined();
+                expect(typeof integrationOptions.templates["items[0].template"].render).toBe("function");
+                expect(integrationOptions.templates["items[0].items[0].template"]).toBeDefined();
+                expect(typeof integrationOptions.templates["items[0].items[0].template"].render).toBe("function");
+            });
+
+            it("doesn't pass integrationOptions to widget if template prop is absent", () => {
+                const NestedItem = createConfigurationComponent({
+                    data() {
+                        return {
+                            $_optionName: "items",
+                            $_isCollectionItem: true
+                        };
+                    },
+                    props: {
+                        prop1: Number
+                    }
+                });
+
+                const vm = defineComponent({
+                    template: `<test-component>
+                                <nested-item>
+                                    <div>1</div>
+                                </nested-item>
+                            </test-component>`,
+                    components: {
+                        TestComponent,
+                        NestedItem
+                    }
+                });
+
+                mount(vm);
+
+                const integrationOptions = WidgetClass.mock.calls[0][1].integrationOptions;
+
+                expect(integrationOptions).toBeDefined();
+                expect(integrationOptions.templates).toBeUndefined();
+            });
+
+            it("renders template containing text only (vue 3)", () => {
+                const NestedItem = createConfigurationComponent({
+                    data() {
+                        return {
+                            $_optionName: "item"
+                        };
+                    },
+                    props: {
+                        prop1: Number,
+                        template: String
+                    }
+                });
+
+                const wrapper =  defineComponent({
+                    template: `<test-component>
+                                <nested-item>
+                                    <template #default>abc</template>
+                                </nested-item>
+                            </test-component>`,
+                    components: {
+                        TestComponent,
+                        NestedItem
+                    }
+                });
+
+                mount(wrapper);
+
+                const renderedTemplate = renderTemplate("item.template");
+
+                expect(renderedTemplate.textContent).toBe("abc");
+            });
+
+            it("doesn't pass integrationOptions to widget if nested item has sub nested item", () => {
+                const NestedItem = createConfigurationComponent({
+                    data() {
+                        return {
+                            $_optionName: "items",
+                            $_isCollectionItem: true
+                        };
+                    },
+                    props: {
+                        prop1: Number,
+                        template: String
+                    }
+                });
+
+                const subNested = buildTestConfigCtor({ $_optionName: "subNestedOption" });
+
+                const vm = defineComponent({
+                    template: `<test-component>
+                                <nested-item>
+                                    <sub-nested prop2="abc"/>
+                                </nested-item>
+                            </test-component>`,
+                    components: {
+                        TestComponent,
+                        subNested,
+                        NestedItem
+                    }
+                });
+
+                mount(vm);
+
+                expect(WidgetClass.mock.calls[0][1].integrationOptions.templates).toBeUndefined();
+            });
+        });
+    });
+    describe("extension component", () => {
+        const ExtensionWidgetClass = jest.fn(createWidget);
+        const TestExtensionComponent = createExtensionComponent({
+            beforeCreate() {
+                (this as any as IWidgetComponent).$_WidgetClass = ExtensionWidgetClass;
+            }
+        });
+
+        it("renders once if mounted manually and targets self element", () => {
+            const component = mount(TestExtensionComponent);
+
+            const expectedElement = component.vm.$el;
+            const actualElement = ExtensionWidgetClass.mock.calls[0][0];
+
+            expect(ExtensionWidgetClass).toHaveBeenCalledTimes(1);
+            expect(actualElement).toBe(expectedElement);
+        });
+
+        it("renders once without parent element and targets self element", () => {
+            const vm = defineComponent({
+                template: `<test-extension-component id="component" />`,
+                components: {
+                    TestExtensionComponent
+                }
+            });
+
+            const wrapper = mount(vm);
+
+            const expectedElement = wrapper.getComponent("#component").vm.$el;
+            const actualElement = ExtensionWidgetClass.mock.calls[0][0];
+
+            expect(ExtensionWidgetClass).toHaveBeenCalledTimes(1);
+            expect(actualElement).toBe(expectedElement);
+        });
+
+        it("renders once inside component and targets parent element", () => {
+            const vm = defineComponent({
+                template: `<test-component id="component">
+                                <test-extension-component/>
+                            </test-component>`,
+                components: {
+                    TestComponent,
+                    TestExtensionComponent
+                }
+            });
+
+            mount(vm);
+
+            const expectedElement = WidgetClass.mock.calls[0][0];
+            const actualElement = ExtensionWidgetClass.mock.calls[0][0];
+
+            expect(ExtensionWidgetClass).toHaveBeenCalledTimes(1);
+            expect(actualElement).toBe(expectedElement);
+        });
+
+        it("should remove extension component from dom", () => {
+            let childCount;
+            WidgetClass.mockImplementationOnce((element: HTMLElement, options: any) => {
+                childCount = element.childElementCount;
+                return createWidget(element, options);
+            });
+
+            mount(defineComponent({
+                template: `<test-component>
+                                <test-extension-component/>
+                            </test-component>`,
+                components: {
+                    TestComponent,
+                    TestExtensionComponent
+                }
+            }));
+
+            expect(childCount).toBe(0);
+        });
+
+        it("destroys correctly", () => {
+            const component = mount(TestExtensionComponent);
+
+            expect(component.unmount.bind(component)).not.toThrow();
+        });
+    });
+});
+
+describe("disposing", () => {
+
+    it("call dispose", () => {
+        const component = mount(TestComponent);
+
+        component.unmount();
+
+        expect(Widget.dispose).toBeCalled();
+    });
+
+    it("fires dxremove", () => {
+        const handleDxRemove = jest.fn();
+        const component = mount(TestComponent);
+
+        events.on(component.vm.$el, "dxremove", handleDxRemove);
+        component.unmount();
+
+        expect(handleDxRemove).toHaveBeenCalledTimes(1);
+    });
+
+    it("destroys correctly", () => {
+        const component = mount(TestComponent);
+
+        expect(component.unmount.bind(component)).not.toThrow();
+    });
+});

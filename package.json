@@ -14,10 +14,11 @@
     "clean": "gulp clean",
     "generate": "gulp generate",
     "lint": "gulp lint",
-    "pack": "gulp npm.pack",
+    "pack": "lerna run --stream pack && gulp npm.pack",
     "serve": "webpack-dev-server",
-    "test": "jest",
+    "test": "jest && lerna run --stream test",
     "test-watch": "jest --watch",
+    "bootstrap-strategy": "lerna bootstrap",
     "update-integration-meta": "dx-tools update-integration-meta --output-path ./tools/integration-data.json"
   },
   "keywords": [
@@ -33,8 +34,8 @@
   },
   "devDependencies": {
     "@types/jest": "^22.2.3",
-    "@types/node": "^9.6.30",
-    "@vue/test-utils": "1.0.0-beta.29",
+    "@types/node": "^13.11.1",
+    "@vue/test-utils": "^2.0.0-beta.3",
     "css-loader": "^2.1.1",
     "dasherize": "^2.0.0",
     "del": "^3.0.0",
@@ -47,19 +48,23 @@
     "gulp-tslint": "^8.1.3",
     "gulp-typescript": "^5.0.0",
     "jest": "^24.8.0",
+    "lerna": "^3.22.1",
     "minimatch": "^3.0.2",
     "source-map-loader": "^0.2.4",
     "style-loader": "^0.20.3",
     "ts-jest": "^24.1.0",
     "ts-loader": "^4.5.0",
     "tslint": "^5.11.0",
-    "typescript": "~3.6.4",
+    "typescript": "^4.0.2",
     "url-loader": "^1.1.1",
-    "vue": "^2.6.3",
+    "vue": "^3.0.0",
     "vue-loader": "^14.2.3",
     "vue-template-compiler": "^2.6.3",
     "webpack": "^4.29.2",
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.1.14"
+  },
+  "dependencies": {
+    "mitt": "^2.1.0"
   }
 }

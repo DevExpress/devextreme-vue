@@ -1,4 +1,5 @@
-import { ComponentPublicInstance, Slot } from "vue";
+import IVue from "vue";
+import { ScopedSlot } from "vue/types/vnode";
 import { getOption } from "./config";
 import {
     discover as discoverSlots,
@@ -11,12 +12,12 @@ import { DX_REMOVE_EVENT, DX_TEMPLATE_WRAPPER_CLASS } from "./constants";
 import { allKeysAreEqual } from "./helpers";
 
 class TemplatesManager {
-    private _component: ComponentPublicInstance;
-    private _slots: Record<string, Slot> = {};
+    private _component: IVue;
+    private _slots: Record<string, ScopedSlot> = {};
     private _templates: Record<string, object> = {};
     private _isDirty: boolean = false;
 
-    constructor(component: ComponentPublicInstance) {
+    constructor(component: IVue) {
         this._component = component;
         this.discover();
     }
@@ -81,15 +82,9 @@ class TemplatesManager {
                     const removalListener = document.createElement(container.nodeName === "TABLE" ? "tbody" : "span");
                     removalListener.style.display = "none";
                     container.appendChild(removalListener);
-                    events.one(
-                        removalListener,
-                        DX_REMOVE_EVENT,
-                        mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate));
+                    events.one(removalListener, DX_REMOVE_EVENT, mountedTemplate.$destroy.bind(mountedTemplate));
                 } else {
-                    events.one(
-                        element,
-                        DX_REMOVE_EVENT,
-                        mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate));
+                    events.one(element, DX_REMOVE_EVENT, mountedTemplate.$destroy.bind(mountedTemplate));
                 }
 
                 return element;

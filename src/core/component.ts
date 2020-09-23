@@ -1,11 +1,13 @@
-import * as VueType from "vue";
-import IVue, { VNode, VueConstructor } from "vue";
+import * as mitt from "mitt";
+import { ComponentPublicInstance, defineComponent, h, VNode } from "vue";
 
 import * as events from "devextreme/events";
 
+import { defaultSlots, getChildren, getComponentInstance, getExtension, usedProps } from "./vue-helper";
+
 import { pullAllChildren } from "./children-processing";
 import Configuration, { bindOptionWatchers, setEmitOptionChangedFunc } from "./configuration";
-import { getConfig, getInnerChanges, IConfigurable, initOptionChangedFunc } from "./configuration-component";
+import { IConfigurable, initOptionChangedFunc } from "./configuration-component";
 import { DX_REMOVE_EVENT } from "./constants";
 import { IExtension, IExtensionComponentNode } from "./extension-component";
 import { camelize, forEachChildNode, getOptionValue, toComparable } from "./helpers";
@@ -21,7 +23,7 @@ interface IWidgetComponent extends IConfigurable {
     $_templatesManager: TemplatesManager;
 }
 
-interface IBaseComponent extends IVue, IWidgetComponent, IEventBusHolder {
+export interface IBaseComponent extends ComponentPublicInstance, IWidgetComponent, IEventBusHolder {
     $_isExtension: boolean;
     $_applyConfigurationChanges: () => void;
     $_createWidget: (element: any) => void;
@@ -33,195 +35,207 @@ interface IBaseComponent extends IVue, IWidgetComponent, IEventBusHolder {
     $_getTemplates: () => object;
 }
 
-const Vue = VueType.default || VueType;
+function initBaseComponent() {
+    return defineComponent({
+        inheritAttrs: false,
 
-const BaseComponent: VueConstructor<IBaseComponent> = Vue.extend({
+        data() {
+            const emit = mitt.default || mitt;
+            return {
+                eventBus: emit()
+            };
+        },
 
-    inheritAttrs: false,
+        provide() {
+            return {
+                eventBus: this.eventBus
+            };
+        },
 
-    data() {
-        return {
-            eventBus: new Vue()
-        };
-    },
+        render(): VNode {
+            const thisComponent = this as any as IBaseComponent;
+            const children: VNode[] = [];
+            if (thisComponent.$_config.cleanNested) {
+                thisComponent.$_config.cleanNested();
+            }
+            pullAllChildren(defaultSlots(this), children, thisComponent.$_config);
 
-    provide() {
-        return {
-            eventBus: this.eventBus
-        };
-    },
-
-    render(createElement: (...args) => VNode): VNode {
-        const children: VNode[] = [];
-
-        if (this.$_config.cleanNested) {
-            this.$_config.cleanNested();
-        }
-        pullAllChildren(this.$slots.default, children, this.$_config);
-
-        this.$_processChildren(children);
-        return createElement(
-            "div",
+            this.$_processChildren(children);
+            return h("div",
             {
                 attrs: { id: this.$attrs.id }
             },
-            children
-        );
-    },
+            children);
+        },
 
-    beforeUpdate() {
-        this.$_config.setPrevNestedOptions(this.$_config.getNestedOptionValues());
-    },
+        beforeUpdate() {
+            const thisComponent = this as any as IBaseComponent;
+            thisComponent.$_config.setPrevNestedOptions(thisComponent.$_config.getNestedOptionValues());
+        },
 
-    updated() {
-        this.$children.forEach((child: IVue) => initOptionChangedFunc(getConfig(child), child, getInnerChanges(child)));
-        this.$_templatesManager.discover();
+        updated() {
+            const thisComponent = this as any as IBaseComponent;
+            getChildren(thisComponent).forEach((child) => {
+                initOptionChangedFunc(
+                    child.$_config,
+                    (child.type as any).props || {},
+                    getComponentInstance(child), child.$_innerChanges);
+            });
+            thisComponent.$_templatesManager.discover();
 
-        this.$_instance.beginUpdate();
-        if (this.$_templatesManager.isDirty) {
-            this.$_instance.option(
-                "integrationOptions.templates",
-                this.$_templatesManager.templates
-            );
+            thisComponent.$_instance.beginUpdate();
+            if (thisComponent.$_templatesManager.isDirty) {
+                thisComponent.$_instance.option(
+                    "integrationOptions.templates",
+                    thisComponent.$_templatesManager.templates
+                );
 
-            for (const name of Object.keys(this.$_templatesManager.templates)) {
-                this.$_instance.option(name, name);
+                for (const name of Object.keys(thisComponent.$_templatesManager.templates)) {
+                    thisComponent.$_instance.option(name, name);
+                }
+
+                thisComponent.$_templatesManager.resetDirtyFlag();
             }
 
-            this.$_templatesManager.resetDirtyFlag();
-        }
-
-        for (const name of Object.keys(this.$_pendingOptions)) {
-            this.$_instance.option(name, this.$_pendingOptions[name]);
-        }
-        (this as IBaseComponent).$_pendingOptions = {};
-
-        this.$_applyConfigurationChanges();
-
-        this.$_instance.endUpdate();
-        this.eventBus.$emit("updated");
-    },
-
-    beforeDestroy(): void {
-        const instance = this.$_instance;
-        if (instance) {
-            events.triggerHandler(this.$el, DX_REMOVE_EVENT);
-            instance.dispose();
-        }
-    },
-
-    created(): void {
-        (this as IBaseComponent).$_config = new Configuration(
-            (n: string, v: any) => this.$_pendingOptions[n] = v,
-            null,
-            this.$options.propsData && { ...this.$options.propsData },
-            this.$_expectedChildren
-        );
-        (this as IBaseComponent).$_innerChanges = {};
-
-        this.$_config.init(this.$props && Object.keys(this.$props));
-    },
-
-    methods: {
-        $_applyConfigurationChanges(): void {
-            this.$_config.componentsCountChanged.forEach(({ optionPath, isCollection, removed }) => {
-                const options = this.$_config.getNestedOptionValues();
-
-                if (!isCollection && removed) {
-                    this.$_instance.resetOption(optionPath);
-                } else {
-                    this.$_instance.option(optionPath, getOptionValue(options, optionPath));
-                }
-            });
-
-            this.$_config.cleanComponentsCountChanged();
-        },
-        $_createWidget(element: any): void {
-            const thisComponent = this as IBaseComponent;
-
+            for (const name of Object.keys(thisComponent.$_pendingOptions)) {
+                thisComponent.$_instance.option(name, thisComponent.$_pendingOptions[name]);
+            }
             thisComponent.$_pendingOptions = {};
-            thisComponent.$_templatesManager = new TemplatesManager(this);
 
-            const config = this.$_config;
-            const options: object = {
-                ...this.$options.propsData,
-                ...config.initialValues,
-                ...config.getNestedOptionValues(),
-                ...this.$_getIntegrationOptions()
-            };
+            this.$_applyConfigurationChanges();
 
-            const instance = new this.$_WidgetClass(element, options);
-            thisComponent.$_instance = instance;
-
-            instance.on("optionChanged", (args) => config.onOptionChanged(args));
-            setEmitOptionChangedFunc(config, this, this.$_innerChanges);
-            bindOptionWatchers(config, this, this.$_innerChanges);
-            this.$_createEmitters(instance);
+            thisComponent.$_instance.endUpdate();
+            this.eventBus.emit("updated");
         },
 
-        $_getIntegrationOptions(): object {
-            const result: Record<string, any> = {
-                integrationOptions:  {
-                    watchMethod: this.$_getWatchMethod(),
-                },
-                ...this.$_getExtraIntegrationOptions(),
-            };
-
-            if (this.$_templatesManager.isDirty) {
-                const templates = this.$_templatesManager.templates;
-
-                result.integrationOptions.templates = templates;
-                for (const name of Object.keys(templates)) {
-                    result[name] = name;
-                }
-
-                this.$_templatesManager.resetDirtyFlag();
+        beforeUnmount(): void {
+            const thisComponent = this as any as IBaseComponent;
+            const instance = thisComponent.$_instance;
+            if (instance) {
+                events.triggerHandler(this.$el, DX_REMOVE_EVENT);
+                instance.dispose();
             }
-
-            return result;
         },
 
-        $_getWatchMethod(): (
-            valueGetter: () => any,
-            valueChangeCallback: (value: any) => void,
-            options: { deep: boolean, skipImmediate: boolean }
-        ) => any {
-            return (valueGetter, valueChangeCallback, options) => {
-                options = options || {};
-                if (!options.skipImmediate) {
-                    valueChangeCallback(valueGetter());
+        created(): void {
+            const thisComponent = this as any as IBaseComponent;
+            const props = usedProps(this);
+            thisComponent.$_config = new Configuration(
+                (n: string, v: any) => { thisComponent.$_pendingOptions[n] = v; },
+                null,
+                props && { ...props },
+                thisComponent.$_expectedChildren
+            );
+            thisComponent.$_innerChanges = {};
+
+            thisComponent.$_config.init(this.$props && Object.keys(this.$props));
+        },
+
+        methods: {
+            $_applyConfigurationChanges(): void {
+                const thisComponent = this as any as IBaseComponent;
+                thisComponent.$_config.componentsCountChanged.forEach(({ optionPath, isCollection, removed }) => {
+                    const options = thisComponent.$_config.getNestedOptionValues();
+
+                    if (!isCollection && removed) {
+                        thisComponent.$_instance.resetOption(optionPath);
+                    } else {
+                        thisComponent.$_instance.option(optionPath, getOptionValue(options, optionPath));
+                    }
+                });
+
+                thisComponent.$_config.cleanComponentsCountChanged();
+            },
+            $_createWidget(element: any): void {
+                const thisComponent = this as any as IBaseComponent;
+
+                thisComponent.$_pendingOptions = {};
+                thisComponent.$_templatesManager = new TemplatesManager(this as ComponentPublicInstance);
+
+                const config = thisComponent.$_config;
+                const options: object = {
+                    ...usedProps(thisComponent),
+                    ...config.initialValues,
+                    ...config.getNestedOptionValues(),
+                    ...this.$_getIntegrationOptions()
+                };
+
+                const instance = new thisComponent.$_WidgetClass(element, options);
+                thisComponent.$_instance = instance;
+
+                instance.on("optionChanged", (args) => config.onOptionChanged(args));
+                setEmitOptionChangedFunc(config, thisComponent, thisComponent.$_innerChanges);
+                bindOptionWatchers(config, thisComponent, thisComponent.$_innerChanges);
+                this.$_createEmitters(instance);
+            },
+
+            $_getIntegrationOptions(): object {
+                const thisComponent = this as any as IBaseComponent;
+                const result: Record<string, any> = {
+                    integrationOptions:  {
+                        watchMethod: this.$_getWatchMethod(),
+                    },
+                    ...this.$_getExtraIntegrationOptions(),
+                };
+
+                if (thisComponent.$_templatesManager.isDirty) {
+                    const templates = thisComponent.$_templatesManager.templates;
+
+                    result.integrationOptions.templates = templates;
+                    for (const name of Object.keys(templates)) {
+                        result[name] = name;
+                    }
+
+                    thisComponent.$_templatesManager.resetDirtyFlag();
                 }
 
-                return this.$watch(() => {
-                    return valueGetter();
-                }, (newValue, oldValue) => {
-                    if (toComparable(oldValue) !== toComparable(newValue) || options.deep) {
-                        valueChangeCallback(newValue);
+                return result;
+            },
+
+            $_getWatchMethod(): (
+                valueGetter: () => any,
+                valueChangeCallback: (value: any) => void,
+                options: { deep: boolean, skipImmediate: boolean }
+            ) => any {
+                return (valueGetter, valueChangeCallback, options) => {
+                    options = options || {};
+                    if (!options.skipImmediate) {
+                        valueChangeCallback(valueGetter());
                     }
-                }, {
-                    deep: options.deep
-                });
-            };
-        },
 
-        $_getExtraIntegrationOptions(): object {
-            return {};
-        },
+                    return this.$watch(() => {
+                        return valueGetter();
+                    }, (newValue, oldValue) => {
+                        if (toComparable(oldValue) !== toComparable(newValue) || options.deep) {
+                            valueChangeCallback(newValue);
+                        }
+                    }, {
+                        deep: options.deep
+                    });
+                };
+            },
 
-        $_processChildren(_children: VNode[]): void {
-            return;
-        },
+            $_getExtraIntegrationOptions(): object {
+                return {};
+            },
 
-        $_createEmitters(instance: any): void {
-            Object.keys(this.$listeners).forEach((listenerName: string) => {
-                const eventName = camelize(listenerName);
-                instance.on(eventName, (e: any) => {
-                    this.$emit(listenerName, e);
-                });
-            });
+            $_processChildren(_children: VNode[]): void {
+                return;
+            },
+
+            $_createEmitters(instance: any): void {
+                if (this.$attrs) {
+                    Object.keys(this.$attrs).forEach((listenerName: string) => {
+                        const eventName = camelize(listenerName);
+                        instance.on(eventName, (e: any) => {
+                            this.$emit(listenerName, e);
+                        });
+                    });
+                }
+            }
         }
-    }
-});
+    });
+}
 
 function cleanWidgetNode(node: Node) {
     const removedNodes: Element[] = [];
@@ -243,41 +257,45 @@ function restoreNodes(el: Element, nodes: Element[]) {
     });
 }
 
-const DxComponent: VueConstructor = BaseComponent.extend({
-    methods: {
-        $_getExtraIntegrationOptions(): object {
-            return {
-                onInitializing() {
-                    (this as any).beginUpdate();
-                }
-            };
+function initDxComponent() {
+    return defineComponent({
+        extends: initBaseComponent(),
+        methods: {
+            $_getExtraIntegrationOptions(): object {
+                return {
+                    onInitializing() {
+                        (this as any).beginUpdate();
+                    }
+                };
+            },
+
+            $_processChildren(children: VNode[]): void {
+                children.forEach((childNode: VNode) => {
+                    if (!childNode || typeof childNode !== "object") { return; }
+
+                    (childNode as any as IExtensionComponentNode).$_hasOwner = true;
+                });
+            },
         },
 
-        $_processChildren(children: VNode[]): void {
-            children.forEach((childNode: VNode) => {
-                if (!childNode.componentOptions) { return; }
+        mounted(): void {
+            const nodes = cleanWidgetNode(this.$el);
+            const thisComponent = this as any as IBaseComponent;
 
-                (childNode.componentOptions as any as IExtensionComponentNode).$_hasOwner = true;
-            });
-        },
-    },
+            this.$_createWidget(this.$el);
+            thisComponent.$_instance.endUpdate();
 
-    mounted(): void {
-        const nodes = cleanWidgetNode(this.$el);
-
-        this.$_createWidget(this.$el);
-        this.$_instance.endUpdate();
-
-        restoreNodes(this.$el, nodes);
-        if (this.$slots && this.$slots.default) {
-            this.$slots.default.forEach((child: VNode) => {
-                const childExtension = child.componentInstance as any as IExtension;
-                if (childExtension && childExtension.$_isExtension) {
-                    childExtension.attachTo(this.$el);
-                }
-            });
+            restoreNodes(this.$el, nodes);
+            if (this.$slots && this.$slots.default) {
+                defaultSlots(this).forEach((child: VNode) => {
+                    const childExtension = getExtension(child);
+                    if (childExtension && (childExtension as IExtension).$_isExtension) {
+                        childExtension.attachTo(this.$el);
+                    }
+                });
+            }
         }
-    }
-});
+    });
+}
 
-export { DxComponent, BaseComponent, IWidgetComponent };
+export { initDxComponent, initBaseComponent, IWidgetComponent };

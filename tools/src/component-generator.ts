@@ -35,6 +35,7 @@ interface INestedComponentModel {
     name: string;
     optionName: string;
     renderedProps?: string;
+    props?: string[];
     isCollectionItem: boolean;
     predefinedProps: Array<{
         name: string;
@@ -124,6 +125,7 @@ function createNestedComponentModel(component: INestedComponent): INestedCompone
         renderedProps: component.props
             ? renderProps(component.props)
             : undefined,
+        props: component.props ? getPropsList(component.props) : undefined,
         isCollectionItem: component.isCollectionItem,
         expectedChildren: formatExpectedChildren(component.expectedChildren),
         predefinedProps
@@ -155,10 +157,7 @@ const renderComponent: (model: {
     defaultExport: string;
     namedExports: string[];
 }) => string = createTempate(
-`import * as VueType from "vue";\n` +
-`const Vue = VueType.default || VueType;\n` +
 `import <#= it.widgetImport.name #><#? it.props #>, { IOptions }<#?#> from "devextreme/<#= it.widgetImport.path #>";\n` +
-
 `<#~ it.namedImports :namedImport #>` +
 `import { <#= namedImport.name #> } from "<#= namedImport.path #>";\n` +
 `<#~#>` + `\n` +
@@ -176,12 +175,21 @@ const renderComponent: (model: {
     L1 + `readonly instance?: <#= it.widgetImport.name #>;` + `\n` +
 `}` + `\n` +
 
-`const <#= it.component #> = Vue.extend({` +
-L1 + `extends: <#= it.baseComponent #>,` +
+`const <#= it.component #> = <#= it.baseComponent #>({` +
 
 `<#? it.props #>` +
     L1 + `props: {\n` +
     `<#= it.renderedProps #>` +
+    L1 + `},` +
+`<#?#>` +
+
+`<#? it.props #>` +
+    L1 + `emits: {` +
+        L2 + `"update:isActive": null,` +
+        L2 + `"update:hoveredElement": null,` +
+    `<#~ it.props: prop #>` +
+        L2 + `"update:<#= prop.name #>": null,` +
+    `<#~#>` +
     L1 + `},` +
 `<#?#>` +
 
@@ -213,34 +221,42 @@ L0 + `});\n` +
 `<#? it.nestedComponents #>` +
     `\n` +
     `<#~ it.nestedComponents : nested #>` +
-        `const <#= nested.name #>: any = Vue.extend({` +
-        L1 + `extends: <#= it.configComponent #>,` +
+        `const <#= nested.name #> = <#= it.configComponent #>({` +
+        L1 + `data() {` +
+            L2 + `return {` +
+                L3 + `$_optionName: "<#= nested.optionName #>",` +
+                `<#? nested.isCollectionItem #>` +
+                L3 + `$_isCollectionItem: true,` +
+                `<#?#>` +
+                `<#? nested.predefinedProps #>` +
+                L3 + `$_predefinedProps: {` +
+                `<#~ nested.predefinedProps : prop #>` +
+                    L4 + `<#= prop.name #>: "<#= prop.value #>",` +
+                `<#~#>` + `\b` +
+                L3 + `},` +
+                `<#?#>` +
+                `<#? nested.expectedChildren #>` +
+                L3 + `$_expectedChildren: {` +
+                    `<#~ nested.expectedChildren : child #>` +
+                    L4 + `<#= child.name #>: { isCollectionItem: <#= child.isCollectionItem #>, optionName: "<#= child.optionName #>" },` +
+                    `<#~#>` + `\b` +
+                L3 + `}` +
+            `<#?#>` +
+            L2 + `};` +
+        L1 + `},` +
+        `<#? nested.props #>` +
+        L1 + `emits: {` +
+                L2 + `"update:isActive": null,` +
+                L2 + `"update:hoveredElement": null,` +
+            `<#~ nested.props: prop #>` +
+                L2 + `"update:<#= prop #>": null,` +
+            `<#~#>` +
+            L1 + `},` +
+        `<#?#>` +
         L1 + `props: {\n` +
         `<#= nested.renderedProps #>` +
         L1 + `}\n` +
         `});\n` +
-        `(<#= nested.name #> as any).$_optionName = "<#= nested.optionName #>";\n` +
-
-        `<#? nested.isCollectionItem #>` +
-            `(<#= nested.name #> as any).$_isCollectionItem = true;\n` +
-        `<#?#>` +
-
-        `<#? nested.predefinedProps #>` +
-            `(<#= nested.name #> as any).$_predefinedProps = {` +
-            `<#~ nested.predefinedProps : prop #>` +
-                L1 + `<#= prop.name #>: "<#= prop.value #>",` +
-            `<#~#>` + `\b\n` +
-            `};\n` +
-        `<#?#>` +
-
-        `<#? nested.expectedChildren #>` +
-            `(<#= nested.name #> as any).$_expectedChildren = {` +
-            `<#~ nested.expectedChildren : child #>` +
-                L1 + `<#= child.name #>: { isCollectionItem: <#= child.isCollectionItem #>, optionName: "<#= child.optionName #>" },` +
-            `<#~#>` + `\b\n` +
-            `};\n` +
-        `<#?#>` +
-
     `<#~#>` +
 `<#?#>` +
 `\n` +
@@ -265,6 +281,12 @@ function compareImports(a: IImport, b: IImport): number {
     if (!a.path.startsWith(".") && b.path.startsWith(".")) { return -1; }
 
     return compareStrings(a.path, b.path);
+}
+
+function getPropsList(props: IProp[]) {
+    return props.map((item) => {
+        return item.name;
+    });
 }
 
 function renderProps(props: IProp[]): string {

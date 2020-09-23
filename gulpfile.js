@@ -23,6 +23,8 @@ const
 
   LINT = 'lint',
 
+  COPY_STRATEGY = "copy.strategy",
+
   NPM_CLEAN = 'npm.clean',
   NPM_PACKAGE = 'npm.package',
   NPM_LICENSE = 'npm.license',
@@ -64,7 +66,6 @@ gulp.task(GEN_RUN, (done) => {
     JSON.parse(fs.readFileSync(config.metadataPath).toString()),
     config.baseComponent,
     config.configComponent,
-    config.extensionComponent,
     {
       componentsDir: config.generatedComponentsDir,
       oldComponentsDir: config.oldComponentsDir,
@@ -91,6 +92,8 @@ gulp.task(NPM_LICENSE,
 gulp.task(NPM_README,
   () => gulp.src(config.npm.readme).pipe(gulp.dest(config.npm.dist))
 );
+
+gulp.task(COPY_STRATEGY, () => gulp.src(config.npm.strategySrc).pipe(gulp.dest(config.npm.strategyDist)));
 
 gulp.task(NPM_BUILD, gulp.series(
   CLEAN,
@@ -141,6 +144,7 @@ gulp.task(NPM_BUILD_WITH_HEADERS, gulp.series(
 
 gulp.task(NPM_PACK, gulp.series(
   NPM_BUILD_WITH_HEADERS,
+  COPY_STRATEGY,
   shell.task(['npm pack'], { cwd: config.npm.dist })
 ));
 

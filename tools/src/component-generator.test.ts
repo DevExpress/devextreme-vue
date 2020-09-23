@@ -3,16 +3,13 @@ import generate, { renderProps } from "./component-generator";
 it("generates", () => {
     //#region EXPECTED
     const EXPECTED = `
-import * as VueType from "vue";
-const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 
 interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT = Vue.extend({
-  extends: BASE_COMPONENT,
+const COMPONENT = BASE_COMPONENT({
   computed: {
     instance(): WIDGET {
       return (this as any).$_instance;
@@ -52,16 +49,13 @@ export {
 it("generates component with model", () => {
     //#region EXPECTED
     const EXPECTED = `
-import * as VueType from "vue";
-const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 
 interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT = Vue.extend({
-  extends: BASE_COMPONENT,
+const COMPONENT = BASE_COMPONENT({
   model: { prop: "value", event: "update:value" },
   computed: {
     instance(): WIDGET {
@@ -103,8 +97,6 @@ export {
 it("generates option", () => {
     //#region EXPECTED
     const EXPECTED = `
-import * as VueType from "vue";
-const Vue = VueType.default || VueType;
 import WIDGET, { IOptions } from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 
@@ -115,10 +107,14 @@ type AccessibleOptions = Pick<IOptions,
 interface COMPONENT extends AccessibleOptions {
   readonly instance?: WIDGET;
 }
-const COMPONENT = Vue.extend({
-  extends: BASE_COMPONENT,
+const COMPONENT = BASE_COMPONENT({
   props: {
     PROP: {}
+  },
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:PROP": null,
   },
   computed: {
     instance(): WIDGET {
@@ -160,8 +156,6 @@ export {
 it("generates nested option component", () => {
     //#region EXPECTED
     const EXPECTED = `
-import * as VueType from "vue";
-const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
@@ -169,8 +163,7 @@ import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
 interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT = Vue.extend({
-  extends: BASE_COMPONENT,
+const COMPONENT = BASE_COMPONENT({
   computed: {
     instance(): WIDGET {
       return (this as any).$_instance;
@@ -181,13 +174,21 @@ const COMPONENT = Vue.extend({
   }
 });
 
-const NESTED_COMPONENT: any = Vue.extend({
-  extends: CONFIG_COMPONENT,
+const NESTED_COMPONENT = CONFIG_COMPONENT({
+  data() {
+    return {
+      $_optionName: "NESTED_OPTION_NAME",
+    };
+  },
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:PROP": null,
+  },
   props: {
     PROP: {}
   }
 });
-(NESTED_COMPONENT as any).$_optionName = "NESTED_OPTION_NAME";
 
 export default COMPONENT;
 export {
@@ -229,8 +230,6 @@ export {
 it("generates nested collection option component", () => {
     //#region EXPECTED
     const EXPECTED = `
-import * as VueType from "vue";
-const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
@@ -238,8 +237,7 @@ import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
 interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT = Vue.extend({
-  extends: BASE_COMPONENT,
+const COMPONENT = BASE_COMPONENT({
   computed: {
     instance(): WIDGET {
       return (this as any).$_instance;
@@ -250,14 +248,22 @@ const COMPONENT = Vue.extend({
   }
 });
 
-const NESTED_COMPONENT: any = Vue.extend({
-  extends: CONFIG_COMPONENT,
+const NESTED_COMPONENT = CONFIG_COMPONENT({
+  data() {
+    return {
+      $_optionName: "NESTED_OPTION_NAME",
+      $_isCollectionItem: true,
+    };
+  },
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:PROP": null,
+  },
   props: {
     PROP: {}
   }
 });
-(NESTED_COMPONENT as any).$_optionName = "NESTED_OPTION_NAME";
-(NESTED_COMPONENT as any).$_isCollectionItem = true;
 
 export default COMPONENT;
 export {
@@ -299,8 +305,6 @@ export {
 it("generates expectedChildren info", () => {
     //#region EXPECTED
     const EXPECTED = `
-import * as VueType from "vue";
-const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
@@ -308,8 +312,7 @@ import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
 interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT = Vue.extend({
-  extends: BASE_COMPONENT,
+const COMPONENT = BASE_COMPONENT({
   computed: {
     instance(): WIDGET {
       return (this as any).$_instance;
@@ -324,17 +327,25 @@ const COMPONENT = Vue.extend({
   }
 });
 
-const NESTED_COMPONENT: any = Vue.extend({
-  extends: CONFIG_COMPONENT,
+const NESTED_COMPONENT = CONFIG_COMPONENT({
+  data() {
+    return {
+      $_optionName: "NESTED_OPTION_NAME",
+      $_expectedChildren: {
+        EXPECTED_3: { isCollectionItem: true, optionName: "ghi" },
+        EXPECTED_4: { isCollectionItem: false, optionName: "jkl" }
+      }
+    };
+  },
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:PROP": null,
+  },
   props: {
     PROP: {}
   }
 });
-(NESTED_COMPONENT as any).$_optionName = "NESTED_OPTION_NAME";
-(NESTED_COMPONENT as any).$_expectedChildren = {
-  EXPECTED_3: { isCollectionItem: true, optionName: "ghi" },
-  EXPECTED_4: { isCollectionItem: false, optionName: "jkl" }
-};
 
 export default COMPONENT;
 export {
@@ -486,8 +497,6 @@ describe("props generation", () => {
     it("generates nested component with predefined value", () => {
         //#region EXPECTED
         const EXPECTED = `
-import * as VueType from "vue";
-const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
@@ -495,8 +504,7 @@ import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
 interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT = Vue.extend({
-  extends: BASE_COMPONENT,
+const COMPONENT = BASE_COMPONENT({
   computed: {
     instance(): WIDGET {
       return (this as any).$_instance;
@@ -507,16 +515,24 @@ const COMPONENT = Vue.extend({
   }
 });
 
-const NESTED_COMPONENT: any = Vue.extend({
-  extends: CONFIG_COMPONENT,
+const NESTED_COMPONENT = CONFIG_COMPONENT({
+  data() {
+    return {
+      $_optionName: "NESTED_OPTION_NAME",
+      $_predefinedProps: {
+        PROP_1: "PREDEFINED_VALUE"
+      },
+    };
+  },
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:PROP": null,
+  },
   props: {
     PROP: {}
   }
 });
-(NESTED_COMPONENT as any).$_optionName = "NESTED_OPTION_NAME";
-(NESTED_COMPONENT as any).$_predefinedProps = {
-  PROP_1: "PREDEFINED_VALUE"
-};
 
 export default COMPONENT;
 export {
@@ -561,8 +577,6 @@ export {
     it("generates nested component with several predefined values", () => {
         //#region EXPECTED
         const EXPECTED = `
-import * as VueType from "vue";
-const Vue = VueType.default || VueType;
 import WIDGET from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
@@ -570,8 +584,7 @@ import { CONFIG_COMPONENT } from "./CONFIG_COMPONENT_PATH";
 interface COMPONENT {
   readonly instance?: WIDGET;
 }
-const COMPONENT = Vue.extend({
-  extends: BASE_COMPONENT,
+const COMPONENT = BASE_COMPONENT({
   computed: {
     instance(): WIDGET {
       return (this as any).$_instance;
@@ -582,17 +595,25 @@ const COMPONENT = Vue.extend({
   }
 });
 
-const NESTED_COMPONENT: any = Vue.extend({
-  extends: CONFIG_COMPONENT,
+const NESTED_COMPONENT = CONFIG_COMPONENT({
+  data() {
+    return {
+      $_optionName: "NESTED_OPTION_NAME",
+      $_predefinedProps: {
+        PROP_1: "PREDEFINED_VALUE_1",
+        PROP_2: "PREDEFINED_VALUE_2"
+      },
+    };
+  },
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:PROP": null,
+  },
   props: {
     PROP: {}
   }
 });
-(NESTED_COMPONENT as any).$_optionName = "NESTED_OPTION_NAME";
-(NESTED_COMPONENT as any).$_predefinedProps = {
-  PROP_1: "PREDEFINED_VALUE_1",
-  PROP_2: "PREDEFINED_VALUE_2"
-};
 
 export default COMPONENT;
 export {

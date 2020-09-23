@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "allowSyntheticDefaultImports": true,
-        "target": "esnext",
+        "target": "es5",
         "module": "commonjs",
         "baseUrl": ".",
         "outDir": "./temp",
@@ -16,9 +16,9 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "strictNullChecks": true,
-        "lib": ["esnext", "dom"]
+        "lib": ["es2015", "dom"]
     },
     "include": [
-        "./src/**/*", "strategy/vue3/index.ts", "strategy/vue3/__tests__"
+        "./src/**/*"
     ]
 }

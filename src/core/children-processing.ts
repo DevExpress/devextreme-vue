@@ -1,6 +1,8 @@
+import { PatchFlags } from "@vue/shared";
 import { VNode } from "vue";
 import Configuration from "./configuration";
 import { IConfigurable, IConfigurationComponent } from "./configuration-component";
+import { configurationChildren, getComponentInfo } from "./vue-helper";
 
 function pullAllChildren(directChildren: VNode[], allChildren: VNode[], config: Configuration): void {
     if (!directChildren || directChildren.length === 0) { return; }
@@ -8,32 +10,40 @@ function pullAllChildren(directChildren: VNode[], allChildren: VNode[], config: 
     pullConfigComponents(directChildren, allChildren, config);
 }
 
+export function isFragment(node: any): boolean {
+    return node.patchFlag === PatchFlags.KEYED_FRAGMENT;
+}
+
 function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Configuration): void {
 
     children.forEach((node) => {
+        if (isFragment(node) && Array.isArray(node.children)) {
+            pullConfigComponents(node.children as any as VNode[], nodes, ownerConfig);
+        }
         nodes.push(node);
-        if (!node.componentOptions) { return; }
+        if (!node) { return; }
 
-        const configComponent = node.componentOptions.Ctor as any as IConfigurationComponent;
-        if (!configComponent.$_optionName) { return; }
+        const componentInfo = getComponentInfo(node) as any as IConfigurationComponent;
+        if (!componentInfo) { return; }
 
+        const componentChildren = configurationChildren(node);
         const initialValues = {
-            ...configComponent.$_predefinedProps,
-            ...node.componentOptions.propsData
+            ...componentInfo.$_predefinedProps,
+            ...node.props
         };
 
         const config = ownerConfig.createNested(
-            configComponent.$_optionName,
+            componentInfo.$_optionName,
             initialValues,
-            configComponent.$_isCollectionItem,
-            configComponent.$_expectedChildren
+            componentInfo.$_isCollectionItem,
+            componentInfo.$_expectedChildren
         );
 
-        (node.componentOptions as any as IConfigurable).$_config = config;
-        (node.componentOptions as any as IConfigurable).$_innerChanges = {};
+        (node as any as IConfigurable).$_config = config;
+        (node as any as IConfigurable).$_innerChanges = {};
 
-        if (node.componentOptions.children) {
-            pullConfigComponents(node.componentOptions.children as VNode[], nodes, config);
+        if (componentChildren) {
+            pullConfigComponents(componentChildren as VNode[], nodes, config);
         }
     });
 }

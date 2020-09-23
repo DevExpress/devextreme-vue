@@ -1,7 +1,5 @@
-import * as VueType from "vue";
-import IVue, { VNode, VueConstructor } from "vue";
-
-const Vue = VueType.default || VueType;
+import { ComponentPublicInstance, defineComponent } from "vue";
+import { getNodeOptions, getNodeTypeOfComponent, saveComponentInstance } from "./vue-helper";
 
 import Configuration, { bindOptionWatchers, ExpectedChild, setEmitOptionChangedFunc } from "./configuration";
 
@@ -9,7 +7,7 @@ interface IConfigurationOwner {
     $_expectedChildren: Record<string, ExpectedChild>;
 }
 
-interface IConfigurationComponent extends IConfigurationOwner {
+interface IConfigurationComponent extends IConfigurationOwner, ComponentPublicInstance {
     $_optionName: string;
     $_isCollectionItem: boolean;
     $_predefinedProps: Record<string, any>;
@@ -18,6 +16,7 @@ interface IConfigurationComponent extends IConfigurationOwner {
 interface IConfigurable extends IConfigurationOwner {
     $_config: Configuration;
     $_innerChanges: any;
+    $_componentInstance: any;
 }
 
 interface IComponentInfo {
@@ -26,33 +25,37 @@ interface IComponentInfo {
     removed?: boolean;
 }
 
-function getConfig(vueInstance: Pick<IVue, "$vnode">): Configuration | undefined {
-    if (!vueInstance.$vnode) {
+function getConfig(vueInstance: Pick<ComponentPublicInstance, "$">): Configuration | undefined {
+    const componentOptions = (getNodeOptions(vueInstance) as any as IConfigurable);
+    if (!componentOptions) {
         return;
     }
 
-    const componentOptions = (vueInstance.$vnode.componentOptions as any as IConfigurable);
-
-    return componentOptions && componentOptions.$_config;
+    return componentOptions.$_config || (vueInstance as any as IConfigurable).$_config;
 }
 
-function getInnerChanges(vueInstance: Pick<IVue, "$vnode">): any {
-    if (!vueInstance.$vnode) {
+function getInnerChanges(vueInstance: Pick<ComponentPublicInstance, "$">): any {
+    const componentOptions = (getNodeOptions(vueInstance) as any as IConfigurable);
+    if (!componentOptions) {
         return;
     }
 
-    const componentOptions = (vueInstance.$vnode.componentOptions as any as IConfigurable);
-
-    return componentOptions && componentOptions.$_innerChanges;
+    return componentOptions.$_innerChanges || (vueInstance as any as IConfigurable).$_innerChanges;
 }
 
-function initOptionChangedFunc(config, vueInstance: Pick<IVue, "$vnode" | "$props" | "$emit">, innerChanges: any) {
+function initOptionChangedFunc(
+    config,
+    props: any,
+    vueInstance: Pick<ComponentPublicInstance, "$" | "$props" | "$emit">,
+    innerChanges: any) {
     if (!config) {
         return;
     }
 
-    config.init(Object.keys(vueInstance.$props));
-    setEmitOptionChangedFunc(config, vueInstance, innerChanges);
+    config.init(Object.keys(props));
+    if (vueInstance) {
+        setEmitOptionChangedFunc(config, vueInstance, innerChanges);
+    }
 }
 
 function getComponentInfo({name, isCollectionItem, ownerConfig }: Configuration, removed?: boolean): IComponentInfo {
@@ -66,33 +69,42 @@ function getComponentInfo({name, isCollectionItem, ownerConfig }: Configuration,
     };
 }
 
-const DxConfiguration: VueConstructor = Vue.extend({
-    beforeMount() {
-        const config = getConfig(this) as Configuration;
-        const innerChanges = getInnerChanges(this);
-        initOptionChangedFunc(config, this, innerChanges);
-        bindOptionWatchers(config, this, innerChanges);
-    },
+function initDxConfiguration() {
+    return defineComponent({
+        updated() {
+            saveComponentInstance(this);
+        },
+        beforeMount() {
+            const thisComponent = this as any as IConfigurationComponent;
+            const config = getConfig(thisComponent) as Configuration;
+            const innerChanges = getInnerChanges(thisComponent);
+            initOptionChangedFunc(config, getNodeTypeOfComponent(thisComponent).props, thisComponent, innerChanges);
+            bindOptionWatchers(config, this, innerChanges);
+        },
 
-    mounted() {
-        if ((this.$parent as any).$_instance) {
-            (this.$parent as any).$_config.componentsCountChanged
-                .push(getComponentInfo(getConfig(this) as Configuration));
+        mounted() {
+            if ((this.$parent as any).$_instance) {
+                (this.$parent as any).$_config.componentsCountChanged
+                    .push(getComponentInfo(getConfig(this as any as IConfigurationComponent) as Configuration));
+            }
+        },
+
+        beforeUnmount() {
+            const config = getConfig(this as any as IConfigurationComponent) as Configuration;
+            if (config) {
+                (this.$parent as any).$_config.componentsCountChanged
+                    .push(getComponentInfo(config, true));
+            }
+        },
+
+        render(): null {
+            return null;
         }
-    },
-
-    beforeDestroy() {
-        (this.$parent as any).$_config.componentsCountChanged
-            .push(getComponentInfo(getConfig(this) as Configuration, true));
-    },
-
-    render(createElement: (...args) => VNode): VNode {
-        return createElement();
-    }
-});
+    });
+}
 
 export {
-    DxConfiguration,
+    initDxConfiguration,
     IComponentInfo,
     IConfigurable,
     IConfigurationComponent,

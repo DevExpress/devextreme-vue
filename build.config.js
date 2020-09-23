@@ -12,6 +12,8 @@ module.exports = {
   },
   npm: {
     dist: './npm/',
+    strategySrc: './strategy/vue2/npm/*',
+    strategyDist: './npm/core/strategy/vue2',
     package: 'package.json',
     license: 'LICENSE',
     readme: 'README.md'
@@ -21,7 +23,6 @@ module.exports = {
   oldComponentsDir: './src/ui',
   coreComponentsDir: './src/core',
   indexFileName: './src/index.ts',
-  baseComponent: './core/component',
-  configComponent: './core/configuration-component',
-  extensionComponent: './core/extension-component'
+  baseComponent: './core/index',
+  configComponent: './core/index',
 };
