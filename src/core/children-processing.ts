@@ -1,3 +1,4 @@
+import { PatchFlags } from "@vue/shared";
 import { VNode } from "vue";
 import Configuration from "./configuration";
 import { IConfigurable, IConfigurationComponent } from "./configuration-component";
@@ -9,9 +10,16 @@ function pullAllChildren(directChildren: VNode[], allChildren: VNode[], config: 
     pullConfigComponents(directChildren, allChildren, config);
 }
 
+export function isFragment(node: any): boolean {
+    return node.patchFlag === PatchFlags.KEYED_FRAGMENT;
+}
+
 function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Configuration): void {
 
     children.forEach((node) => {
+        if (isFragment(node) && Array.isArray(node.children)) {
+            pullConfigComponents(node.children as any as VNode[], nodes, ownerConfig);
+        }
         nodes.push(node);
         if (!node) { return; }
 

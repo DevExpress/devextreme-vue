@@ -269,6 +269,52 @@ describe("component rendering", () => {
             expect(config.nested[2].collectionItemIndex).toBe(2);
         });
 
+        it("initializes nested config (using v-for)", () => {
+            const nestedCollectionItem = buildTestConfigCtor({
+                $_optionName: "nestedOption",
+                $_isCollectionItem: true
+            });
+
+            const vm = defineComponent({
+                template:
+                    `<test-component id="component">` +
+                    `  <nested-collection-item v-for="(item, index) in items" :key="index" :prop1="item.value" />` +
+                    `</test-component>`,
+                data() {
+                    return {
+                        items: [{ value: 123 }, { value: 321 }, { value: 432 }]
+                    };
+                },
+                components: {
+                    TestComponent,
+                    nestedCollectionItem
+                }
+            });
+
+            const wrapper = mount(vm);
+
+            const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+            expect(config.nested).toHaveLength(3);
+
+            expect(config.nested[0].name).toBe("nestedOption");
+            expect(config.nested[0].options).toEqual(["prop1", "prop2"]);
+            expect(config.nested[0].initialValues).toEqual({ key: 0, prop1: 123 });
+            expect(config.nested[0].isCollectionItem).toBeTruthy();
+            expect(config.nested[0].collectionItemIndex).toBe(0);
+
+            expect(config.nested[1].name).toBe("nestedOption");
+            expect(config.nested[1].options).toEqual(["prop1", "prop2"]);
+            expect(config.nested[1].initialValues).toEqual({ key: 1, prop1: 321 });
+            expect(config.nested[1].isCollectionItem).toBeTruthy();
+            expect(config.nested[1].collectionItemIndex).toBe(1);
+
+            expect(config.nested[2].name).toBe("nestedOption");
+            expect(config.nested[2].options).toEqual(["prop1", "prop2"]);
+            expect(config.nested[2].initialValues).toEqual({ key: 2, prop1: 432 });
+            expect(config.nested[2].isCollectionItem).toBeTruthy();
+            expect(config.nested[2].collectionItemIndex).toBe(2);
+        });
+
         it("initializes nested config predefined prop", () => {
             const predefinedValue = {};
             const NestedWithPredefined = buildTestConfigCtor({ $_optionName: "nestedOption", $_predefinedProps: {

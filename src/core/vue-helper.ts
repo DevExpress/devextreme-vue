@@ -1,21 +1,25 @@
 import { ComponentPublicInstance, createApp, Slot, Slots, VNode, VNodeProps } from "vue";
-import Configuration from "./configuration";
 import { camelize } from "./helpers";
 
 import { IBaseComponent } from "./component";
-import { IConfigurable, IConfigurationComponent } from "./configuration-component";
+import { IConfigurationComponent } from "./configuration-component";
 
-import { pullAllChildren } from "./children-processing";
+import { isFragment } from "./children-processing";
 
-interface IConfigurableNode extends IConfigurable, VNode {}
-
-export function getChildren(component: IBaseComponent): VNode[] {
-    const children = [];
+export function getChildren(component: IBaseComponent): any {
     if (!hasChildren(component) || !component.$_config) {
-        return children;
+        return [];
     }
-    pullConfigurationChildren(defaultSlots(component), children, component.$_config.nested);
-    return children;
+    const children = component.$.subTree && component.$.subTree.children;
+    if (!Array.isArray(children)) {
+        return [];
+    }
+    return children.filter((child: VNode) => {
+        if (!isFragment(child)) {
+            return child as VNode;
+        }
+        return;
+    });
 }
 
 export function getExtension(component: VNode) {
@@ -24,16 +28,6 @@ export function getExtension(component: VNode) {
 
     vNode.attachTo = vNode.$_componentInstance.attachTo;
     return vNode;
-}
-
-export function getChildrenToUpdate(component: IBaseComponent): IConfigurableNode[] {
-    const children = [];
-    if (!hasChildren(component) || !component.$_config) {
-        return children;
-    }
-    component.$_config.cleanNested();
-    pullAllChildren(defaultSlots(component), children, component.$_config);
-    return children;
 }
 
 export function getComponentInfo(component): IConfigurationComponent {
@@ -119,6 +113,9 @@ export function getNodeTypeOfComponent(component: Pick<ComponentPublicInstance, 
 
 function findConfigurationComponents(children: VNode[]) {
     return children.filter((child) => {
+        if (isFragment(child)) {
+            return findConfigurationComponents((child as any).children || []);
+        }
         if (child.type && typeof child.type === "object") {
             delete (child as any).$_config;
             delete (child as any).$_innerChanges;
@@ -131,34 +128,15 @@ function findConfigurationComponents(children: VNode[]) {
 function hasInlineTemplate(children: VNode[]): boolean {
     let hasTemplate = false;
     children.forEach((child) => {
-        if (!(child.type && typeof child.type === "object" && (child.type as any).data().$_optionName)) {
+        if (!isConfiguration(child) && !isFragment(child)) {
             hasTemplate = true;
         }
     });
     return hasTemplate;
 }
 
-function pullConfigurationChildren(allChildren: VNode[], children: VNode[], nested: Configuration[]): void {
-    let nodeDetected = false;
-    allChildren.forEach((child: IConfigurableNode, index) => {
-        const id = nodeDetected ? index - 1 : index;
-        if (child.type && typeof child.type === "object") {
-            restoreConfigData(child, children, nested, id);
-        } else {
-            nodeDetected = true;
-        }
-    });
-}
-
-function restoreConfigData(child: IConfigurableNode, children: VNode[], nested: Configuration[], id: number): void {
-    if (child.type) {
-        child.$_config = nested[id];
-        children.push(child);
-        const subChildren = (child.children as any);
-        if (subChildren && subChildren.default) {
-            pullConfigurationChildren(subChildren.default(), children, nested[id].nested);
-        }
-    }
+function isConfiguration(child): boolean {
+    return child.type && typeof child.type === "object" && (child.type as any).data().$_optionName;
 }
 
 export function getConfigurationOptions(node: VNode): any {

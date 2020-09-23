@@ -3,7 +3,7 @@ import { ComponentPublicInstance, defineComponent, h, VNode } from "vue";
 
 import * as events from "devextreme/events";
 
-import { defaultSlots, getChildrenToUpdate, getComponentInstance, getExtension, usedProps } from "./vue-helper";
+import { defaultSlots, getChildren, getComponentInstance, getExtension, usedProps } from "./vue-helper";
 
 import { pullAllChildren } from "./children-processing";
 import Configuration, { bindOptionWatchers, setEmitOptionChangedFunc } from "./configuration";
@@ -75,7 +75,7 @@ function initBaseComponent() {
 
         updated() {
             const thisComponent = this as any as IBaseComponent;
-            getChildrenToUpdate(thisComponent).forEach((child) => {
+            getChildren(thisComponent).forEach((child) => {
                 initOptionChangedFunc(
                     child.$_config,
                     (child.type as any).props || {},

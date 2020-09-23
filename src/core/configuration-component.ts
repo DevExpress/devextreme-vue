@@ -90,8 +90,11 @@ function initDxConfiguration() {
         },
 
         beforeUnmount() {
-            (this.$parent as any).$_config.componentsCountChanged
-                .push(getComponentInfo(getConfig(this as any as IConfigurationComponent) as Configuration, true));
+            const config = getConfig(this as any as IConfigurationComponent) as Configuration;
+            if (config) {
+                (this.$parent as any).$_config.componentsCountChanged
+                    .push(getComponentInfo(config, true));
+            }
         },
 
         render(): null {

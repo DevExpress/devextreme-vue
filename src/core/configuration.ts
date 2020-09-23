@@ -258,7 +258,7 @@ function bindOptionWatchers(
     config: Configuration,
     vueInstance: Pick<IVue, "$watch">,
     innerChanges: Record<string, any>): void {
-    const targets = config.getOptionsToWatch();
+    const targets = config && config.getOptionsToWatch();
     if (targets) {
         targets.forEach((optionName: string) => {
             vueInstance.$watch(optionName, (value) => {
