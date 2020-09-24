@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "allowSyntheticDefaultImports": true,
-        "target": "esnext",
+        "target": "es5",
         "module": "commonjs",
         "baseUrl": ".",
         "outDir": "./temp",
