@@ -1,6 +1,6 @@
 import * as VueType from "vue";
 import { DxComponent, IWidgetComponent } from "./component";
-import { DxConfiguration, IConfigurable, IConfigurationComponent } from "./configuration-component";
+import { DxConfiguration, IConfigurable } from "./configuration-component";
 import { DxExtensionComponent } from "./extension-component";
 
 import * as events from "devextreme/events";
@@ -59,9 +59,12 @@ function skipIntegrationOptions(options: {
     return result;
 }
 
-function buildTestConfigCtor(): VueType.VueConstructor {
+function buildTestConfigCtor(options): VueType.VueConstructor {
     return Vue.extend({
         extends: DxConfiguration(),
+        data() {
+            return options;
+        },
         props: {
             prop1: Number,
             prop2: String
@@ -267,13 +270,12 @@ describe("options", () => {
 
 describe("configuration", () => {
 
-    const Nested = buildTestConfigCtor();
-    (Nested as any as IConfigurationComponent).$_optionName = "nestedOption";
+    const Nested = buildTestConfigCtor({ $_optionName: "nestedOption" });
 
     it("creates configuration", () => {
         const vm = new TestComponent();
 
-        expect((vm as IConfigurable).$_config).not.toBeNull();
+        expect((vm as any as IConfigurable).$_config).not.toBeNull();
     });
 
     it("passes configuration initialValues to widget ctor", () => {
@@ -287,7 +289,7 @@ describe("configuration", () => {
         };
 
         const vm = new TestComponent();
-        (vm as IConfigurable).$_config = {
+        (vm as any as IConfigurable).$_config = {
             getNestedOptionValues: jest.fn(() => initialValues),
             getOptionsToWatch: jest.fn()
         } as any;
@@ -305,12 +307,12 @@ describe("configuration", () => {
         const vm = new TestComponent();
         vm.$mount();
 
-        const pendingOptions = (vm as IWidgetComponent).$_pendingOptions;
+        const pendingOptions = (vm as any as IWidgetComponent).$_pendingOptions;
 
         const name = "abc";
         const value = {};
 
-        (vm as IConfigurable).$_config.updateFunc(name, value);
+        (vm as any as IConfigurable).$_config.updateFunc(name, value);
         expect(pendingOptions[name]).toEqual(value);
     });
 
@@ -335,9 +337,10 @@ describe("configuration", () => {
     });
 
     it("initializes nested config (collectionItem)", () => {
-        const nestedCollectionItem = buildTestConfigCtor();
-        (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
-        (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+        const nestedCollectionItem = buildTestConfigCtor({
+            $_optionName: "nestedOption",
+            $_isCollectionItem: true
+        });
 
         const vm = new Vue({
             template:
@@ -360,9 +363,10 @@ describe("configuration", () => {
     });
 
     it("initializes nested config (several collectionItems)", () => {
-        const nestedCollectionItem = buildTestConfigCtor();
-        (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
-        (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+        const nestedCollectionItem = buildTestConfigCtor({
+            $_optionName: "nestedOption",
+            $_isCollectionItem: true
+        });
 
         const vm = new Vue({
             template:
@@ -401,11 +405,12 @@ describe("configuration", () => {
 
     it("initializes nested config predefined prop", () => {
         const predefinedValue = {};
-        const NestedWithPredefined = buildTestConfigCtor();
-        (NestedWithPredefined as any as IConfigurationComponent).$_optionName = "nestedOption";
-        (NestedWithPredefined as any as IConfigurationComponent).$_predefinedProps = {
-            predefinedProp: predefinedValue
-        };
+        const NestedWithPredefined = buildTestConfigCtor({
+            $_optionName: "nestedOption",
+            $_predefinedProps: {
+                predefinedProp: predefinedValue
+            }
+        });
 
         const vm = new Vue({
             template:
@@ -426,8 +431,9 @@ describe("configuration", () => {
     });
 
     it("initializes sub-nested config", () => {
-        const subNested = buildTestConfigCtor();
-        (subNested as any as IConfigurationComponent).$_optionName = "subNestedOption";
+        const subNested = buildTestConfigCtor({
+            $_optionName: "subNestedOption"
+        });
 
         const vm = new Vue({
             template:
@@ -456,9 +462,10 @@ describe("configuration", () => {
     });
 
     it("initializes sub-nested config (collectionItem)", () => {
-        const nestedCollectionItem = buildTestConfigCtor();
-        (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "subNestedOption";
-        (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+        const nestedCollectionItem = buildTestConfigCtor({
+            $_optionName: "subNestedOption",
+            $_isCollectionItem: true
+        });
 
         const vm = new Vue({
             template:
@@ -488,9 +495,10 @@ describe("configuration", () => {
     });
 
     it("initializes sub-nested config (multiple collectionItems)", () => {
-        const nestedCollectionItem = buildTestConfigCtor();
-        (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "subNestedOption";
-        (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+        const nestedCollectionItem = buildTestConfigCtor({
+            $_optionName: "subNestedOption",
+            $_isCollectionItem: true
+        });
 
         const vm = new Vue({
             template:
@@ -548,15 +556,16 @@ describe("configuration", () => {
 
             const vm = new WidgetComponent();
 
-            expect((vm as IWidgetComponent).$_config.expectedChildren).toBe(expected);
+            expect((vm as any as IWidgetComponent).$_config.expectedChildren).toBe(expected);
         });
 
         it("initialized for config component", () => {
             const expected = {};
 
-            const ConfigComponent = buildTestConfigCtor();
-            (ConfigComponent as any as IConfigurationComponent).$_optionName = "nestedOption";
-            (ConfigComponent as any as IConfigurationComponent).$_expectedChildren = expected;
+            const ConfigComponent = buildTestConfigCtor({
+                $_optionName: "nestedOption",
+                $_expectedChildren: expected
+            });
 
             const vm = new Vue({
                 template:
@@ -578,8 +587,9 @@ describe("configuration", () => {
 
 describe("nested option", () => {
 
-    const Nested = buildTestConfigCtor();
-    (Nested as any as IConfigurationComponent).$_optionName = "nestedOption";
+    const Nested = buildTestConfigCtor({
+        $_optionName: "nestedOption"
+    });
 
     it("pulls initital values", () => {
         const vm = new Vue({
@@ -603,9 +613,10 @@ describe("nested option", () => {
     });
 
     it("pulls initital values (collectionItem)", () => {
-        const nestedCollectionItem = buildTestConfigCtor();
-        (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
-        (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+        const nestedCollectionItem = buildTestConfigCtor({
+            $_optionName: "nestedOption",
+            $_isCollectionItem: true
+        });
 
         const vm = new Vue({
             template:
@@ -628,8 +639,9 @@ describe("nested option", () => {
     });
 
     it("pulls initital values (subnested)", () => {
-        const subNested = buildTestConfigCtor();
-        (subNested as any as IConfigurationComponent).$_optionName = "subNestedOption";
+        const subNested = buildTestConfigCtor({
+            $_optionName: "subNestedOption"
+        });
 
         const vm = new Vue({
             template:
@@ -658,9 +670,10 @@ describe("nested option", () => {
     });
 
     it("pulls initital values (subnested collectionItem)", () => {
-        const nestedCollectionItem = buildTestConfigCtor();
-        (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "subNestedOption";
-        (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+        const nestedCollectionItem = buildTestConfigCtor({
+            $_optionName: "subNestedOption",
+            $_isCollectionItem: true
+        });
 
         const vm = new Vue({
             template:
@@ -841,9 +854,10 @@ describe("nested option", () => {
     });
 
     it("remove nested component by condition", (done) => {
-        const nestedCollectionItem = buildTestConfigCtor();
-        (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
-        (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+        const nestedCollectionItem = buildTestConfigCtor({
+            $_optionName: "nestedOption",
+            $_isCollectionItem: true
+        });
         const vm = new Vue({
             template:
                 `<test-component>` +
@@ -868,9 +882,10 @@ describe("nested option", () => {
     });
 
     it("should update only part of collection components", (done) => {
-        const nestedCollectionItem = buildTestConfigCtor();
-        (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
-        (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+        const nestedCollectionItem = buildTestConfigCtor({
+            $_optionName: "nestedOption",
+            $_isCollectionItem: true
+        });
         const vm = new Vue({
             template:
                 `<test-component>` +
@@ -902,9 +917,10 @@ describe("nested option", () => {
     });
 
     it("should update only part of collection components (remove all subnested)", (done) => {
-        const nestedCollectionItem = buildTestConfigCtor();
-        (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
-        (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+        const nestedCollectionItem = buildTestConfigCtor({
+            $_optionName: "nestedOption",
+            $_isCollectionItem: true
+        });
         const vm = new Vue({
             template:
                 `<test-component>` +
@@ -1006,9 +1022,10 @@ describe("nested option", () => {
     });
 
     it("watches option changes (collectionItem)", (done) => {
-        const nestedCollectionItem = buildTestConfigCtor();
-        (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
-        (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+        const nestedCollectionItem = buildTestConfigCtor({
+            $_optionName: "nestedOption",
+            $_isCollectionItem: true
+        });
 
         const vm = new Vue({
             template:
@@ -1035,8 +1052,9 @@ describe("nested option", () => {
     });
 
     it("watches option changes (subnested)", (done) => {
-        const subNested = buildTestConfigCtor();
-        (subNested as any as IConfigurationComponent).$_optionName = "subNestedOption";
+        const subNested = buildTestConfigCtor({
+            $_optionName: "subNestedOption"
+        });
 
         const vm = new Vue({
             template:
@@ -1066,9 +1084,10 @@ describe("nested option", () => {
     });
 
     it("watches option changes (subnested collectionItem)", (done) => {
-        const subNestedCollectionItem = buildTestConfigCtor();
-        (subNestedCollectionItem as any as IConfigurationComponent).$_optionName = "subNestedOption";
-        (subNestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+        const subNestedCollectionItem = buildTestConfigCtor({
+            $_optionName: "subNestedOption",
+            $_isCollectionItem: true
+        });
 
         const vm = new Vue({
             template:
@@ -1123,9 +1142,10 @@ describe("nested option", () => {
     });
 
     it("removes obstructive nodes before widget creation (T711311)", () => {
-        const subNestedCollectionItem = buildTestConfigCtor();
-        (subNestedCollectionItem as any as IConfigurationComponent).$_optionName = "subNestedOption";
-        (subNestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+        const subNestedCollectionItem = buildTestConfigCtor({
+            $_optionName: "subNestedOption",
+            $_isCollectionItem: true
+        });
 
         let innerHtml;
         WidgetClass.mockImplementationOnce((element: HTMLElement, options: any) => {
@@ -1514,13 +1534,17 @@ describe("static items", () => {
     it("passes integrationOptions to widget", () => {
         const NestedItem = Vue.extend({
             extends: DxConfiguration(),
+            data() {
+                return {
+                    $_optionName: "items",
+                    $_isCollectionItem: true
+                }
+            },
             props: {
                 prop1: Number,
                 template: String
             }
         });
-        (NestedItem as any as IConfigurationComponent).$_optionName = "items";
-        (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
         new Vue({
             template: `<test-component>
@@ -1545,12 +1569,16 @@ describe("static items", () => {
     it("doesn't pass integrationOptions to widget if template prop is absent", () => {
         const NestedItem = Vue.extend({
             extends: DxConfiguration(),
+            data() {
+                return {
+                    $_optionName: "items",
+                    $_isCollectionItem: true
+                }
+            },
             props: {
                 prop1: Number
             }
         });
-        (NestedItem as any as IConfigurationComponent).$_optionName = "items";
-        (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
         new Vue({
             template: `<test-component>
@@ -1572,13 +1600,17 @@ describe("static items", () => {
     it("renders", () => {
         const NestedItem = Vue.extend({
             extends: DxConfiguration(),
+            data() {
+                return {
+                    $_optionName: "items",
+                    $_isCollectionItem: true
+                }
+            },
             props: {
                 prop1: Number,
                 template: String
             }
         });
-        (NestedItem as any as IConfigurationComponent).$_optionName = "items";
-        (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
         new Vue({
             template: `<test-component>
@@ -1600,12 +1632,16 @@ describe("static items", () => {
     it("renders template containing text only (vue 3)", () => {
         const NestedItem = Vue.extend({
             extends: DxConfiguration(),
+            data() {
+                return {
+                    $_optionName: "item"
+                }
+            },
             props: {
                 prop1: Number,
                 template: String
             }
         });
-        (NestedItem as any as IConfigurationComponent).$_optionName = "item";
 
         new Vue({
             template: `<test-component>
@@ -1627,12 +1663,16 @@ describe("static items", () => {
     it("renders template with several root elements (vue 3)", () => {
         const NestedItem = Vue.extend({
             extends: DxConfiguration(),
+            data() {
+                return {
+                    $_optionName: "item",
+                }
+            },
             props: {
                 prop1: Number,
                 template: String
             }
         });
-        (NestedItem as any as IConfigurationComponent).$_optionName = "item";
 
         expect( () =>
             new Vue({
@@ -1652,12 +1692,16 @@ describe("static items", () => {
     it("renders template with single root element (vue 3)", () => {
         const NestedItem = Vue.extend({
             extends: DxConfiguration(),
+            data() {
+                return {
+                    $_optionName: "item"
+                }
+            },
             props: {
                 prop1: Number,
                 template: String
             }
         });
-        (NestedItem as any as IConfigurationComponent).$_optionName = "item";
 
         new Vue({
             template: `<test-component>
@@ -1679,12 +1723,16 @@ describe("static items", () => {
     it("keeps template root element class and id (vue 3)", () => {
         const NestedItem = Vue.extend({
             extends: DxConfiguration(),
+            data() {
+                return {
+                    $_optionName: "item"
+                }
+            },
             props: {
                 prop1: Number,
                 template: String
             }
         });
-        (NestedItem as any as IConfigurationComponent).$_optionName = "item";
 
         new Vue({
             template: `<test-component>
@@ -1707,13 +1755,17 @@ describe("static items", () => {
     it("render nested template", () => {
         const NestedItem = Vue.extend({
             extends: DxConfiguration(),
+            data() {
+                return {
+                    $_optionName: "items",
+                    $_isCollectionItem: true
+                }
+            },
             props: {
                 prop1: Number,
                 template: String
             }
         });
-        (NestedItem as any as IConfigurationComponent).$_optionName = "items";
-        (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
         new Vue({
             template: `<test-component>
@@ -1740,16 +1792,21 @@ describe("static items", () => {
     it("doesn't pass integrationOptions to widget if nested item has sub nested item", () => {
         const NestedItem = Vue.extend({
             extends: DxConfiguration(),
+            data() {
+                return {
+                    $_optionName: "items",
+                    $_isCollectionItem: true
+                }
+            },
             props: {
                 prop1: Number,
                 template: String
             }
         });
-        (NestedItem as any as IConfigurationComponent).$_optionName = "items";
-        (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
-        const subNested = buildTestConfigCtor();
-        (subNested as any as IConfigurationComponent).$_optionName = "subNestedOption";
+        const subNested = buildTestConfigCtor({
+            $_optionName: "subNestedOption"
+        });
 
         new Vue({
             template: `<test-component>
