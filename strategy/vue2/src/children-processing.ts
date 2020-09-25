@@ -15,7 +15,10 @@ function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Co
         if (!node.componentOptions) { return; }
 
         const configComponent = node.componentOptions.Ctor as any;
-        const configData = configComponent.options && configComponent.options.data && configComponent.options.data() as any as IConfigurationComponent;
+        const configData = configComponent.options
+            && configComponent.options.data
+            && configComponent.options.data() as any as IConfigurationComponent;
+
         if (!configData || !configData.$_optionName) { return; }
 
         const initialValues = {
