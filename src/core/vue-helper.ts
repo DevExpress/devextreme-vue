@@ -39,6 +39,16 @@ export function getComponentInstance(component) {
     return component.type && component.type.$_componentInstance;
 }
 
+export function getNormalizedProps(props: VNodeProps): VNodeProps {
+        const result = {};
+        for (const propName in props) {
+            if (props.hasOwnProperty(propName)) {
+                result[camelize(propName)] = props[propName];
+            }
+        }
+        return result;
+}
+
 export function configurationChildren(component): VNode[] {
     if (!component.children) {
         return [];
@@ -76,15 +86,9 @@ export function mount(options, parent, el) {
     return template.mount(el);
 }
 
-export function usedProps(component: ComponentPublicInstance): VNodeProps {
-        const props = component.$.vnode.props;
-        const result = {};
-        for (const propName in props) {
-            if (props.hasOwnProperty(propName)) {
-                result[camelize(propName)] = props[propName];
-            }
-        }
-        return result;
+export function getComponentProps(component: ComponentPublicInstance): VNodeProps {
+        const props = component.$.vnode.props || {};
+        return getNormalizedProps(props);
     }
 
 export function usedConfigurationProps(node: VNode): VNodeProps | null {

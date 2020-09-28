@@ -67,7 +67,8 @@ function buildTestConfigCtor(options): any {
         },
         props: {
             prop1: Number,
-            prop2: String
+            prop2: String,
+            sampleProp: String
         }
     });
 }
@@ -193,7 +194,7 @@ describe("component rendering", () => {
             const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
             expect(config.nested).toHaveLength(1);
             expect(config.nested[0].name).toBe("nestedOption");
-            expect(config.nested[0].options).toEqual(["prop1", "prop2"]);
+            expect(config.nested[0].options).toEqual(["prop1", "prop2", "sampleProp"]);
             expect(config.nested[0].initialValues).toEqual({ prop1: 123 });
             expect(config.nested[0].isCollectionItem).toBeFalsy();
         });
@@ -220,7 +221,7 @@ describe("component rendering", () => {
             const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
             expect(config.nested).toHaveLength(1);
             expect(config.nested[0].name).toBe("nestedOption");
-            expect(config.nested[0].options).toEqual(["prop1", "prop2"]);
+            expect(config.nested[0].options).toEqual(["prop1", "prop2", "sampleProp"]);
             expect(config.nested[0].initialValues).toEqual({ prop1: 123 });
             expect(config.nested[0].isCollectionItem).toBeTruthy();
             expect(config.nested[0].collectionItemIndex).toBe(0);
@@ -236,7 +237,7 @@ describe("component rendering", () => {
                 template:
                     `<test-component id="component">` +
                     `  <nested-collection-item :prop1="123" />` +
-                    `  <nested-collection-item :prop1="456" prop2="abc" />` +
+                    `  <nested-collection-item :prop1="456" prop2="abc" sample-prop="test" />` +
                     `  <nested-collection-item prop2="def" />` +
                     `</test-component>`,
                 components: {
@@ -251,19 +252,19 @@ describe("component rendering", () => {
             expect(config.nested).toHaveLength(3);
 
             expect(config.nested[0].name).toBe("nestedOption");
-            expect(config.nested[0].options).toEqual(["prop1", "prop2"]);
+            expect(config.nested[0].options).toEqual(["prop1", "prop2", "sampleProp"]);
             expect(config.nested[0].initialValues).toEqual({ prop1: 123 });
             expect(config.nested[0].isCollectionItem).toBeTruthy();
             expect(config.nested[0].collectionItemIndex).toBe(0);
 
             expect(config.nested[1].name).toBe("nestedOption");
-            expect(config.nested[1].options).toEqual(["prop1", "prop2"]);
-            expect(config.nested[1].initialValues).toEqual({ prop1: 456, prop2: "abc" });
+            expect(config.nested[1].options).toEqual(["prop1", "prop2", "sampleProp"]);
+            expect(config.nested[1].initialValues).toEqual({ prop1: 456, prop2: "abc", sampleProp: "test" });
             expect(config.nested[1].isCollectionItem).toBeTruthy();
             expect(config.nested[1].collectionItemIndex).toBe(1);
 
             expect(config.nested[2].name).toBe("nestedOption");
-            expect(config.nested[2].options).toEqual(["prop1", "prop2"]);
+            expect(config.nested[2].options).toEqual(["prop1", "prop2", "sampleProp"]);
             expect(config.nested[2].initialValues).toEqual({ prop2: "def" });
             expect(config.nested[2].isCollectionItem).toBeTruthy();
             expect(config.nested[2].collectionItemIndex).toBe(2);
@@ -297,19 +298,19 @@ describe("component rendering", () => {
             expect(config.nested).toHaveLength(3);
 
             expect(config.nested[0].name).toBe("nestedOption");
-            expect(config.nested[0].options).toEqual(["prop1", "prop2"]);
+            expect(config.nested[0].options).toEqual(["prop1", "prop2", "sampleProp"]);
             expect(config.nested[0].initialValues).toEqual({ key: 0, prop1: 123 });
             expect(config.nested[0].isCollectionItem).toBeTruthy();
             expect(config.nested[0].collectionItemIndex).toBe(0);
 
             expect(config.nested[1].name).toBe("nestedOption");
-            expect(config.nested[1].options).toEqual(["prop1", "prop2"]);
+            expect(config.nested[1].options).toEqual(["prop1", "prop2", "sampleProp"]);
             expect(config.nested[1].initialValues).toEqual({ key: 1, prop1: 321 });
             expect(config.nested[1].isCollectionItem).toBeTruthy();
             expect(config.nested[1].collectionItemIndex).toBe(1);
 
             expect(config.nested[2].name).toBe("nestedOption");
-            expect(config.nested[2].options).toEqual(["prop1", "prop2"]);
+            expect(config.nested[2].options).toEqual(["prop1", "prop2", "sampleProp"]);
             expect(config.nested[2].initialValues).toEqual({ key: 2, prop1: 432 });
             expect(config.nested[2].isCollectionItem).toBeTruthy();
             expect(config.nested[2].collectionItemIndex).toBe(2);
@@ -367,7 +368,7 @@ describe("component rendering", () => {
             expect(nestedConfig.nested).toHaveLength(1);
 
             expect(nestedConfig.nested[0].name).toBe("subNestedOption");
-            expect(nestedConfig.nested[0].options).toEqual(["prop1", "prop2"]);
+            expect(nestedConfig.nested[0].options).toEqual(["prop1", "prop2", "sampleProp"]);
             expect(nestedConfig.nested[0].initialValues).toEqual({ prop2: "abc" });
             expect(nestedConfig.nested[0].isCollectionItem).toBeFalsy();
         });
@@ -398,7 +399,7 @@ describe("component rendering", () => {
             expect(nestedConfig.nested).toHaveLength(1);
 
             expect(nestedConfig.nested[0].name).toBe("subNestedOption");
-            expect(nestedConfig.nested[0].options).toEqual(["prop1", "prop2"]);
+            expect(nestedConfig.nested[0].options).toEqual(["prop1", "prop2", "sampleProp"]);
             expect(nestedConfig.nested[0].initialValues).toEqual({ prop2: "abc" });
             expect(nestedConfig.nested[0].isCollectionItem).toBeTruthy();
             expect(nestedConfig.nested[0].collectionItemIndex).toBe(0);
@@ -435,19 +436,19 @@ describe("component rendering", () => {
             expect(nestedConfig.nested).toHaveLength(3);
 
             expect(nestedConfig.nested[0].name).toBe("subNestedOption");
-            expect(nestedConfig.nested[0].options).toEqual(["prop1", "prop2"]);
+            expect(nestedConfig.nested[0].options).toEqual(["prop1", "prop2", "sampleProp"]);
             expect(nestedConfig.nested[0].initialValues).toEqual({ prop1: 123 });
             expect(nestedConfig.nested[0].isCollectionItem).toBeTruthy();
             expect(nestedConfig.nested[0].collectionItemIndex).toBe(0);
 
             expect(nestedConfig.nested[1].name).toBe("subNestedOption");
-            expect(nestedConfig.nested[1].options).toEqual(["prop1", "prop2"]);
+            expect(nestedConfig.nested[1].options).toEqual(["prop1", "prop2", "sampleProp"]);
             expect(nestedConfig.nested[1].initialValues).toEqual({ prop1: 456, prop2: "abc" });
             expect(nestedConfig.nested[1].isCollectionItem).toBeTruthy();
             expect(nestedConfig.nested[1].collectionItemIndex).toBe(1);
 
             expect(nestedConfig.nested[2].name).toBe("subNestedOption");
-            expect(nestedConfig.nested[2].options).toEqual(["prop1", "prop2"]);
+            expect(nestedConfig.nested[2].options).toEqual(["prop1", "prop2", "sampleProp"]);
             expect(nestedConfig.nested[2].initialValues).toEqual({ prop2: "def" });
             expect(nestedConfig.nested[2].isCollectionItem).toBeTruthy();
             expect(nestedConfig.nested[2].collectionItemIndex).toBe(2);

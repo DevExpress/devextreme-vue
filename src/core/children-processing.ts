@@ -2,7 +2,7 @@ import { PatchFlags } from "@vue/shared";
 import { VNode } from "vue";
 import Configuration from "./configuration";
 import { IConfigurable, IConfigurationComponent } from "./configuration-component";
-import { configurationChildren, getComponentInfo } from "./vue-helper";
+import { configurationChildren, getComponentInfo, getNormalizedProps } from "./vue-helper";
 
 function pullAllChildren(directChildren: VNode[], allChildren: VNode[], config: Configuration): void {
     if (!directChildren || directChildren.length === 0) { return; }
@@ -29,7 +29,7 @@ function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Co
         const componentChildren = configurationChildren(node);
         const initialValues = {
             ...componentInfo.$_predefinedProps,
-            ...node.props
+            ...getNormalizedProps(node.props || {})
         };
 
         const config = ownerConfig.createNested(
