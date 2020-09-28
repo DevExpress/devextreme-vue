@@ -30,6 +30,7 @@ export function getExtension(component: VNode) {
     return vNode;
 }
 
+
 export function getComponentInfo(component): IConfigurationComponent {
     const options = getConfigurationOptions(component);
     return options.data && options.data();
@@ -37,6 +38,16 @@ export function getComponentInfo(component): IConfigurationComponent {
 
 export function getComponentInstance(component) {
     return component.type && component.type.$_componentInstance;
+}
+
+export function getNormalizedProps(props: VNodeProps): VNodeProps {
+        const result = {};
+        for (const propName in props) {
+            if (props.hasOwnProperty(propName)) {
+                result[camelize(propName)] = props[propName];
+            }
+        }
+        return result;
 }
 
 export function configurationChildren(component): VNode[] {
@@ -77,14 +88,8 @@ export function mount(options, parent, el) {
 }
 
 export function usedProps(component: ComponentPublicInstance): VNodeProps {
-        const props = component.$.vnode.props;
-        const result = {};
-        for (const propName in props) {
-            if (props.hasOwnProperty(propName)) {
-                result[camelize(propName)] = props[propName];
-            }
-        }
-        return result;
+        const props = component.$.vnode.props || {};
+        return getNormalizedProps(props);
     }
 
 export function usedConfigurationProps(node: VNode): VNodeProps | null {
