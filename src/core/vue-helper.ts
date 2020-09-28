@@ -86,7 +86,7 @@ export function mount(options, parent, el) {
     return template.mount(el);
 }
 
-export function usedProps(component: ComponentPublicInstance): VNodeProps {
+export function getComponentProps(component: ComponentPublicInstance): VNodeProps {
         const props = component.$.vnode.props || {};
         return getNormalizedProps(props);
     }
