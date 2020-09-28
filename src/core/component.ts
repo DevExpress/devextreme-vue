@@ -3,7 +3,7 @@ import { ComponentPublicInstance, defineComponent, h, VNode } from "vue";
 
 import * as events from "devextreme/events";
 
-import { defaultSlots, getChildren, getComponentInstance, getExtension, usedProps } from "./vue-helper";
+import { defaultSlots, getChildren, getComponentInstance, getComponentProps, getExtension } from "./vue-helper";
 
 import { pullAllChildren } from "./children-processing";
 import Configuration, { bindOptionWatchers, setEmitOptionChangedFunc } from "./configuration";
@@ -119,7 +119,7 @@ function initBaseComponent() {
 
         created(): void {
             const thisComponent = this as any as IBaseComponent;
-            const props = usedProps(this);
+            const props = getComponentProps(this);
             thisComponent.$_config = new Configuration(
                 (n: string, v: any) => { thisComponent.$_pendingOptions[n] = v; },
                 null,
@@ -154,7 +154,7 @@ function initBaseComponent() {
 
                 const config = thisComponent.$_config;
                 const options: object = {
-                    ...usedProps(thisComponent),
+                    ...getComponentProps(thisComponent),
                     ...config.initialValues,
                     ...config.getNestedOptionValues(),
                     ...this.$_getIntegrationOptions()

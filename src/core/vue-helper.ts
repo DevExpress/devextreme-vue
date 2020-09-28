@@ -30,7 +30,6 @@ export function getExtension(component: VNode) {
     return vNode;
 }
 
-
 export function getComponentInfo(component): IConfigurationComponent {
     const options = getConfigurationOptions(component);
     return options.data && options.data();
