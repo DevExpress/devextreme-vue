@@ -32,8 +32,8 @@ import ExampleBlock from "./example-block";
 import { DxMap, DxMarker, DxLocation, DxTooltip, DxRoute } from "../../src/map";
 
 const startPos = {
-  lat: 40.71,
-  lng: -73.91
+  lat: 40.71000,
+  lng: -73.91000
 };
 
 export default {

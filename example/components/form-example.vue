@@ -38,7 +38,7 @@
         dataField="Phone"
         :editorOptions="{
           mask: '+1 (X00) 000-0000',
-          maskRules: { X: /[02-9]/ },
+          maskRules: { X: /[02-9]/ }
         }"
       />
     </dx-form>
@@ -62,7 +62,7 @@ const employee = {
   HireDate: "1995/01/15",
   Notes: "John has been in the Audio/Video industry since 1990. He has led DevAv as its CEO since 2003.",
   Address: "351 S Hill St., Los Angeles, CA",
-  Phone: "360-684-1334",
+  Phone: "360-684-1334"
 };
 
 export default {
