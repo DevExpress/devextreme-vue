@@ -26,6 +26,8 @@
   <tab-panel-example/>
   <br/>
   <text-box-example/>
+  <br/>
+  <validator-example/>
 </template>
 
 <script>
@@ -43,6 +45,7 @@ import SchedulerExample from "./components/scheduler-example";
 import ScrollViewExample from "./components/scroll-view-example";
 import TabPanelExample from "./components/tab-panel-example";
 import TextBoxExample from "./components/text-box-example";
+import ValidatorExample from "./components/validation-example";
 
 export default {
   components: {
@@ -59,7 +62,8 @@ export default {
     SchedulerExample,
     ScrollViewExample,
     TabPanelExample,
-    TextBoxExample
+    TextBoxExample,
+    ValidatorExample
   }
 };
 </script>
