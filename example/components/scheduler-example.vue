@@ -1,14 +1,14 @@
 <template>
-    <example-block title="dxScheduler">
-        <dx-scheduler 
-            currentView="week"
-            :dataSource="appointments"
-            :height="400"
-            :currentDate="currentDate"
-            :startDayHour="9"
-            :views="['month', 'week', 'day']"
-        />
-    </example-block>
+  <example-block title="dxScheduler">
+    <dx-scheduler
+      currentView="week"
+      :dataSource="appointments"
+      :height="400"
+      :currentDate="currentDate"
+      :startDayHour="9"
+      :views="['month', 'week', 'day']"
+    />
+  </example-block>
 </template>
 
 <script>
@@ -21,7 +21,7 @@ export default {
     ExampleBlock,
     DxScheduler
   },
-  data: function() {
+  data() {
     return {
       appointments: appointments,
       currentDate: new Date(2017, 4, 25)

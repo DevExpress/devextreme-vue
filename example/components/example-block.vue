@@ -1,8 +1,8 @@
 <template>
   <div>
-      <h4 class="example-title" >{{title}}</h4>
-      <pre v-if="stateStr">{{stateStr}}</pre>
-      <slot/>
+    <h4 class="example-title">{{ title }}</h4>
+    <pre v-if="stateStr">{{ stateStr }}</pre>
+    <slot />
   </div>
 </template>
 
@@ -12,11 +12,11 @@ export default {
     title: String,
     state: Object
   },
-  data: function() {
+  data() {
     return { a: 1 };
   },
   computed: {
-    stateStr: function() {
+    stateStr: function () {
       return JSON.stringify(this.state, null, "  ");
     }
   }

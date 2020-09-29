@@ -1,74 +1,43 @@
 <template>
-    <example-block title="dxList">
-        <h4>List of simple items</h4>
-        <dx-list :items="simpleData" />
-        <br/>
-        <dx-text-box v-model="item"/>
-        <dx-button text="Add" @click="add"/>
-
-        <h4>List with item template</h4>
-        <dx-list :items="listData">
-            <template #item="{ data, index }">
-                <div>{{index + 1}} - <i>{{data.day}}</i></div>
-            </template>
-            <template #weekend>
-                <b>No templates on weekend</b>
-            </template>
-        </dx-list>
-        <br/>
-
-        <h4>List with item template (vue < 2.6.0)</h4>
-        <dx-list :items="listData">
-            <div slot="item" slot-scope="{ data, index }">
-                {{index + 1}} - <i>{{data.day}}</i>
-            </div>
-            <div slot="weekend">
-                <b>No templates on weekend</b>
-            </div>
-        </dx-list>
-        <br/>
-        
-        <h4>List with static items (vue < 2.6.0)</h4>
-        <dx-list>
-            <dx-item>
-                <div slot-scope="_">1</div>
-            </dx-item>
-            <dx-item>
-                <div slot-scope="_">2</div>
-            </dx-item>
-            <dx-item>
-                <div slot-scope="_">3 - <i>third</i></div>
-            </dx-item>
-        </dx-list>
-
-        <h4>List with static items</h4>
-        <dx-list>
-            <dx-item>
-                <template #default>1</template>
-            </dx-item>
-            <dx-item>
-                <template #default>2</template>
-            </dx-item>
-            <dx-item>
-                <template #default><span>3 - <i>third</i></span></template>
-            </dx-item>
-        </dx-list>
-
-        <h4>List with several templates</h4>
-        <dx-list 
-          itemTemplate="weekday"
-          :items="listData"
-        >
-            <template #weekday="{ data }">
-                <s>{{data.day}}</s>
-            </template>
-            <template #weekend="{ data }">
-                <b>{{data.day}}</b>
-            </template>
-        </dx-list>
-        <br/>
-        <dx-button text="Toggle Weekend" @click="toggleWeekend"/>
-    </example-block>
+  <example-block title="dxList">
+    <h4>List of simple items</h4>
+    <dx-list :items="simpleData" />
+    <br />
+    <dx-text-box v-model="item" />
+    <dx-button text="Add" @click="add" />
+    <h4>List with item template</h4>
+    <dx-list :items="listData">
+      <template #item="{ data, index }">
+        <div>{{ index + 1 }} - <i>{{ data.day }}</i></div>
+      </template>
+      <template #weekend>
+        <b>No templates on weekend</b>
+      </template>
+    </dx-list>
+    <br />
+    <h4>List with static items</h4>
+    <dx-list>
+      <dx-item>1</dx-item>
+      <dx-item>2</dx-item>
+      <dx-item>
+        <template>3 - <i>third</i></template>
+      </dx-item>
+    </dx-list>
+    <h4>List with several templates</h4>
+    <dx-list
+    itemTemplate="weekday"
+    :items="listData"
+    >
+      <template #weekday="{ data }">
+        <s>{{ data.day }}</s>
+      </template>
+      <template #weekend="{ data }">
+        <b>{{ data.day }}</b>
+      </template>
+    </dx-list>
+    <br />
+    <dx-button text="Toggle Weekend" @click="toggleWeekend" />
+  </example-block>
 </template>
 
 <script>
@@ -85,7 +54,7 @@ export default {
     DxItem,
     DxTextBox
   },
-  data: function() {
+  data: function () {
     return {
       item: "",
       simpleData: [1, 2, 3, 4],
@@ -93,16 +62,16 @@ export default {
     };
   },
   methods: {
-      add() {
-          if (this.item) {
-            this.simpleData.push(this.item)
-            this.item = "";
-          }
-      },
-      toggleWeekend() {
-          this.listData[5].disabled = !this.listData[5].disabled;
-          this.listData[6].disabled = !this.listData[6].disabled;
+    add() {
+      if (this.item) {
+        this.simpleData.push(this.item);
+        this.item = "";
       }
+    },
+    toggleWeekend() {
+      this.listData[5].disabled = !this.listData[5].disabled;
+      this.listData[6].disabled = !this.listData[6].disabled;
+    }
   }
 };
 </script>
