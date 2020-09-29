@@ -27,7 +27,7 @@
     />
     <h5 class="text-box-label">@focusIn (clears text)</h5>
     <dx-text-box
-    v-model="text"
+    v-model:value="text"
     @focusIn="text = ''"
     valueChangeEvent="input" />
     <h5 class="text-box-label">Validation (Required)</h5>

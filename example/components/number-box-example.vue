@@ -1,6 +1,6 @@
 <template>
   <example-block title="dxNumberBox">
-    <dx-number-box :min="0" :max="200" v-model="value" format="$ #0.##" />
+    <dx-number-box :min="0" :max="200" v-model:value="value" format="$ #0.##" />
     This is {{ value }}
   </example-block>
 </template>

@@ -3,6 +3,14 @@
     <dx-button
     text="click me"
     v-on:click="greet" />
+    <dx-button
+    text="I'm colored"
+    :elementAttr="buttonAttrs"
+    />
+    <dx-button
+    text="I'm dangerous"
+    type="danger"
+    />
   </example-block>
 </template>
 
@@ -14,6 +22,11 @@ export default {
   components: {
     ExampleBlock,
     DxButton
+  },
+  data: function() {
+    return {
+      buttonAttrs: { style: 'background-color: #ffc' }
+      }
   },
   methods: {
     greet: function () {

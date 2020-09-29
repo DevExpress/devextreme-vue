@@ -3,7 +3,7 @@
     <h4>List of simple items</h4>
     <dx-list :items="simpleData" />
     <br />
-    <dx-text-box v-model="item" />
+    <dx-text-box v-model:value="item" />
     <dx-button text="Add" @click="add" />
     <h4>List with item template</h4>
     <dx-list :items="listData">
