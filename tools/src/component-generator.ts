@@ -222,28 +222,6 @@ L0 + `});\n` +
     `\n` +
     `<#~ it.nestedComponents : nested #>` +
         `const <#= nested.name #> = <#= it.configComponent #>({` +
-        L1 + `data() {` +
-            L2 + `return {` +
-                L3 + `$_optionName: "<#= nested.optionName #>",` +
-                `<#? nested.isCollectionItem #>` +
-                L3 + `$_isCollectionItem: true,` +
-                `<#?#>` +
-                `<#? nested.predefinedProps #>` +
-                L3 + `$_predefinedProps: {` +
-                `<#~ nested.predefinedProps : prop #>` +
-                    L4 + `<#= prop.name #>: "<#= prop.value #>",` +
-                `<#~#>` + `\b` +
-                L3 + `},` +
-                `<#?#>` +
-                `<#? nested.expectedChildren #>` +
-                L3 + `$_expectedChildren: {` +
-                    `<#~ nested.expectedChildren : child #>` +
-                    L4 + `<#= child.name #>: { isCollectionItem: <#= child.isCollectionItem #>, optionName: "<#= child.optionName #>" },` +
-                    `<#~#>` + `\b` +
-                L3 + `}` +
-            `<#?#>` +
-            L2 + `};` +
-        L1 + `},` +
         `<#? nested.props #>` +
         L1 + `emits: {` +
                 L2 + `"update:isActive": null,` +
@@ -257,6 +235,27 @@ L0 + `});\n` +
         `<#= nested.renderedProps #>` +
         L1 + `}\n` +
         `});\n` +
+        `(<#= nested.name #> as any).$_optionName = "<#= nested.optionName #>";\n` +
+
+        `<#? nested.isCollectionItem #>` +
+            `(<#= nested.name #> as any).$_isCollectionItem = true;\n` +
+        `<#?#>` +
+
+        `<#? nested.predefinedProps #>` +
+            `(<#= nested.name #> as any).$_predefinedProps = {` +
+            `<#~ nested.predefinedProps : prop #>` +
+                L1 + `<#= prop.name #>: "<#= prop.value #>",` +
+            `<#~#>` + `\b\n` +
+            `};\n` +
+        `<#?#>` +
+
+        `<#? nested.expectedChildren #>` +
+            `(<#= nested.name #> as any).$_expectedChildren = {` +
+            `<#~ nested.expectedChildren : child #>` +
+                L1 + `<#= child.name #>: { isCollectionItem: <#= child.isCollectionItem #>, optionName: "<#= child.optionName #>" },` +
+            `<#~#>` + `\b\n` +
+            `};\n` +
+        `<#?#>` +
     `<#~#>` +
 `<#?#>` +
 `\n` +
