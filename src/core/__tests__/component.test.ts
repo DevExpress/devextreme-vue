@@ -1212,8 +1212,8 @@ describe("component rendering", () => {
             const component1 = wrapper.getComponent("#component1");
             const component2 = wrapper.getComponent("#component2");
 
-            expect((component1.vm as any).$_config._initialValues.prop[0]).toEqual({"type": "required"});
-            expect((component2.vm as any).$_config._initialValues.prop[0]).toEqual({"type": "email"});
+            expect((component1.vm as any).$_config._initialValues.prop[0]).toEqual({type: "required"});
+            expect((component2.vm as any).$_config._initialValues.prop[0]).toEqual({type: "email"});
         });
 
         it("should remove extension component from dom", () => {
