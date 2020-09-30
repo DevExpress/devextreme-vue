@@ -31,8 +31,7 @@ export function getExtension(component: VNode) {
 }
 
 export function getComponentInfo(component): IConfigurationComponent {
-    const options = getConfigurationOptions(component);
-    return options.data && options.data();
+    return getConfigurationOptions(component);
 }
 
 export function getComponentInstance(component) {
@@ -140,7 +139,7 @@ function hasInlineTemplate(children: VNode[]): boolean {
 }
 
 function isConfiguration(child): boolean {
-    return child.type && typeof child.type === "object" && (child.type as any).data().$_optionName;
+    return child.type && typeof child.type === "object" && (child.type as any).$_optionName;
 }
 
 export function getConfigurationOptions(node: VNode): any {

@@ -3,7 +3,7 @@ import * as events from "devextreme/events";
 import { defineComponent, nextTick } from "vue";
 
 import { IWidgetComponent } from "../component";
-import { IConfigurable } from "../configuration-component";
+import { IConfigurable, IConfigurationComponent } from "../configuration-component";
 import { createComponent, createConfigurationComponent, createExtensionComponent } from "../index";
 
 const eventHandlers = {};
@@ -60,11 +60,8 @@ function skipIntegrationOptions(options: {
     return result;
 }
 
-function buildTestConfigCtor(options): any {
+function buildTestConfigCtor(): any {
     return createConfigurationComponent({
-        data() {
-            return options;
-        },
         props: {
             prop1: Number,
             prop2: String,
@@ -157,7 +154,8 @@ describe("component rendering", () => {
 
     describe("configuration", () => {
 
-        const Nested = buildTestConfigCtor({ $_optionName: "nestedOption" });
+        const Nested = buildTestConfigCtor();
+        (Nested as any as IConfigurationComponent).$_optionName = "nestedOption";
 
         it("creates configuration", () => {
             const wrapper = mount(TestComponent);
@@ -200,10 +198,9 @@ describe("component rendering", () => {
         });
 
         it("initializes nested config (collectionItem)", () => {
-            const nestedCollectionItem = buildTestConfigCtor(
-                { $_optionName: "nestedOption",
-                $_isCollectionItem: true
-            });
+            const nestedCollectionItem = buildTestConfigCtor();
+            (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
+            (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
             const vm = defineComponent({
                 template:
@@ -228,10 +225,10 @@ describe("component rendering", () => {
         });
 
         it("initializes nested config (several collectionItems)", () => {
-            const nestedCollectionItem = buildTestConfigCtor({
-                $_optionName: "nestedOption",
-                $_isCollectionItem: true
-            });
+            debugger;
+            const nestedCollectionItem = buildTestConfigCtor();
+            (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
+            (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
             const vm = defineComponent({
                 template:
@@ -271,10 +268,9 @@ describe("component rendering", () => {
         });
 
         it("initializes nested config (using v-for)", () => {
-            const nestedCollectionItem = buildTestConfigCtor({
-                $_optionName: "nestedOption",
-                $_isCollectionItem: true
-            });
+            const nestedCollectionItem = buildTestConfigCtor();
+            (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
+            (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
             const vm = defineComponent({
                 template:
@@ -318,9 +314,11 @@ describe("component rendering", () => {
 
         it("initializes nested config predefined prop", () => {
             const predefinedValue = {};
-            const NestedWithPredefined = buildTestConfigCtor({ $_optionName: "nestedOption", $_predefinedProps: {
+            const NestedWithPredefined = buildTestConfigCtor();
+            (NestedWithPredefined as any as IConfigurationComponent).$_optionName = "nestedOption";
+            (NestedWithPredefined as any as IConfigurationComponent).$_predefinedProps = {
                 predefinedProp: predefinedValue
-            } });
+            };
 
             const vm = defineComponent({
                 template:
@@ -343,7 +341,8 @@ describe("component rendering", () => {
         });
 
         it("initializes sub-nested config", () => {
-            const subNested = buildTestConfigCtor({ $_optionName: "subNestedOption" });
+            const subNested = buildTestConfigCtor();
+            (subNested as any as IConfigurationComponent).$_optionName = "subNestedOption";
 
             const vm = defineComponent({
                 template:
@@ -374,7 +373,9 @@ describe("component rendering", () => {
         });
 
         it("initializes sub-nested config (collectionItem)", () => {
-            const subNested = buildTestConfigCtor({ $_optionName: "subNestedOption", $_isCollectionItem: true });
+            const subNested = buildTestConfigCtor();
+            (subNested as any as IConfigurationComponent).$_optionName = "subNestedOption";
+            (subNested as any as IConfigurationComponent).$_isCollectionItem = true;
 
             const vm = defineComponent({
                 template:
@@ -406,10 +407,9 @@ describe("component rendering", () => {
         });
 
         it("initializes sub-nested config (multiple collectionItems)", () => {
-            const nestedCollectionItem = buildTestConfigCtor({
-                $_optionName: "subNestedOption",
-                $_isCollectionItem: true
-            });
+            const nestedCollectionItem = buildTestConfigCtor();
+            (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "subNestedOption";
+            (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
             const vm = defineComponent({
                 template:
@@ -473,10 +473,9 @@ describe("component rendering", () => {
 
             it("initialized for config component", () => {
                 const expected = {};
-                const ConfigComponent = buildTestConfigCtor({
-                    $_optionName: "nestedOption",
-                    $_expectedChildren: expected
-                });
+                const ConfigComponent = buildTestConfigCtor();
+                (ConfigComponent as any as IConfigurationComponent).$_optionName = "nestedOption";
+                (ConfigComponent as any as IConfigurationComponent).$_expectedChildren = expected;
 
                 const vm = defineComponent({
                     template:
@@ -500,7 +499,8 @@ describe("component rendering", () => {
 
     describe("nested option", () => {
 
-        const Nested = buildTestConfigCtor({ $_optionName: "nestedOption" });
+        const Nested = buildTestConfigCtor();
+        (Nested as any as IConfigurationComponent).$_optionName = "nestedOption";
 
         it("pulls initital values", () => {
             const vm = defineComponent({
@@ -583,10 +583,9 @@ describe("component rendering", () => {
         });
 
         it("remove nested component by condition", (done) => {
-            const nestedCollectionItem = buildTestConfigCtor({
-                $_optionName: "nestedOption",
-                $_isCollectionItem: true
-            });
+            const nestedCollectionItem = buildTestConfigCtor();
+            (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
+            (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
             const vm = defineComponent({
                 template:
                     `<test-component>` +
@@ -616,10 +615,9 @@ describe("component rendering", () => {
         });
 
         it("should update only part of collection components", (done) => {
-            const nestedCollectionItem = buildTestConfigCtor({
-                $_optionName: "nestedOption",
-                $_isCollectionItem: true
-            });
+            const nestedCollectionItem = buildTestConfigCtor();
+            (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
+            (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
             const vm = defineComponent({
                 template:
                     `<test-component>` +
@@ -656,10 +654,9 @@ describe("component rendering", () => {
         });
 
         it("should update only part of collection components (remove all subnested)", (done) => {
-            const nestedCollectionItem = buildTestConfigCtor({
-                $_optionName: "nestedOption",
-                $_isCollectionItem: true
-            });
+            const nestedCollectionItem = buildTestConfigCtor();
+            (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
+            (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
             const vm = defineComponent({
                 template:
                     `<test-component>` +
@@ -925,17 +922,13 @@ describe("component rendering", () => {
         describe("static items", () => {
             it("passes integrationOptions to widget", () => {
                 const NestedItem = createConfigurationComponent({
-                    data() {
-                        return {
-                            $_optionName: "items",
-                            $_isCollectionItem: true
-                        };
-                    },
                     props: {
                         prop1: Number,
                         template: String
                     }
                 });
+                (NestedItem as any as IConfigurationComponent).$_optionName = "items";
+                (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
                 const vm = defineComponent({
                     template: `<test-component>
@@ -964,17 +957,13 @@ describe("component rendering", () => {
 
             it("passes node of nested component as template", () => {
                 const NestedItem = createConfigurationComponent({
-                    data() {
-                        return {
-                            $_optionName: "items",
-                            $_isCollectionItem: true
-                        };
-                    },
                     props: {
                         prop1: Number,
                         template: String
                     }
                 });
+                (NestedItem as any as IConfigurationComponent).$_optionName = "items";
+                (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
                 const vm = defineComponent({
                     template: `<test-component>
@@ -997,17 +986,13 @@ describe("component rendering", () => {
 
             it("passes node of nested component as template (exclude nested component)", () => {
                 const NestedItem = createConfigurationComponent({
-                    data() {
-                        return {
-                            $_optionName: "items",
-                            $_isCollectionItem: true
-                        };
-                    },
                     props: {
                         prop1: Number,
                         template: String
                     }
                 });
+                (NestedItem as any as IConfigurationComponent).$_optionName = "items";
+                (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
                 const vm = defineComponent({
                     template: `<test-component>
@@ -1031,17 +1016,13 @@ describe("component rendering", () => {
 
             it("passes node of nested component as template (tree of components)", () => {
                 const NestedItem = createConfigurationComponent({
-                    data() {
-                        return {
-                            $_optionName: "items",
-                            $_isCollectionItem: true
-                        };
-                    },
                     props: {
                         prop1: Number,
                         template: String
                     }
                 });
+                (NestedItem as any as IConfigurationComponent).$_optionName = "items";
+                (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
                 const vm = defineComponent({
                     template: `<test-component>
@@ -1069,16 +1050,12 @@ describe("component rendering", () => {
 
             it("doesn't pass integrationOptions to widget if template prop is absent", () => {
                 const NestedItem = createConfigurationComponent({
-                    data() {
-                        return {
-                            $_optionName: "items",
-                            $_isCollectionItem: true
-                        };
-                    },
                     props: {
                         prop1: Number
                     }
                 });
+                (NestedItem as any as IConfigurationComponent).$_optionName = "items";
+                (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
                 const vm = defineComponent({
                     template: `<test-component>
@@ -1102,16 +1079,12 @@ describe("component rendering", () => {
 
             it("renders template containing text only (vue 3)", () => {
                 const NestedItem = createConfigurationComponent({
-                    data() {
-                        return {
-                            $_optionName: "item"
-                        };
-                    },
                     props: {
                         prop1: Number,
                         template: String
                     }
                 });
+                (NestedItem as any as IConfigurationComponent).$_optionName = "item";
 
                 const wrapper =  defineComponent({
                     template: `<test-component>
@@ -1134,19 +1107,16 @@ describe("component rendering", () => {
 
             it("doesn't pass integrationOptions to widget if nested item has sub nested item", () => {
                 const NestedItem = createConfigurationComponent({
-                    data() {
-                        return {
-                            $_optionName: "items",
-                            $_isCollectionItem: true
-                        };
-                    },
                     props: {
                         prop1: Number,
                         template: String
                     }
                 });
+                (NestedItem as any as IConfigurationComponent).$_optionName = "items";
+                (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
-                const subNested = buildTestConfigCtor({ $_optionName: "subNestedOption" });
+                const subNested = buildTestConfigCtor();
+                (subNested as any as IConfigurationComponent).$_optionName = "subNestedOption";
 
                 const vm = defineComponent({
                     template: `<test-component>

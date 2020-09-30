@@ -74,7 +74,7 @@ function clearConfiguration(content: VNode[]) {
     const newContent: VNode[] = [];
     content.forEach((item) => {
         const configurable = getConfigurationOptions(item);
-        if (!configurable || !(configurable.data && configurable.data().$_optionName)) {
+        if (!configurable || !configurable.$_optionName) {
             newContent.push(item);
         }
     });
