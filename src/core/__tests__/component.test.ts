@@ -225,7 +225,6 @@ describe("component rendering", () => {
         });
 
         it("initializes nested config (several collectionItems)", () => {
-            debugger;
             const nestedCollectionItem = buildTestConfigCtor();
             (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
             (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
