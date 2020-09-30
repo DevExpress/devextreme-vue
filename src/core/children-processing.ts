@@ -24,7 +24,7 @@ function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Co
         if (!node) { return; }
 
         const componentInfo = getComponentInfo(node) as any as IConfigurationComponent;
-        if (!componentInfo) { return; }
+        if (!componentInfo || !componentInfo.$_optionName) { return; }
 
         const componentChildren = configurationChildren(node);
         const initialValues = {
