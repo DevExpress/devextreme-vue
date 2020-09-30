@@ -25,8 +25,6 @@ export function getChildren(component: IBaseComponent): any {
 export function getExtension(component: VNode) {
     const vNode = getConfigurationOptions(component);
     if (!vNode.$_isExtension) { return; }
-
-    vNode.attachTo = vNode.$_componentInstance.attachTo;
     return vNode;
 }
 
