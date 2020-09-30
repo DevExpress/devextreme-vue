@@ -1,37 +1,46 @@
 <template>
-    <example-block title="dxTabPanel">
-        <dx-tab-panel :items="tabs">
-            <template #tab1>
-                <h3>First Tab Content</h3>
-            </template>
-            <template #tab2>
-                <async-component/>
-            </template>
-        </dx-tab-panel>
-    </example-block>
+  <example-block title="dxTabPanel">
+    <dx-tab-panel :items="tabs">
+      <template #tab1>
+        <h3>First Tab Content</h3>
+      </template>
+      <template #tab2>
+        <async-comp />
+      </template>
+    </dx-tab-panel>
+  </example-block>
 </template>
 
 <script>
-import Vue from "vue";
+import Vue, { defineAsyncComponent } from "vue";
 import ExampleBlock from "./example-block";
 import { DxTabPanel } from "../../src";
 
-const SecondTabComponent = Vue.extend({
-    template: "<h3>Second Tab Content</h3>"
-});
+const SecondTabComponent = {
+  extends: "<h3>Second Tab Content</h3>"
+};
+
+const AsyncComp = defineAsyncComponent(
+  () =>
+    new Promise((resolve, reject) => {
+      resolve({
+        template: "<div>I am async!</div>"
+      });
+    })
+);
 
 export default {
   components: {
     ExampleBlock,
     DxTabPanel,
-    AsyncComponent: () => Promise.resolve(SecondTabComponent)
+    AsyncComp
   },
-  data: function() {
+  data: function () {
     return {
-        tabs: [
-          { title:"Sync Tab", template:"tab1" },
-          { title:"Async Tab", template:"tab2" }
-        ]
+      tabs: [
+        { title: "Sync Tab", template: "tab1" },
+        { title: "Async Tab", template: "tab2" }
+      ]
     };
   }
 };

@@ -1,3 +1,5 @@
+const { VueLoaderPlugin } = require('vue-loader');
+
 module.exports = {
     entry: "./example/main.ts",
     output: {
@@ -12,10 +14,10 @@ module.exports = {
     resolve: {
       extensions: [".webpack.js", ".web.js", ".ts", ".vue", ".js"],
       alias: {
-        'vue$': 'vue/dist/vue.esm.js'
+        'vue$': 'vue/dist/vue.cjs.js'
       }
     },
-    mode: 'development',
+    mode: "development",
     module: {
       rules: [
         {
@@ -35,8 +37,10 @@ module.exports = {
           use: {
             loader: "ts-loader",
             options: {
-              transpileOnly: true,
-              appendTsSuffixTo: [/\.vue$/]
+              appendTsSuffixTo: [/\.vue$/],
+              compilerOptions: {
+              "noImplicitAny": false
+              } 
             }
           }
         },
@@ -52,5 +56,8 @@ module.exports = {
           use: "url-loader?name=[name].[ext]"
         }
       ]
-    }
+    },
+    plugins: [
+      new VueLoaderPlugin()
+    ]
   };

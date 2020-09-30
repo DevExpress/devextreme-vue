@@ -1,10 +1,10 @@
 <template>
-    <example-block title="dxChart">
-        <dx-chart 
-            :dataSource="chartData"
-            :series="series"
-        />
-    </example-block>
+  <example-block title="dxChart">
+    <dx-chart
+    :dataSource="chartData"
+    :series="series"
+    />
+  </example-block>
 </template>
 
 <script>
@@ -17,7 +17,7 @@ export default {
     ExampleBlock,
     DxChart
   },
-  data: function() {
+  data() {
     return {
       chartData: orangesByDay,
       series: [
