@@ -198,9 +198,9 @@ describe("component rendering", () => {
         });
 
         it("initializes nested config (collectionItem)", () => {
-            const nestedCollectionItem = buildTestConfigCtor();
-            (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
-            (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+            const NestedCollectionItem = buildTestConfigCtor();
+            (NestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
+            (NestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
             const vm = defineComponent({
                 template:
@@ -209,7 +209,7 @@ describe("component rendering", () => {
                     `</test-component>`,
                 components: {
                     TestComponent,
-                    nestedCollectionItem
+                    NestedCollectionItem
                 }
             });
 
@@ -225,9 +225,9 @@ describe("component rendering", () => {
         });
 
         it("initializes nested config (several collectionItems)", () => {
-            const nestedCollectionItem = buildTestConfigCtor();
-            (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
-            (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+            const NestedCollectionItem = buildTestConfigCtor();
+            (NestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
+            (NestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
             const vm = defineComponent({
                 template:
@@ -238,7 +238,7 @@ describe("component rendering", () => {
                     `</test-component>`,
                 components: {
                     TestComponent,
-                    nestedCollectionItem
+                    NestedCollectionItem
                 }
             });
 
@@ -267,9 +267,9 @@ describe("component rendering", () => {
         });
 
         it("initializes nested config (using v-for)", () => {
-            const nestedCollectionItem = buildTestConfigCtor();
-            (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
-            (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+            const NestedCollectionItem = buildTestConfigCtor();
+            (NestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
+            (NestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
             const vm = defineComponent({
                 template:
@@ -283,7 +283,7 @@ describe("component rendering", () => {
                 },
                 components: {
                     TestComponent,
-                    nestedCollectionItem
+                    NestedCollectionItem
                 }
             });
 
@@ -340,8 +340,8 @@ describe("component rendering", () => {
         });
 
         it("initializes sub-nested config", () => {
-            const subNested = buildTestConfigCtor();
-            (subNested as any as IConfigurationComponent).$_optionName = "subNestedOption";
+            const SubNested = buildTestConfigCtor();
+            (SubNested as any as IConfigurationComponent).$_optionName = "subNestedOption";
 
             const vm = defineComponent({
                 template:
@@ -353,7 +353,7 @@ describe("component rendering", () => {
                 components: {
                     TestComponent,
                     Nested,
-                    subNested
+                    SubNested
                 }
             });
 
@@ -372,9 +372,9 @@ describe("component rendering", () => {
         });
 
         it("initializes sub-nested config (collectionItem)", () => {
-            const subNested = buildTestConfigCtor();
-            (subNested as any as IConfigurationComponent).$_optionName = "subNestedOption";
-            (subNested as any as IConfigurationComponent).$_isCollectionItem = true;
+            const SubNested = buildTestConfigCtor();
+            (SubNested as any as IConfigurationComponent).$_optionName = "subNestedOption";
+            (SubNested as any as IConfigurationComponent).$_isCollectionItem = true;
 
             const vm = defineComponent({
                 template:
@@ -386,7 +386,7 @@ describe("component rendering", () => {
                 components: {
                     TestComponent,
                     Nested,
-                    subNested
+                    SubNested
                 }
             });
 
@@ -406,9 +406,9 @@ describe("component rendering", () => {
         });
 
         it("initializes sub-nested config (multiple collectionItems)", () => {
-            const nestedCollectionItem = buildTestConfigCtor();
-            (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "subNestedOption";
-            (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+            const NestedCollectionItem = buildTestConfigCtor();
+            (NestedCollectionItem as any as IConfigurationComponent).$_optionName = "subNestedOption";
+            (NestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
             const vm = defineComponent({
                 template:
@@ -422,7 +422,7 @@ describe("component rendering", () => {
                 components: {
                     TestComponent,
                     Nested,
-                    nestedCollectionItem
+                    NestedCollectionItem
                 }
             });
 
@@ -582,9 +582,9 @@ describe("component rendering", () => {
         });
 
         it("remove nested component by condition", (done) => {
-            const nestedCollectionItem = buildTestConfigCtor();
-            (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
-            (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+            const NestedCollectionItem = buildTestConfigCtor();
+            (NestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
+            (NestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
             const vm = defineComponent({
                 template:
                     `<test-component>` +
@@ -593,7 +593,7 @@ describe("component rendering", () => {
                     `</test-component>`,
                 components: {
                     TestComponent,
-                    nestedCollectionItem
+                    NestedCollectionItem
                 },
                 props: {
                     show: {
@@ -614,9 +614,9 @@ describe("component rendering", () => {
         });
 
         it("should update only part of collection components", (done) => {
-            const nestedCollectionItem = buildTestConfigCtor();
-            (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
-            (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+            const NestedCollectionItem = buildTestConfigCtor();
+            (NestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
+            (NestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
             const vm = defineComponent({
                 template:
                     `<test-component>` +
@@ -631,7 +631,7 @@ describe("component rendering", () => {
                     `</test-component>`,
                 components: {
                     TestComponent,
-                    nestedCollectionItem
+                    NestedCollectionItem
                 },
                 props: {
                     show: {
@@ -653,9 +653,9 @@ describe("component rendering", () => {
         });
 
         it("should update only part of collection components (remove all subnested)", (done) => {
-            const nestedCollectionItem = buildTestConfigCtor();
-            (nestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
-            (nestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+            const NestedCollectionItem = buildTestConfigCtor();
+            (NestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
+            (NestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
             const vm = defineComponent({
                 template:
                     `<test-component>` +
@@ -670,7 +670,7 @@ describe("component rendering", () => {
                     `</test-component>`,
                 components: {
                     TestComponent,
-                    nestedCollectionItem
+                    NestedCollectionItem
                 },
                 props: {
                     show: {
@@ -1114,8 +1114,8 @@ describe("component rendering", () => {
                 (NestedItem as any as IConfigurationComponent).$_optionName = "items";
                 (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
-                const subNested = buildTestConfigCtor();
-                (subNested as any as IConfigurationComponent).$_optionName = "subNestedOption";
+                const SubNested = buildTestConfigCtor();
+                (SubNested as any as IConfigurationComponent).$_optionName = "subNestedOption";
 
                 const vm = defineComponent({
                     template: `<test-component>
@@ -1125,7 +1125,7 @@ describe("component rendering", () => {
                             </test-component>`,
                     components: {
                         TestComponent,
-                        subNested,
+                        SubNested,
                         NestedItem
                     }
                 });
