@@ -1,11 +1,10 @@
-import { ComponentPublicInstance as IVue, defineComponent } from "vue";
+import { defineComponent } from "vue";
 import { IBaseComponent, initBaseComponent } from "./component";
-import { getNodeOptions, getNodeTypeOfComponent } from "./vue-helper";
+import { getNodeOptions } from "./vue-helper";
 
 interface IExtension {
     $_isExtension: boolean;
-    $_componentInstance: IVue;
-    attachTo(element: any);
+    $_attachTo(element: any);
 }
 
 interface IExtensionComponentNode {
@@ -16,10 +15,10 @@ function initDxExtensionComponent() {
     return defineComponent({
         extends: initBaseComponent(),
         created(): void {
-            const nodeOptions = getNodeTypeOfComponent(this);
+            const nodeOptions = getNodeOptions(this);
 
-            nodeOptions.$_isExtension = true;
-            nodeOptions.$_componentInstance = this;
+            (nodeOptions as any as IExtension).$_isExtension = true;
+            (nodeOptions as any as IExtension).$_attachTo = this.attachTo.bind(this);
         },
 
         mounted() {

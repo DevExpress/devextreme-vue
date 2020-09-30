@@ -1141,6 +1141,9 @@ describe("component rendering", () => {
         const TestExtensionComponent = createExtensionComponent({
             beforeCreate() {
                 (this as any as IWidgetComponent).$_WidgetClass = ExtensionWidgetClass;
+            },
+            props: {
+                prop: Array
             }
         });
 
@@ -1189,6 +1192,28 @@ describe("component rendering", () => {
 
             expect(ExtensionWidgetClass).toHaveBeenCalledTimes(1);
             expect(actualElement).toBe(expectedElement);
+        });
+
+        it("should create two different components", () => {
+            const vm = defineComponent({
+                template: `<test-component>
+                                <test-extension-component id="component1" :prop="[{ type: 'required' }]" />
+                            </test-component>
+                            <test-component>
+                                <test-extension-component id="component2" :prop="[{ type: 'email' }]" />
+                            </test-component>`,
+                components: {
+                    TestComponent,
+                    TestExtensionComponent
+                }
+            });
+
+            const wrapper = mount(vm);
+            const component1 = wrapper.getComponent("#component1");
+            const component2 = wrapper.getComponent("#component2");
+
+            expect((component1.vm as any).$_config._initialValues.prop[0]).toEqual({type: "required"});
+            expect((component2.vm as any).$_config._initialValues.prop[0]).toEqual({type: "email"});
         });
 
         it("should remove extension component from dom", () => {
