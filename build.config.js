@@ -1,6 +1,7 @@
 
 module.exports = {
   src: './src/**/*.ts',
+  strategySrc: './vue2-strategy/src',
   ignoredGlobs: ['!./src/**/*.test.ts', '!./src/**/__mocks__/*'],
   generator: {
     src: './tools/src/**/*.ts',
@@ -12,7 +13,7 @@ module.exports = {
   },
   npm: {
     dist: './npm/',
-    strategySrc: './strategy/vue2/npm/*',
+    strategySrc: './vue2-strategy/npm/*',
     strategyDist: './npm/core/strategy/vue2',
     package: 'package.json',
     license: 'LICENSE',

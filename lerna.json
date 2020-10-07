@@ -1,6 +1,6 @@
 {
     "packages": [
-        "strategy/*"
+        "vue2-strategy"
     ],
     "version": "0.0.0"
 }

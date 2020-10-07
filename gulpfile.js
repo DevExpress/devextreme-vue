@@ -22,8 +22,8 @@ const
   GEN_RUN = 'generator.run',
 
   LINT = 'lint',
-
-  COPY_STRATEGY = "copy.strategy",
+  COPY_COMPONENTS = 'copy.components',
+  COPY_STRATEGY = 'copy.strategy',
 
   NPM_CLEAN = 'npm.clean',
   NPM_PACKAGE = 'npm.package',
@@ -32,6 +32,10 @@ const
   NPM_README = 'npm.readme',
   NPM_BUILD = 'npm.build',
   NPM_PACK = 'npm.pack';
+  
+
+gulp.task(COPY_COMPONENTS,
+   (c) => gulp.src(`${config.generatedComponentsDir}/*.ts`).pipe(gulp.dest(config.strategySrc)));
 
 gulp.task(OUTPUTDIR_CLEAN, (c) =>
   del([`${config.generatedComponentsDir}\\*`, `!${config.coreComponentsDir}`], c)
@@ -78,7 +82,8 @@ gulp.task(GEN_RUN, (done) => {
 
 gulp.task(GENERATE, gulp.series(
   gulp.parallel(OLD_OUTPUTDIR_CREATE, GEN_COMPILE),
-  GEN_RUN
+  GEN_RUN,
+  COPY_COMPONENTS
 ));
 
 gulp.task(NPM_PACKAGE,

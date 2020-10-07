@@ -1,6 +1,6 @@
 module.exports = {
     "roots": [
-      "<rootDir>/src"
+      "<rootDir>/src/core"
     ],
     "transform": {
       "^.+\\.(j|t)sx?$": "ts-jest"
@@ -17,6 +17,6 @@ module.exports = {
     ],
     "moduleNameMapper": {
       "^vue$": "vue/dist/vue.common.js",
-      "^@/(.*)$": "<rootDir>/src/$1"
+      "^@/(.*)$": "<rootDir>/src/core/$1"
     }
 };
