@@ -63,14 +63,12 @@ class TemplatesManager {
                     : { data: data.model, index: data.index };
 
                 const container = data.container.get ? data.container.get(0) : data.container;
-                const placeholder = document.createElement("div");
-                container.appendChild(placeholder);
                 const mountedTemplate = mountTemplate(
                     () => this._slots[name],
                     this._component,
                     scopeData,
                     name,
-                    placeholder
+                    container
                 );
 
                 const element = mountedTemplate.$el;
