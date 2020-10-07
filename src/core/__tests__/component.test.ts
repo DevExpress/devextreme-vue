@@ -730,7 +730,6 @@ describe("component rendering", () => {
         });
     }
 
-
     describe("template", () => {
 
         const DX_TEMPLATE_WRAPPER = "dx-template-wrapper";
@@ -883,7 +882,7 @@ describe("component rendering", () => {
                     TestComponent
                 }
             });
-            mount(vm)
+            mount(vm);
             const renderedTemplate = renderItemTemplate(
                 { text: "with data" },
                 { get: () => document.createElement("div") }
