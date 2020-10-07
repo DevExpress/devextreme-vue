@@ -730,6 +730,7 @@ describe("component rendering", () => {
         });
     }
 
+
     describe("template", () => {
 
         const DX_TEMPLATE_WRAPPER = "dx-template-wrapper";
@@ -815,6 +816,27 @@ describe("component rendering", () => {
             });
         });
 
+        it("does not unnecessarily pass 'integrationOptions.templates'", () => {
+            const wrapper = mount(componentWithTemplate, {
+                props: {
+                    renderTemplate: true,
+                    prop1Value: 1
+                }
+            });
+
+            wrapper.setProps({
+                prop1Value: 2
+            });
+
+            wrapper.setProps({
+                prop1Value: 3
+            });
+
+            expect(
+                Widget.option.mock.calls.find((call) => call[0] === "integrationOptions.templates")
+            ).toBeUndefined();
+        });
+
         it("renders", () => {
             const vm = defineComponent({
                 template: `<test-component>
@@ -848,6 +870,45 @@ describe("component rendering", () => {
             mount(vm);
             const renderedTemplate = renderItemTemplate({ text: "with data" }, undefined, 5);
             expect(renderedTemplate.textContent).toContain("Template with data and index 5");
+        });
+
+        it("unwraps container", () => {
+            const vm = defineComponent({
+                template: `<test-component>
+                                <template #item="{ data }">
+                                    <div>Template {{data.text}}</div>
+                                </template>
+                            </test-component>`,
+                components: {
+                    TestComponent
+                }
+            });
+            mount(vm)
+            const renderedTemplate = renderItemTemplate(
+                { text: "with data" },
+                { get: () => document.createElement("div") }
+            );
+
+            expect(renderedTemplate.nodeName).toBe("DIV");
+            expect(renderedTemplate.innerHTML).toBe("Template with data");
+        });
+
+        it("preserves classes", () => {
+            const vm = defineComponent({
+                template: `<test-component>
+                                <template #item="{ data }">
+                                    <div class='custom-class'></div>
+                                </template>
+                            </test-component>`,
+                components: {
+                    TestComponent
+                }
+            });
+
+            mount(vm);
+            const renderedTemplate = renderItemTemplate({});
+
+            expect(renderedTemplate.className).toBe(`custom-class ${DX_TEMPLATE_WRAPPER}`);
         });
 
         it("preserves custom-attrs", () => {
