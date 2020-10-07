@@ -32,7 +32,6 @@ const
   NPM_README = 'npm.readme',
   NPM_BUILD = 'npm.build',
   NPM_PACK = 'npm.pack';
-  
 
 gulp.task(COPY_COMPONENTS,
    (c) => gulp.src(`${config.generatedComponentsDir}/*.ts`).pipe(gulp.dest(config.strategySrc)));
