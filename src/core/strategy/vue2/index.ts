@@ -1,13 +1,11 @@
-export default {
-    createComponent(): any {
-        return;
-    },
+export function createComponent(): any {
+    return;
+}
 
-    createConfigurationComponent(): any {
-        return;
-    },
+export function createConfigurationComponent(): any {
+    return;
+}
 
-    createExtensionComponent(): any {
-        return;
-    }
-};
+export function createExtensionComponent(): any {
+    return;
+}
