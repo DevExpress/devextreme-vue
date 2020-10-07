@@ -14,23 +14,19 @@ function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Co
         nodes.push(node);
         if (!node.componentOptions) { return; }
 
-        const configComponent = node.componentOptions.Ctor as any;
-        const configData = configComponent.options
-            && configComponent.options.data
-            && configComponent.options.data() as any as IConfigurationComponent;
-
-        if (!configData || !configData.$_optionName) { return; }
+        const configComponent = node.componentOptions.Ctor as any as IConfigurationComponent;
+        if (!configComponent.$_optionName) { return; }
 
         const initialValues = {
-            ...configData.$_predefinedProps,
+            ...configComponent.$_predefinedProps,
             ...node.componentOptions.propsData
         };
 
         const config = ownerConfig.createNested(
-            configData.$_optionName,
+            configComponent.$_optionName,
             initialValues,
-            configData.$_isCollectionItem,
-            configData.$_expectedChildren
+            configComponent.$_isCollectionItem,
+            configComponent.$_expectedChildren
         );
 
         (node.componentOptions as any as IConfigurable).$_config = config;
