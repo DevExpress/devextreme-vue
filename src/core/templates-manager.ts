@@ -62,17 +62,20 @@ class TemplatesManager {
                     ? data.model
                     : { data: data.model, index: data.index };
 
+                    const placeholder = document.createElement("div");
+
+
                 const container = data.container.get ? data.container.get(0) : data.container;
                 const mountedTemplate = mountTemplate(
                     () => this._slots[name],
                     this._component,
                     scopeData,
                     name,
-                    container
+                    placeholder
                 );
 
                 const element = mountedTemplate.$el;
-
+                container.appendChild(element);
                 domAdapter.setClass(element, DX_TEMPLATE_WRAPPER_CLASS, true);
 
                 if (element.nodeType === Node.TEXT_NODE) {
