@@ -6,7 +6,7 @@ const header = require('gulp-header');
 const ts = require('gulp-typescript');
 // const tslint = require("gulp-tslint");
 
-const config = require('../../build.config');
+const config = require('./build.config');
 
 const
   CLEAN = 'clean',
@@ -27,7 +27,7 @@ gulp.task(NPM_BUILD, gulp.series(
   CLEAN,
   () => {
     return gulp.src([
-        config.src,
+        config.core,
         ...config.ignoredGlobs
       ])
       .pipe(ts('tsconfig.json'))
@@ -38,7 +38,7 @@ gulp.task(NPM_BUILD, gulp.series(
 gulp.task(NPM_BUILD_WITH_HEADERS, gulp.series(
   NPM_BUILD,
   () => {
-    const pkg = require('../../package.json'),
+    const pkg = require('../package.json'),
         now = new Date(),
         data = {
             pkg: pkg,

@@ -1,7 +1,8 @@
 {
   "name": "devextreme-vue2-strategy",
   "scripts": {
-    "start": "npm run test",
+    "start": "npm run serve",
+    "serve": "webpack-dev-server",
     "clean": "gulp clean",
     "lint": "gulp lint",
     "pack": "npm install && gulp npm.pack",

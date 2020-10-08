@@ -327,6 +327,33 @@ describe("component rendering", () => {
             expect(config.nested[2].collectionItemIndex).toBe(2);
         });
 
+        it("shouldn't add fragment as children (v-for)", () => {
+            const NestedCollectionItem = buildTestConfigCtor();
+            (NestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
+            (NestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+
+            const vm = defineComponent({
+                template:
+                    `<test-component id="component">` +
+                    `  <nested-collection-item v-for="(item, index) in items" :key="index" :prop1="item.value" />` +
+                    `</test-component>`,
+                data() {
+                    return {
+                        items: [{ value: 123 }, { value: 321 }, { value: 432 }]
+                    };
+                },
+                components: {
+                    TestComponent,
+                    NestedCollectionItem
+                }
+            });
+
+            const wrapper = mount(vm);
+
+            const component = wrapper.getComponent("#component").vm;
+            expect(component.$.subTree.children).toHaveLength(3);
+        });
+
         it("initializes nested config predefined prop", () => {
             const predefinedValue = {};
             const NestedWithPredefined = buildTestConfigCtor();
@@ -831,6 +858,27 @@ describe("component rendering", () => {
             });
         });
 
+        it("does not unnecessarily pass 'integrationOptions.templates'", () => {
+            const wrapper = mount(componentWithTemplate, {
+                props: {
+                    renderTemplate: true,
+                    prop1Value: 1
+                }
+            });
+
+            wrapper.setProps({
+                prop1Value: 2
+            });
+
+            wrapper.setProps({
+                prop1Value: 3
+            });
+
+            expect(
+                Widget.option.mock.calls.find((call) => call[0] === "integrationOptions.templates")
+            ).toBeUndefined();
+        });
+
         it("renders", () => {
             const vm = defineComponent({
                 template: `<test-component>
@@ -864,6 +912,45 @@ describe("component rendering", () => {
             mount(vm);
             const renderedTemplate = renderItemTemplate({ text: "with data" }, undefined, 5);
             expect(renderedTemplate.textContent).toContain("Template with data and index 5");
+        });
+
+        it("unwraps container", () => {
+            const vm = defineComponent({
+                template: `<test-component>
+                                <template #item="{ data }">
+                                    <div>Template {{data.text}}</div>
+                                </template>
+                            </test-component>`,
+                components: {
+                    TestComponent
+                }
+            });
+            mount(vm);
+            const renderedTemplate = renderItemTemplate(
+                { text: "with data" },
+                { get: () => document.createElement("div") }
+            );
+
+            expect(renderedTemplate.nodeName).toBe("DIV");
+            expect(renderedTemplate.innerHTML).toBe("Template with data");
+        });
+
+        it("preserves classes", () => {
+            const vm = defineComponent({
+                template: `<test-component>
+                                <template #item="{ data }">
+                                    <div class='custom-class'></div>
+                                </template>
+                            </test-component>`,
+                components: {
+                    TestComponent
+                }
+            });
+
+            mount(vm);
+            const renderedTemplate = renderItemTemplate({});
+
+            expect(renderedTemplate.className).toBe(`custom-class ${DX_TEMPLATE_WRAPPER}`);
         });
 
         it("preserves custom-attrs", () => {

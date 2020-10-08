@@ -12,7 +12,6 @@ import {
 import { ComponentPublicInstance, h, Slot, VNode } from "vue";
 
 import { IBaseComponent } from "./component";
-import { TEMPLATE_MULTIPLE_ROOTS_ERROR } from "./errors";
 
 const TEMPLATE_PROP = "template";
 
@@ -105,9 +104,6 @@ function mountTemplate(
             const content = clearConfiguration(getSlot()(data) as VNode[]);
             if (!content) {
                 return h("div");
-            }
-            if (content.length > 1) {
-                throw new Error(TEMPLATE_MULTIPLE_ROOTS_ERROR);
             }
 
             return content[0];

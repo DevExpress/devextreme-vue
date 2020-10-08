@@ -6,3 +6,4 @@ src/*
 src/index.ts
 tools/bin/
 artifacts/
+vue2-strategy/src/*.ts
