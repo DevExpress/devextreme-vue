@@ -127,8 +127,7 @@ function mapNestedComponent(
 }
 
 function getProps(options: IOption[], customTypes: Record<string, ICustomType>) {
-  const reservedPropNames = ["key"];
-  return options.filter((o) => reservedPropNames.indexOf(o.name) < 0).map((o) => mapProp(o, customTypes));
+  return options.map((o) => mapProp(o, customTypes));
 }
 
 function buildValueRestriction(restrictedTypes) {
@@ -153,7 +152,7 @@ function mapProp(rawOption: IOption, customTypes: Record<string, ICustomType>): 
   const valueRestriction = buildValueRestriction(restrictedTypes);
 
   return {
-    name: rawOption.name,
+    name: rawOption.name === "key" ? "dxKey" : rawOption.name,
     acceptableValues: valueRestriction.acceptableValues,
     types,
     isArray: types && types.length === 1 && types[0] === "Array",

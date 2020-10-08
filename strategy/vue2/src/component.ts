@@ -149,6 +149,11 @@ const BaseComponent = (): VueConstructor<IBaseComponent> => Vue.extend({
                 ...config.getNestedOptionValues(),
                 ...this.$_getIntegrationOptions()
             };
+            
+            if (options["dxKey"]) {
+                options["key"] = options["dxKey"];
+                delete options["dxKey"];
+            }
 
             const instance = new this.$_WidgetClass(element, options);
             thisComponent.$_instance = instance;

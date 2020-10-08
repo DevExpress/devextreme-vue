@@ -160,6 +160,11 @@ function initBaseComponent() {
                     ...this.$_getIntegrationOptions()
                 };
 
+                if ((options as any).dxKey) {
+                    (options as any).key = (options as any).dxKey;
+                    delete (options as any).dxKey;
+                }
+
                 const instance = new thisComponent.$_WidgetClass(element, options);
                 thisComponent.$_instance = instance;
 

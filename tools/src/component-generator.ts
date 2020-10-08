@@ -165,9 +165,15 @@ const renderComponent: (model: {
 `<#? it.props #>` +
     `type AccessibleOptions = Pick<IOptions,` +
     `<#~ it.props: prop #>` +
-        L1 + `"<#= prop.name #>" |` +
+        `<#? prop.name !== "dxKey" #>` +
+            L1 + `"<#= prop.name #>" |` +
+        `<#?#>` +
     `<#~#>` +
-    `\b\b` + `\n>;\n` +
+    `\b\b` + `\n>` +
+    `<#? prop = it.props.find((el)=>el.name === "dxKey") #>` +
+        ` & {<#= prop.name#>?: [<#= prop.types.map((el)=>el.toLowerCase()).join(" , ")#>]}` +
+    `<#?#>;` +
+    `\n` +
     `\n` +
 `<#?#>` +
 
