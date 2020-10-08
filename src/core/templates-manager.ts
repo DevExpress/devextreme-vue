@@ -62,9 +62,7 @@ class TemplatesManager {
                     ? data.model
                     : { data: data.model, index: data.index };
 
-                    const placeholder = document.createElement("div");
-
-
+                const placeholder = document.createElement("div");
                 const container = data.container.get ? data.container.get(0) : data.container;
                 const mountedTemplate = mountTemplate(
                     () => this._slots[name],
