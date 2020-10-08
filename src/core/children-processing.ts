@@ -20,7 +20,7 @@ function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Co
         if (isFragment(node) && Array.isArray(node.children)) {
             pullConfigComponents(node.children as any as VNode[], nodes, ownerConfig);
         }
-        if(!isFragment(node)) {
+        if (!isFragment(node)) {
             nodes.push(node);
         }
         if (!node) { return; }
