@@ -311,6 +311,33 @@ describe("component rendering", () => {
             expect(config.nested[2].collectionItemIndex).toBe(2);
         });
 
+        it("shouldn't add fragment as children (v-for)", () => {
+            const NestedCollectionItem = buildTestConfigCtor();
+            (NestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
+            (NestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+
+            const vm = defineComponent({
+                template:
+                    `<test-component id="component">` +
+                    `  <nested-collection-item v-for="(item, index) in items" :key="index" :prop1="item.value" />` +
+                    `</test-component>`,
+                data() {
+                    return {
+                        items: [{ value: 123 }, { value: 321 }, { value: 432 }]
+                    };
+                },
+                components: {
+                    TestComponent,
+                    NestedCollectionItem
+                }
+            });
+
+            const wrapper = mount(vm);
+
+            const component = wrapper.getComponent("#component").vm;
+            expect(component.$.subTree.children).toHaveLength(3);
+        });
+
         it("initializes nested config predefined prop", () => {
             const predefinedValue = {};
             const NestedWithPredefined = buildTestConfigCtor();
