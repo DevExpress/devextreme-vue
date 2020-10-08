@@ -20,7 +20,9 @@ function pullConfigComponents(children: VNode[], nodes: VNode[], ownerConfig: Co
         if (isFragment(node) && Array.isArray(node.children)) {
             pullConfigComponents(node.children as any as VNode[], nodes, ownerConfig);
         }
-        nodes.push(node);
+        if (!isFragment(node)) {
+            nodes.push(node);
+        }
         if (!node) { return; }
 
         const componentInfo = getComponentInfo(node) as any as IConfigurationComponent;
