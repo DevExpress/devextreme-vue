@@ -91,6 +91,21 @@ describe("component rendering", () => {
         expect(Widget.endUpdate).toHaveBeenCalledTimes(1);
     });
 
+    it("calls widget creation and dxKey prop to key", () => {
+        new TestComponent({props:["dxKey"], propsData: {dxKey: {google: "X"}}}).$mount();
+        expect(WidgetClass).toHaveBeenCalledTimes(1);
+        expect(WidgetClass).toHaveBeenCalledWith(
+            expect.anything(),
+            {
+                integrationOptions: expect.anything(), 
+                key: {google: "X"}, 
+                onInitializing: expect.anything()
+            }
+        );
+        expect(Widget.beginUpdate).toHaveBeenCalledTimes(1);
+        expect(Widget.endUpdate).toHaveBeenCalledTimes(1);
+    });
+
     it("component has disabled inheritAttrs", () => {
         const component = new TestComponent();
         expect(component.$options.inheritAttrs).toBe(false);

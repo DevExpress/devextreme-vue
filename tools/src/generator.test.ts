@@ -14,7 +14,7 @@ const simpleWidget: IWidget = {
 };
 
 describe("mapWidget", () => {
-    it("ignores 'key' option in props", () => {
+    it("replace 'key' option in props with 'dxKey' ", () => {
         const result = mapWidget(
             {
                 ...simpleWidget,
@@ -34,7 +34,13 @@ describe("mapWidget", () => {
             "configComponentPath",
             []
         );
-        expect(result.component.props).toEqual([]);
+        expect(result.component.props).toEqual([{
+            acceptableValueType: undefined,
+            acceptableValues: undefined,
+            isArray: false,
+            name: "dxKey",
+            types: ["Object", "String"]
+        }]);
     });
 
     it("does not ignore 'key' in nested components", () => {

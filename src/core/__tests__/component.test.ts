@@ -128,6 +128,22 @@ describe("component rendering", () => {
             });
         });
 
+        it("rename dxKey prop to key", () => {
+            mount(TestComponent, {
+                props: {dxKey: {google: "X"}}
+            });
+
+            expect(WidgetClass).toHaveBeenCalledWith(
+                expect.anything(),
+                {
+                    integrationOptions: { watchMethod: expect.anything() },
+                    key: {google: "X"},
+                    onInitializing: expect.anything(),
+                    ref: "VTU_COMPONENT"
+                }
+            );
+        });
+
         it("subscribes to optionChanged", () => {
             mount(TestComponent, {
                 props: {

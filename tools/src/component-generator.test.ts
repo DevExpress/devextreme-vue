@@ -153,6 +153,70 @@ export {
     ).toBe(EXPECTED);
 });
 
+it("generates option2", () => {
+  //#region EXPECTED
+  const EXPECTED = `
+import WIDGET, { IOptions } from "devextreme/DX/WIDGET/PATH";
+import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
+
+type AccessibleOptions = Pick<IOptions,
+  "PROP"
+> & {dxKey?: [object , string]};
+
+interface COMPONENT extends AccessibleOptions {
+  readonly instance?: WIDGET;
+}
+const COMPONENT = BASE_COMPONENT({
+  props: {
+    dxKey: [Object, String],
+    PROP: {}
+  },
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:dxKey": null,
+    "update:PROP": null,
+  },
+  computed: {
+    instance(): WIDGET {
+      return (this as any).$_instance;
+    }
+  },
+  beforeCreate() {
+    (this as any).$_WidgetClass = WIDGET;
+  }
+});
+
+export default COMPONENT;
+export {
+  COMPONENT
+};
+`.trimLeft();
+  //#endregion
+
+  expect(
+      generate({
+          name: "COMPONENT",
+          widgetComponent: {
+            name: "WIDGET",
+            path: "DX/WIDGET/PATH"
+          },
+          baseComponent: {
+              name: "BASE_COMPONENT",
+              path: "./BASE_COMPONENT_PATH"
+          },
+          configComponent: {
+              name: "CONFIG_COMPONENT",
+              path: "./CONFIG_COMPONENT_PATH"
+          },
+          props: [
+            { name: "dxKey", types: ["Object", "String"] },
+            { name: "PROP" }
+          ]
+      })
+  ).toBe(EXPECTED);
+});
+
 it("generates nested option component", () => {
     //#region EXPECTED
     const EXPECTED = `
