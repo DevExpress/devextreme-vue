@@ -88,7 +88,7 @@ describe("component rendering", () => {
         expect(Widget.endUpdate).toHaveBeenCalledTimes(1);
     });
 
-    it("calls widget creation and dxKey prop to key", () => {
+    it("WidgetClass is called with 'key' instead 'dxKey'", () => {
         new TestComponent({props:["dxKey"], propsData: {dxKey: {google: "X"}}}).$mount();
         expect(WidgetClass).toHaveBeenCalledTimes(1);
         expect(WidgetClass).toHaveBeenCalledWith(
