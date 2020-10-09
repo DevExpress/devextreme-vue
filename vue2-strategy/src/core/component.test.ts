@@ -99,8 +99,6 @@ describe("component rendering", () => {
                 onInitializing: expect.anything()
             }
         );
-        expect(Widget.beginUpdate).toHaveBeenCalledTimes(1);
-        expect(Widget.endUpdate).toHaveBeenCalledTimes(1);
     });
 
     it("component has disabled inheritAttrs", () => {

@@ -153,16 +153,16 @@ function initBaseComponent() {
                 thisComponent.$_templatesManager = new TemplatesManager(this as ComponentPublicInstance);
 
                 const config = thisComponent.$_config;
-                const options: object = {
+                const options: Record<string, any> = {
                     ...getComponentProps(thisComponent),
                     ...config.initialValues,
                     ...config.getNestedOptionValues(),
                     ...this.$_getIntegrationOptions()
                 };
 
-                if ((options as any).dxKey) {
-                    (options as any).key = (options as any).dxKey;
-                    delete (options as any).dxKey;
+                if (options.dxKey) {
+                    options.key = options.dxKey;
+                    delete options.dxKey;
                 }
 
                 const instance = new thisComponent.$_WidgetClass(element, options);
