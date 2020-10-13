@@ -1,4 +1,3 @@
-import { Emitter } from "mitt";
 import { IConfigurable } from "./configuration-component";
 import {
     configurationDefaultTemplate,
@@ -16,7 +15,11 @@ import { IBaseComponent } from "./component";
 const TEMPLATE_PROP = "template";
 
 interface IEventBusHolder {
-    eventBus: Emitter;
+    eventBus: {
+        fire(): void;
+        add(handler: () => void): void;
+        remove(handler: () => void): void;
+    };
 }
 
 function asConfigurable(component: VNode): IConfigurable | undefined {
@@ -80,10 +83,6 @@ function clearConfiguration(content: VNode[]) {
     return newContent;
 }
 
-function updatedHandler(this: ComponentPublicInstance) {
-    this.$forceUpdate();
-}
-
 function mountTemplate(
     getSlot: () => Slot,
     parent: ComponentPublicInstance,
@@ -95,10 +94,15 @@ function mountTemplate(
         name,
         inject: ["eventBus"],
         created(this: any & IEventBusHolder) {
-            this.eventBus.on("updated", updatedHandler.bind(this));
+            this.eventBus.add(this.$_updatedHandler);
         },
         unmounted() {
-            this.eventBus.off("updated", updatedHandler);
+            this.eventBus.remove(this.$_updatedHandler);
+        },
+        methods: {
+            $_updatedHandler() {
+                (this as any as ComponentPublicInstance).$forceUpdate();
+            }
         },
         render: (): VNode => {
             const content = clearConfiguration(getSlot()(data) as VNode[]);

@@ -996,11 +996,8 @@ describe("component rendering", () => {
             events.triggerHandler(container.children[0], "dxremove");
             renderItemTemplate({ text: "with data" }, container);
 
-            const subscriptions = (wrapper.getComponent("#component").vm as any).eventBus.all;
-            // TODO
-            for (const subscription of subscriptions) {
-                expect(subscription.length).toBe(2);
-            }
+            const subscriptions = (wrapper.getComponent("#component").vm as any).eventBus._list;
+            expect(subscriptions.length).toBe(1);
 
             done();
         });
