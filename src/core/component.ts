@@ -153,6 +153,7 @@ function initBaseComponent() {
 
                 const config = thisComponent.$_config;
                 const options: object = {
+                    templatesRenderAsynchronously: true,
                     ...getComponentProps(thisComponent),
                     ...config.initialValues,
                     ...config.getNestedOptionValues(),
