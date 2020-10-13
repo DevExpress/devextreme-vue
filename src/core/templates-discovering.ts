@@ -83,10 +83,6 @@ function clearConfiguration(content: VNode[]) {
     return newContent;
 }
 
-function updatedHandler(this: ComponentPublicInstance) {
-    this.$forceUpdate();
-}
-
 function mountTemplate(
     getSlot: () => Slot,
     parent: ComponentPublicInstance,
@@ -98,10 +94,15 @@ function mountTemplate(
         name,
         inject: ["eventBus"],
         created(this: any & IEventBusHolder) {
-            this.eventBus.add(updatedHandler.bind(this));
+            this.eventBus.add(this.$_updatedHandler);
         },
         unmounted() {
-            this.eventBus.remove(updatedHandler.bind(this));
+            this.eventBus.remove(this.$_updatedHandler);
+        },
+        methods: {
+            $_updatedHandler() {
+                (this as any as ComponentPublicInstance).$forceUpdate();
+            }
         },
         render: (): VNode => {
             const content = clearConfiguration(getSlot()(data) as VNode[]);
