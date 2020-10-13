@@ -1,6 +1,6 @@
 import { ComponentPublicInstance, defineComponent, h, VNode } from "vue";
 
-import * as Callbacks from "devextreme/core/utils/callbacks";
+import * as CreateCallback from "devextreme/core/utils/callbacks";
 import * as events from "devextreme/events";
 
 import { defaultSlots, getChildren, getComponentInstance, getComponentProps } from "./vue-helper";
@@ -41,7 +41,7 @@ function initBaseComponent() {
 
         data() {
             return {
-                eventBus: Callbacks()
+                eventBus: CreateCallback()
             };
         },
 

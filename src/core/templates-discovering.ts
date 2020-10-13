@@ -16,9 +16,9 @@ const TEMPLATE_PROP = "template";
 
 interface IEventBusHolder {
     eventBus: {
-        fire: () => {};
-        add(handler: () => {}): void;
-        remove(handler: () => {}): void;
+        fire(): void;
+        add(handler: () => void): void;
+        remove(handler: () => void): void;
     };
 }
 
@@ -101,7 +101,7 @@ function mountTemplate(
             this.eventBus.add(updatedHandler.bind(this));
         },
         unmounted() {
-            this.eventBus.remove(updatedHandler);
+            this.eventBus.remove(updatedHandler.bind(this));
         },
         render: (): VNode => {
             const content = clearConfiguration(getSlot()(data) as VNode[]);
