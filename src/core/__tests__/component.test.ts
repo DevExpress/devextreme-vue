@@ -997,7 +997,7 @@ describe("component rendering", () => {
             renderItemTemplate({ text: "with data" }, container);
 
             const subscriptions = (wrapper.getComponent("#component").vm as any).eventBus._list;
-            expect(subscriptions.length).toBe(2);
+            expect(subscriptions.length).toBe(1);
 
             done();
         });
