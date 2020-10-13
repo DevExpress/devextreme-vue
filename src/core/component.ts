@@ -1,6 +1,6 @@
-import * as mitt from "mitt";
 import { ComponentPublicInstance, defineComponent, h, VNode } from "vue";
 
+import * as Callbacks from "devextreme/core/utils/callbacks";
 import * as events from "devextreme/events";
 
 import { defaultSlots, getChildren, getComponentInstance, getComponentProps } from "./vue-helper";
@@ -40,9 +40,8 @@ function initBaseComponent() {
         inheritAttrs: false,
 
         data() {
-            const emit = mitt.default || mitt;
             return {
-                eventBus: emit()
+                eventBus: Callbacks()
             };
         },
 
@@ -105,7 +104,7 @@ function initBaseComponent() {
             this.$_applyConfigurationChanges();
 
             thisComponent.$_instance.endUpdate();
-            this.eventBus.emit("updated");
+            this.eventBus.fire();
         },
 
         beforeUnmount(): void {
