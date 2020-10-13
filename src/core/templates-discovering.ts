@@ -15,7 +15,11 @@ import { IBaseComponent } from "./component";
 const TEMPLATE_PROP = "template";
 
 interface IEventBusHolder {
-    eventBus: any;
+    eventBus: {
+        add(handler: () => {}): void;
+        fire: () => {};
+        remove(handler: () => {}): void;
+    };
 }
 
 function asConfigurable(component: VNode): IConfigurable | undefined {
