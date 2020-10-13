@@ -30,7 +30,7 @@
   "license": "MIT",
   "peerDependencies": {
     "devextreme": "~20.1.7",
-    "vue": "^2.5.16"
+    "vue": "^2.5.16 || ^3.0.0"
   },
   "devDependencies": {
     "@types/jest": "^22.2.3",
@@ -64,8 +64,5 @@
     "webpack": "^4.29.2",
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.1.14"
-  },
-  "dependencies": {
-    "mitt": "^2.1.0"
   }
 }

@@ -16,8 +16,8 @@ const TEMPLATE_PROP = "template";
 
 interface IEventBusHolder {
     eventBus: {
-        add(handler: () => {}): void;
         fire: () => {};
+        add(handler: () => {}): void;
         remove(handler: () => {}): void;
     };
 }
