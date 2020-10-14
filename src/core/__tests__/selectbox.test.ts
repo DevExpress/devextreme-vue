@@ -14,11 +14,11 @@ describe("template rendering", () => {
     it("field template rendered", () => {
         const vm = defineComponent({
             template:
-                `<dx-select-box :data-source="dataSource" field-template="field" id="component">` +
-                `  <template #field="">` +
-                `    <dx-text-box value="text" />` +
-                `  </template>` +
-                `</dx-select-box >`,
+                `<dx-select-box :data-source="dataSource" field-template="field" id="component">
+                    <template #field="">
+                        <dx-text-box value="text" />
+                    </template>
+                </dx-select-box >`,
             data() {
                 return {
                     dataSource: [{ ID: 1 }]
