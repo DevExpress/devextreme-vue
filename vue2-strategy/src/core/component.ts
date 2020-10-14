@@ -1,6 +1,7 @@
 import * as VueType from "vue";
 import IVue, { VNode, VueConstructor } from "vue";
 
+import * as CreateCallback from "devextreme/core/utils/callbacks";
 import * as events from "devextreme/events";
 
 import { pullAllChildren } from "./children-processing";
@@ -41,7 +42,7 @@ const BaseComponent = (): VueConstructor<IBaseComponent> => Vue.extend({
 
     data() {
         return {
-            eventBus: new Vue()
+            eventBus: CreateCallback()
         };
     },
 
@@ -99,7 +100,7 @@ const BaseComponent = (): VueConstructor<IBaseComponent> => Vue.extend({
         this.$_applyConfigurationChanges();
 
         this.$_instance.endUpdate();
-        this.eventBus.$emit("updated");
+        this.eventBus.fire();
     },
 
     beforeDestroy(): void {

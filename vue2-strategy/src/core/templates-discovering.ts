@@ -9,7 +9,11 @@ const TEMPLATE_PROP = "template";
 const Vue = VueType.default || VueType;
 
 interface IEventBusHolder {
-    eventBus: IVue;
+    eventBus: {
+        fire(): void;
+        add(handler: () => void): void;
+        remove(handler: () => void): void;
+    };
 }
 
 function asConfigurable(component: IVue): IConfigurable | undefined {
@@ -75,9 +79,7 @@ function mountTemplate(
         inject: ["eventBus"],
         parent,
         created(this: IVue & IEventBusHolder) {
-            this.eventBus.$on("updated", () => {
-                this.$forceUpdate();
-            });
+            this.eventBus.add(this.$forceUpdate);
         },
         render: (createElement: CreateElement) => {
             const content = getSlot()(data) as any;
@@ -93,7 +95,7 @@ function mountTemplate(
         },
         destroyed() {
             // T857821
-            (this as IEventBusHolder).eventBus.$off("updated");
+            (this as any).eventBus.remove(this.$forceUpdate);
         }
     });
 }

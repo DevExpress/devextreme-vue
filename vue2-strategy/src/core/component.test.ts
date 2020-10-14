@@ -1322,7 +1322,7 @@ describe("template", () => {
     });
 
     it("updates templates on component updating (check via functional component inside)", () => {
-        expect.assertions(2);
+        expect.assertions(1);
         const FunctionalComponent = Vue.extend({
             functional: true,
             render(h) {
@@ -1460,11 +1460,9 @@ describe("template", () => {
         events.triggerHandler(container.children[0], "dxremove");
         renderItemTemplate({ text: "with data" }, container);
 
-        const subscriptions = (vm.$children[0] as any).eventBus._events;
+        const subscriptions = (vm.$children[0] as any).eventBus._list;
 
-        for (const subscription of subscriptions) {
-            expect(subscription.length).toBe(1);
-        }
+        expect(subscriptions.length).toBe(1);
 
         done();
     });
