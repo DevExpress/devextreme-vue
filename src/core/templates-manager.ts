@@ -1,5 +1,4 @@
 import { ComponentPublicInstance, Slot } from "vue";
-import { getOption } from "./config";
 import {
     discover as discoverSlots,
     mountTemplate
@@ -64,9 +63,7 @@ class TemplatesManager {
                     }
                     counter++;
                 })(data.onRendered);
-                const scopeData = getOption("useLegacyTemplateEngine")
-                    ? data.model
-                    : { data: data.model, index: data.index, onRendered: rendered };
+                const scopeData = { data: data.model, index: data.index, onRendered: rendered };
 
                 const placeholder = document.createElement("div");
                 const container = data.container.get ? data.container.get(0) : data.container;
