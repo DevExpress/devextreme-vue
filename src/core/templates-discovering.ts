@@ -96,6 +96,9 @@ function mountTemplate(
         created(this: any & IEventBusHolder) {
             this.eventBus.add(this.$_updatedHandler);
         },
+        mounted() {
+            data.onRendered();
+        },
         unmounted() {
             this.eventBus.remove(this.$_updatedHandler);
         },

@@ -1,5 +1,4 @@
 import { ComponentPublicInstance, Slot } from "vue";
-import { getOption } from "./config";
 import {
     discover as discoverSlots,
     mountTemplate
@@ -58,9 +57,13 @@ class TemplatesManager {
     private createDxTemplate(name: string) {
         return {
             render: (data: any) => {
-                const scopeData = getOption("useLegacyTemplateEngine")
-                    ? data.model
-                    : { data: data.model, index: data.index };
+                const rendered = ((onRendered, counter = 0) => () => {
+                    if (counter === 1 && onRendered) {
+                        onRendered();
+                    }
+                    counter++;
+                })(data.onRendered);
+                const scopeData = { data: data.model, index: data.index, onRendered: rendered };
 
                 const placeholder = document.createElement("div");
                 const container = data.container.get ? data.container.get(0) : data.container;
@@ -90,7 +93,7 @@ class TemplatesManager {
                         DX_REMOVE_EVENT,
                         mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate));
                 }
-
+                rendered();
                 return element;
             }
         };
