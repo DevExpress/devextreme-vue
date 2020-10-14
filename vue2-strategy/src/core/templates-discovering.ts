@@ -93,9 +93,9 @@ function mountTemplate(
 
             return content[0];
         },
-        destroyed() {
+        destroyed(this: IVue & IEventBusHolder) {
             // T857821
-            (this as any).eventBus.remove(this.$forceUpdate);
+            this.eventBus.remove(this.$forceUpdate);
         }
     });
 }
