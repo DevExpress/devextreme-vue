@@ -1,4 +1,5 @@
 import { ComponentPublicInstance, Slot } from "vue";
+import { IBaseComponent } from "./component";
 import {
     discover as discoverSlots,
     mountTemplate
@@ -57,12 +58,12 @@ class TemplatesManager {
     private createDxTemplate(name: string) {
         return {
             render: (data: any) => {
-                const rendered = ((onRendered, counter = 0) => () => {
-                    if (counter === 1 && onRendered) {
+                const rendered = ((onRendered, component, counter = 0) => () => {
+                    if (counter === 1 && onRendered && (component as IBaseComponent).$_asyncTemplates) {
                         onRendered();
                     }
                     counter++;
-                })(data.onRendered);
+                })(data.onRendered, this._component);
                 const scopeData = { data: data.model, index: data.index, onRendered: rendered };
 
                 const placeholder = document.createElement("div");

@@ -205,6 +205,9 @@ L1 + `},` +
 
 L1 + `beforeCreate() {` +
     L2 + `(this as any).$_WidgetClass = <#= it.widgetImport.name #>;` +
+    `<#? it.widgetImport.name === 'SelectBox' #>` +
+    L2 + `(this as any).$_asyncTemplates = true;` +
+    `<#?#>` +
 
     `<#? it.expectedChildren #>` +
     L2 + `(this as any).$_expectedChildren = {` +

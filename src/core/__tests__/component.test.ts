@@ -124,8 +124,7 @@ describe("component rendering", () => {
             expect(WidgetClass.mock.calls[0][0]).toBe(wrapper.element);
 
             expect(skipIntegrationOptions(WidgetClass.mock.calls[0][1])).toEqual({
-                sampleProp: "default",
-                templatesRenderAsynchronously: true
+                sampleProp: "default"
             });
         });
 
@@ -549,8 +548,7 @@ describe("component rendering", () => {
             expect(skipIntegrationOptions(WidgetClass.mock.calls[0][1])).toEqual({
                 nestedOption: {
                     prop1: 123
-                },
-                templatesRenderAsynchronously: true
+                }
             });
         });
 

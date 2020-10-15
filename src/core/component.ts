@@ -33,6 +33,7 @@ export interface IBaseComponent extends ComponentPublicInstance, IWidgetComponen
     $_createEmitters: () => void;
     $_processChildren: () => void;
     $_getTemplates: () => object;
+    $_asyncTemplates: Boolean;
 }
 
 function initBaseComponent() {
@@ -153,12 +154,15 @@ function initBaseComponent() {
 
                 const config = thisComponent.$_config;
                 const options: object = {
-                    templatesRenderAsynchronously: true,
                     ...getComponentProps(thisComponent),
                     ...config.initialValues,
                     ...config.getNestedOptionValues(),
                     ...this.$_getIntegrationOptions()
                 };
+
+                if(thisComponent.$_asyncTemplates) {
+                    options['templatesRenderAsynchronously'] = true;
+                }
 
                 const instance = new thisComponent.$_WidgetClass(element, options);
                 thisComponent.$_instance = instance;
