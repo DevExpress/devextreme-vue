@@ -39,7 +39,7 @@
     "dasherize": "^2.0.0",
     "del": "^3.0.0",
     "devextreme": "~19.2.9",
-    "devextreme-internal-tools": "stable",
+    "devextreme-internal-tools": "^2.0.0-beta.14",
     "dot": "^1.1.2",
     "gulp": "^4.0.0",
     "gulp-header": "^2.0.5",
