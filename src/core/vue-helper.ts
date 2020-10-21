@@ -73,6 +73,7 @@ export function defaultSlots(component: ComponentPublicInstance): VNode[] {
 
 export function mount(options, parent, el) {
     const template = createApp(options);
+    template.config.globalProperties = parent.$.appContext.config.globalProperties;
     template.provide("eventBus", parent.eventBus);
     return template.mount(el);
 }
