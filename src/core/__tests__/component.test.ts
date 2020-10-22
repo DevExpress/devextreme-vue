@@ -884,6 +884,33 @@ describe("component rendering", () => {
             expect(renderedTemplate.innerHTML).toBe("Template");
         });
 
+        it("template should have globalProperties of parent", () => {
+            let  templateGlobalProperties;
+            const CustomComponent = defineComponent({
+                template: `<div></div>`,
+                mounted() {
+                    templateGlobalProperties = this.$.appContext.config.globalProperties;
+                }
+            });
+            const vm = defineComponent({
+                template: `<test-component id="component">
+                                <template #item>
+                                    <CustomComponent></CustomComponent>
+                                </template>
+                            </test-component>`,
+                components: {
+                    TestComponent,
+                    CustomComponent
+                }
+            });
+            const config = {
+                globalProperties: { name: "test"}
+            };
+            mount(vm, { global: { config } });
+            renderItemTemplate();
+            expect(templateGlobalProperties).toEqual(config.globalProperties);
+        });
+
         it("renders scoped slot", () => {
             const vm = defineComponent({
                 template: `<test-component>
