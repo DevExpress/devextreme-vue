@@ -75,6 +75,7 @@ export function mount(options, parent, el) {
     const template = createApp(options);
     template.config.globalProperties = parent.$.appContext.config.globalProperties;
     template.provide("eventBus", parent.eventBus);
+    template._context.provides = Object.assign(parent.$.appContext.provides, template._context.provides);
     return template.mount(el);
 }
 

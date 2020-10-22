@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
 import * as events from "devextreme/events";
 import { defineComponent, nextTick } from "vue";
+import { createRouter, createWebHistory } from "vue-router";
 
 import { IWidgetComponent } from "../component";
 import { IConfigurable, IConfigurationComponent } from "../configuration-component";
@@ -909,6 +910,38 @@ describe("component rendering", () => {
             mount(vm, { global: { config } });
             renderItemTemplate();
             expect(templateGlobalProperties).toEqual(config.globalProperties);
+        });
+
+        it("template should have router provides of parent", () => {
+            const router = createRouter({
+                history: createWebHistory(),
+                routes: []
+            });
+            let templateProvides;
+            const CustomComponent = defineComponent({
+                template: `<div></div>`,
+                mounted() {
+                    templateProvides = this.$.appContext.provides;
+                }
+            });
+            const vm = defineComponent({
+                template: `<test-component id="component">
+                                <template #item>
+                                    <CustomComponent></CustomComponent>
+                                </template>
+                            </test-component>`,
+                components: {
+                    TestComponent,
+                    CustomComponent
+                }
+            });
+            mount(vm, {
+                global: {
+                  plugins: [router]
+                }
+              });
+            renderItemTemplate();
+            expect(Object.getOwnPropertySymbols(templateProvides)).toHaveLength(2);
         });
 
         it("renders scoped slot", () => {
