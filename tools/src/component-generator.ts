@@ -157,13 +157,13 @@ const renderComponent: (model: {
     defaultExport: string;
     namedExports: string[];
 }) => string = createTempate(
-`import <#= it.widgetImport.name #><#? it.props #>, { IOptions }<#?#> from "devextreme/<#= it.widgetImport.path #>";\n` +
+`import <#= it.widgetImport.name #><#? it.props #>, { Options }<#?#> from "devextreme/<#= it.widgetImport.path #>";\n` +
 `<#~ it.namedImports :namedImport #>` +
 `import { <#= namedImport.name #> } from "<#= namedImport.path #>";\n` +
 `<#~#>` + `\n` +
 
 `<#? it.props #>` +
-    `type AccessibleOptions = Pick<IOptions,` +
+    `type AccessibleOptions = Pick<Options,` +
     `<#~ it.props: prop #>` +
         L1 + `"<#= prop.name #>" |` +
     `<#~#>` +

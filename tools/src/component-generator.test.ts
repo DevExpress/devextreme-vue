@@ -97,10 +97,10 @@ export {
 it("generates option", () => {
     //#region EXPECTED
     const EXPECTED = `
-import WIDGET, { IOptions } from "devextreme/DX/WIDGET/PATH";
+import WIDGET, { Options } from "devextreme/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 
-type AccessibleOptions = Pick<IOptions,
+type AccessibleOptions = Pick<Options,
   "PROP"
 >;
 
