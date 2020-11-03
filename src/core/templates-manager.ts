@@ -67,6 +67,7 @@ class TemplatesManager {
 
                 const placeholder = document.createElement("div");
                 const container = data.container.get ? data.container.get(0) : data.container;
+                container.appendChild(placeholder);
                 const mountedTemplate = mountTemplate(
                     () => this._slots[name],
                     this._component,
@@ -76,6 +77,7 @@ class TemplatesManager {
                 );
 
                 const element = mountedTemplate.$el;
+                container.removeChild(placeholder);
                 container.appendChild(element);
                 domAdapter.setClass(element, DX_TEMPLATE_WRAPPER_CLASS, true);
 
