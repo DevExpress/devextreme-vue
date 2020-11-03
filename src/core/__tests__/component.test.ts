@@ -845,6 +845,51 @@ describe("component rendering", () => {
             });
         });
 
+        describe("with DOM", () => {
+            let fixture;
+
+            beforeEach(() => {
+                fixture = document.createElement("div");
+                fixture.id = "fixture";
+                document.body.appendChild(fixture);
+            });
+
+            afterEach(() => {
+                fixture.remove();
+            });
+
+            it("template content should be rendered in DOM", () => {
+                let mountedInDom;
+                const ChildComponent = defineComponent({
+                    template: "<div>Test</div>",
+                    mounted() {
+                        mountedInDom = document.body.contains(this.$el);
+                    }
+                });
+                const instance = defineComponent({
+                    template: `<test-component id="component">
+                                    <div class="template-container"></div>
+                                    <template #tmpl>
+                                        <child-component/>
+                                    </template>
+                                </test-component>`,
+                    components: {
+                        TestComponent,
+                        ChildComponent
+                    }
+                });
+
+                const wrapper = mount(instance, { attachTo: document.getElementById("fixture") } as any);
+
+                renderTemplate(
+                    "tmpl",
+                    {},
+                    wrapper.getComponent("#component").vm.$el.querySelector(".template-container"));
+
+                expect(mountedInDom).toBeTruthy();
+            });
+        });
+
         it("does not unnecessarily pass 'integrationOptions.templates'", () => {
             const wrapper = mount(componentWithTemplate, {
                 props: {

@@ -73,9 +73,12 @@ export function defaultSlots(component: ComponentPublicInstance): VNode[] {
 
 export function mount(options, parent, el) {
     const template = createApp(options);
-    template.config.globalProperties = parent.$.appContext.config.globalProperties;
     template.provide("eventBus", parent.eventBus);
+    template._context.components = Object.assign(parent.$.appContext.components, template._context.components);
     template._context.provides = Object.assign(parent.$.appContext.provides, template._context.provides);
+    template._context.config = parent.$.appContext.config;
+    template._context.directives = parent.$.appContext.directives;
+    template._context.mixins = parent.$.appContext.mixins;
     return template.mount(el);
 }
 
