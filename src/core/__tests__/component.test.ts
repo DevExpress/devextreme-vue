@@ -115,6 +115,23 @@ describe("component rendering", () => {
 
     describe("options", () => {
 
+        it("should update option", function (done) {
+
+            const wrapper = mount(TestComponent, {
+                props: {
+                    sampleProp: "test"
+                }
+            });
+            
+            (wrapper.vm as any).$_config.updateValue = jest.fn();
+            wrapper.setProps({ sampleProp: undefined });
+            
+            nextTick(function () {
+                expect((wrapper.vm as any).$_config.updateValue).toBeCalled()
+                done();
+            });
+        });
+
         it("pass props to option on mounting", () => {
             const wrapper = mount(TestComponent, {
                 props: {
