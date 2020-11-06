@@ -119,7 +119,7 @@ describe("component rendering", () => {
 
 describe("options", () => {
 
-    it("should update option", function (done) {
+    it("watch prop changing to undefined", function (done) {
 
         const wrapper = mount(TestComponent, {props: ["sampleProp"],
         propsData: {
@@ -130,7 +130,7 @@ describe("options", () => {
         wrapper.setProps({ sampleProp: undefined });
         
         Vue.nextTick(function () {
-            expect((wrapper.vm as any).$_config.updateValue).toBeCalled()
+            expect((wrapper.vm as IConfigurable).$_config.updateValue).toBeCalled()
             done();
         });
     });

@@ -115,7 +115,7 @@ describe("component rendering", () => {
 
     describe("options", () => {
 
-        it("should update option", function (done) {
+        it("watch prop changing to undefined", function (done) {
 
             const wrapper = mount(TestComponent, {
                 props: {
@@ -127,7 +127,7 @@ describe("component rendering", () => {
             wrapper.setProps({ sampleProp: undefined });
             
             nextTick(function () {
-                expect((wrapper.vm as any).$_config.updateValue).toBeCalled()
+                expect((wrapper.vm as any as IConfigurable).$_config.updateValue).toBeCalled()
                 done();
             });
         });
