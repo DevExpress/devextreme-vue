@@ -115,19 +115,19 @@ describe("component rendering", () => {
 
     describe("options", () => {
 
-        it("watch prop changing to undefined", function (done) {
+        it("watch prop changing to undefined", (done) => {
 
             const wrapper = mount(TestComponent, {
                 props: {
                     sampleProp: "test"
                 }
             });
-            
+
             (wrapper.vm as any).$_config.updateValue = jest.fn();
             wrapper.setProps({ sampleProp: undefined });
-            
-            nextTick(function () {
-                expect((wrapper.vm as any as IConfigurable).$_config.updateValue).toBeCalled()
+
+            nextTick(() => {
+                expect((wrapper.vm as any as IConfigurable).$_config.updateValue).toBeCalled();
                 done();
             });
         });

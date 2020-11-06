@@ -125,12 +125,12 @@ describe("options", () => {
         propsData: {
             sampleProp: "default"
         }});
-        
+
         (wrapper.vm as any).$_config.updateValue = jest.fn();
         wrapper.setProps({ sampleProp: undefined });
-        
-        Vue.nextTick(function () {
-            expect((wrapper.vm as IConfigurable).$_config.updateValue).toBeCalled()
+
+        Vue.nextTick(() => {
+            expect((wrapper.vm as any as IConfigurable).$_config.updateValue).toBeCalled();
             done();
         });
     });
