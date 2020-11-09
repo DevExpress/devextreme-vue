@@ -262,7 +262,8 @@ function bindOptionWatchers(
     if (targets) {
         targets.forEach((optionName: string) => {
             vueInstance.$watch(optionName, (value) => {
-                if (innerChanges[optionName] !== value) {
+                if (!innerChanges.hasOwnProperty(optionName) ||
+                    innerChanges[optionName] !== value) {
                     config.updateValue(optionName, value);
                 }
                 delete innerChanges[optionName];
