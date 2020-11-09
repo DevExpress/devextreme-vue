@@ -119,6 +119,19 @@ describe("component rendering", () => {
 
 describe("options", () => {
 
+    it("watch prop changing to undefined", function (done) {
+        const wrapper = mount(TestComponent, {props: ["sampleProp"],
+        propsData: {
+            sampleProp: "default"
+        }});
+        (wrapper.vm as any).$_config.updateValue = jest.fn();
+        wrapper.setProps({ sampleProp: undefined });
+        Vue.nextTick(() => {
+            expect((wrapper.vm as any as IConfigurable).$_config.updateValue).toBeCalled();
+            done();
+        });
+    });
+
     it("pass props to option on mounting", () => {
         const vm = new TestComponent({
             propsData: {
