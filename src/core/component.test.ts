@@ -119,7 +119,7 @@ describe("component rendering", () => {
 
 describe("options", () => {
 
-    it("watch prop changing to undefined", function (done) {
+    it("watch prop changing to undefined", (done) => {
         const wrapper = mount(TestComponent, {props: ["sampleProp"],
         propsData: {
             sampleProp: "default"
