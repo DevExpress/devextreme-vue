@@ -1,4 +1,4 @@
-import { ComponentPublicInstance as IVue } from "vue";
+import { ComponentPublicInstance as IVue, VNodeProps } from "vue";
 import { IComponentInfo } from "./configuration-component";
 import { getOptionInfo, isEqual } from "./helpers";
 
@@ -271,13 +271,17 @@ function bindOptionWatchers(
     }
 }
 
+function hasProp(props: VNodeProps, propName: string) {
+    return props && props.hasOwnProperty(propName);
+}
+
 function setEmitOptionChangedFunc(
     config: Configuration,
     vueInstance: Pick<IVue, "$" | "$props" | "$emit">,
     innerChanges: Record<string, any>): void {
     config.emitOptionChanged = (name: string, value: string) => {
         const props = vueInstance.$props;
-        if (props && !isEqual(value, props[name]) && vueInstance.$emit) {
+        if (hasProp(props, name) && !isEqual(value, props[name]) && vueInstance.$emit) {
             innerChanges[name] = value;
             vueInstance.$emit("update:" + name, value);
         }

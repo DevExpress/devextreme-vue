@@ -114,6 +114,7 @@ const COMPONENT = BASE_COMPONENT({
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:focusedElement": null,
     "update:PROP": null,
   },
   computed: {

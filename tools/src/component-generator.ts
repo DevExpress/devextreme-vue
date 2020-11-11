@@ -188,21 +188,6 @@ const renderComponent: (model: {
         L2 + `"update:isActive": null,` +
         L2 + `"update:hoveredElement": null,` +
         L2 + `"update:focusedElement": null,` +
-        L2 + `"update:selectionMode": null,` +
-        L2 + `"update:selectionRequired": null,` +
-        L2 + `"update:selectedItems": null,` +
-        L2 + `"update:selectedItemKeys": null,` +
-        L2 + `"update:loopItemFocus": null,` +
-        L2 + `"update:itemData": null,` +
-        L2 + `"update:itemPoints": null,` +
-        L2 + `"update:fromIndex": null,` +
-        L2 + `"update:toIndex": null,` +
-        L2 + `"update:draggableElementSize": null,` +
-        L2 + `"update:validationStatus": null,` +
-        L2 + `"update:isValid": null,` +
-        L2 + `"update:bounds": null,` +
-        L2 + `"update:popupPosition": null,` +
-        L2 + `"update:currentScreenFactor": null,` +
     `<#~ it.props: prop #>` +
         L2 + `"update:<#= prop.name #>": null,` +
     `<#~#>` +
