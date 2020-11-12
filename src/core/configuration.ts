@@ -272,13 +272,18 @@ function bindOptionWatchers(
     }
 }
 
+function hasProp(vueInstance: Pick<IVue, "$options">, propName: string) {
+    const props = vueInstance.$options.props;
+    return props && props.hasOwnProperty(propName);
+}
+
 function setEmitOptionChangedFunc(
     config: Configuration,
-    vueInstance: Pick<IVue, "$" | "$props" | "$emit">,
+    vueInstance: Pick<IVue, "$" | "$props" | "$emit" | "$options">,
     innerChanges: Record<string, any>): void {
     config.emitOptionChanged = (name: string, value: string) => {
         const props = vueInstance.$props;
-        if (props && !isEqual(value, props[name]) && vueInstance.$emit) {
+        if (hasProp(vueInstance, name) && !isEqual(value, props[name]) && vueInstance.$emit) {
             innerChanges[name] = value;
             vueInstance.$emit("update:" + name, value);
         }
