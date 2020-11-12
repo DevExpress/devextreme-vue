@@ -187,7 +187,6 @@ const renderComponent: (model: {
     L1 + `emits: {` +
         L2 + `"update:isActive": null,` +
         L2 + `"update:hoveredElement": null,` +
-        L2 + `"update:focusedElement": null,` +
     `<#~ it.props: prop #>` +
         L2 + `"update:<#= prop.name #>": null,` +
     `<#~#>` +
