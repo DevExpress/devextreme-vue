@@ -46,7 +46,7 @@ function getInnerChanges(vueInstance: Pick<ComponentPublicInstance, "$">): any {
 function initOptionChangedFunc(
     config,
     props: any,
-    vueInstance: Pick<ComponentPublicInstance, "$" | "$props" | "$emit">,
+    vueInstance: Pick<ComponentPublicInstance, "$" | "$props" | "$emit" | "$options">,
     innerChanges: any) {
     if (!config) {
         return;
