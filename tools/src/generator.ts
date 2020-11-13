@@ -37,7 +37,8 @@ function generate(
     componentsDir: string,
     oldComponentsDir: string,
     indexFileName: string
-  }
+  },
+  widgetsPackage: string
 ) {
   const modulePaths: IReExport[] = [];
 
@@ -51,7 +52,7 @@ function generate(
     const widgetFilePath = joinPaths(out.componentsDir, widgetFile.fileName);
     const indexFileDir = getDirName(out.indexFileName);
 
-    writeFile(widgetFilePath, generateComponent(widgetFile.component), { encoding: "utf8" });
+    writeFile(widgetFilePath, generateComponent(widgetFile.component, widgetsPackage), { encoding: "utf8" });
     modulePaths.push({
       name: widgetFile.component.name,
       path: "./" + removeExtension(getRelativePath(indexFileDir, widgetFilePath)).replace(pathSeparator, "/")

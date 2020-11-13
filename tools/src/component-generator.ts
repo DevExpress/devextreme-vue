@@ -71,7 +71,7 @@ const renderReExport: (model: {path: string, fileName: string}) => string = crea
 `export { default } from "<#= it.path #>";\n`
 );
 
-function generate(component: IComponent): string {
+function generate(component: IComponent, widgetsPackage: string = "devextreme"): string {
     const nestedComponents = component.nestedComponents
         ? component.nestedComponents.map(createNestedComponentModel)
         : undefined;
@@ -104,6 +104,7 @@ function generate(component: IComponent): string {
         defaultExport: component.name,
         namedExports,
         expectedChildren: formatExpectedChildren(component.expectedChildren),
+        widgetsPackage: widgetsPackage
     };
 
     return renderComponent(componentModel);
@@ -156,8 +157,10 @@ const renderComponent: (model: {
     expectedChildren?: IExpectedChildModel[];
     defaultExport: string;
     namedExports: string[];
+    widgetsPackage: string;
+
 }) => string = createTempate(
-`import <#= it.widgetImport.name #><#? it.props #>, { Options }<#?#> from "devextreme/<#= it.widgetImport.path #>";\n` +
+`import <#= it.widgetImport.name #><#? it.props #>, { Options }<#?#> from "<#= it.widgetsPackage #>/<#= it.widgetImport.path #>";\n` +
 `<#~ it.namedImports :namedImport #>` +
 `import { <#= namedImport.name #> } from "<#= namedImport.path #>";\n` +
 `<#~#>` + `\n` +

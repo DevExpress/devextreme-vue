@@ -73,7 +73,8 @@ gulp.task(GEN_RUN, (done) => {
       componentsDir: config.generatedComponentsDir,
       oldComponentsDir: config.oldComponentsDir,
       indexFileName: config.indexFileName
-    }
+    },
+    config.widgetsPackage
   );
 
   done();
