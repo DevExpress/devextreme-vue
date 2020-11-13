@@ -104,7 +104,7 @@ function generate(component: IComponent, widgetsPackage: string = "devextreme"):
         defaultExport: component.name,
         namedExports,
         expectedChildren: formatExpectedChildren(component.expectedChildren),
-        widgetsPackage: widgetsPackage
+        widgetsPackage
     };
 
     return renderComponent(componentModel);
