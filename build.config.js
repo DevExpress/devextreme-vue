@@ -26,4 +26,5 @@ module.exports = {
   indexFileName: './src/index.ts',
   baseComponent: './core/index',
   configComponent: './core/index',
+  widgetsPackage: 'devextreme'
 };
