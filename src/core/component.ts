@@ -120,7 +120,13 @@ function initBaseComponent() {
             const thisComponent = this as any as IBaseComponent;
             const props = getComponentProps(this);
             thisComponent.$_config = new Configuration(
-                (n: string, v: any) => { thisComponent.$_pendingOptions[n] = v; },
+                (n: string, v: any) => {
+                    if (Array.isArray(v)) {
+                        thisComponent.$_instance.option(n, v);
+                    } else {
+                        thisComponent.$_pendingOptions[n] = v;
+                    }
+                },
                 null,
                 props && { ...props },
                 thisComponent.$_expectedChildren
