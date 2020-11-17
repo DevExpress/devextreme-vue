@@ -1,4 +1,5 @@
 import { ComponentPublicInstance as IVue } from "vue";
+import { getOption } from "./config";
 import { IComponentInfo } from "./configuration-component";
 import { getOptionInfo, isEqual } from "./helpers";
 
@@ -267,7 +268,7 @@ function bindOptionWatchers(
                     config.updateValue(optionName, value);
                 }
                 delete innerChanges[optionName];
-            });
+            }, { deep: getOption("deepWatch") });
         });
     }
 }

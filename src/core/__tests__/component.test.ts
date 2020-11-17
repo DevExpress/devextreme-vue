@@ -4,6 +4,7 @@ import { defineComponent, nextTick } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 import { IWidgetComponent } from "../component";
+import globalConfig from "../config";
 import { IConfigurable, IConfigurationComponent } from "../configuration-component";
 import { createComponent, createConfigurationComponent, createExtensionComponent } from "../index";
 
@@ -39,7 +40,8 @@ const TestComponent = createComponent({
     },
     props: {
         prop1: Number,
-        sampleProp: String
+        prop2: Array,
+        sampleProp: String,
     },
     model: {
         prop: "prop1",
@@ -167,6 +169,59 @@ describe("component rendering", () => {
 
             expect(Widget.option).toHaveBeenCalledTimes(1);
             expect(Widget.option).toHaveBeenCalledWith("sampleProp", "new");
+        });
+
+        it("component shouldn't update array value(by default)", async (done) => {
+            const component = defineComponent({
+                template: `
+                    <button @click="testData.push(2)">Click me</button>
+                    <test-component :prop2="testData"></test-component>
+                `,
+                components: {
+                    TestComponent
+                },
+                data() {
+                    return {
+                        testData: [1]
+                    };
+                }
+            });
+            const wrapper = mount(component);
+
+            await wrapper.find("button").trigger("click");
+
+            nextTick(() => {
+                expect(Widget.option).toHaveBeenCalledTimes(0);
+                done();
+            });
+        });
+
+        it("component updates array value if the deepWatch flag equal true", async (done) => {
+            globalConfig({ deepWatch: true });
+            const component = defineComponent({
+                template: `
+                    <button @click="testData.push(2)">Click me</button>
+                    <test-component :prop2="testData"></test-component>
+                `,
+                components: {
+                    TestComponent
+                },
+                data() {
+                    return {
+                        testData: [1]
+                    };
+                }
+            });
+            const wrapper = mount(component);
+
+            await wrapper.find("button").trigger("click");
+
+            nextTick(() => {
+                expect(Widget.option).toHaveBeenCalledTimes(1);
+                expect(Widget.option).toHaveBeenCalledWith("prop2", [1, 2]);
+                globalConfig({ deepWatch: false });
+                done();
+            });
         });
 
     });
