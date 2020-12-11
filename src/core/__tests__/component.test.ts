@@ -1058,7 +1058,7 @@ describe("component rendering", () => {
                 }
               });
             renderItemTemplate();
-            expect(Object.getOwnPropertySymbols(templateProvides)).toHaveLength(2);
+            expect(Object.getOwnPropertySymbols(templateProvides)).toHaveLength(3);
         });
 
         it("renders scoped slot", () => {

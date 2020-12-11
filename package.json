@@ -60,7 +60,7 @@
     "url-loader": "^1.1.1",
     "vue": "^3.0.0",
     "vue-loader": "^16.0.0-beta.8",
-    "vue-router": "^4.0.0-beta.13",
+    "vue-router": "^4.0.1",
     "vue-template-compiler": "^2.6.3",
     "webpack": "^4.29.2",
     "webpack-cli": "^3.2.3",
