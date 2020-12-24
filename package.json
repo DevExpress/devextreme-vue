@@ -29,7 +29,7 @@
   "author": "Developer Express Inc.",
   "license": "MIT",
   "peerDependencies": {
-    "devextreme": "~20.2.4",
+    "devextreme": "21.1.1-alpha-20350-0313",
     "vue": "^2.5.16 || ^3.0.0"
   },
   "devDependencies": {
@@ -40,7 +40,7 @@
     "css-loader": "^2.1.1",
     "dasherize": "^2.0.0",
     "del": "^3.0.0",
-    "devextreme": "~20.2.4",
+    "devextreme": "21.1.1-alpha-20350-0313",
     "devextreme-internal-tools": "stable",
     "dot": "^1.1.2",
     "gulp": "^4.0.0",
