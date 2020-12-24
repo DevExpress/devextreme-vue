@@ -41,7 +41,7 @@
     "dasherize": "^2.0.0",
     "del": "^3.0.0",
     "devextreme": "~20.2.4",
-    "devextreme-internal-tools": "stable",
+    "devextreme-internal-tools": "^3.3.0",
     "dot": "^1.1.2",
     "gulp": "^4.0.0",
     "gulp-header": "^2.0.5",

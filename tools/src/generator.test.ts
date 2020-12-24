@@ -20,6 +20,7 @@ describe("mapWidget", () => {
                 ...simpleWidget,
                 options: [
                     {
+                        firedEvents: [],
                         name: "key",
                         types: [
                             { type: "Object" } as any,
