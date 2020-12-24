@@ -9,7 +9,7 @@ beforeEach(() => {
 
 describe("component rendering", () => {
 
-    it("field template rendered", () => {
+    it("rendering with configuration options", () => {
         const vm = {
             template:
                 `<dx-form :form-data="data">
