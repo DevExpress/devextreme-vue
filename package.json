@@ -16,7 +16,7 @@
     "lint": "gulp lint",
     "pack": "gulp npm.pack",
     "serve": "webpack-dev-server",
-    "test": "jest",
+    "test": "npm run build && jest",
     "test-watch": "jest --watch",
     "update-integration-meta": "dx-tools update-integration-meta --output-path ./tools/integration-data.json"
   },
