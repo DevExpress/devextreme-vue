@@ -2,6 +2,7 @@ import { ComponentPublicInstance, createApp, Slot, Slots, VNode, VNodeProps } fr
 import { camelize } from "./helpers";
 
 import { IBaseComponent } from "./component";
+import Configuration from "./configuration";
 import { IConfigurationComponent } from "./configuration-component";
 
 import { isFragment } from "./children-processing";
@@ -111,14 +112,20 @@ export function getNodeTypeOfComponent(component: Pick<ComponentPublicInstance, 
     return component.$.vnode.type;
 }
 
+interface ChildConfiguration extends VNode {
+    $_config?: Configuration;
+    $_innerChanges?: Record<string, any>;
+}
+
 function findConfigurationComponents(children: VNode[]) {
     return children.filter((child) => {
         if (isFragment(child)) {
             return findConfigurationComponents((child as any).children || []);
         }
-        if (child.type && typeof child.type === "object") {
-            delete (child as any).$_config;
-            delete (child as any).$_innerChanges;
+        const childType = child.type as IConfigurationComponent;
+        if (childType && typeof childType === "object" && childType.$_optionName) {
+            delete (child as ChildConfiguration).$_config;
+            delete (child as ChildConfiguration).$_innerChanges;
             return child;
         }
         return;
