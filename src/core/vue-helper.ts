@@ -74,12 +74,9 @@ export function defaultSlots(component: ComponentPublicInstance): VNode[] {
 
 export function mount(options, parent, el) {
     const template = createApp(options);
+
     template.provide("eventBus", parent.eventBus);
-    template._context.components = Object.assign(parent.$.appContext.components, template._context.components);
-    template._context.provides = Object.assign(parent.$.appContext.provides, template._context.provides);
-    template._context.config = parent.$.appContext.config;
-    template._context.directives = parent.$.appContext.directives;
-    template._context.mixins = parent.$.appContext.mixins;
+    setAppContext(template, parent);
     return template.mount(el);
 }
 
@@ -115,6 +112,15 @@ export function getNodeTypeOfComponent(component: Pick<ComponentPublicInstance, 
 interface ChildConfiguration extends VNode {
     $_config?: Configuration;
     $_innerChanges?: Record<string, any>;
+}
+
+function setAppContext(template, parent) {
+    template._context.components = Object.assign(parent.$.appContext.components, template._context.components);
+    Object.setPrototypeOf(template._context.provides, Object.getPrototypeOf(parent.$.provides));
+    Object.assign(template._context.provides, parent.$.appContext.provides);
+    template._context.config = parent.$.appContext.config;
+    template._context.directives = parent.$.appContext.directives;
+    template._context.mixins = parent.$.appContext.mixins;
 }
 
 function findConfigurationComponents(children: VNode[]) {
