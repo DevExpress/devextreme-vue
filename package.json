@@ -1,69 +1,47 @@
 {
-  "name": "devextreme-vue",
-  "version": "20.2.4",
+  "author": "Developer Express Inc.",
+  "name": "root",
+  "private": true,
+  "version": "0.0.0",
   "description": "DevExtreme Vue UI and Visualization Components",
   "repository": {
     "type": "git",
     "url": "https://github.com/DevExpress/devextreme-vue.git"
   },
-  "main": "index.js",
-  "types": "index.d.ts",
   "scripts": {
-    "start": "npm run build && npm run serve",
-    "build": "npm run clean && npm run generate",
-    "clean": "gulp clean",
-    "generate": "gulp generate",
+    "clean": "npm run clean:packages && npm run clean:root",
+    "clean:packages": "lerna clean --yes",
+    "clean:root": "del-cli node_modules",
+    "start": "lerna run build && lerna run start",
+    "postinstall": "npm run bootstrap",
+    "bootstrap": "lerna bootstrap --no-ci --hoist",
+    "build": "lerna run build && npm run lint",
     "lint": "gulp lint",
-    "pack": "lerna run --stream pack && gulp npm.pack",
-    "serve": "webpack-dev-server",
-    "test": "npm run build && jest && lerna run --stream test",
+    "test": "jest",
     "test-watch": "jest --watch",
-    "bootstrap-strategy": "lerna bootstrap",
-    "update-integration-meta": "dx-tools update-integration-meta --output-path ./tools/integration-data.json"
+    "pack": "lerna run pack",
+    "update-integration-meta": "dx-tools update-integration-meta --output-path ./packages/devextreme-vue/metadata/integration-data.json",
+    "postupdate-integration-meta": "cpy $npm_package_config_metaModelSrc $npm_package_config_metaModelDest && del-cli $npm_package_config_metaModelSrc"
+  },
+  "config": {
+    "metaModelSrc": "./packages/devextreme-vue/metadata/integration-data-model.ts",
+    "metaModelDest": "./packages/devextreme-vue-generator/src/"
   },
   "keywords": [
     "vue",
     "devextreme",
     "devexpress"
   ],
-  "author": "Developer Express Inc.",
   "license": "MIT",
-  "peerDependencies": {
-    "devextreme": "~20.2.4",
-    "vue": "^2.5.16 || ^3.0.0"
-  },
   "devDependencies": {
-    "@types/jest": "^22.2.3",
-    "@types/node": "^13.11.1",
-    "@vue/compiler-sfc": "^3.0.0",
-    "@vue/test-utils": "^2.0.0-beta.7",
-    "css-loader": "^2.1.1",
-    "dasherize": "^2.0.0",
-    "del": "^3.0.0",
-    "devextreme": "~20.2.4",
+    "cpy-cli": "^3.1.1",
+    "del-cli": "^3.0.1",
     "devextreme-internal-tools": "stable",
-    "dot": "^1.1.2",
     "gulp": "^4.0.0",
-    "gulp-header": "^2.0.5",
-    "gulp-shell": "^0.6.5",
     "gulp-tslint": "^8.1.3",
-    "gulp-typescript": "^5.0.0",
     "jest": "^24.8.0",
     "lerna": "^3.22.1",
-    "minimatch": "^3.0.2",
-    "source-map-loader": "^0.2.4",
-    "style-loader": "^0.20.3",
     "ts-jest": "^24.1.0",
-    "ts-loader": "^8.0.4",
-    "tslint": "^5.11.0",
-    "typescript": "^4.0.2",
-    "url-loader": "^1.1.1",
-    "vue": "^3.0.0",
-    "vue-loader": "^16.0.0-beta.8",
-    "vue-router": "^4.0.1",
-    "vue-template-compiler": "^2.6.3",
-    "webpack": "^4.29.2",
-    "webpack-cli": "^3.2.3",
-    "webpack-dev-server": "^3.1.14"
+    "tslint": "^5.11.0"
   }
 }

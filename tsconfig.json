@@ -1,10 +1,23 @@
 {
     "compilerOptions": {
+        "baseUrl": "./packages",
+        "paths": {
+            "devextreme-vue-generator": [
+                "devextreme-vue-generator/src"
+            ],
+            "devextreme-vue": [
+                "devextreme-vue/src"
+            ],
+            "devextreme-vue/*": [
+                "devextreme-vue/src/*"
+            ],
+            "devextreme-vue2-strategy": [
+                "vue2-strategy/src/core"
+            ]
+        },
         "allowSyntheticDefaultImports": true,
         "target": "es5",
         "module": "commonjs",
-        "baseUrl": ".",
-        "outDir": "./temp",
         "noEmitOnError": true,
         "declaration": true,
         "experimentalDecorators": true,
@@ -16,9 +29,13 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "strictNullChecks": true,
-        "lib": ["esnext", "dom"]
+        "lib": [
+            "esnext",
+            "dom"
+        ]
     },
-    "include": [
-        "./src/**/*", "strategy/vue3/index.ts", "strategy/vue3/__tests__"
+    "exclude": [
+        "node_modules",
+        "dist"
     ]
 }
