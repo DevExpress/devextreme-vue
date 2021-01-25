@@ -89,14 +89,14 @@ gulp.task(NPM_BUILD_WITH_HEADERS, gulp.series(
   }
 ));
 
+gulp.task(BUILD, gulp.series(
+  NPM_BUILD_WITH_HEADERS,
+  GENERATE
+));
+
 gulp.task(NPM_PACK, gulp.series(
   BUILD,
   shell.task(['npm pack']),
   () => gulp.src('./*.tgz').pipe(rename('vue2-strategy.tgz')).pipe(gulp.dest(config.npm.dist)),
   (c) => del('./*.tgz', c)
-));
-
-gulp.task(BUILD, gulp.series(
-  NPM_BUILD_WITH_HEADERS,
-  GENERATE
 ));
