@@ -1,4 +1,4 @@
-import * as dasherize from "dasherize";
+import dasherize from "dasherize";
 import { extname as getPathExtension } from "path";
 
 export function removeExtension(path: string) {

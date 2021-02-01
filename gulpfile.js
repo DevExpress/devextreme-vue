@@ -57,6 +57,7 @@ gulp.task(OLD_OUTPUTDIR_CREATE, (done) =>
 gulp.task(GEN_COMPILE, gulp.series(GEN_CLEAN, () =>
   gulp.src([config.generator.src, `!**/*.test.ts`])
     .pipe(ts({
+      'esModuleInterop': true,
       'target': 'es6',
       'module': 'commonjs'
     }))
