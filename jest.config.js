@@ -1,24 +1,7 @@
-const vuePath = "vue/dist/vue.cjs";
+const base = require('./jest.config.base.js');
+
 module.exports = {
-    "roots": [
-      "<rootDir>/src/core/__tests__",
-      "<rootDir>/tools"
-    ],
-    "transform": {
-      "^.+\\.(j|t)sx?$": "ts-jest"
-    },
-    "testURL": "http://localhost",
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ],
-    "moduleNameMapper": {
-      "^vue$": vuePath,
-      "^@/(.*)$": "<rootDir>/src/$1"
-    }
+  ...base,
+  projects: ['<rootDir>/packages/*/jest.config.js'],
+  coverageDirectory: '<rootDir>/coverage/',
 };

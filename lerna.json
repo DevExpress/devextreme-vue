@@ -1,6 +1,10 @@
 {
     "packages": [
-        "vue2-strategy"
+      "packages/*"
     ],
-    "version": "0.0.0"
-}
+    "version": "independent",
+    "npmClient": "npm",
+    "stream": true,
+    "nohoist": ["vue-loader", "vue-template-compiler"]
+  }
+  
