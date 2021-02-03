@@ -17,7 +17,7 @@
     "bootstrap": "lerna bootstrap --no-ci --hoist",
     "build": "lerna run build && npm run lint",
     "lint": "gulp lint",
-    "test": "jest",
+    "test": "lerna run build && jest",
     "test-watch": "jest --watch",
     "pack": "lerna run pack",
     "update-integration-meta": "dx-tools update-integration-meta --output-path ./packages/devextreme-vue/metadata/integration-data.json",
