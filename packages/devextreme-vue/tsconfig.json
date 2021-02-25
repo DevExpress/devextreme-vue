@@ -4,7 +4,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "typeRoots": [
-      "./node_module/@types"
+      "./node_modules/@types"
     ]
   },
   "include": [
