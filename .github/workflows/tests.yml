@@ -39,8 +39,8 @@ jobs:
     - name: Run lint
       run: npm run lint
 
-    - name: Pack with Vue
-      run: npm run pack
+    - name: Build with Vue
+      run: npm run build
 
     - name: Run tests with Vue
       run: npm run test
