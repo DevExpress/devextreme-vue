@@ -44,7 +44,7 @@ jobs:
       run: npm run build
 
     - name: Run tests with Vue
-      run: npx lerna run --scope devextreme-vue gulp -- run.tests
+      run: npm run test
 
     - name: Install Vue Latest
       run: |
@@ -53,7 +53,7 @@ jobs:
         npx lerna add @vue/test-utils@latest packages/devextreme-vue --dev --exact --no-bootstrap
         npx lerna bootstrap --no-ci
     - name: Run tests with Vue latest
-      run: npx lerna run --scope devextreme-vue gulp -- run.tests
+      run: npm run test
 
     - name: Install Vue Next
       run: |
@@ -62,4 +62,4 @@ jobs:
         npx lerna add @vue/test-utils@next packages/devextreme-vue --dev --exact --no-bootstrap
         npx lerna bootstrap --no-ci
     - name: Run tests with Vue Next
-      run: npx lerna run --scope devextreme-vue gulp -- run.tests 
+      run: npm run test 
