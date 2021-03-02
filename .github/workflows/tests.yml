@@ -1,0 +1,65 @@
+name: Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Clone devextreme repo from PR author fork
+      continue-on-error: true
+      if: github.event_name == 'pull_request'
+      run: git clone -b ${{github.event.pull_request.head.ref}} https://github.com/${{github.event.pull_request.user.login}}/devextreme ../devextreme-repo
+
+    - name: Clone devextreme repo
+      run: test -d ../devextreme-repo || git clone -b 21_1 https://github.com/devexpress/devextreme ../devextreme-repo
+
+    - name: Install packages in devextreme repo
+      run: |
+        cd ../devextreme-repo
+        npm install --no-audit --no-fund
+    - name: Build devextreme repo
+      run: |
+        cd ../devextreme-repo
+        npm run build-dist
+    - name: Install devextreme package
+      run: |
+        cd ./packages/devextreme-vue
+        npm install --save-dev ../../../devextreme-repo/artifacts/npm/devextreme
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Run devextreme-vue-generator tests
+      run: npx lerna run --scope devextreme-vue-generator test
+
+    - name: Run lint
+      run: npm run lint
+
+    - name: Build with Vue
+      run: npm run build
+
+    - name: Run tests with Vue
+      run: npx lerna run --scope devextreme-vue gulp -- run.tests
+
+    - name: Install Vue Latest
+      run: |
+        npx lerna clean --yes
+        npx lerna add @vue/compiler-sfc@latest packages/devextreme-vue --dev --exact --no-bootstrap
+        npx lerna add @vue/test-utils@latest packages/devextreme-vue --dev --exact --no-bootstrap
+        npx lerna bootstrap --no-ci
+    - name: Run tests with Vue latest
+      run: npx lerna run --scope devextreme-vue gulp -- run.tests
+
+    - name: Install Vue Next
+      run: |
+        npx lerna clean --yes
+        npx lerna add @vue/compiler-sfc@next packages/devextreme-vue --dev --exact --no-bootstrap
+        npx lerna add @vue/test-utils@next packages/devextreme-vue --dev --exact --no-bootstrap
+        npx lerna bootstrap --no-ci
+    - name: Run tests with Vue Next
+      run: npx lerna run --scope devextreme-vue gulp -- run.tests 
