@@ -23,19 +23,18 @@ jobs:
       run: |
         cd ../devextreme-repo
         npm install --no-audit --no-fund
+
     - name: Build devextreme repo
       run: |
         cd ../devextreme-repo
         npm run build-dist
+
     - name: Install devextreme package
       run: |
-        cd ../devextreme-repo
         npm install --save-dev ../devextreme-repo/artifacts/npm/devextreme
+
     - name: Run npm install
       run: npm install --no-audit --no-fund
-
-    - name: Run bootstrap
-      run: npm run bootstrap
 
     - name: Run lint
       run: npm run lint
