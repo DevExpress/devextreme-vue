@@ -58,7 +58,7 @@ jobs:
     - name: Install Vue Next
       run: |
         npx lerna clean --yes
-        npx lerna add @vue/compiler-sfc@next packages/devextreme-vue --dev --exact --no-bootstrap
+        npx lerna add @vue/compiler-sfc@preview packages/devextreme-vue --dev --exact --no-bootstrap
         npx lerna add @vue/test-utils@next packages/devextreme-vue --dev --exact --no-bootstrap
         npx lerna bootstrap --no-ci
     - name: Run tests with Vue Next
