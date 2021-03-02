@@ -5,6 +5,6 @@
     "version": "independent",
     "npmClient": "npm",
     "stream": true,
-    "nohoist": ["vue-loader", "vue-template-compiler"]
+    "nohoist": ["vue-loader", "vue-template-compiler", "@vue/test-utils", "typescript"]
   }
   
