@@ -37,6 +37,9 @@ jobs:
     - name: Run devextreme-vue-generator tests
       run: npx lerna run --scope devextreme-vue-generator test
 
+    - name: Run bootstrap
+      run: npm run bootstrap
+
     - name: Run lint
       run: npm run lint
 
@@ -45,21 +48,3 @@ jobs:
 
     - name: Run tests with Vue
       run: npm run test
-
-    - name: Install Vue Latest
-      run: |
-        npx lerna clean --yes
-        npx lerna add @vue/compiler-sfc@latest packages/devextreme-vue --dev --exact --no-bootstrap
-        npx lerna add @vue/test-utils@latest packages/devextreme-vue --dev --exact --no-bootstrap
-        npx lerna bootstrap --no-ci
-    - name: Run tests with Vue latest
-      run: npm run test
-
-    - name: Install Vue Next
-      run: |
-        npx lerna clean --yes
-        npx lerna add @vue/compiler-sfc@preview packages/devextreme-vue --dev --exact --no-bootstrap
-        npx lerna add @vue/test-utils@next packages/devextreme-vue --dev --exact --no-bootstrap
-        npx lerna bootstrap --no-ci
-    - name: Run tests with Vue Next
-      run: npm run test 
