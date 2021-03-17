@@ -7,6 +7,8 @@ import { IConfigurationComponent } from "./configuration-component";
 
 import { isFragment } from "./children-processing";
 
+export const VMODEL_NAME = "modelValue";
+
 export function getChildren(component: IBaseComponent): any {
     if (!hasChildren(component) || !component.$_config) {
         return [];
@@ -74,12 +76,9 @@ export function defaultSlots(component: ComponentPublicInstance): VNode[] {
 
 export function mount(options, parent, el) {
     const template = createApp(options);
+
     template.provide("eventBus", parent.eventBus);
-    template._context.components = Object.assign(parent.$.appContext.components, template._context.components);
-    template._context.provides = Object.assign(parent.$.appContext.provides, template._context.provides);
-    template._context.config = parent.$.appContext.config;
-    template._context.directives = parent.$.appContext.directives;
-    template._context.mixins = parent.$.appContext.mixins;
+    setAppContext(template, parent);
     return template.mount(el);
 }
 
@@ -112,9 +111,30 @@ export function getNodeTypeOfComponent(component: Pick<ComponentPublicInstance, 
     return component.$.vnode.type;
 }
 
+export function getVModelValue(options: Record<string, any>) {
+    return options[VMODEL_NAME];
+}
+
+export function setVModel(config: any): void {
+    const eventName = `update:${VMODEL_NAME}`;
+    config.model.prop = VMODEL_NAME;
+    config.model.event = eventName;
+    config.props.modelValue = {};
+    config.emits = { ...config.emits, [`${eventName}`]: null };
+}
+
 interface ChildConfiguration extends VNode {
     $_config?: Configuration;
     $_innerChanges?: Record<string, any>;
+}
+
+function setAppContext(template, parent) {
+    template._context.components = Object.assign(parent.$.appContext.components, template._context.components);
+    Object.setPrototypeOf(template._context.provides, Object.getPrototypeOf(parent.$.provides));
+    Object.assign(template._context.provides, parent.$.appContext.provides);
+    template._context.config = parent.$.appContext.config;
+    template._context.directives = parent.$.appContext.directives;
+    template._context.mixins = parent.$.appContext.mixins;
 }
 
 function findConfigurationComponents(children: VNode[]) {
