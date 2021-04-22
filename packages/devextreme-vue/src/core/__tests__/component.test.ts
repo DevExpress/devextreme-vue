@@ -413,9 +413,9 @@ describe("component rendering", () => {
         });
 
         it("should find nested options if they wrapped to some kind of fragment elements", () => {
-            const NestedCollectionItem = buildTestConfigCtor();
-            (NestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
-            (NestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
+            const NestedCollectionItem: IConfigurationComponent = buildTestConfigCtor();
+            NestedCollectionItem.$_optionName = "nestedOption";
+            NestedCollectionItem.$_isCollectionItem = true;
 
             const vm = defineComponent({
                 template:
