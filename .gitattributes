@@ -7,7 +7,6 @@
 *.md text eol=lf
 *.yml text eol=lf
 *.vue text eol=lf
+*.css text eol=lf
 *.ts text eol=lf
 *.html text eol=lf
-
-*.png binary
