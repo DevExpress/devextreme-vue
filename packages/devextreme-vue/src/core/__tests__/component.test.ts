@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import * as events from "devextreme/events";
-import { defineComponent, nextTick, App } from "vue";
+import { App, defineComponent, nextTick } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 import { IWidgetComponent } from "../component";
@@ -9,7 +9,7 @@ import { IConfigurable, IConfigurationComponent } from "../configuration-compone
 import { createComponent, createConfigurationComponent, createExtensionComponent } from "../index";
 
 interface CustomApp extends App {
-    test: string
+    test: string;
 }
 
 const eventHandlers = {};
@@ -34,7 +34,7 @@ const CustomPlugin = {
     install: (app) => {
         app.test = "test data";
     }
-  }
+};
 
 function createWidget(_, options) {
     if (options.onInitializing) {

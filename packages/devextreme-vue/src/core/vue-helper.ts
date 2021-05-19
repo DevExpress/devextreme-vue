@@ -1,11 +1,11 @@
 import {
+    App,
     ComponentPublicInstance,
     createApp,
     Slot,
     Slots,
     VNode,
-    VNodeProps,
-    App
+    VNodeProps
 } from "vue";
 import { camelize } from "./helpers";
 
@@ -137,10 +137,9 @@ interface ChildConfiguration extends VNode {
 }
 
 function setCustomPluginsData(appContext: App, parentAppContext: App) {
-    for(let prop in parentAppContext) {
-        const value = parentAppContext[prop];
-        if(!appContext.hasOwnProperty(prop) && value) {
-            appContext[prop] = value;
+    for (const prop in parentAppContext) {
+        if (!appContext.hasOwnProperty(prop) && parentAppContext.hasOwnProperty(prop)) {
+            appContext[prop] = parentAppContext[prop];
         }
     }
 }
