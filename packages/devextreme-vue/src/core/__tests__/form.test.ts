@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { defineComponent, nextTick } from "vue";
 
-import { DxItem, DxForm } from "../../form";
+import { DxForm, DxItem } from "../../form";
 
 jest.setTimeout(1000);
 beforeEach(() => {
@@ -50,9 +50,10 @@ describe("form", () => {
         nextTick(() => {
             wrapper.setProps({ show: true });
             nextTick(() => {
-                expect(wrapper.getComponent("#form").vm.$el.getElementsByClassName("dx-field-item-label-text")).toHaveLength(2);
+                expect(wrapper.getComponent("#form").vm.$el
+                .getElementsByClassName("dx-field-item-label-text")).toHaveLength(2);
                 done();
-             })
+             });
         });
     });
 });
