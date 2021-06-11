@@ -39,9 +39,9 @@ const includeAttrs = ["id", "class", "style"];
 
 function getAttrs(attrs) {
     const attributes = {};
-    includeAttrs.forEach(attr => {
+    includeAttrs.forEach((attr) => {
         const attrValue = attrs[attr];
-        if(attrValue) {
+        if (attrValue) {
             attributes[attr] = attrValue;
         }
     });
