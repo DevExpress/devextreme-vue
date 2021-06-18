@@ -289,7 +289,7 @@ describe("configuration", () => {
     it("creates configuration", () => {
         const vm = new TestComponent();
 
-        expect((vm as IConfigurable).$_config).not.toBeNull();
+        expect((vm as unknown as IConfigurable).$_config).not.toBeNull();
     });
 
     it("passes configuration initialValues to widget ctor", () => {
@@ -303,7 +303,7 @@ describe("configuration", () => {
         };
 
         const vm = new TestComponent();
-        (vm as IConfigurable).$_config = {
+        (vm as unknown as IConfigurable).$_config = {
             getNestedOptionValues: jest.fn(() => initialValues),
             getOptionsToWatch: jest.fn()
         } as any;
@@ -321,12 +321,12 @@ describe("configuration", () => {
         const vm = new TestComponent();
         vm.$mount();
 
-        const pendingOptions = (vm as IWidgetComponent).$_pendingOptions;
+        const pendingOptions = (vm as unknown as IWidgetComponent).$_pendingOptions;
 
         const name = "abc";
         const value = {};
 
-        (vm as IConfigurable).$_config.updateFunc(name, value);
+        (vm as unknown as IConfigurable).$_config.updateFunc(name, value);
         expect(pendingOptions[name]).toEqual(value);
     });
 
@@ -564,7 +564,7 @@ describe("configuration", () => {
 
             const vm = new WidgetComponent();
 
-            expect((vm as IWidgetComponent).$_config.expectedChildren).toBe(expected);
+            expect((vm as unknown as IWidgetComponent).$_config.expectedChildren).toBe(expected);
         });
 
         it("initialized for config component", () => {
