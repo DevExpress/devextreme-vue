@@ -28,7 +28,7 @@
   "dependencies": {
     "@types/semver": "^7.3.6",
     "dasherize": "^2.0.0",
-    "devextreme-internal-tools": "^6.4.4",
+    "devextreme-internal-tools": "^6.4.4 || ^7.0.0-beta.1",
     "dot": "^1.1.2",
     "semver": "^7.3.5"
   },
