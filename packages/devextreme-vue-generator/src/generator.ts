@@ -18,8 +18,6 @@ import {
   sep as pathSeparator
 } from "path";
 
-import { satisfies } from "semver";
-
 import generateComponent, {
   generateReExport,
   IComponent,
@@ -28,7 +26,6 @@ import generateComponent, {
   IProp
 } from "./component-generator";
 
-import { dependencies } from "../package.json";
 import { convertTypes } from "./converter";
 import { removeExtension, removePrefix, toKebabCase, uppercaseFirst } from "./helpers";
 import generateIndex, { IReExport } from "./index-generator";
@@ -43,14 +40,7 @@ function generate(
     indexFileName: string
   },
   widgetsPackage: string
-): string | undefined {
-  if (!rawData.meta.toolsVersion) {
-    return "Integration-data.json is built with old version of \'devextreme-internal-tools\' package. Update the integration-data.json file.";
-  }
-  if (!satisfies(rawData.meta.toolsVersion, dependencies["devextreme-internal-tools"])) {
-    return `Integration-data.json is built with incompatible (${rawData.meta.toolsVersion}) version of 'devextreme-internal-tools' package (you use ${dependencies["devextreme-internal-tools"]}). Update your 'devextreme-internal-tools' dependency.`;
-  }
-
+) {
   const modulePaths: IReExport[] = [];
 
   rawData.widgets.forEach((data) => {
@@ -80,7 +70,6 @@ function generate(
   });
 
   writeFile(out.indexFileName, generateIndex(modulePaths), { encoding: "utf8" });
-  return undefined;
 }
 
 function mapWidget(
