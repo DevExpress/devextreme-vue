@@ -1,12 +1,3 @@
-import { writeFileSync as writeFile } from "fs";
-import {
-  dirname as getDirName,
-  join as joinPaths,
-  normalize as normalizePath,
-  relative as getRelativePath,
-  sep as pathSeparator
-} from "path";
-
 import {
   IComplexProp,
   IComponentRef,
@@ -15,7 +6,17 @@ import {
   IProp as IOption,
   ITypeDescr,
   IWidget
-} from "./integration-data-model";
+} from "devextreme-internal-tools/integration-data-model";
+
+import { writeFileSync as writeFile } from "fs";
+
+import {
+  dirname as getDirName,
+  join as joinPaths,
+  normalize as normalizePath,
+  relative as getRelativePath,
+  sep as pathSeparator
+} from "path";
 
 import generateComponent, {
   generateReExport,

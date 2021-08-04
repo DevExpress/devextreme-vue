@@ -1,6 +1,6 @@
 
+import { IWidget } from "devextreme-internal-tools/integration-data-model";
 import { mapWidget } from "./generator";
-import { IWidget } from "./integration-data-model";
 
 const simpleWidget: IWidget = {
     complexOptions: [],
