@@ -162,9 +162,9 @@ const renderComponent: (model: {
     widgetsPackage: string;
 
 }) => string = createTempate(
-'<#? it.hasExplicitTypes #>' +
-    'export { ExplicitTypes } from "<#= it.widgetsPackage #>/<#= it.widgetImport.path #>";\n' +
-'<#?#>' +
+`<#? it.hasExplicitTypes #>` +
+    `export { ExplicitTypes } from "<#= it.widgetsPackage #>/<#= it.widgetImport.path #>";\n` +
+`<#?#>` +
 
 `import <#= it.widgetImport.name #><#? it.props #>, { Properties }<#?#> from "<#= it.widgetsPackage #>/<#= it.widgetImport.path #>";\n` +
 `<#~ it.namedImports :namedImport #>` +
