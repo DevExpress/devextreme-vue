@@ -97,10 +97,10 @@ export {
 it("generates option", () => {
     //#region EXPECTED
     const EXPECTED = `
-import WIDGET, { Options } from "widget-gackage-name/DX/WIDGET/PATH";
+import WIDGET, { Properties } from "widget-gackage-name/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 
-type AccessibleOptions = Pick<Options,
+type AccessibleOptions = Pick<Properties,
   "PROP"
 >;
 
