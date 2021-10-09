@@ -32,7 +32,7 @@ jobs:
     - name: Build devextreme repo
       run: |
         cd ../devextreme-repo
-        npm run build-dist
+        npm run build-npm-devextreme
     - name: Install devextreme package
       run: |
         cd ./packages/devextreme-vue
