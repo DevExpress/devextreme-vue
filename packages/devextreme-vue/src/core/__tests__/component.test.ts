@@ -1082,7 +1082,9 @@ describe("component rendering", () => {
             const container = document.createElement("div");
             renderItemTemplate({}, container);
 
-            expect(container.innerHTML).toBe("<div>child1</div><div>child2</div><span style=\"display: none;\"></span>");
+            expect(container.innerHTML).toBe(
+                "<div>child1</div><div>child2</div><span style=\"display: none;\"></span>"
+            );
         });
 
         it("template should have globalProperties of parent", () => {
