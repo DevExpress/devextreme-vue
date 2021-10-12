@@ -169,8 +169,12 @@ const renderComponent: (model: {
     `export { ExplicitTypes } from "<#= it.widgetsPackage #>/<#= it.widgetImport.path #>";\n` +
 `<#?#>` +
 
-`<#? it.reexports #>` +
-    `export { <#= it.reexports.join(', ') #> } from "<#= it.widgetsPackage #>/<#= it.widgetImport.path #>";\n` +
+`<#? it.reexports?.filter(n => n != 'default')?.length #>` +
+    `export {\n  <#= it.reexports.filter(n => n != 'default').join(',\\n  ') #>,\n} from "<#= it.widgetsPackage #>/<#= it.widgetImport.path #>";\n` +
+`<#?#>` +
+
+`<#? !it.defaultExport && it.reexports?.includes('default') #>` +
+    `export default from "<#= it.widgetsPackage #>/<#= it.widgetImport.path #>";\n` +
 `<#?#>` +
 
 `import <#= it.widgetImport.name #><#? it.props #>, { Properties }<#?#> from "<#= it.widgetsPackage #>/<#= it.widgetImport.path #>";\n` +

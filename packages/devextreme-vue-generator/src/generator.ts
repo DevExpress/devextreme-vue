@@ -107,6 +107,7 @@ function mapWidget(
       props: getProps(raw.options, customTypeHash),
       hasModel: !!raw.isEditor,
       hasExplicitTypes: !!raw.optionsTypeParams?.length,
+      reexports: raw.reexports,
       nestedComponents: raw.complexOptions
         ? raw.complexOptions.map((o) => mapNestedComponent(o, customTypeHash))
         : undefined,
