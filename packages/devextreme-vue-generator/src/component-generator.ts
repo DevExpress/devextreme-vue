@@ -21,6 +21,7 @@ interface IComponent {
     hasExplicitTypes?: boolean;
     nestedComponents?: INestedComponent[];
     expectedChildren?: Record<string, IExpectedChild>;
+    reexports?: string[];
 }
 
 interface INestedComponent {
@@ -104,6 +105,7 @@ function generate(component: IComponent, widgetsPackage: string = "devextreme"):
         nestedComponents,
         defaultExport: component.name,
         namedExports,
+        reexports: component.reexports,
         expectedChildren: formatExpectedChildren(component.expectedChildren),
         widgetsPackage
     };
@@ -159,11 +161,16 @@ const renderComponent: (model: {
     expectedChildren?: IExpectedChildModel[];
     defaultExport: string;
     namedExports: string[];
+    reexports?: string[];
     widgetsPackage: string;
 
 }) => string = createTempate(
 `<#? it.hasExplicitTypes #>` +
     `export { ExplicitTypes } from "<#= it.widgetsPackage #>/<#= it.widgetImport.path #>";\n` +
+`<#?#>` +
+
+`<#? it.reexports #>` +
+    `export { <#= it.reexports.join(', ') #> } from "<#= it.widgetsPackage #>/<#= it.widgetImport.path #>";\n` +
 `<#?#>` +
 
 `import <#= it.widgetImport.name #><#? it.props #>, { Properties }<#?#> from "<#= it.widgetsPackage #>/<#= it.widgetImport.path #>";\n` +

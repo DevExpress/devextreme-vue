@@ -49,6 +49,7 @@ export {
 it("generates component with model", () => {
     //#region EXPECTED
     const EXPECTED = `
+export { ReexportewdMember, OtherReexportedMember } from "widget-gackage-name/DX/WIDGET/PATH";
 import WIDGET from "widget-gackage-name/DX/WIDGET/PATH";
 import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
 
@@ -89,7 +90,8 @@ export {
                 name: "CONFIG_COMPONENT",
                 path: "./CONFIG_COMPONENT_PATH"
             },
-            hasModel: true
+            hasModel: true,
+            reexports: [ "ReexportewdMember", "OtherReexportedMember"]
         }, "widget-gackage-name")
     ).toBe(EXPECTED);
 });
