@@ -94,7 +94,7 @@ export {
                 path: "./CONFIG_COMPONENT_PATH"
             },
             hasModel: true,
-            reexports: [ "ReexportedMember", "OtherReexportedMember"]
+            reexports: [ "ReexportedMember", "OtherReexportedMember", "default"]
         }, "widget-gackage-name")
     ).toBe(EXPECTED);
 });
@@ -153,7 +153,8 @@ export {
                 name: "CONFIG_COMPONENT",
                 path: "./CONFIG_COMPONENT_PATH"
             },
-            props: [{ name: "PROP" }]
+            props: [{ name: "PROP" }],
+            reexports: [ "default" ]
         }, "widget-gackage-name")
     ).toBe(EXPECTED);
 });
