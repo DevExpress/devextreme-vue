@@ -11,7 +11,8 @@ const simpleWidget: IWidget = {
     name: "dxTestWidget",
     nesteds: [],
     options: [],
-    templates: []
+    templates: [],
+    optionsTypeParams: []
 };
 
 describe("mapWidget", () => {
