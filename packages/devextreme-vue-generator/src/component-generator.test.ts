@@ -1,4 +1,4 @@
-import generate, { renderProps } from "./component-generator";
+import generate, { renderProps, USE_SYNC_TEMPLATES } from "./component-generator";
 
 it("generates", () => {
     //#region EXPECTED
@@ -17,6 +17,7 @@ const COMPONENT = BASE_COMPONENT({
   },
   beforeCreate() {
     (this as any).$_WidgetClass = WIDGET;
+    (this as any).$_hasAsyncTemplate = true;
   }
 });
 
@@ -42,7 +43,7 @@ export {
                 name: "BASE_COMPONENT",
                 path: "./BASE_COMPONENT_PATH"
             }
-        }, "widget-gackage-name")
+        }, "widget-gackage-name", 3)
     ).toBe(EXPECTED);
 });
 
@@ -64,6 +65,7 @@ const COMPONENT = BASE_COMPONENT({
   },
   beforeCreate() {
     (this as any).$_WidgetClass = WIDGET;
+    (this as any).$_hasAsyncTemplate = true;
   }
 });
 
@@ -123,6 +125,7 @@ const COMPONENT = BASE_COMPONENT({
   },
   beforeCreate() {
     (this as any).$_WidgetClass = WIDGET;
+    (this as any).$_hasAsyncTemplate = true;
   }
 });
 
@@ -171,6 +174,7 @@ const COMPONENT = BASE_COMPONENT({
   },
   beforeCreate() {
     (this as any).$_WidgetClass = WIDGET;
+    (this as any).$_hasAsyncTemplate = true;
   }
 });
 
@@ -219,6 +223,7 @@ const COMPONENT = BASE_COMPONENT({
   },
   beforeCreate() {
     (this as any).$_WidgetClass = WIDGET;
+    (this as any).$_hasAsyncTemplate = true;
   }
 });
 
@@ -289,6 +294,7 @@ const COMPONENT = BASE_COMPONENT({
   },
   beforeCreate() {
     (this as any).$_WidgetClass = WIDGET;
+    (this as any).$_hasAsyncTemplate = true;
   }
 });
 
@@ -360,6 +366,7 @@ const COMPONENT = BASE_COMPONENT({
   },
   beforeCreate() {
     (this as any).$_WidgetClass = WIDGET;
+    (this as any).$_hasAsyncTemplate = true;
     (this as any).$_expectedChildren = {
       EXPECTED_1: { isCollectionItem: true, optionName: "abc" },
       EXPECTED_2: { isCollectionItem: false, optionName: "def" }
@@ -426,6 +433,62 @@ export {
             }
         }, "widget-gackage-name")
     ).toBe(EXPECTED);
+});
+
+describe("addintion info generation", () => {
+  beforeAll(() => {
+    USE_SYNC_TEMPLATES.add("COMPONENT");
+  });
+  afterEach(() => {
+    USE_SYNC_TEMPLATES.delete("COMPONENT");
+  });
+
+  it("generates", () => {
+      //#region EXPECTED
+      const EXPECTED = `
+import WIDGET from "widget-gackage-name/DX/WIDGET/PATH";
+import { BASE_COMPONENT } from "./BASE_COMPONENT_PATH";
+
+interface COMPONENT {
+  readonly instance?: WIDGET;
+}
+const COMPONENT = BASE_COMPONENT({
+  computed: {
+    instance(): WIDGET {
+      return (this as any).$_instance;
+    }
+  },
+  beforeCreate() {
+    (this as any).$_WidgetClass = WIDGET;
+    (this as any).$_hasAsyncTemplate = false;
+  }
+});
+
+export default COMPONENT;
+export {
+  COMPONENT
+};
+`.trimLeft();
+      //#endregion
+
+      expect(
+          generate({
+              name: "COMPONENT",
+              widgetComponent: {
+                name: "WIDGET",
+                path: "DX/WIDGET/PATH"
+              },
+              configComponent: {
+                  name: "CONFIG_COMPONENT",
+                  path: "./CONFIG_COMPONENT_PATH"
+              },
+              baseComponent: {
+                  name: "BASE_COMPONENT",
+                  path: "./BASE_COMPONENT_PATH"
+              }
+          }, "widget-gackage-name", 3)
+      ).toBe(EXPECTED);
+  });
 });
 
 describe("props generation", () => {
@@ -548,6 +611,7 @@ const COMPONENT = BASE_COMPONENT({
   },
   beforeCreate() {
     (this as any).$_WidgetClass = WIDGET;
+    (this as any).$_hasAsyncTemplate = true;
   }
 });
 
@@ -624,6 +688,7 @@ const COMPONENT = BASE_COMPONENT({
   },
   beforeCreate() {
     (this as any).$_WidgetClass = WIDGET;
+    (this as any).$_hasAsyncTemplate = true;
   }
 });
 
