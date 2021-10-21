@@ -10,7 +10,7 @@ import Configuration, { bindOptionWatchers, setEmitOptionChangedFunc } from "./c
 import { IConfigurable, initOptionChangedFunc } from "./configuration-component";
 import { DX_REMOVE_EVENT } from "./constants";
 import { IExtension, IExtensionComponentNode } from "./extension-component";
-import { camelize, forEachChildNode, getOptionValue, toComparable } from "./helpers";
+import { camelize, forEachChildNode, getOptionValue, getTemplatePropName, toComparable } from "./helpers";
 import {
     IEventBusHolder
 } from "./templates-discovering";
@@ -33,6 +33,7 @@ export interface IBaseComponent extends ComponentPublicInstance, IWidgetComponen
     $_createEmitters: () => void;
     $_processChildren: () => void;
     $_getTemplates: () => object;
+    $_hasAsyncTemplate: boolean;
 }
 
 const includeAttrs = ["id", "class", "style"];
@@ -104,8 +105,9 @@ function initBaseComponent() {
                     thisComponent.$_templatesManager.templates
                 );
 
+                const props = thisComponent.$.vnode.props;
                 for (const name of Object.keys(thisComponent.$_templatesManager.templates)) {
-                    thisComponent.$_instance.option(name, name);
+                    thisComponent.$_instance.option(getTemplatePropName(props, name), name);
                 }
 
                 thisComponent.$_templatesManager.resetDirtyFlag();
@@ -181,7 +183,7 @@ function initBaseComponent() {
                 }
 
                 const options: object = {
-                    templatesRenderAsynchronously: true,
+                    templatesRenderAsynchronously: thisComponent.$_hasAsyncTemplate,
                     ...getComponentProps(thisComponent),
                     ...config.initialValues,
                     ...config.getNestedOptionValues(),
@@ -210,8 +212,9 @@ function initBaseComponent() {
                     const templates = thisComponent.$_templatesManager.templates;
 
                     result.integrationOptions.templates = templates;
+                    const props = thisComponent.$.vnode.props;
                     for (const name of Object.keys(templates)) {
-                        result[name] = name;
+                        result[getTemplatePropName(props, name)] = name;
                     }
 
                     thisComponent.$_templatesManager.resetDirtyFlag();

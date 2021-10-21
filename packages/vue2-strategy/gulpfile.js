@@ -7,9 +7,10 @@ const ts = require('gulp-typescript');
 const generateSync = require('devextreme-vue-generator').default;
 
 const config = require('./build.config');
+const VUE_VERSION = 2;
 
 gulp.task('build.components', gulp.series(
-  (done) => 
+  (done) =>
     mkdir(config.oldComponentsDir, {}, done),
   (done) => {
     generateSync(
@@ -21,17 +22,23 @@ gulp.task('build.components', gulp.series(
         oldComponentsDir: config.oldComponentsDir,
         indexFileName: config.indexFileName
       },
-      config.widgetsPackage
+      config.widgetsPackage,
+      VUE_VERSION
     );
-  
+
     done();
   }
 ));
 
 gulp.task('clean', gulp.parallel(
-  (c) => del([`${config.generatedComponentsDir}\\*`, `!${config.coreComponentsDir}`], c), 
+  (c) => del([`${config.generatedComponentsDir}\\*`, `!${config.coreComponentsDir}`], c),
   (c) => del(config.npm.dist, c)
 ));
+
+gulp.task('copy-helper', () => {
+  return gulp.src('../devextreme-vue/src/core/helpers.ts')
+    .pipe(gulp.dest('./src/core'));
+});
 
 gulp.task('build.strategy', function() {
   return gulp.src([
@@ -44,6 +51,7 @@ gulp.task('build.strategy', function() {
 
 gulp.task('build', gulp.series(
   'clean',
+  'copy-helper',
   'build.strategy',
   'build.components'
 ));

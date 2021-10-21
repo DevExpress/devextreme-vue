@@ -67,13 +67,17 @@ function generateReExport(path: string, fileName: string): string {
     return renderReExport({ path, fileName });
 }
 
+export const USE_SYNC_TEMPLATES: Set<string> = new Set([
+    "DxScheduler"
+]);
+
 const renderReExport: (model: {path: string, fileName: string}) => string = createTempate(
 `/** @deprecated Use 'devextreme-vue/<#= it.fileName #>' file instead */\n` +
 `export * from "<#= it.path #>";\n` +
 `export { default } from "<#= it.path #>";\n`
 );
 
-function generate(component: IComponent, widgetsPackage: string = "devextreme"): string {
+function generate(component: IComponent, widgetsPackage: string = "devextreme", vueVersion: number = 3): string {
     const nestedComponents = component.nestedComponents
         ? component.nestedComponents.map(createNestedComponentModel)
         : undefined;
@@ -107,7 +111,9 @@ function generate(component: IComponent, widgetsPackage: string = "devextreme"):
         namedExports,
         reexports: component.reexports,
         expectedChildren: formatExpectedChildren(component.expectedChildren),
-        widgetsPackage
+        widgetsPackage,
+        templatesRenderAsynchronously: !USE_SYNC_TEMPLATES.has(component.name),
+        isVue3: vueVersion === 3
     };
 
     return renderComponent(componentModel);
@@ -163,6 +169,8 @@ const renderComponent: (model: {
     namedExports: string[];
     reexports?: string[];
     widgetsPackage: string;
+    templatesRenderAsynchronously: boolean;
+    isVue3: boolean;
 
 }) => string = createTempate(
 `<#? it.hasExplicitTypes #>` +
@@ -221,7 +229,9 @@ L1 + `},` +
 
 L1 + `beforeCreate() {` +
     L2 + `(this as any).$_WidgetClass = <#= it.widgetImport.name #>;` +
-
+    `<#? it.isVue3 #>` +
+    L2 + `(this as any).$_hasAsyncTemplate = <#= it.templatesRenderAsynchronously #>;` +
+    `<#?#>` +
     `<#? it.expectedChildren #>` +
     L2 + `(this as any).$_expectedChildren = {` +
     `<#~ it.expectedChildren : child #>` +
