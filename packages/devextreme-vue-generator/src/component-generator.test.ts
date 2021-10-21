@@ -392,9 +392,9 @@ describe("addintion info generation", () => {
   });
   afterEach(() => {
     USE_SYNC_TEMPLATES.delete("COMPONENT");
-  })
+  });
 
-    it("generates", () => {
+  it("generates", () => {
       //#region EXPECTED
       const EXPECTED = `
 import WIDGET from "widget-gackage-name/DX/WIDGET/PATH";
@@ -440,7 +440,7 @@ export {
           }, "widget-gackage-name", 3)
       ).toBe(EXPECTED);
   });
-})
+});
 
 describe("props generation", () => {
 
