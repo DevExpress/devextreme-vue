@@ -174,6 +174,7 @@ const COMPONENT = BASE_COMPONENT({
   },
   beforeCreate() {
     (this as any).$_WidgetClass = WIDGET;
+    (this as any).$_hasAsyncTemplate = true;
   }
 });
 
