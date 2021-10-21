@@ -23,7 +23,7 @@ jobs:
       run: git clone -b ${{github.event.pull_request.head.ref}} https://github.com/${{github.event.pull_request.user.login}}/devextreme ../devextreme-repo
 
     - name: Clone devextreme repo
-      run: test -d ../devextreme-repo || git clone -b 21_1 https://github.com/devexpress/devextreme ../devextreme-repo
+      run: test -d ../devextreme-repo || git clone -b 21_2 https://github.com/devexpress/devextreme ../devextreme-repo
 
     - name: Install packages in devextreme repo
       run: |
@@ -32,7 +32,7 @@ jobs:
     - name: Build devextreme repo
       run: |
         cd ../devextreme-repo
-        npm run build-dist
+        npm run build-npm-devextreme
     - name: Install devextreme package
       run: |
         cd ./packages/devextreme-vue

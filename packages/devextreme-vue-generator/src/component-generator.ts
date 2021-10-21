@@ -18,6 +18,7 @@ interface IComponent {
     configComponent: IImport;
     props?: IProp[];
     hasModel?: boolean;
+    hasExplicitTypes?: boolean;
     nestedComponents?: INestedComponent[];
     expectedChildren?: Record<string, IExpectedChild>;
 }
@@ -153,6 +154,7 @@ const renderComponent: (model: {
     configComponent: string;
     renderedProps?: string;
     hasModel?: boolean;
+    hasExplicitTypes?: boolean;
     nestedComponents?: INestedComponentModel[];
     expectedChildren?: IExpectedChildModel[];
     defaultExport: string;
@@ -160,13 +162,17 @@ const renderComponent: (model: {
     widgetsPackage: string;
 
 }) => string = createTempate(
-`import <#= it.widgetImport.name #><#? it.props #>, { Options }<#?#> from "<#= it.widgetsPackage #>/<#= it.widgetImport.path #>";\n` +
+`<#? it.hasExplicitTypes #>` +
+    `export { ExplicitTypes } from "<#= it.widgetsPackage #>/<#= it.widgetImport.path #>";\n` +
+`<#?#>` +
+
+`import <#= it.widgetImport.name #><#? it.props #>, { Properties }<#?#> from "<#= it.widgetsPackage #>/<#= it.widgetImport.path #>";\n` +
 `<#~ it.namedImports :namedImport #>` +
 `import { <#= namedImport.name #> } from "<#= namedImport.path #>";\n` +
 `<#~#>` + `\n` +
 
 `<#? it.props #>` +
-    `type AccessibleOptions = Pick<Options,` +
+    `type AccessibleOptions = Pick<Properties,` +
     `<#~ it.props: prop #>` +
         L1 + `"<#= prop.name #>" |` +
     `<#~#>` +

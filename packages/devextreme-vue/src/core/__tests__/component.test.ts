@@ -52,6 +52,7 @@ const TestComponent = createComponent({
         prop1: Number,
         prop2: Array,
         sampleProp: String,
+        templateName: String
     },
     model: {
         prop: "prop1",
@@ -163,6 +164,54 @@ describe("component rendering", () => {
             nextTick(() => {
                 expect((wrapper.vm as any as IConfigurable).$_config.updateValue).toBeCalled();
                 done();
+            });
+        });
+
+        it("pass the same template name as in props", () => {
+            const vm = defineComponent({
+                template:
+                    `<test-component id="component" templateName="myTemplate">
+                        <template #myTemplate>
+                            content
+                        </template>
+                    </test-component>`,
+                components: {
+                    TestComponent
+                }
+            });
+
+            const wrapper = mount(vm);
+            const component = wrapper.getComponent("#component");
+
+            expect(WidgetClass.mock.calls[0][0]).toBe(component.vm.$el);
+
+            expect(skipIntegrationOptions(WidgetClass.mock.calls[0][1])).toEqual({
+                templateName: "myTemplate",
+                templatesRenderAsynchronously: true
+            });
+        });
+
+        it("pass template name as default", () => {
+            const vm = defineComponent({
+                template:
+                    `<test-component id="component">
+                        <template #templateName>
+                            content
+                        </template>
+                    </test-component>`,
+                components: {
+                    TestComponent
+                }
+            });
+
+            const wrapper = mount(vm);
+            const component = wrapper.getComponent("#component");
+
+            expect(WidgetClass.mock.calls[0][0]).toBe(component.vm.$el);
+
+            expect(skipIntegrationOptions(WidgetClass.mock.calls[0][1])).toEqual({
+                templateName: "templateName",
+                templatesRenderAsynchronously: true
             });
         });
 
@@ -953,6 +1002,37 @@ describe("component rendering", () => {
             expect(integrationOptions.templates.default).toBeUndefined();
         });
 
+        it("pass correct template name", () => {
+            const vm = defineComponent({
+                template: `<test-component templateName="myTemplate">
+                             <template #item>
+                               <div>1</div>
+                             </template>
+                             <template #content>
+                               <div>1</div>
+                             </template>
+                             <div>1</div>
+                           </test-component>`,
+                components: {
+                    TestComponent
+                }
+            });
+
+            mount(vm);
+            const integrationOptions = WidgetClass.mock.calls[0][1].integrationOptions;
+
+            expect(integrationOptions).toBeDefined();
+            expect(integrationOptions.templates).toBeDefined();
+
+            expect(integrationOptions.templates.item).toBeDefined();
+            expect(typeof integrationOptions.templates.item.render).toBe("function");
+
+            expect(integrationOptions.templates.content).toBeDefined();
+            expect(typeof integrationOptions.templates.content.render).toBe("function");
+
+            expect(integrationOptions.templates.default).toBeUndefined();
+        });
+
         it("passes 'integrationOptions.templates' on update", () => {
             const wrapper = mount(componentWithTemplate);
 
@@ -1064,6 +1144,27 @@ describe("component rendering", () => {
             expect(renderedTemplate.nodeName).toBe("DIV");
             expect(renderedTemplate.className).toBe(DX_TEMPLATE_WRAPPER);
             expect(renderedTemplate.innerHTML).toBe("Template");
+        });
+
+        it("renders template with several children", () => {
+            const vm = defineComponent({
+                template: `<test-component>
+                                <template #item>
+                                    <div>child1</div>
+                                    <div>child2</div>
+                                </template>
+                            </test-component>`,
+                components: {
+                    TestComponent
+                }
+            });
+            mount(vm);
+            const container = document.createElement("div");
+            renderItemTemplate({}, container);
+
+            expect(container.innerHTML).toBe(
+                "<div>child1</div><div>child2</div><span style=\"display: none;\"></span>"
+            );
         });
 
         it("template should have globalProperties of parent", () => {
