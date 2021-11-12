@@ -51,6 +51,8 @@ jobs:
         npm install --save-dev ../../../devextreme-repo/artifacts/npm/devextreme
         cd ../sandbox
         npm install --save-dev ../../../devextreme-repo/artifacts/npm/devextreme
+        cd ../vue2-strategy
+        npm install --save-dev ../../../devextreme-repo/artifacts/npm/devextreme
         cd ../../
         npm install --save-dev ../devextreme-repo/artifacts/npm/devextreme
 
