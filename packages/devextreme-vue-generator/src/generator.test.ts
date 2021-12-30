@@ -12,7 +12,8 @@ const simpleWidget: IWidget = {
     nesteds: [],
     options: [],
     templates: [],
-    optionsTypeParams: []
+    optionsTypeParams: [],
+    reexports: []
 };
 
 describe("mapWidget", () => {
@@ -29,7 +30,8 @@ describe("mapWidget", () => {
                             { type: "String" } as any
                         ],
                         isSubscribable: false,
-                        props: []
+                        props: [],
+                        isDeprecated: false,
                     }
                 ]
             },
