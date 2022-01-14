@@ -25,6 +25,11 @@ jobs:
     - name: Clone devextreme repo
       run: test -d ../devextreme-repo || git clone -b 21_1 https://github.com/devexpress/devextreme ../devextreme-repo
 
+    - name: Use Node.js 15
+      uses: actions/setup-node@v2
+      with:
+        node-version: '15'
+
     - name: Install packages in devextreme repo
       run: |
         cd ../devextreme-repo
@@ -33,6 +38,12 @@ jobs:
       run: |
         cd ../devextreme-repo
         npm run build-dist
+
+    - name: Use Node.js 14
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
     - name: Install devextreme package
       run: |
         cd ./packages/devextreme-vue
