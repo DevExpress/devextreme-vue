@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { defineComponent, nextTick } from "vue";
 
-import { DxDataGrid, DxColumn } from "../../data-grid";
+import { DxColumn, DxDataGrid } from "../../data-grid";
 
 jest.setTimeout(1000);
 beforeEach(() => {
@@ -35,14 +35,14 @@ describe("data grid", () => {
                 return {
                     visible1: true,
                     visible2: true
-                }
+                };
             },
             props: {
                 data: {
                     type: Object,
                     default: [
-                        { prop: 'test1', prop2: 'test1'},
-                        { prop: 'test2', prop2: 'test2' }
+                        { prop: "test1", prop2: "test1"},
+                        { prop: "test2", prop2: "test2" }
                     ]
                 }
             }
@@ -50,10 +50,10 @@ describe("data grid", () => {
 
         const wrapper = mount(vm);
         const instance = (wrapper.getComponent("#grid").vm as any).$_instance;
-        instance.option('columns[0].visible', false);
+        instance.option("columns[0].visible", false);
 
         nextTick(() => {
-            instance.option('columns[1].visible', false);
+            instance.option("columns[1].visible", false);
             nextTick(() => {
                 expect(wrapper.vm.visible1).toBe(false);
                 expect(wrapper.vm.visible2).toBe(false);
