@@ -73,3 +73,10 @@ jobs:
 
     - name: Run tests with Vue
       run: npm run test
+
+    - name: Archive internal-tools artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: internal-tools-artifacts
+        path: artifacts/internal-tools/
+        retention-days: 7
