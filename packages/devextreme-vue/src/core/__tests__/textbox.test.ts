@@ -28,9 +28,10 @@ describe("two-way binding", () => {
             }
         });
         const wrapper = mount(vm);
-        const component = wrapper.getComponent("#component2").vm as any as IConfigurable;
+        const components = wrapper.findAllComponents(DxTextBox);
+        const component = components[1].vm as any as IConfigurable;
         component.$_config.updateValue = jest.fn();
-        wrapper.getComponent("#component1").vm.$emit("update:modelValue", "newValue");
+        components[0].vm.$emit("update:modelValue", "newValue");
         nextTick(() => {
             expect(component.$_config.updateValue).toBeCalled();
             done();
@@ -51,7 +52,7 @@ describe("two-way binding", () => {
             }
         });
         const wrapper = mount(vm);
-        const component = wrapper.getComponent("#component2").vm as any as IConfigurable;
+        const component = wrapper.findAllComponents(DxTextBox)[0].vm as any as IConfigurable;
         component.$_config.updateValue = jest.fn();
         wrapper.setProps({ testValue: "test" });
         nextTick(() => {

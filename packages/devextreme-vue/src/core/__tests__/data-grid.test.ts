@@ -49,7 +49,7 @@ describe("data grid", () => {
         });
 
         const wrapper = mount(vm);
-        const instance = (wrapper.getComponent("#grid").vm as any).$_instance;
+        const instance = (wrapper.getComponent(DxDataGrid).vm as any).$_instance;
         instance.option("columns[0].visible", false);
 
         nextTick(() => {

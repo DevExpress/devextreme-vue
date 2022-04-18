@@ -50,7 +50,7 @@ describe("form", () => {
         nextTick(() => {
             wrapper.setProps({ show: true });
             nextTick(() => {
-                expect(wrapper.getComponent("#form").vm.$el
+                expect(wrapper.getComponent(DxForm).vm.$el
                 .getElementsByClassName("dx-field-item-label-text")).toHaveLength(2);
                 done();
              });

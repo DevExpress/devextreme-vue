@@ -105,35 +105,35 @@ describe("component rendering", () => {
     });
 
     it("passes id to element", () => {
-        const vm = defineComponent({
+        const component = defineComponent({
             template: "<test-component id='my-id'/>",
             components: {
                 TestComponent
             }
         });
-        const wrapper = mount(vm);
+        const wrapper = mount(component);
         expect(wrapper.element.id).toBe("my-id");
     });
 
     it("passes class to element", () => {
-        const vm = defineComponent({
+        const component = defineComponent({
             template: "<test-component class='my-class my-class2'/>",
             components: {
                 TestComponent
             }
         });
-        const wrapper = mount(vm);
+        const wrapper = mount(component);
         expect(wrapper.element.className).toBe("my-class my-class2");
     });
 
     it("passes styles to element", () => {
-        const vm = defineComponent({
+        const component = defineComponent({
             template: "<test-component style='height: 10px; width: 20px;'/>",
             components: {
                 TestComponent
             }
         });
-        const wrapper = mount(vm);
+        const wrapper = mount(component);
         expect(wrapper.element.outerHTML).toBe("<div style=\"height: 10px; width: 20px;\"></div>");
     });
 
@@ -157,7 +157,7 @@ describe("component rendering", () => {
                 props: {
                     sampleProp: "test"
                 }
-            });
+            }) as any;
 
             (wrapper.vm as any).$_config.updateValue = jest.fn();
             wrapper.setProps({ sampleProp: undefined });
@@ -169,7 +169,7 @@ describe("component rendering", () => {
         });
 
         it("pass the same template name as in props", () => {
-            const vm = defineComponent({
+            const component = defineComponent({
                 template:
                     `<test-component id="component" templateName="myTemplate">
                         <template #myTemplate>
@@ -181,10 +181,9 @@ describe("component rendering", () => {
                 }
             });
 
-            const wrapper = mount(vm);
-            const component = wrapper.getComponent("#component");
+            const wrapper = mount(component);
 
-            expect(WidgetClass.mock.calls[0][0]).toBe(component.vm.$el);
+            expect(WidgetClass.mock.calls[0][0]).toBe(wrapper.getComponent(TestComponent).vm.$el);
 
             expect(skipIntegrationOptions(WidgetClass.mock.calls[0][1])).toEqual({
                 templateName: "myTemplate",
@@ -193,7 +192,7 @@ describe("component rendering", () => {
         });
 
         it("pass template name as default", () => {
-            const vm = defineComponent({
+            const component = defineComponent({
                 template:
                     `<test-component id="component">
                         <template #templateName>
@@ -205,10 +204,8 @@ describe("component rendering", () => {
                 }
             });
 
-            const wrapper = mount(vm);
-            const component = wrapper.getComponent("#component");
-
-            expect(WidgetClass.mock.calls[0][0]).toBe(component.vm.$el);
+            const wrapper = mount(component);
+            expect(WidgetClass.mock.calls[0][0]).toBe(wrapper.getComponent(TestComponent).vm.$el);
 
             expect(skipIntegrationOptions(WidgetClass.mock.calls[0][1])).toEqual({
                 templateName: "templateName",
@@ -332,7 +329,7 @@ describe("component rendering", () => {
         });
 
         it("initializes nested config", () => {
-            const vm = defineComponent({
+            const component = defineComponent({
                 template:
                     `<test-component id="component">` +
                     `  <nested :prop1="123" />` +
@@ -343,9 +340,9 @@ describe("component rendering", () => {
                 }
             });
 
-            const wrapper = mount(vm);
+            const wrapper = mount(component);
 
-            const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+            const config = (wrapper.getComponent(TestComponent).vm as any as IConfigurable).$_config;
             expect(config.nested).toHaveLength(1);
             expect(config.nested[0].name).toBe("nestedOption");
             expect(config.nested[0].options).toEqual(["prop1", "prop2", "sampleProp"]);
@@ -358,9 +355,9 @@ describe("component rendering", () => {
             (NestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
             (NestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
-            const vm = defineComponent({
+            const component = defineComponent({
                 template:
-                    `<test-component id="component">` +
+                    `<test-component>` +
                     `  <nested-collection-item :prop1="123" />` +
                     `</test-component>`,
                 components: {
@@ -369,9 +366,9 @@ describe("component rendering", () => {
                 }
             });
 
-            const wrapper = mount(vm);
+            const wrapper = mount(component);
 
-            const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+            const config = (wrapper.getComponent(TestComponent).vm as any as IConfigurable).$_config;
             expect(config.nested).toHaveLength(1);
             expect(config.nested[0].name).toBe("nestedOption");
             expect(config.nested[0].options).toEqual(["prop1", "prop2", "sampleProp"]);
@@ -385,7 +382,7 @@ describe("component rendering", () => {
             (NestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
             (NestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
-            const vm = defineComponent({
+            const component = defineComponent({
                 template:
                     `<test-component id="component">` +
                     `  <nested-collection-item :prop1="123" />` +
@@ -398,9 +395,9 @@ describe("component rendering", () => {
                 }
             });
 
-            const wrapper = mount(vm);
+            const wrapper = mount(component);
 
-            const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+            const config = (wrapper.getComponent(TestComponent).vm as any as IConfigurable).$_config;
             expect(config.nested).toHaveLength(3);
 
             expect(config.nested[0].name).toBe("nestedOption");
@@ -427,7 +424,7 @@ describe("component rendering", () => {
             (NestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
             (NestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
-            const vm = defineComponent({
+            const component = defineComponent({
                 template:
                     `<test-component id="component">` +
                     `  <nested-collection-item v-for="(item, index) in items" :key="index" :prop1="item.value" />` +
@@ -443,9 +440,9 @@ describe("component rendering", () => {
                 }
             });
 
-            const wrapper = mount(vm);
+            const wrapper = mount(component);
 
-            const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+            const config = (wrapper.getComponent(TestComponent).vm as any as IConfigurable).$_config;
             expect(config.nested).toHaveLength(3);
 
             expect(config.nested[0].name).toBe("nestedOption");
@@ -472,7 +469,7 @@ describe("component rendering", () => {
             (NestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
             (NestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
-            const vm = defineComponent({
+            const component = defineComponent({
                 template:
                     `<test-component id="component">` +
                     `  <nested-collection-item v-for="(item, index) in items" :key="index" :prop1="item.value" />` +
@@ -488,10 +485,8 @@ describe("component rendering", () => {
                 }
             });
 
-            const wrapper = mount(vm);
-
-            const component = wrapper.getComponent("#component").vm;
-            expect(component.$.subTree.children).toHaveLength(3);
+            const wrapper = mount(component);
+            expect(wrapper.getComponent(TestComponent).vm.$.subTree.children).toHaveLength(3);
         });
 
         it("should find nested options if they wrapped to some kind of fragment elements", () => {
@@ -499,7 +494,7 @@ describe("component rendering", () => {
             NestedCollectionItem.$_optionName = "nestedOption";
             NestedCollectionItem.$_isCollectionItem = true;
 
-            const vm = defineComponent({
+            const component = defineComponent({
                 template:
                     `<test-component id="component">
                         <template v-if="hasNested">
@@ -520,10 +515,8 @@ describe("component rendering", () => {
                 }
             });
 
-            const wrapper = mount(vm);
-
-            const component = wrapper.getComponent("#component").vm;
-            expect(component.$.subTree.children).toHaveLength(3);
+            const wrapper = mount(component);
+            expect(wrapper.getComponent(TestComponent).vm.$.subTree.children).toHaveLength(3);
         });
 
         it("initializes nested config predefined prop", () => {
@@ -534,9 +527,9 @@ describe("component rendering", () => {
                 predefinedProp: predefinedValue
             };
 
-            const vm = defineComponent({
+            const component = defineComponent({
                 template:
-                    `<test-component id="component">` +
+                    `<test-component>` +
                     `  <nested-with-predefined />` +
                     `</test-component>`,
                 components: {
@@ -545,9 +538,9 @@ describe("component rendering", () => {
                 }
             });
 
-            const wrapper = mount(vm);
+            const wrapper = mount(component);
 
-            const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+            const config = (wrapper.getComponent(TestComponent).vm as any as IConfigurable).$_config;
             const initialValues = config.getNestedOptionValues();
             expect(initialValues).toHaveProperty("nestedOption");
             expect(initialValues!.nestedOption).toHaveProperty("predefinedProp");
@@ -558,9 +551,9 @@ describe("component rendering", () => {
             const SubNested = buildTestConfigCtor();
             (SubNested as any as IConfigurationComponent).$_optionName = "subNestedOption";
 
-            const vm = defineComponent({
+            const component = defineComponent({
                 template:
-                    `<test-component id="component">` +
+                    `<test-component>` +
                     `  <nested :prop1="123">` +
                     `    <sub-nested prop2="abc"/>` +
                     `  </nested>` +
@@ -572,9 +565,9 @@ describe("component rendering", () => {
                 }
             });
 
-            const wrapper = mount(vm);
+            const wrapper = mount(component);
 
-            const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+            const config = (wrapper.getComponent(TestComponent).vm as any as IConfigurable).$_config;
             expect(config.nested).toHaveLength(1);
 
             const nestedConfig = config.nested[0];
@@ -591,7 +584,7 @@ describe("component rendering", () => {
             (SubNested as any as IConfigurationComponent).$_optionName = "subNestedOption";
             (SubNested as any as IConfigurationComponent).$_isCollectionItem = true;
 
-            const vm = defineComponent({
+            const component = defineComponent({
                 template:
                     `<test-component id="component">` +
                     `  <nested :prop1="123">` +
@@ -605,9 +598,9 @@ describe("component rendering", () => {
                 }
             });
 
-            const wrapper = mount(vm);
+            const wrapper = mount(component);
 
-            const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+            const config = (wrapper.getComponent(TestComponent).vm as any as IConfigurable).$_config;
             expect(config.nested).toHaveLength(1);
 
             const nestedConfig = config.nested[0];
@@ -625,7 +618,7 @@ describe("component rendering", () => {
             (NestedCollectionItem as any as IConfigurationComponent).$_optionName = "subNestedOption";
             (NestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
-            const vm = defineComponent({
+            const component = defineComponent({
                 template:
                     `<test-component id="component">` +
                     `  <nested>` +
@@ -641,9 +634,9 @@ describe("component rendering", () => {
                 }
             });
 
-            const wrapper = mount(vm);
+            const wrapper = mount(component);
 
-            const config = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+            const config = (wrapper.getComponent(TestComponent).vm as any as IConfigurable).$_config;
             expect(config.nested).toHaveLength(1);
 
             const nestedConfig = config.nested[0];
@@ -691,7 +684,7 @@ describe("component rendering", () => {
                 (ConfigComponent as any as IConfigurationComponent).$_optionName = "nestedOption";
                 (ConfigComponent as any as IConfigurationComponent).$_expectedChildren = expected;
 
-                const vm = defineComponent({
+                const component = defineComponent({
                     template:
                         `<test-component id="component">` +
                         `  <config-component />` +
@@ -702,9 +695,9 @@ describe("component rendering", () => {
                     }
                 });
 
-                const wrapper = mount(vm);
+                const wrapper = mount(component);
 
-                const widgetConfig = (wrapper.getComponent("#component").vm as any as IConfigurable).$_config;
+                const widgetConfig = (wrapper.getComponent(TestComponent).vm as any as IConfigurable).$_config;
                 expect(widgetConfig.nested[0].expectedChildren).toBe(expected);
             });
         });
@@ -717,7 +710,7 @@ describe("component rendering", () => {
         (Nested as any as IConfigurationComponent).$_optionName = "nestedOption";
 
         it("pulls initital values", () => {
-            const vm = defineComponent({
+            const component = defineComponent({
                 template:
                     `<test-component id="component">` +
                     `  <nested :prop1="123" />` +
@@ -728,10 +721,8 @@ describe("component rendering", () => {
                 }
             });
 
-            const wrapper = mount(vm);
-            const component = wrapper.getComponent("#component");
-
-            expect(WidgetClass.mock.calls[0][0]).toBe(component.vm.$el);
+            const wrapper = mount(component);
+            expect(WidgetClass.mock.calls[0][0]).toBe(wrapper.getComponent(TestComponent).vm.$el);
 
             expect(skipIntegrationOptions(WidgetClass.mock.calls[0][1])).toEqual({
                 nestedOption: {
@@ -742,7 +733,7 @@ describe("component rendering", () => {
         });
 
         it("watches option changes", (done) => {
-            const vm = defineComponent({
+            const component = defineComponent({
                 template:
                     `<test-component>` +
                     `  <nested :prop1="value" />` +
@@ -754,7 +745,7 @@ describe("component rendering", () => {
                 props: ["value"]
             });
 
-            const wrapper = mount(vm, {
+            const wrapper = mount(component, {
                 props: {
                     value: 123
                 }
@@ -770,7 +761,7 @@ describe("component rendering", () => {
         });
 
         it("add nested component by condition", (done) => {
-            const vm = defineComponent({
+            const component = defineComponent({
                 template:
                     `<test-component>` +
                     `  <nested v-if="showNest" :prop1="123" />` +
@@ -787,7 +778,7 @@ describe("component rendering", () => {
                 }
             });
 
-            const wrapper = mount(vm);
+            const wrapper = mount(component);
 
             wrapper.setProps({ showNest: true });
 
@@ -801,7 +792,7 @@ describe("component rendering", () => {
             const NestedCollectionItem = buildTestConfigCtor();
             (NestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
             (NestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
-            const vm = defineComponent({
+            const component = defineComponent({
                 template:
                     `<test-component>` +
                     `  <nested-collection-item v-if="show" :prop1="123" />` +
@@ -819,7 +810,7 @@ describe("component rendering", () => {
                 }
             });
 
-            const wrapper = mount(vm);
+            const wrapper = mount(component);
 
             wrapper.setProps({ show: false });
 
@@ -833,7 +824,7 @@ describe("component rendering", () => {
             const NestedCollectionItem = buildTestConfigCtor();
             (NestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
             (NestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
-            const vm = defineComponent({
+            const component = defineComponent({
                 template:
                     `<test-component>` +
                     `  <nested-collection-item>` +
@@ -857,7 +848,7 @@ describe("component rendering", () => {
                 }
             });
 
-            const wrapper = mount(vm);
+            const wrapper = mount(component);
 
             wrapper.setProps({ show: false });
 
@@ -872,7 +863,7 @@ describe("component rendering", () => {
             const NestedCollectionItem = buildTestConfigCtor();
             (NestedCollectionItem as any as IConfigurationComponent).$_optionName = "nestedOption";
             (NestedCollectionItem as any as IConfigurationComponent).$_isCollectionItem = true;
-            const vm = defineComponent({
+            const component = defineComponent({
                 template:
                     `<test-component>` +
                     `  <nested-collection-item>` +
@@ -896,7 +887,7 @@ describe("component rendering", () => {
                 }
             });
 
-            const wrapper = mount(vm);
+            const wrapper = mount(component);
 
             wrapper.setProps({ show: false });
 
@@ -907,7 +898,7 @@ describe("component rendering", () => {
         });
 
         it("reset nested component", (done) => {
-            const vm = defineComponent({
+            const component = defineComponent({
                 template:
                     `<test-component>` +
                     `  <nested v-if="show" :prop1="123" />` +
@@ -924,7 +915,7 @@ describe("component rendering", () => {
                 }
             });
 
-            const wrapper = mount(vm);
+            const wrapper = mount(component);
 
             wrapper.setProps({ show: false });
 
@@ -973,7 +964,7 @@ describe("component rendering", () => {
         }
 
         it("passes integrationOptions to widget", () => {
-            const vm = defineComponent({
+            const component = defineComponent({
                 template: `<test-component>
                              <template #item>
                                <div>1</div>
@@ -988,7 +979,7 @@ describe("component rendering", () => {
                 }
             });
 
-            mount(vm);
+            mount(component);
             const integrationOptions = WidgetClass.mock.calls[0][1].integrationOptions;
 
             expect(integrationOptions).toBeDefined();
@@ -1004,7 +995,7 @@ describe("component rendering", () => {
         });
 
         it("pass correct template name", () => {
-            const vm = defineComponent({
+            const component = defineComponent({
                 template: `<test-component templateName="myTemplate">
                              <template #item>
                                <div>1</div>
@@ -1019,7 +1010,7 @@ describe("component rendering", () => {
                 }
             });
 
-            mount(vm);
+            mount(component);
             const integrationOptions = WidgetClass.mock.calls[0][1].integrationOptions;
 
             expect(integrationOptions).toBeDefined();
@@ -1101,7 +1092,7 @@ describe("component rendering", () => {
                 renderTemplate(
                     "tmpl",
                     {},
-                    wrapper.getComponent("#component").vm.$el.querySelector(".template-container"));
+                    wrapper.getComponent(TestComponent).vm.$el.querySelector(".template-container"));
 
                 expect(mountedInDom).toBeTruthy();
             });
@@ -1129,7 +1120,7 @@ describe("component rendering", () => {
         });
 
         it("renders", () => {
-            const vm = defineComponent({
+            const component = defineComponent({
                 template: `<test-component>
                                 <template #item>
                                     <div>Template</div>
@@ -1139,7 +1130,7 @@ describe("component rendering", () => {
                     TestComponent
                 }
             });
-            mount(vm);
+            mount(component);
             const renderedTemplate = renderItemTemplate();
 
             expect(renderedTemplate.nodeName).toBe("DIV");
@@ -1148,7 +1139,7 @@ describe("component rendering", () => {
         });
 
         it("renders template with several children", () => {
-            const vm = defineComponent({
+            const component = defineComponent({
                 template: `<test-component>
                                 <template #item>
                                     <div>child1</div>
@@ -1159,7 +1150,7 @@ describe("component rendering", () => {
                     TestComponent
                 }
             });
-            mount(vm);
+            mount(component);
             const container = document.createElement("div");
             renderItemTemplate({}, container);
 
@@ -1176,7 +1167,7 @@ describe("component rendering", () => {
                     templateGlobalProperties = this.$.appContext.config.globalProperties;
                 }
             });
-            const vm = defineComponent({
+            const component = defineComponent({
                 template: `<test-component id="component">
                                 <template #item>
                                     <CustomComponent></CustomComponent>
@@ -1190,7 +1181,7 @@ describe("component rendering", () => {
             const config = {
                 globalProperties: { name: "test"}
             };
-            mount(vm, { global: { config } });
+            mount(component, { global: { config } });
             renderItemTemplate();
             expect(templateGlobalProperties).toEqual(config.globalProperties);
         });
@@ -1203,7 +1194,7 @@ describe("component rendering", () => {
                     testData = (this.$.appContext.app as CustomApp).test;
                 }
             });
-            const vm = defineComponent({
+            const component = defineComponent({
                 template: `<test-component id="component">
                                 <template #item>
                                     <CustomComponent></CustomComponent>
@@ -1215,7 +1206,7 @@ describe("component rendering", () => {
                 }
             });
 
-            mount(vm, {
+            mount(component, {
                 global: {
                     plugins: [CustomPlugin]
                 }
@@ -1236,7 +1227,7 @@ describe("component rendering", () => {
                     templateProvides = this.$.appContext.provides;
                 }
             });
-            const vm = defineComponent({
+            const component = defineComponent({
                 template: `<test-component id="component">
                                 <template #item>
                                     <CustomComponent></CustomComponent>
@@ -1247,7 +1238,7 @@ describe("component rendering", () => {
                     CustomComponent
                 }
             });
-            mount(vm, {
+            mount(component, {
                 global: {
                   plugins: [router]
                 }
@@ -1257,7 +1248,7 @@ describe("component rendering", () => {
         });
 
         it("renders scoped slot", () => {
-            const vm = defineComponent({
+            const component = defineComponent({
                 template: `<test-component>
                                 <template #item="{ data: { text }, index }">
                                     Template {{text}} and index {{index}}
@@ -1267,13 +1258,13 @@ describe("component rendering", () => {
                     TestComponent
                 }
             });
-            mount(vm);
+            mount(component);
             const renderedTemplate = renderItemTemplate({ text: "with data" }, undefined, 5);
             expect(renderedTemplate.textContent).toContain("Template with data and index 5");
         });
 
         it("unwraps container", () => {
-            const vm = defineComponent({
+            const component = defineComponent({
                 template: `<test-component>
                                 <template #item="{ data }">
                                     <div>Template {{data.text}}</div>
@@ -1283,7 +1274,7 @@ describe("component rendering", () => {
                     TestComponent
                 }
             });
-            mount(vm);
+            mount(component);
             const renderedTemplate = renderItemTemplate(
                 { text: "with data" },
                 { get: () => document.createElement("div") }
@@ -1294,7 +1285,7 @@ describe("component rendering", () => {
         });
 
         it("preserves classes", () => {
-            const vm = defineComponent({
+            const component = defineComponent({
                 template: `<test-component>
                                 <template #item="{ data }">
                                     <div class='custom-class'></div>
@@ -1305,14 +1296,14 @@ describe("component rendering", () => {
                 }
             });
 
-            mount(vm);
+            mount(component);
             const renderedTemplate = renderItemTemplate({});
 
             expect(renderedTemplate.className).toBe(`custom-class ${DX_TEMPLATE_WRAPPER}`);
         });
 
         it("preserves custom-attrs", () => {
-            const vm = defineComponent({
+            const component = defineComponent({
                 template: `<test-component>
                                 <template #item="{ data: { text } }">
                                     <div custom-attr=123>Template {{text}}</div>
@@ -1322,7 +1313,7 @@ describe("component rendering", () => {
                     TestComponent
                 }
             });
-            mount(vm);
+            mount(component);
             const renderedTemplate = renderItemTemplate({});
 
             expect(renderedTemplate.attributes).toHaveProperty("custom-attr");
@@ -1330,7 +1321,7 @@ describe("component rendering", () => {
         });
 
         it("doesn't throw on dxremove", () => {
-            const vm = defineComponent({
+            const component = defineComponent({
                 template: `<test-component>
                                 <template #item="{ data: { text } }">
                                     Template {{text}}
@@ -1341,7 +1332,7 @@ describe("component rendering", () => {
                 }
             });
 
-            mount(vm);
+            mount(component);
 
             const renderedTemplate = renderItemTemplate({ text: "with data" });
 
@@ -1349,7 +1340,7 @@ describe("component rendering", () => {
         });
 
         it("destroyed component should remove subscriptions", (done) => {
-            const vm = defineComponent({
+            const component = defineComponent({
                 template: `<test-component id="component" :prop1="value">
                                 <template #item="{data}">Template {{data.text}}</template>
                             </test-component>`,
@@ -1359,7 +1350,7 @@ describe("component rendering", () => {
                 props: ["value"]
             });
 
-            const wrapper = mount(vm, {
+            const wrapper = mount(component, {
                 props: {
                     value: 123
                 }
@@ -1370,7 +1361,7 @@ describe("component rendering", () => {
             events.triggerHandler(container.children[0], "dxremove");
             renderItemTemplate({ text: "with data" }, container);
 
-            const subscriptions = (wrapper.getComponent("#component").vm as any).eventBus._list;
+            const subscriptions = (wrapper.getComponent(TestComponent).vm as any).eventBus._list;
             expect(subscriptions.length).toBe(1);
 
             done();
@@ -1387,7 +1378,7 @@ describe("component rendering", () => {
                 (NestedItem as any as IConfigurationComponent).$_optionName = "items";
                 (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
-                const vm = defineComponent({
+                const component = defineComponent({
                     template: `<test-component>
                                 <nested-item>
                                     <template #default>
@@ -1401,7 +1392,7 @@ describe("component rendering", () => {
                     }
                 });
 
-                mount(vm);
+                mount(component);
 
                 const integrationOptions = WidgetClass.mock.calls[0][1].integrationOptions;
 
@@ -1422,7 +1413,7 @@ describe("component rendering", () => {
                 (NestedItem as any as IConfigurationComponent).$_optionName = "items";
                 (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
-                const vm = defineComponent({
+                const component = defineComponent({
                     template: `<test-component>
                                 <nested-item>
                                     <div>1</div>
@@ -1434,7 +1425,7 @@ describe("component rendering", () => {
                     }
                 });
 
-                mount(vm);
+                mount(component);
 
                 const integrationOptions = WidgetClass.mock.calls[0][1].integrationOptions;
                 expect(integrationOptions.templates["items[0].template"]).toBeDefined();
@@ -1451,7 +1442,7 @@ describe("component rendering", () => {
                 (NestedItem as any as IConfigurationComponent).$_optionName = "items";
                 (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
-                const vm = defineComponent({
+                const component = defineComponent({
                     template: `<test-component>
                                 <nested-item>
                                     <nested-item></nested-item>
@@ -1464,7 +1455,7 @@ describe("component rendering", () => {
                     }
                 });
 
-                mount(vm);
+                mount(component);
 
                 const integrationOptions = WidgetClass.mock.calls[0][1].integrationOptions;
                 expect(integrationOptions.templates["items[0].template"]).toBeDefined();
@@ -1481,7 +1472,7 @@ describe("component rendering", () => {
                 (NestedItem as any as IConfigurationComponent).$_optionName = "items";
                 (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
-                const vm = defineComponent({
+                const component = defineComponent({
                     template: `<test-component>
                                 <nested-item>
                                     <nested-item>
@@ -1496,7 +1487,7 @@ describe("component rendering", () => {
                     }
                 });
 
-                mount(vm);
+                mount(component);
 
                 const integrationOptions = WidgetClass.mock.calls[0][1].integrationOptions;
                 expect(integrationOptions.templates["items[0].template"]).toBeDefined();
@@ -1514,7 +1505,7 @@ describe("component rendering", () => {
                 (NestedItem as any as IConfigurationComponent).$_optionName = "items";
                 (NestedItem as any as IConfigurationComponent).$_isCollectionItem = true;
 
-                const vm = defineComponent({
+                const component = defineComponent({
                     template: `<test-component>
                                 <nested-item>
                                     <div>1</div>
@@ -1526,7 +1517,7 @@ describe("component rendering", () => {
                     }
                 });
 
-                mount(vm);
+                mount(component);
 
                 const integrationOptions = WidgetClass.mock.calls[0][1].integrationOptions;
 
@@ -1575,7 +1566,7 @@ describe("component rendering", () => {
                 const SubNested = buildTestConfigCtor();
                 (SubNested as any as IConfigurationComponent).$_optionName = "subNestedOption";
 
-                const vm = defineComponent({
+                const component = defineComponent({
                     template: `<test-component>
                                 <nested-item>
                                     <sub-nested v-if="showNest" prop2="abc"/>
@@ -1588,7 +1579,7 @@ describe("component rendering", () => {
                     }
                 });
 
-                mount(vm);
+                mount(component);
 
                 expect(WidgetClass.mock.calls[0][1].integrationOptions.templates).toBeUndefined();
             });
@@ -1606,7 +1597,7 @@ describe("component rendering", () => {
                 const SubNested = buildTestConfigCtor();
                 (SubNested as any as IConfigurationComponent).$_optionName = "subNestedOption";
 
-                const vm = defineComponent({
+                const component = defineComponent({
                     template: `<test-component>
                                 <nested-item>
                                     <!-- <div>test</div> -->
@@ -1618,7 +1609,7 @@ describe("component rendering", () => {
                     }
                 });
 
-                mount(vm);
+                mount(component);
 
                 expect(WidgetClass.mock.calls[0][1].integrationOptions.templates).toBeUndefined();
             });
@@ -1636,7 +1627,7 @@ describe("component rendering", () => {
                 const SubNested = buildTestConfigCtor();
                 (SubNested as any as IConfigurationComponent).$_optionName = "subNestedOption";
 
-                const vm = defineComponent({
+                const component = defineComponent({
                     template: `<test-component>
                                 <nested-item>
                                     <sub-nested prop2="abc"/>
@@ -1649,7 +1640,7 @@ describe("component rendering", () => {
                     }
                 });
 
-                mount(vm);
+                mount(component);
 
                 expect(WidgetClass.mock.calls[0][1].integrationOptions.templates).toBeUndefined();
             });
@@ -1677,16 +1668,16 @@ describe("component rendering", () => {
         });
 
         it("renders once without parent element and targets self element", () => {
-            const vm = defineComponent({
+            const component = defineComponent({
                 template: `<test-extension-component id="component" />`,
                 components: {
                     TestExtensionComponent
                 }
             });
 
-            const wrapper = mount(vm);
+            const wrapper = mount(component);
 
-            const expectedElement = wrapper.getComponent("#component").vm.$el;
+            const expectedElement = wrapper.getComponent(TestExtensionComponent).vm.$el;
             const actualElement = ExtensionWidgetClass.mock.calls[0][0];
 
             expect(ExtensionWidgetClass).toHaveBeenCalledTimes(1);
@@ -1694,7 +1685,7 @@ describe("component rendering", () => {
         });
 
         it("renders once inside component and targets parent element", () => {
-            const vm = defineComponent({
+            const component = defineComponent({
                 template: `<test-component id="component">
                                 <test-extension-component/>
                             </test-component>`,
@@ -1704,7 +1695,7 @@ describe("component rendering", () => {
                 }
             });
 
-            mount(vm);
+            mount(component);
 
             const expectedElement = WidgetClass.mock.calls[0][0];
             const actualElement = ExtensionWidgetClass.mock.calls[0][0];
@@ -1714,7 +1705,7 @@ describe("component rendering", () => {
         });
 
         it("should create two different components", () => {
-            const vm = defineComponent({
+            const component = defineComponent({
                 template: `<test-component>
                                 <test-extension-component id="component1" :prop="[{ type: 'required' }]" />
                             </test-component>
@@ -1727,12 +1718,11 @@ describe("component rendering", () => {
                 }
             });
 
-            const wrapper = mount(vm);
-            const component1 = wrapper.getComponent("#component1");
-            const component2 = wrapper.getComponent("#component2");
+            const wrapper = mount(component);
+            const components = wrapper.findAllComponents(TestExtensionComponent);
 
-            expect((component1.vm as any).$_config._initialValues.prop[0]).toEqual({type: "required"});
-            expect((component2.vm as any).$_config._initialValues.prop[0]).toEqual({type: "email"});
+            expect((components[0].vm as any).$_config._initialValues.prop[0]).toEqual({type: "required"});
+            expect((components[1].vm as any).$_config._initialValues.prop[0]).toEqual({type: "email"});
         });
 
         it("should remove extension component from dom", () => {

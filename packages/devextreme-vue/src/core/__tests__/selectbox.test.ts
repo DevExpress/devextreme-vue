@@ -30,6 +30,6 @@ describe("template rendering", () => {
             }
         });
         const wrapper = mount(vm);
-        expect(wrapper.getComponent("#component").vm.$el.children).toHaveLength(1);
+        expect(wrapper.getComponent(DxSelectBox).vm.$el.children).toHaveLength(1);
     });
 });
