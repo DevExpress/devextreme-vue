@@ -40,6 +40,9 @@ jobs:
         cd ../devextreme
         npm run build-dist
 
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
     - name: Install devextreme package
       run: |
         cd ./packages/devextreme-vue
@@ -50,9 +53,6 @@ jobs:
         npm install --save-dev ../../../devextreme/artifacts/npm/devextreme
         cd ../../
         npm install --save-dev ../devextreme/artifacts/npm/devextreme
-
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
 
     - name: Run devextreme-vue-generator tests
       run: npx lerna run --scope devextreme-vue-generator test
