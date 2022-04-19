@@ -45,14 +45,9 @@ jobs:
 
     - name: Install devextreme package
       run: |
-        cd ./packages/devextreme-vue
-        npm install --save-dev ../../../devextreme/artifacts/npm/devextreme
-        cd ../sandbox
-        npm install --save-dev ../../../devextreme/artifacts/npm/devextreme
-        cd ../vue2-strategy
-        npm install --save-dev ../../../devextreme/artifacts/npm/devextreme
-        cd ../../
-        npm install --save-dev ../devextreme/artifacts/npm/devextreme
+        npx lerna add devextreme@file:../devextreme/artifacts/npm/devextreme/ --dev --no-bootstrap --scope=devextreme-vue --exact
+        npx lerna add devextreme@file:../devextreme/artifacts/npm/devextreme/ --dev --no-bootstrap --scope=devextreme-vue-sandbox --exact
+        npx lerna add devextreme@file:../devextreme/artifacts/npm/devextreme/ --dev --no-bootstrap --scope=devextreme-vue2-strategy --exact
 
     - name: Run devextreme-vue-generator tests
       run: npx lerna run --scope devextreme-vue-generator test
