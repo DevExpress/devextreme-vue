@@ -40,14 +40,14 @@ jobs:
         cd ../devextreme
         npm run build-dist
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
-
     - name: Install devextreme package
       run: |
         npx lerna add devextreme@file:../devextreme/artifacts/npm/devextreme/ --dev --no-bootstrap --scope=devextreme-vue --exact
         npx lerna add devextreme@file:../devextreme/artifacts/npm/devextreme/ --dev --no-bootstrap --scope=devextreme-vue-sandbox --exact
         npx lerna add devextreme@file:../devextreme/artifacts/npm/devextreme/ --dev --no-bootstrap --scope=devextreme-vue2-strategy --exact
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
 
     - name: Run devextreme-vue-generator tests
       run: npx lerna run --scope devextreme-vue-generator test
