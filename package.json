@@ -1,6 +1,6 @@
 {
   "name": "devextreme-vue",
-  "version": "20.1.12",
+  "version": "20.1.15",
   "description": "DevExtreme Vue UI and Visualization Components",
   "repository": {
     "type": "git",
@@ -28,7 +28,7 @@
   "author": "Developer Express Inc.",
   "license": "MIT",
   "peerDependencies": {
-    "devextreme": "~20.1.12",
+    "devextreme": "~20.1.15",
     "vue": "^2.5.16"
   },
   "devDependencies": {
@@ -38,7 +38,7 @@
     "css-loader": "^2.1.1",
     "dasherize": "^2.0.0",
     "del": "^3.0.0",
-    "devextreme": "~20.1.12",
+    "devextreme": "~20.1.15",
     "devextreme-internal-tools": "^2.0.0",
     "dot": "^1.1.2",
     "gulp": "^4.0.0",
