@@ -2,3 +2,4 @@
 node_modules/
 dist/
 artifacts/
+packages/devextreme-vue/metadata/integration-data.json
