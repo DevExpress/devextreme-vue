@@ -14,16 +14,13 @@ interface IExtensionComponentNode {
 function initDxExtensionComponent() {
     return defineComponent({
         extends: initBaseComponent(),
-        created(): void {
+        mounted() {
+            const componentOptions = getNodeOptions(this);
             const nodeOptions = getNodeOptions(this);
 
+            this.$el.setAttribute("isExtension", "true");
             (nodeOptions as any as IExtension).$_isExtension = true;
             (nodeOptions as any as IExtension).$_attachTo = this.attachTo.bind(this);
-        },
-
-        mounted() {
-            this.$el.setAttribute("isExtension", "true");
-            const componentOptions = getNodeOptions(this);
             if (componentOptions && (componentOptions as any as IExtensionComponentNode).$_hasOwner) { return; }
 
             this.attachTo(this.$el);
