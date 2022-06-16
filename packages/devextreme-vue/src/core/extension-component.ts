@@ -15,13 +15,11 @@ function initDxExtensionComponent() {
     return defineComponent({
         extends: initBaseComponent(),
         mounted() {
-            const componentOptions = getNodeOptions(this);
-            const nodeOptions = getNodeOptions(this);
-
             this.$el.setAttribute("isExtension", "true");
+            const nodeOptions = getNodeOptions(this);
             (nodeOptions as any as IExtension).$_isExtension = true;
             (nodeOptions as any as IExtension).$_attachTo = this.attachTo.bind(this);
-            if (componentOptions && (componentOptions as any as IExtensionComponentNode).$_hasOwner) { return; }
+            if (nodeOptions && (nodeOptions as any as IExtensionComponentNode).$_hasOwner) { return; }
 
             this.attachTo(this.$el);
         },
