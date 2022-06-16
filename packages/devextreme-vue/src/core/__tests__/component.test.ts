@@ -1618,7 +1618,7 @@ describe("component rendering", () => {
         it("should set extension flag when component mounted", () => {
             const getExtansionFlag = (componentInstance) => {
                 return (getNodeOptions(componentInstance) as any as IExtension).$_isExtension;
-            }
+            };
             TestExtensionComponent.created = function() {
                 expect(getExtansionFlag(this)).toBeFalsy();
             };
