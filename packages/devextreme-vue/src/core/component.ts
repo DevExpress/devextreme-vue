@@ -130,8 +130,8 @@ function initBaseComponent() {
             const thisComponent = this as any as IBaseComponent;
             const instance = thisComponent.$_instance;
             if (instance) {
-                instance.dispose();
                 triggerHandler(this.$el, DX_REMOVE_EVENT);
+                instance.dispose();
             }
         },
 
