@@ -1820,6 +1820,7 @@ describe("disposing", () => {
 
     it("not crash if dxremove after dispose", () => {
         const component = mount(TestComponent);
+        TestComponent.dispose();
         expect(component.unmount.bind(component)).not.toThrow();
         events.triggerHandler(component.vm.$el, "dxremove");
         events.trigger(component.vm.$el, "dxremove");
