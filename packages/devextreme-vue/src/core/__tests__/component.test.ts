@@ -1823,6 +1823,7 @@ describe("disposing", () => {
         component.unmount();
         expect(component.unmount.bind(component)).not.toThrow();
         events.triggerHandler(component.element, "dxremove");
+        events.triggerHandler(component.element, "dxremove");
         events.trigger(component.vm.$el, "dxremove");
     });
 });
