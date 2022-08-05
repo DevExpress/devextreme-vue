@@ -1,11 +1,13 @@
 import { PatchFlags } from "@vue/shared";
 import { mount } from "@vue/test-utils";
 import * as events from "devextreme/events";
-import { App, createVNode, defineComponent, h, nextTick, renderSlot } from "vue";
+import BaseWidget from "devextreme/viz/core/base_widget";
+import { App, createVNode, defineComponent, h, nextTick,  renderSlot } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
+import { DxBox, DxItem } from "../../box";
 
 import { pullConfigComponents } from "../children-processing";
-import { IWidgetComponent } from "../component";
+import { IWidgetComponent} from "../component";
 import globalConfig from "../config";
 import Configuration from "../configuration";
 import { IConfigurable, IConfigurationComponent } from "../configuration-component";
@@ -60,6 +62,35 @@ const TestComponent = createComponent({
         prop2: Array,
         sampleProp: String,
         templateName: String
+    },
+    model: {
+        prop: "prop1",
+        event: "update:prop1"
+    }
+});
+
+class BaseWidgetImpl extends BaseWidget<any> {
+    // @ts-ignore
+    private _totalChangesOrder = {};
+    // @ts-ignore
+    // tslint:disable-next-line:no-empty
+    private _initCore() {  }
+    // @ts-ignore
+    // tslint:disable-next-line:no-empty
+    private _disposeCore() {  }
+}
+
+const DxBaseWidgetComponent = createComponent({
+    beforeCreate() {
+        this.$_WidgetClass = BaseWidgetImpl;
+        this.$_hasAsyncTemplate = false;
+    },
+    props: {
+    },
+    computed: {
+        instance(): BaseWidget<any> {
+            return (this as any).$_instance;
+        }
     },
     model: {
         prop: "prop1",
@@ -1812,10 +1843,36 @@ describe("disposing", () => {
         expect(handleDxRemove).toHaveBeenCalledTimes(1);
     });
 
-    it("destroys correctly", () => {
-        const component = mount(TestComponent);
+    /* T1072778 (fixed in devextreme) */
+    it("Changing props in container with baseWidget shouldn't throw exception",  () => {
+        const dxBaseWidgetComponent = defineComponent({
+            template: "<DxBaseWidgetComponent/>",
+            components: {
+                DxBaseWidgetComponent
+            }
+        });
+        const instance = defineComponent({
+            template: `<DxBox id="component">
+            <DxItem :ratio="value">
+              <template #default>
+                <dx-base-widget-component/>
+              </template>
+            </DxItem>
+            </DxBox>`,
+            components: {
+                DxBox,
+                DxItem,
+                dxBaseWidgetComponent
+            },
+            props: ["value"]
+        });
 
-        expect(component.unmount.bind(component)).not.toThrow();
+        const wrapper = mount(instance, { attachTo: document.getElementById("fixture"), props: {
+                value: 1
+            } } as any);
+
+        wrapper.setProps({value: 2});
+        expect(wrapper.getComponent("#component").vm.$el.querySelector("svg")).toBeTruthy();
     });
 });
 
