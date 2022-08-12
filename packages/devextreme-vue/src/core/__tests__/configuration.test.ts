@@ -194,11 +194,11 @@ it("should update only when raw value not equal", () => {
         innerChanges
     );
 
-    $watchFunc.mock.calls[0][1](reactive(innerChanges)["prop1"]);
+    $watchFunc.mock.calls[0][1](reactive(innerChanges).prop1);
 
     expect(updateValueFunc).toHaveBeenCalledTimes(0);
 
-    $watchFunc.mock.calls[0][1](reactive({ prop1: "test1"})["prop1"]);
+    $watchFunc.mock.calls[0][1](reactive({ prop1: "test1"}).prop1);
     expect(updateValueFunc).toHaveBeenCalledTimes(1);
     expect(updateValueFunc.mock.calls[0][0]).toBe("prop1");
     expect(updateValueFunc.mock.calls[0][1]).toBe("test1");
