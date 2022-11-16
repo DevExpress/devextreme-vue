@@ -67,7 +67,8 @@ function generateReExport(path: string, fileName: string): string {
 }
 
 export const USE_SYNC_TEMPLATES: Set<string> = new Set([
-    "DxScheduler"
+    "DxScheduler",
+    "DxDataGrid"
 ]);
 
 const renderReExport: (model: {path: string, fileName: string}) => string = createTempate(
