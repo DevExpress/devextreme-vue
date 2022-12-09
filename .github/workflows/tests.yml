@@ -30,6 +30,13 @@ jobs:
       with:
         node-version: '16'
 
+    - name: Restore devextreme npm cache
+      uses: actions/cache@v3
+      with:
+        path: ../devextreme/node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('../devextreme/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
     - name: Install packages in devextreme repo
       run: |
         cd ../devextreme
@@ -39,6 +46,11 @@ jobs:
       run: |
         cd ../devextreme
         npm run build-dist
+
+    - name: Use Node.js 14
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
 
     - name: Install devextreme package
       run: |
