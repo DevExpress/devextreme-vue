@@ -75,16 +75,16 @@ jobs:
 
 #    - name: Run update integration meta
 #      run: npm run update-integration-meta
-
-    - name: Run build
-      run: npm run build:packages
+#
+#    - name: Run build
+#      run: npm run build:packages
 
     - name: Run tests with Vue
       run: npm run test
 
-    - name: Archive internal-tools artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: internal-tools-artifacts
-        path: artifacts/internal-tools/
-        retention-days: 7
+#    - name: Archive internal-tools artifacts
+#      uses: actions/upload-artifact@v3
+#      with:
+#        name: internal-tools-artifacts
+#        path: artifacts/internal-tools/
+#        retention-days: 7
