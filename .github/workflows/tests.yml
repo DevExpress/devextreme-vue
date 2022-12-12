@@ -77,7 +77,7 @@ jobs:
       run: npm run update-integration-meta
 
     - name: Run build
-      run: npm run build
+      run: npm run build:packages
 
     - name: Run tests with Vue
       run: npm run test

@@ -9,11 +9,10 @@
     "url": "https://github.com/DevExpress/devextreme-vue.git"
   },
   "scripts": {
-    "clean": "npm run clean:packages && npm run clean:root",
-    "clean:packages": "npm run clean --yes --ws --if-present",
+    "clean:packages": "npm run clean --yes --ws --if-present && npm run clean:root",
     "clean:root": "del-cli node_modules",
-    "start": "npn run start --ws --if-present",
-    "build": "npm run build --ws --if-present",
+    "start:packages": "npn run start --ws --if-present",
+    "build:packages": "npm run build --ws --if-present",
     "lint": "gulp lint",
     "test": "jest",
     "test-watch": "jest --watch",
