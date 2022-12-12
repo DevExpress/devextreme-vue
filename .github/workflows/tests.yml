@@ -73,6 +73,12 @@ jobs:
     - name: Run lint
       run: npm run lint
 
+    - name: Run update integration meta
+      run: npm run update-integration-meta
+
+    - name: Run build
+      run: npm run build
+
     - name: Run tests with Vue
       run: npm run test
 

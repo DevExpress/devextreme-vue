@@ -10,12 +10,12 @@
   },
   "scripts": {
     "clean": "npm run clean:packages && npm run clean:root",
-    "clean:packages": "lerna clean --yes",
+    "clean:packages": "npm run clean --yes --ws --if-present",
     "clean:root": "del-cli node_modules",
-    "start": "lerna run build && lerna run start",
-    "build": "npm run update-integration-meta && npm run build --ws --if-present && npm run lint",
+    "start": "npn run start --ws --if-present",
+    "build": "npm run build --ws --if-present",
     "lint": "gulp lint",
-    "test": "npm run update-integration-meta && npm run build --ws --if-present && jest",
+    "test": "jest",
     "test-watch": "jest --watch",
     "pack": "npm run update-integration-meta && npm run pack --ws --if-present",
     "update-integration-meta": "dx-tools integration-data-generator --js-scripts ../devextreme/js  --artifacts  ../devextreme/artifacts/internal-tools --output-path ./packages/devextreme-vue/metadata/integration-data.json --version 22_2"
