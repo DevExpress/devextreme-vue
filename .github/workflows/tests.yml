@@ -30,13 +30,13 @@ jobs:
       with:
         node-version: '16'
 
-#    - name: Restore devextreme npm cache
-#      uses: actions/cache@v3
-#      with:
-#        path: ../devextreme/node_modules
-#        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-#        restore-keys: ${{ runner.os }}-node-modules
-#
+    - name: Restore devextreme npm cache
+      uses: actions/cache@v3
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
 #    - name: Install packages in devextreme repo
 #      run: |
 #        cd ../devextreme
@@ -75,9 +75,9 @@ jobs:
 
 #    - name: Run update integration meta
 #      run: npm run update-integration-meta
-#
-#    - name: Run build
-#      run: npm run build:packages
+
+    - name: Run build
+      run: npm run build:packages
 
     - name: Run tests with Vue
       run: npm run test
