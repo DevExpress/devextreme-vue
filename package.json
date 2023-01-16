@@ -17,7 +17,7 @@
     "test": "jest",
     "test-watch": "jest --watch",
     "pack": "npm run update-integration-meta && npm run pack --ws --if-present",
-    "update-integration-meta": "dx-tools integration-data-generator --js-scripts ../devextreme/js  --artifacts  ../devextreme/artifacts/internal-tools --output-path ./packages/devextreme-vue/metadata/integration-data.json --version 22_2"
+    "update-integration-meta": "dx-tools integration-data-generator --js-scripts ../devextreme/js  --artifacts  ../devextreme/artifacts/internal-tools --output-path ./packages/devextreme-vue/metadata/integration-data.json --version 23_1"
   },
   "keywords": [
     "vue",
@@ -29,7 +29,7 @@
     "@types/jest": "^26.0.24",
     "cpy-cli": "^3.1.1",
     "del-cli": "^3.0.1",
-    "devextreme-internal-tools": "^8.0.0",
+    "devextreme-internal-tools": "^9.3.0",
     "gulp": "^4.0.2",
     "gulp-tslint": "^8.1.4",
     "jest": "^26.6.3",
