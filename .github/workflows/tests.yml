@@ -44,7 +44,7 @@ jobs:
     - name: Build devextreme repo
       run: |
         cd ../devextreme
-        npm run build-dist
+        DEVEXTREME_TEST_CI=true npm run build-dist
 
     - name: Use Node.js 14
       uses: actions/setup-node@v3
