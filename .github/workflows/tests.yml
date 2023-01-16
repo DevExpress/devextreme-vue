@@ -58,11 +58,11 @@ jobs:
     - name: Install devextreme package
       run: |
         cd ./packages/devextreme-vue
-        npm install --save-dev ../../../devextreme/artifacts/npm/devextreme
+        npm install --save-dev ../../devextreme/artifacts/npm/devextreme
         cd ../sandbox
-        npm install --save-dev ../../../devextreme/artifacts/npm/devextreme
+        npm install --save-dev ../../devextreme/artifacts/npm/devextreme
         cd ../vue2-strategy
-        npm install --save-dev ../../../devextreme/artifacts/npm/devextreme
+        npm install --save-dev ../../devextreme/artifacts/npm/devextreme
         cd ../../
         npm install --save-dev ../devextreme/artifacts/npm/devextreme
 
