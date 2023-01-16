@@ -29,6 +29,10 @@ jobs:
       with:
         node-version: '16'
 
+    - uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '3.1.x'
+
     - name: Restore devextreme npm cache
       uses: actions/cache@v3
       with:
@@ -46,14 +50,30 @@ jobs:
         cd ../devextreme
         DEVEXTREME_TEST_CI=true npm run build-dist
 
+    - name: Echo paths
+      run: |
+        cd ../devextreme
+        echo '../devextreme'
+        ls
+        cd artifacts
+        echo '../devextreme/artifacts'
+        ls
+        cd npm
+        echo '../devextreme/artifacts/npm'
+        ls
+        cd devextreme
+        echo '../devextreme/artifacts/npm/devextreme'
+        ls
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: devextreme-artifacts
+        path: ../devextreme/artifacts/npm/devextreme
+
 #    - name: Use Node.js 14
 #      uses: actions/setup-node@v3
 #      with:
 #        node-version: '14'
-
-    - uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '3.1.x'
 
     - name: Install devextreme package
       run: |
