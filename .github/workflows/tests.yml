@@ -21,9 +21,9 @@ jobs:
 #      continue-on-error: true
 #      if: github.event_name == 'pull_request'
 #      run: git clone -b ${{github.event.pull_request.head.ref}} https://github.com/${{github.event.pull_request.user.login}}/devextreme ../devextreme
-#
-#    - name: Clone devextreme repo
-#      run: test -d ../devextreme || git clone -b 22_2 https://github.com/devexpress/devextreme ../devextreme
+
+    - name: Clone devextreme repo
+      run: test -d ../devextreme || git clone -b 22_2 https://github.com/devexpress/devextreme ../devextreme
 
     - name: Use Node.js 16
       uses: actions/setup-node@v3
@@ -37,35 +37,35 @@ jobs:
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
-#    - name: Install packages in devextreme repo
-#      run: |
-#        cd ../devextreme
-#        npm install --no-audit --no-fund
-#
-#    - name: Build devextreme repo
-#      run: |
-#        cd ../devextreme
-#        npm run build-dist
-#
-#    - name: Use Node.js 14
-#      uses: actions/setup-node@v3
-#      with:
-#        node-version: '14'
-#
-#    - uses: actions/setup-dotnet@v3
-#      with:
-#        dotnet-version: '3.1.x'
-#
-#    - name: Install devextreme package
-#      run: |
-#        cd ./packages/devextreme-vue
-#        npm install --save-dev ../../../devextreme/artifacts/npm/devextreme
-#        cd ../sandbox
-#        npm install --save-dev ../../../devextreme/artifacts/npm/devextreme
-#        cd ../vue2-strategy
-#        npm install --save-dev ../../../devextreme/artifacts/npm/devextreme
-#        cd ../../
-#        npm install --save-dev ../devextreme/artifacts/npm/devextreme
+    - name: Install packages in devextreme repo
+      run: |
+        cd ../devextreme
+        npm install --no-audit --no-fund
+
+    - name: Build devextreme repo
+      run: |
+        cd ../devextreme
+        npm run build-dist
+
+    - name: Use Node.js 14
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
+
+    - uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '3.1.x'
+
+    - name: Install devextreme package
+      run: |
+        cd ./packages/devextreme-vue
+        npm install --save-dev ../../../devextreme/artifacts/npm/devextreme
+        cd ../sandbox
+        npm install --save-dev ../../../devextreme/artifacts/npm/devextreme
+        cd ../vue2-strategy
+        npm install --save-dev ../../../devextreme/artifacts/npm/devextreme
+        cd ../../
+        npm install --save-dev ../devextreme/artifacts/npm/devextreme
 
     - name: Run npm install
       run: npm install --no-audit --no-fund
@@ -73,8 +73,8 @@ jobs:
     - name: Run lint
       run: npm run lint
 
-#    - name: Run update integration meta
-#      run: npm run update-integration-meta
+    - name: Run update integration meta
+      run: npm run update-integration-meta
 
     - name: Run build
       run: npm run build:packages
