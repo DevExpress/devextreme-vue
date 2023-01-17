@@ -75,10 +75,10 @@ jobs:
 #        name: devextreme-artifacts
 #        path: ../devextreme/artifacts/npm/devextreme
 
-    - name: Use Node.js 14
-      uses: actions/setup-node@v3
-      with:
-        node-version: '14'
+#    - name: Use Node.js 14
+#      uses: actions/setup-node@v3
+#      with:
+#        node-version: '14'
 
     - name: Install devextreme package
       run: |
@@ -103,10 +103,10 @@ jobs:
     - name: Run build
       run: npm run build:packages
 
-    - name: Run build vue2 force
-      run: |
-        cd packages/vue2-strategy
-        npm run build
+#    - name: Run build vue2 force
+#      run: |
+#        cd packages/vue2-strategy
+#        npm run build
 
     - name: Run tests with Vue
       run: npm run test
