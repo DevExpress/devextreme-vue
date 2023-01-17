@@ -16,13 +16,13 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v3
 
-#    - name: Clone devextreme repo from PR author fork
-#      continue-on-error: true
-#      if: github.event_name == 'pull_request'
-#      run: git clone -b ${{github.event.pull_request.head.ref}} https://github.com/${{github.event.pull_request.user.login}}/devextreme ../devextreme
+    - name: Clone devextreme repo from PR author fork
+      continue-on-error: true
+      if: github.event_name == 'pull_request'
+      run: git clone -b ${{github.event.pull_request.head.ref}} https://github.com/${{github.event.pull_request.user.login}}/devextreme ../devextreme
 
-    - name: Clone devextreme repo
-      run: test -d ../devextreme || git clone -b 23_1 https://github.com/devexpress/devextreme ../devextreme
+#    - name: Clone devextreme repo
+#      run: test -d ../devextreme || git clone -b 23_1 https://github.com/devexpress/devextreme ../devextreme
 
     - name: Use Node.js 16
       uses: actions/setup-node@v3
@@ -48,11 +48,12 @@ jobs:
     - name: Build devextreme repo
       run: |
         cd ../devextreme
-        DEVEXTREME_TEST_CI=true npm run build-dist
+        npm run build-dist
+#        DEVEXTREME_TEST_CI=true npm run build-dist
 
-    - name: Copy package.json
-      run: |
-        cp ../devextreme/package.json ../devextreme/artifacts/npm/devextreme
+#    - name: Copy package.json
+#      run: |
+#        cp ../devextreme/package.json ../devextreme/artifacts/npm/devextreme
 
 #    - name: Echo paths
 #      run: |
