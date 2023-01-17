@@ -54,30 +54,30 @@ jobs:
       run: |
         cp ../devextreme/package.json ../devextreme/artifacts/npm/devextreme
 
-    - name: Echo paths
-      run: |
-        cd ../devextreme
-        echo '../devextreme'
-        ls
-        cd artifacts
-        echo '../devextreme/artifacts'
-        ls
-        cd npm
-        echo '../devextreme/artifacts/npm'
-        ls
-        cd devextreme
-        echo '../devextreme/artifacts/npm/devextreme'
-        ls
+#    - name: Echo paths
+#      run: |
+#        cd ../devextreme
+#        echo '../devextreme'
+#        ls
+#        cd artifacts
+#        echo '../devextreme/artifacts'
+#        ls
+#        cd npm
+#        echo '../devextreme/artifacts/npm'
+#        ls
+#        cd devextreme
+#        echo '../devextreme/artifacts/npm/devextreme'
+#        ls
 
 #    - uses: actions/upload-artifact@v3
 #      with:
 #        name: devextreme-artifacts
 #        path: ../devextreme/artifacts/npm/devextreme
 
-#    - name: Use Node.js 14
-#      uses: actions/setup-node@v3
-#      with:
-#        node-version: '14'
+    - name: Use Node.js 14
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
 
     - name: Install devextreme package
       run: |
