@@ -85,7 +85,7 @@ jobs:
         cd ../devextreme/artifacts/npm/devextreme
         npm link
 
-    - name: Install devextreme package
+    - name: Install npm packages
       run: |
         npm link devextreme
 
@@ -94,14 +94,14 @@ jobs:
 #      with:
 #        node-version: '16'
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+#    - name: Run npm install
+#      run: npm install --no-audit --no-fund
 
     - name: Run lint
       run: npm run lint
 
-    - name: Run update integration meta
-      run: npm run update-integration-meta
+#    - name: Run update integration meta
+#      run: npm run update-integration-meta
 
     - name: Run build
       run: npm run build:packages
