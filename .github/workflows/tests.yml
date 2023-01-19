@@ -75,26 +75,24 @@ jobs:
 #        name: devextreme-artifacts
 #        path: ../devextreme/artifacts/npm/devextreme
 
-    - name: Use Node.js 14
-      uses: actions/setup-node@v3
-      with:
-        node-version: '14'
+#    - name: Use Node.js 14
+#      uses: actions/setup-node@v3
+#      with:
+#        node-version: '14'
+
+    - name: Link devextreme
+      run: |
+        cd ../devextreme/artifacts/npm/devextreme
+        npm link
 
     - name: Install devextreme package
       run: |
-        cd ./packages/devextreme-vue
-        npm install --save-dev ../../../devextreme/artifacts/npm/devextreme
-        cd ../sandbox
-        npm install --save-dev ../../../devextreme/artifacts/npm/devextreme
-        cd ../vue2-strategy
-        npm install --save-dev ../../../devextreme/artifacts/npm/devextreme
-        cd ../../
-        npm install --save-dev ../devextreme/artifacts/npm/devextreme
+        npm link devextreme
 
-    - name: Use Node.js 16
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'
+#    - name: Use Node.js 16
+#      uses: actions/setup-node@v3
+#      with:
+#        node-version: '16'
 
     - name: Run npm install
       run: npm install --no-audit --no-fund

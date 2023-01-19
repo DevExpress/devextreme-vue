@@ -29,6 +29,7 @@
     "@types/jest": "^26.0.24",
     "cpy-cli": "^3.1.1",
     "del-cli": "^3.0.1",
+    "devextreme": "file:../DevExtreme/artifacts/npm/devextreme",
     "devextreme-internal-tools": "^9.3.0",
     "gulp": "^4.0.2",
     "gulp-tslint": "^8.1.4",
