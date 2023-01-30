@@ -771,7 +771,7 @@ describe("nested option", () => {
         });
     });
 
-    it.skip("should initialize watchers once", (done) => {
+    it("should initialize watchers once", (done) => {
         const vm = new Vue({
             template:
                 `<test-component>` +

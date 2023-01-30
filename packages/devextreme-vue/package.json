@@ -21,9 +21,6 @@
   ],
   "author": "Developer Express Inc.",
   "license": "MIT",
-  "peerDependencies": {
-    "vue": "^2.5.16 || ^3.0.0"
-  },
   "devDependencies": {
     "@types/jest": "^26.0.24",
     "@vue/compiler-sfc": "^3.0.0",
@@ -38,7 +35,7 @@
     "jest": "^26.6.3",
     "ts-jest": "^26.5.6",
     "typescript": "^4.7.4",
-    "vue": "^3.0.0",
+    "vue": "3.0.0",
     "vue-router": "^4.0.16",
     "vue-template-compiler": "^2.6.3"
   }

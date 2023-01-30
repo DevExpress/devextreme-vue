@@ -21,8 +21,8 @@ jobs:
       if: github.event_name == 'pull_request'
       run: git clone -b ${{github.event.pull_request.head.ref}} https://github.com/${{github.event.pull_request.user.login}}/devextreme ../devextreme
 
-#    - name: Clone devextreme repo
-#      run: test -d ../devextreme || git clone -b 23_1 https://github.com/devexpress/devextreme ../devextreme
+    - name: Clone devextreme repo
+      run: test -d ../devextreme || git clone -b 23_1 https://github.com/devexpress/devextreme ../devextreme
 
     - name: Use Node.js 16
       uses: actions/setup-node@v3
@@ -49,53 +49,15 @@ jobs:
       run: |
         cd ../devextreme
         npm run build-dist
-#        DEVEXTREME_TEST_CI=true npm run build-dist
-
-#    - name: Copy package.json
-#      run: |
-#        cp ../devextreme/package.json ../devextreme/artifacts/npm/devextreme
-
-#    - name: Echo paths
-#      run: |
-#        cd ../devextreme
-#        echo '../devextreme'
-#        ls
-#        cd artifacts
-#        echo '../devextreme/artifacts'
-#        ls
-#        cd npm
-#        echo '../devextreme/artifacts/npm'
-#        ls
-#        cd devextreme
-#        echo '../devextreme/artifacts/npm/devextreme'
-#        ls
-
-#    - uses: actions/upload-artifact@v3
-#      with:
-#        name: devextreme-artifacts
-#        path: ../devextreme/artifacts/npm/devextreme
-
-#    - name: Use Node.js 14
-#      uses: actions/setup-node@v3
-#      with:
-#        node-version: '14'
 
     - name: Link devextreme
       run: |
         cd ../devextreme/artifacts/npm/devextreme
         npm link
 
-    - name: Install npm packages
+    - name: Install npm packages and link to devextreme
       run: |
         npm link devextreme
-
-#    - name: Use Node.js 16
-#      uses: actions/setup-node@v3
-#      with:
-#        node-version: '16'
-
-#    - name: Run npm install
-#      run: npm install --no-audit --no-fund
 
     - name: Run lint
       run: npm run lint
@@ -105,11 +67,6 @@ jobs:
 
     - name: Run build
       run: npm run build:packages
-
-#    - name: Run build vue2 force
-#      run: |
-#        cd packages/vue2-strategy
-#        npm run build
 
     - name: Run tests with Vue
       run: npm run test
