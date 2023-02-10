@@ -35,7 +35,8 @@
     "gulp-tslint": "^8.1.4",
     "jest": "^26.6.3",
     "ts-jest": "^26.5.6",
-    "tslint": "^5.11.0"
+    "tslint": "^5.11.0",
+    "yocto-queue": "^1.0.0"
   },
   "workspaces": [
     "packages/*"
