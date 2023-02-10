@@ -29,13 +29,14 @@
     "@types/jest": "^26.0.24",
     "cpy-cli": "^3.1.1",
     "del-cli": "^3.0.1",
-    "devextreme": "file:../DevExtreme/artifacts/npm/devextreme",
+    "devextreme": "22.2.4",
     "devextreme-internal-tools": "^9.3.0",
     "gulp": "^4.0.2",
     "gulp-tslint": "^8.1.4",
     "jest": "^26.6.3",
     "ts-jest": "^26.5.6",
-    "tslint": "^5.11.0"
+    "tslint": "^5.11.0",
+    "yocto-queue": "^1.0.0"
   },
   "workspaces": [
     "packages/*"

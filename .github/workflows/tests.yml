@@ -71,6 +71,9 @@ jobs:
     - name: Run tests with Vue
       run: npm run test
 
+    - name: Check packing
+      run: npm run pack
+
     - name: Archive internal-tools artifacts
       uses: actions/upload-artifact@v3
       with:
