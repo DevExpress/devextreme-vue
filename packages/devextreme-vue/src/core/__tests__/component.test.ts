@@ -1254,6 +1254,7 @@ describe("component rendering", () => {
                     CustomComponent
                 }
             });
+            // @ts-ignore
             mount(vm, {
                 global: {
                   plugins: [router]

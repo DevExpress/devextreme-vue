@@ -59,6 +59,7 @@ describe("template rendering", () => {
         });
         router.push("/");
         await router.isReady();
+        // @ts-ignore
         const wrapper = mount(rootView, {
             global: {
                 plugins: [router]
