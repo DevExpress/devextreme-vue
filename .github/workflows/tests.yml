@@ -57,7 +57,7 @@ jobs:
 
     - name: Install npm packages and link to devextreme
       run: |
-        npm link devextreme
+        npm link devextreme --legacy-peer-deps
 
     - name: Run lint
       run: npm run lint
