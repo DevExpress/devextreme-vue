@@ -114,7 +114,8 @@ function mapWidget(
       nestedComponents: raw.complexOptions
         ? raw.complexOptions.map((o) => mapNestedComponent(o, customTypeHash))
         : undefined,
-        expectedChildren: mapExpectedChildren(raw.nesteds)
+      expectedChildren: mapExpectedChildren(raw.nesteds),
+      reexports: raw.reexports,
     }
   };
 }

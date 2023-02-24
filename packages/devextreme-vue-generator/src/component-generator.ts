@@ -21,6 +21,7 @@ interface IComponent {
     hasExplicitTypes?: boolean;
     nestedComponents?: INestedComponent[];
     expectedChildren?: Record<string, IExpectedChild>;
+    reexports?: string[];
 }
 
 interface INestedComponent {
@@ -94,6 +95,17 @@ function generate(component: IComponent, widgetsPackage: string = "devextreme", 
     }
 
     namedImports.sort(compareImports);
+
+    const filterReexports = (reexports?: string[]) => {
+        if (!reexports) {
+            return;
+        }
+        const result = reexports.filter(
+            item => item !== 'default' && (component.hasExplicitTypes && item !== 'ExplicitTypes')
+        );
+        return result.length ? result : undefined;
+    }
+    
     const componentModel = {
         ...component,
 
@@ -113,7 +125,8 @@ function generate(component: IComponent, widgetsPackage: string = "devextreme", 
         expectedChildren: formatExpectedChildren(component.expectedChildren),
         widgetsPackage,
         templatesRenderAsynchronously: !USE_SYNC_TEMPLATES.has(component.name),
-        isVue3: vueVersion === 3
+        isVue3: vueVersion === 3,
+        reexports: filterReexports(component.reexports)
     };
 
     return renderComponent(componentModel);
@@ -166,7 +179,8 @@ const renderComponent: (model: {
     nestedComponents?: INestedComponentModel[];
     expectedChildren?: IExpectedChildModel[];
     defaultExport: string;
-    namedExports: string[];
+    namedExports?: string[];
+    reexports?: string[];
     widgetsPackage: string;
     templatesRenderAsynchronously: boolean;
     isVue3: boolean;
@@ -289,7 +303,14 @@ L0 + `});\n` +
     `<#~ it.namedExports :namedExport #>` +
         L1 + `<#= namedExport #>,` +
     `<#~#>` + `\b` + `\n` +
-`};\n`
+`};\n` +
+`<#? it.reexports #>` +
+`export {` +
+    `<#~ it.reexports :reexport #>` +
+        L1 + `<#= reexport #>,` +
+    `<#~#>` + `\b` + `\n` +
+`} from '<#= it.widgetsPackage #>/<#= it.widgetImport.path #>';\n` +
+`<#?#>`
 );
 
 function compareProps(a: IProp, b: IProp): number {
