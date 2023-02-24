@@ -96,15 +96,13 @@ function generate(component: IComponent, widgetsPackage: string = "devextreme", 
 
     namedImports.sort(compareImports);
 
-    const filterReexports = (reexports?: string[]) => {
-        if (!reexports) {
-            return;
-        }
-        const result = reexports.filter(
-            item => item !== 'default' && (component.hasExplicitTypes && item !== 'ExplicitTypes')
-        );
-        return result.length ? result : undefined;
-    }
+    const filterReexports = (reexports?: string[]) : string[] => (
+        reexports
+          ? reexports.filter(
+            (item) => item !== 'default' && (component.hasExplicitTypes && item !== 'ExplicitTypes'),
+          )
+          : []
+    );
     
     const componentModel = {
         ...component,
@@ -180,7 +178,7 @@ const renderComponent: (model: {
     expectedChildren?: IExpectedChildModel[];
     defaultExport: string;
     namedExports?: string[];
-    reexports?: string[];
+    reexports: string[];
     widgetsPackage: string;
     templatesRenderAsynchronously: boolean;
     isVue3: boolean;
@@ -304,7 +302,7 @@ L0 + `});\n` +
         L1 + `<#= namedExport #>,` +
     `<#~#>` + `\b` + `\n` +
 `};\n` +
-`<#? it.reexports #>` +
+`<#? it.reexports.length #>` +
 `export {` +
     `<#~ it.reexports :reexport #>` +
         L1 + `<#= reexport #>,` +
