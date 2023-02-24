@@ -10,8 +10,6 @@ const config = require('./build.config');
 const VUE_VERSION = 2;
 
 gulp.task('build.components', gulp.series(
-  (done) =>
-    mkdir(config.oldComponentsDir, {}, done),
   (done) => {
     generateSync(
       JSON.parse(fs.readFileSync(config.metadataPath).toString()),
@@ -19,7 +17,6 @@ gulp.task('build.components', gulp.series(
       config.configComponent,
       {
         componentsDir: config.generatedComponentsDir,
-        oldComponentsDir: config.oldComponentsDir,
         indexFileName: config.indexFileName
       },
       config.widgetsPackage,

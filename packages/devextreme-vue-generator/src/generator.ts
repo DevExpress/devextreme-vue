@@ -13,13 +13,11 @@ import { writeFileSync as writeFile } from "fs";
 import {
   dirname as getDirName,
   join as joinPaths,
-  normalize as normalizePath,
   relative as getRelativePath,
   sep as pathSeparator
 } from "path";
 
 import generateComponent, {
-  generateReExport,
   IComponent,
   IExpectedChild,
   INestedComponent,
@@ -36,7 +34,6 @@ function generate(
   configComponentPath: string,
   out: {
     componentsDir: string,
-    oldComponentsDir: string,
     indexFileName: string
   },
   widgetsPackage: string,
@@ -62,15 +59,6 @@ function generate(
       name: widgetFile.component.name,
       path: "./" + removeExtension(getRelativePath(indexFileDir, widgetFilePath)).replace(pathSeparator, "/")
     });
-
-    writeFile(
-      joinPaths(out.oldComponentsDir, widgetFile.fileName),
-      generateReExport(
-        normalizePath("./" + removeExtension(getRelativePath(out.oldComponentsDir, widgetFilePath)))
-          .replace(pathSeparator, "/"),
-        removeExtension(widgetFile.fileName)
-      )
-    );
   });
 
   writeFile(out.indexFileName, generateIndex(modulePaths), { encoding: "utf8" });

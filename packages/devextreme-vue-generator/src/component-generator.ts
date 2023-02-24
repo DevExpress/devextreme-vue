@@ -62,21 +62,11 @@ interface IProp {
     isArray?: boolean;
 }
 
-function generateReExport(path: string, fileName: string): string {
-    return renderReExport({ path, fileName });
-}
-
 export const USE_SYNC_TEMPLATES: Set<string> = new Set([
     "DxScheduler",
     "DxDataGrid",
     "DxTreeList"
 ]);
-
-const renderReExport: (model: {path: string, fileName: string}) => string = createTempate(
-`/** @deprecated Use 'devextreme-vue/<#= it.fileName #>' file instead */\n` +
-`export * from "<#= it.path #>";\n` +
-`export { default } from "<#= it.path #>";\n`
-);
 
 function generate(component: IComponent, widgetsPackage: string = "devextreme", vueVersion: number = 3): string {
     const nestedComponents = component.nestedComponents
@@ -390,5 +380,4 @@ export {
     INestedComponent,
     IProp,
     renderProps,
-    generateReExport
 };
