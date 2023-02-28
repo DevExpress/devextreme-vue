@@ -86,14 +86,14 @@ function generate(component: IComponent, widgetsPackage: string = "devextreme", 
 
     namedImports.sort(compareImports);
 
-    const filterReexports = (reexports?: string[]) : string[] => (
+    const filterReexports = (reexports?: string[]): string[] => (
         reexports
           ? reexports.filter(
-            (item) => item !== 'default' && (component.hasExplicitTypes && item !== 'ExplicitTypes'),
+            (item) => item !== "default" && (component.hasExplicitTypes && item !== "ExplicitTypes"),
           )
           : []
     );
-    
+
     const componentModel = {
         ...component,
 
