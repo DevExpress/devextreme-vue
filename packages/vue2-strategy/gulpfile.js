@@ -23,7 +23,8 @@ gulp.task('build.components', gulp.series(
         indexFileName: config.indexFileName
       },
       config.widgetsPackage,
-      VUE_VERSION
+      VUE_VERSION,
+      true
     );
 
     done();

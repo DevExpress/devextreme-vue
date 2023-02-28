@@ -42,7 +42,8 @@ function generate(
     indexFileName: string
   },
   widgetsPackage: string,
-  vueVersion: number
+  vueVersion: number,
+  generateReexports?: boolean,
 ) {
   const modulePaths: IReExport[] = [];
 
@@ -77,7 +78,7 @@ function generate(
 
   writeFile(out.indexFileName, generateIndex(modulePaths), { encoding: "utf8" });
 
-  if (rawData.commonReexports) {
+  if (generateReexports && rawData.commonReexports) {
     const commonPath = joinPaths(out.componentsDir, "common");
     if (!existsSync(commonPath)) {
       mkdirSync(commonPath);
