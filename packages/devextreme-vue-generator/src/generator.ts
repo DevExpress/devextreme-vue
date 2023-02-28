@@ -77,18 +77,19 @@ function generate(
 
   writeFile(out.indexFileName, generateIndex(modulePaths), { encoding: "utf8" });
 
-  const commonPath = joinPaths(out.componentsDir, "common");
-  if (!existsSync(commonPath)) {
-    mkdirSync(commonPath);
+  if (rawData.commonReexports) {
+    const commonPath = joinPaths(out.componentsDir, "common");
+    if (!existsSync(commonPath)) {
+      mkdirSync(commonPath);
+    }
+    Object.keys(rawData.commonReexports).forEach((key) => {
+      writeFile(
+        joinPaths(commonPath, `${key.replace("common/", "")}.ts`),
+        generateCommonReexports(key, rawData.commonReexports[key]),
+        { encoding: "utf8" },
+      );
+    });
   }
-  Object.keys(rawData.commonReexports).forEach((key) => {
-    writeFile(
-      joinPaths(commonPath, `${key.replace("common/", "")}.ts`),
-      generateCommonReexports(key, rawData.commonReexports[key]),
-      { encoding: "utf8" },
-    );
-  });
-
 }
 
 function mapWidget(

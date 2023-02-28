@@ -4,7 +4,7 @@ const render: (model: { module: string, reexports: string[] }) => string = creat
 export {<#~ it.reexports :reExport #>
     <#= reExport #>,<#~#>
 } from "devextreme/<#= it.module #>";
-`.trim());
+`.trimStart());
 
 function generate(module: string, reexports: string[]): string {
   const result = render({ module, reexports });
