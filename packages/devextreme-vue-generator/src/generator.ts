@@ -8,23 +8,23 @@ import {
   IWidget
 } from "devextreme-internal-tools/integration-data-model";
 
-import { writeFileSync as writeFile } from "fs";
+import { existsSync, mkdirSync, writeFileSync as writeFile } from "fs";
 
 import {
   dirname as getDirName,
   join as joinPaths,
-  normalize as normalizePath,
   relative as getRelativePath,
   sep as pathSeparator
 } from "path";
 
 import generateComponent, {
-  generateReExport,
   IComponent,
   IExpectedChild,
   INestedComponent,
   IProp
 } from "./component-generator";
+
+import generateCommonReexports from "./common-reexports-generator";
 
 import { convertTypes } from "./converter";
 import { removeExtension, removePrefix, toKebabCase, uppercaseFirst } from "./helpers";
@@ -36,11 +36,11 @@ function generate(
   configComponentPath: string,
   out: {
     componentsDir: string,
-    oldComponentsDir: string,
     indexFileName: string
   },
   widgetsPackage: string,
-  vueVersion: number
+  vueVersion: number,
+  generateReexports?: boolean,
 ) {
   const modulePaths: IReExport[] = [];
 
@@ -62,18 +62,23 @@ function generate(
       name: widgetFile.component.name,
       path: "./" + removeExtension(getRelativePath(indexFileDir, widgetFilePath)).replace(pathSeparator, "/")
     });
-
-    writeFile(
-      joinPaths(out.oldComponentsDir, widgetFile.fileName),
-      generateReExport(
-        normalizePath("./" + removeExtension(getRelativePath(out.oldComponentsDir, widgetFilePath)))
-          .replace(pathSeparator, "/"),
-        removeExtension(widgetFile.fileName)
-      )
-    );
   });
 
   writeFile(out.indexFileName, generateIndex(modulePaths), { encoding: "utf8" });
+
+  if (generateReexports && rawData.commonReexports) {
+    const commonPath = joinPaths(out.componentsDir, "common");
+    if (!existsSync(commonPath)) {
+      mkdirSync(commonPath);
+    }
+    Object.keys(rawData.commonReexports).forEach((key) => {
+      writeFile(
+        joinPaths(commonPath, `${key.replace("common/", "")}.ts`),
+        generateCommonReexports(key, rawData.commonReexports[key]),
+        { encoding: "utf8" },
+      );
+    });
+  }
 }
 
 function mapWidget(
