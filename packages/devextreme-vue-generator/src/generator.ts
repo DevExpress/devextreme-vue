@@ -56,7 +56,7 @@ function generate(
 
     writeFile(
       widgetFilePath,
-      generateComponent(widgetFile.component, widgetsPackage, vueVersion),
+      generateComponent(widgetFile.component, widgetsPackage, vueVersion, generateReexports),
       { encoding: "utf8" });
     modulePaths.push({
       name: widgetFile.component.name,
