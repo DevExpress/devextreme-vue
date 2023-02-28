@@ -69,7 +69,12 @@ export const USE_SYNC_TEMPLATES: Set<string> = new Set([
     "DxTreeList"
 ]);
 
-function generate(component: IComponent, widgetsPackage: string = "devextreme", vueVersion: number = 3, renderReexports: boolean = false): string {
+function generate(
+    component: IComponent,
+    widgetsPackage: string = "devextreme",
+    vueVersion: number = 3,
+    renderReexports: boolean = false
+): string {
     const nestedComponents = component.nestedComponents
         ? component.nestedComponents.map(createNestedComponentModel)
         : undefined;
@@ -297,7 +302,7 @@ L0 + `});\n` +
     `<#~ it.reexports :reexport #>` +
         L1 + `<#= reexport #>,` +
     `<#~#>` + `\b` + `\n` +
-`} from '<#= it.widgetsPackage #>/<#= it.widgetImport.path #>';\n` +
+`} from "<#= it.widgetsPackage #>/<#= it.widgetImport.path #>";\n` +
 `<#?#>`
 );
 
