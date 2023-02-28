@@ -8,7 +8,7 @@ import {
   IWidget
 } from "devextreme-internal-tools/integration-data-model";
 
-import { writeFileSync as writeFile, existsSync, mkdirSync } from "fs";
+import { existsSync, mkdirSync, writeFileSync as writeFile } from "fs";
 
 import {
   dirname as getDirName,
@@ -26,7 +26,7 @@ import generateComponent, {
   IProp
 } from "./component-generator";
 
-import generateCommonReexports from './common-reexports-generator';
+import generateCommonReexports from "./common-reexports-generator";
 
 import { convertTypes } from "./converter";
 import { removeExtension, removePrefix, toKebabCase, uppercaseFirst } from "./helpers";
@@ -77,15 +77,15 @@ function generate(
 
   writeFile(out.indexFileName, generateIndex(modulePaths), { encoding: "utf8" });
 
-    const commonPath = joinPaths(out.componentsDir, 'common');
+  const commonPath = joinPaths(out.componentsDir, "common");
   if (!existsSync(commonPath)) {
     mkdirSync(commonPath);
   }
   Object.keys(rawData.commonReexports).forEach((key) => {
     writeFile(
-      joinPaths(commonPath, `${key.replace('common/', '')}.ts`),
+      joinPaths(commonPath, `${key.replace("common/", "")}.ts`),
       generateCommonReexports(key, rawData.commonReexports[key]),
-      { encoding: 'utf8' },
+      { encoding: "utf8" },
     );
   });
 

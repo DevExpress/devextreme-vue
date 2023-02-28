@@ -1,4 +1,4 @@
-import { createTempate } from './template';
+import { createTempate } from "./template";
 
 const render: (model: { module: string, reexports: string[] }) => string = createTempate(`
 export {<#~ it.reexports :reExport #>
