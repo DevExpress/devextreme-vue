@@ -94,7 +94,7 @@ function generate(
     const filterReexports = (reexports?: string[]): string[] => (
         reexports
           ? reexports.filter(
-            (item) => item !== "default" && (component.hasExplicitTypes && item !== "ExplicitTypes"),
+            (item) => item !== "default" && item !== "ExplicitTypes",
           )
           : []
     );
