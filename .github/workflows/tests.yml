@@ -15,7 +15,7 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Clone devextreme repo from PR author fork
       continue-on-error: true
@@ -26,9 +26,13 @@ jobs:
       run: test -d ../devextreme || git clone -b 22_1 https://github.com/devexpress/devextreme ../devextreme
 
     - name: Use Node.js 15
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: '15'
+
+    - uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '3.1.x'
 
     - name: Install packages in devextreme repo
       run: |
@@ -41,7 +45,7 @@ jobs:
         npm run build-dist
 
     - name: Use Node.js 14
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: '14'
 
