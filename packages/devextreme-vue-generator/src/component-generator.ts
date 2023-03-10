@@ -21,7 +21,7 @@ interface IComponent {
     hasExplicitTypes?: boolean;
     nestedComponents?: INestedComponent[];
     expectedChildren?: Record<string, IExpectedChild>;
-    reexports?: string[];
+    renderReexports?: boolean;
 }
 
 interface INestedComponent {
@@ -91,14 +91,6 @@ function generate(
 
     namedImports.sort(compareImports);
 
-    const filterReexports = (reexports?: string[]): string[] => (
-        reexports
-          ? reexports.filter(
-            (item) => item !== "default" && item !== "ExplicitTypes",
-          )
-          : []
-    );
-
     const componentModel = {
         ...component,
 
@@ -119,7 +111,7 @@ function generate(
         widgetsPackage,
         templatesRenderAsynchronously: !USE_SYNC_TEMPLATES.has(component.name),
         isVue3: vueVersion === 3,
-        reexports: renderReexports ? filterReexports(component.reexports) : []
+        renderReexports
     };
 
     return renderComponent(componentModel);
@@ -173,7 +165,7 @@ const renderComponent: (model: {
     expectedChildren?: IExpectedChildModel[];
     defaultExport: string;
     namedExports?: string[];
-    reexports: string[];
+    renderReexports: boolean;
     widgetsPackage: string;
     templatesRenderAsynchronously: boolean;
     isVue3: boolean;
@@ -297,12 +289,8 @@ L0 + `});\n` +
         L1 + `<#= namedExport #>,` +
     `<#~#>` + `\b` + `\n` +
 `};\n` +
-`<#? it.reexports.length #>` +
-`export {` +
-    `<#~ it.reexports :reexport #>` +
-        L1 + `<#= reexport #>,` +
-    `<#~#>` + `\b` + `\n` +
-`} from "<#= it.widgetsPackage #>/<#= it.widgetImport.path #>";\n` +
+`<#? it.renderReexports #>` +
+`export * as <#= it.component #>Types from "<#= it.widgetsPackage #>/<#= it.widgetImport.path #>_types";\n` +
 `<#?#>`
 );
 
