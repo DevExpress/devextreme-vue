@@ -21,6 +21,7 @@ interface IComponent {
     hasExplicitTypes?: boolean;
     nestedComponents?: INestedComponent[];
     expectedChildren?: Record<string, IExpectedChild>;
+    containsReexports?: boolean;
 }
 
 interface INestedComponent {
@@ -68,7 +69,12 @@ export const USE_SYNC_TEMPLATES: Set<string> = new Set([
     "DxTreeList"
 ]);
 
-function generate(component: IComponent, widgetsPackage: string = "devextreme", vueVersion: number = 3): string {
+function generate(
+    component: IComponent,
+    widgetsPackage: string = "devextreme",
+    vueVersion: number = 3,
+    renderReexports: boolean = false
+): string {
     const nestedComponents = component.nestedComponents
         ? component.nestedComponents.map(createNestedComponentModel)
         : undefined;
@@ -84,6 +90,7 @@ function generate(component: IComponent, widgetsPackage: string = "devextreme", 
     }
 
     namedImports.sort(compareImports);
+
     const componentModel = {
         ...component,
 
@@ -103,7 +110,8 @@ function generate(component: IComponent, widgetsPackage: string = "devextreme", 
         expectedChildren: formatExpectedChildren(component.expectedChildren),
         widgetsPackage,
         templatesRenderAsynchronously: !USE_SYNC_TEMPLATES.has(component.name),
-        isVue3: vueVersion === 3
+        isVue3: vueVersion === 3,
+        renderReexports: renderReexports && component.containsReexports
     };
 
     return renderComponent(componentModel);
@@ -156,7 +164,8 @@ const renderComponent: (model: {
     nestedComponents?: INestedComponentModel[];
     expectedChildren?: IExpectedChildModel[];
     defaultExport: string;
-    namedExports: string[];
+    namedExports?: string[];
+    renderReexports?: boolean;
     widgetsPackage: string;
     templatesRenderAsynchronously: boolean;
     isVue3: boolean;
@@ -279,7 +288,11 @@ L0 + `});\n` +
     `<#~ it.namedExports :namedExport #>` +
         L1 + `<#= namedExport #>,` +
     `<#~#>` + `\b` + `\n` +
-`};\n`
+`};\n` +
+`<#? it.renderReexports #>` +
+`import type * as <#= it.component #>Types from "<#= it.widgetsPackage #>/<#= it.widgetImport.path #>_types";\n` +
+`export { <#= it.component #>Types };\n` +
+`<#?#>`
 );
 
 function compareProps(a: IProp, b: IProp): number {

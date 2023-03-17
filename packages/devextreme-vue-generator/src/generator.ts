@@ -56,7 +56,7 @@ function generate(
 
     writeFile(
       widgetFilePath,
-      generateComponent(widgetFile.component, widgetsPackage, vueVersion),
+      generateComponent(widgetFile.component, widgetsPackage, vueVersion, generateReexports),
       { encoding: "utf8" });
     modulePaths.push({
       name: widgetFile.component.name,
@@ -119,7 +119,8 @@ function mapWidget(
       nestedComponents: raw.complexOptions
         ? raw.complexOptions.map((o) => mapNestedComponent(o, customTypeHash))
         : undefined,
-        expectedChildren: mapExpectedChildren(raw.nesteds)
+      expectedChildren: mapExpectedChildren(raw.nesteds),
+      containsReexports: !!raw.reexports.filter((r) => r !== "default").length
     }
   };
 }
