@@ -21,7 +21,7 @@ interface IComponent {
     hasExplicitTypes?: boolean;
     nestedComponents?: INestedComponent[];
     expectedChildren?: Record<string, IExpectedChild>;
-    renderReexports?: boolean;
+    containsReexports?: boolean;
 }
 
 interface INestedComponent {
@@ -111,7 +111,7 @@ function generate(
         widgetsPackage,
         templatesRenderAsynchronously: !USE_SYNC_TEMPLATES.has(component.name),
         isVue3: vueVersion === 3,
-        renderReexports
+        renderReexports: renderReexports && component.containsReexports
     };
 
     return renderComponent(componentModel);
@@ -165,7 +165,7 @@ const renderComponent: (model: {
     expectedChildren?: IExpectedChildModel[];
     defaultExport: string;
     namedExports?: string[];
-    renderReexports: boolean;
+    renderReexports?: boolean;
     widgetsPackage: string;
     templatesRenderAsynchronously: boolean;
     isVue3: boolean;

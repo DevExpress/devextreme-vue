@@ -120,6 +120,7 @@ function mapWidget(
         ? raw.complexOptions.map((o) => mapNestedComponent(o, customTypeHash))
         : undefined,
       expectedChildren: mapExpectedChildren(raw.nesteds),
+      containsReexports: !!raw.reexports.filter((r) => r !== 'default').length
     }
   };
 }
