@@ -290,7 +290,8 @@ L0 + `});\n` +
     `<#~#>` + `\b` + `\n` +
 `};\n` +
 `<#? it.renderReexports #>` +
-`export * as <#= it.component #>Types from "<#= it.widgetsPackage #>/<#= it.widgetImport.path #>_types";\n` +
+`import type * as <#= it.component #>Types from "<#= it.widgetsPackage #>/<#= it.widgetImport.path #>_types";\n` +
+`export { <#= it.component #>Types };\n` +
 `<#?#>`
 );
 
