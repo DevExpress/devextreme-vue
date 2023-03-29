@@ -1,4 +1,5 @@
 .vscode/launch.json
+.idea
 node_modules/
 dist/
 artifacts/
