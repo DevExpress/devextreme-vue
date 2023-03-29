@@ -9,8 +9,8 @@
     "url": "https://github.com/DevExpress/devextreme-vue.git"
   },
   "scripts": {
-    "prepare-devextreme": "git submodule init && git submodule update && npm i --prefix ./devextreme",
-    "build-devextreme": "npm run build-dist --prefix ./devextreme",
+    "clone-devextreme": "git submodule init && git submodule update",
+    "build-devextreme": "npm i --prefix ./devextreme && npm run build-dist --prefix ./devextreme",
     "update-devextreme": "git submodule update --remote",
     "clean:packages": "npm run clean --yes --ws --if-present && npm run clean:root",
     "clean:root": "del-cli node_modules",
