@@ -9,6 +9,9 @@
     "url": "https://github.com/DevExpress/devextreme-vue.git"
   },
   "scripts": {
+    "prepare-devextreme": "git submodule init && git submodule update && npm i --prefix ./devextreme",
+    "build-devextreme": "npm run build-dist --prefix ./devextreme",
+    "update-devextreme": "git submodule update --remote",
     "clean:packages": "npm run clean --yes --ws --if-present && npm run clean:root",
     "clean:root": "del-cli node_modules",
     "start:packages": "npn run start --ws --if-present",
@@ -17,7 +20,7 @@
     "test": "jest",
     "test-watch": "jest --watch",
     "pack": "npm run update-integration-meta && npm run pack --ws --if-present",
-    "update-integration-meta": "dx-tools integration-data-generator --js-scripts ../devextreme/js  --artifacts  ../devextreme/artifacts/internal-tools --output-path ./packages/devextreme-vue/metadata/integration-data.json --version 23_1"
+    "update-integration-meta": "dx-tools integration-data-generator --js-scripts ./devextreme/js  --artifacts  ./devextreme/artifacts/internal-tools --output-path ./packages/devextreme-vue/metadata/integration-data.json --version 23_1"
   },
   "keywords": [
     "vue",
