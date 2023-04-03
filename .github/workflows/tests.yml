@@ -32,7 +32,7 @@ jobs:
       run: npm run prepare-devextreme
 
     - name: Install npm packages
-      run: npm i --legacy-peer-deps
+      run: npm i
 
     - name: Run lint
       run: npm run lint
