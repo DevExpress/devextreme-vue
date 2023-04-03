@@ -10,8 +10,11 @@
   },
   "scripts": {
     "clone-devextreme": "git submodule init && git submodule update",
-    "build-devextreme": "npm i --prefix ./devextreme && npm run build-dist --prefix ./devextreme",
-    "update-devextreme": "git submodule update --remote",
+    "update-devextreme": "git submodule init && git submodule update --remote",
+    "prepare-devextreme": "npm i --prefix ./devextreme",
+    "discover-declarations": "npm run discover-declarations --prefix ./devextreme",
+    "update-integration-meta": "dx-tools integration-data-generator --js-scripts ./devextreme/js  --artifacts  ./devextreme/artifacts/internal-tools --output-path ./packages/devextreme-vue/metadata/integration-data.json --version 23_1",
+    "generate-metadata": "npm run discover-declarations && npm run update-integration-meta",
     "clean:packages": "npm run clean --yes --ws --if-present && npm run clean:root",
     "clean:root": "del-cli node_modules",
     "start:packages": "npn run start --ws --if-present",
@@ -19,8 +22,7 @@
     "lint": "gulp lint",
     "test": "jest",
     "test-watch": "jest --watch",
-    "pack": "npm run update-integration-meta && npm run pack --ws --if-present",
-    "update-integration-meta": "dx-tools integration-data-generator --js-scripts ./devextreme/js  --artifacts  ./devextreme/artifacts/internal-tools --output-path ./packages/devextreme-vue/metadata/integration-data.json --version 23_1"
+    "pack": "npm run update-integration-meta && npm run pack --ws --if-present"
   },
   "keywords": [
     "vue",
