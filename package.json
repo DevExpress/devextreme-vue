@@ -9,12 +9,9 @@
     "url": "https://github.com/DevExpress/devextreme-vue.git"
   },
   "scripts": {
-    "clone-devextreme": "git submodule init && git submodule update",
-    "update-devextreme": "git submodule init && git submodule update --remote",
-    "prepare-devextreme": "npm i --prefix ./devextreme",
-    "discover-declarations": "npm run discover-declarations --prefix ./devextreme",
-    "update-integration-meta": "dx-tools integration-data-generator --js-scripts ./devextreme/js  --artifacts  ./devextreme/artifacts/internal-tools --output-path ./packages/devextreme-vue/metadata/integration-data.json --version 23_1",
-    "generate-metadata": "npm run discover-declarations && npm run update-integration-meta",
+    "generate-metadata": "node ./generate-metadata.js --version=23_1",
+    "generate-metadata:local": "npm run generate-metadata -- --local --devextreme-path=../devextreme",
+    "update-metadata": "npm run generate-metadata -- --update-submodule",
     "clean:packages": "npm run clean --yes --ws --if-present && npm run clean:root",
     "clean:root": "del-cli node_modules",
     "start:packages": "npn run start --ws --if-present",
@@ -22,7 +19,7 @@
     "lint": "gulp lint",
     "test": "jest",
     "test-watch": "jest --watch",
-    "pack": "npm run update-integration-meta && npm run pack --ws --if-present"
+    "pack": "npm run generate-metadata && npm run pack --ws --if-present"
   },
   "keywords": [
     "vue",
@@ -41,6 +38,7 @@
     "jest": "^26.6.3",
     "ts-jest": "^26.5.6",
     "tslint": "^5.11.0",
+    "yargs-parser": "^21.1.1",
     "yocto-queue": "^1.0.0"
   },
   "workspaces": [

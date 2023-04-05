@@ -292,10 +292,12 @@ const DxItem = createConfigurationComponent({
     "update:html": null,
     "update:icon": null,
     "update:items": null,
+    "update:linkAttr": null,
     "update:selectable": null,
     "update:selected": null,
     "update:template": null,
     "update:text": null,
+    "update:url": null,
     "update:visible": null,
   },
   props: {
@@ -305,10 +307,12 @@ const DxItem = createConfigurationComponent({
     html: String,
     icon: String,
     items: Array,
+    linkAttr: Object,
     selectable: Boolean,
     selected: Boolean,
     template: {},
     text: String,
+    url: String,
     visible: Boolean
   }
 });
