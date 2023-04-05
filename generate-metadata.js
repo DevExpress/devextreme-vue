@@ -8,7 +8,7 @@ const exec = (command) => {
 
 const argv = parser(process.argv.slice(2), { boolean: [ 'local', 'update-submodule' ], default: { } })
 
-let devextremePath = './devextreme';
+const devextremePath = argv.local ? argv.devextremePath : './devextreme';
 
 if (!argv.local) {
     exec('git submodule init');
