@@ -16,9 +16,6 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v3
 
-    - name: Clone devextreme
-      run: npm run clone-devextreme
-
     - name: Use Node.js 18
       uses: actions/setup-node@v3
       with:
@@ -27,9 +24,6 @@ jobs:
     - uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '3.1.x'
-
-    - name: Install packages in devextreme repo
-      run: npm run prepare-devextreme
 
     - name: Install npm packages
       run: npm i
