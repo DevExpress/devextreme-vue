@@ -12,7 +12,7 @@
     "devextreme": "./devextreme"
   },
   "scripts": {
-    "restore-devextreme": "git submodule init && pushd devextreme && git add . && popd && git submodule update --force --checkout && npm i --prefix ./devextreme",
+    "restore-devextreme": "git submodule init && cd devextreme && git add . && cd .. && git submodule update --force --checkout && npm i --prefix ./devextreme",
     "pull-devextreme": "npm run restore-devextreme -- --remote && npm i --prefix ./devextreme",
     "generate-metadata:discover": "npm run discover-declarations --prefix $npm_package_config_devextreme",
     "generate-metadata:integration": "dx-tools integration-data-generator --js-scripts $npm_package_config_devextreme/js --artifacts $npm_package_config_devextreme/artifacts/internal-tools --output-path ./packages/devextreme-vue/metadata/integration-data.json",
