@@ -8,10 +8,15 @@
     "type": "git",
     "url": "https://github.com/DevExpress/devextreme-vue.git"
   },
+  "config": {
+    "devextreme": "./devextreme"
+  },
   "scripts": {
-    "generate-metadata": "node ./generate-metadata.js --version=23_1",
-    "generate-metadata:local": "npm run generate-metadata -- --local --devextreme-path=../devextreme",
-    "update-metadata": "npm run generate-metadata -- --update-submodule",
+    "restore-devextreme": "git submodule init && pushd devextreme && git add . && popd && git submodule update --force --checkout && npm i --prefix ./devextreme",
+    "pull-devextreme": "npm run restore-devextreme -- --remote && npm i --prefix ./devextreme",
+    "generate-metadata:discover": "npm run discover-declarations --prefix $npm_package_config_devextreme",
+    "generate-metadata:integration": "dx-tools integration-data-generator --js-scripts $npm_package_config_devextreme/js --artifacts $npm_package_config_devextreme/artifacts/internal-tools --output-path ./packages/devextreme-vue/metadata/integration-data.json",
+    "generate-metadata": "npm run generate-metadata:discover && npm run generate-metadata:integration",
     "clean:packages": "npm run clean --yes --ws --if-present && npm run clean:root",
     "clean:root": "del-cli node_modules",
     "start:packages": "npn run start --ws --if-present",
