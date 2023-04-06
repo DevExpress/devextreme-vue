@@ -73,8 +73,7 @@ function generate(
       mkdirSync(commonPath);
     }
     Object.keys(rawData.commonReexports).forEach((key) => {
-      const targetKey = key.replace(`${commonTargetFolderName}/`, "");
-      const targetFileName = `${targetKey === commonTargetFolderName ? "index" : targetKey}.ts`;
+      const targetFileName = key === commonTargetFolderName ? "index.ts" : `${key.replace(`${commonTargetFolderName}/`, "")}.ts`;
       writeFile(
         joinPaths(commonPath, targetFileName),
         generateCommonReexports(key, rawData.commonReexports[key]),
