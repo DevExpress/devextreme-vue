@@ -8,7 +8,7 @@ it("deduplicates", () => {
     ])).toEqual(["String", "Number"]);
 });
 
-it("returns undefiend if finds Any", () => {
+it("returns undefined if finds Any", () => {
         expect(convertTypes([{
             type: "Any",
             isCustomType: false,
@@ -85,8 +85,7 @@ it("expands custom types", () => {
                 }
             ],
             props: [],
-            templates: [],
-            module: ""
+            templates: []
         }
     })).toEqual(["Object", "String", "Number"]);
 });
