@@ -154,7 +154,6 @@ const DxItem = createConfigurationComponent({
     "update:imageSrc": null,
     "update:template": null,
     "update:text": null,
-    "update:visible": null,
   },
   props: {
     disabled: Boolean,
@@ -162,8 +161,7 @@ const DxItem = createConfigurationComponent({
     imageAlt: String,
     imageSrc: String,
     template: {},
-    text: String,
-    visible: Boolean
+    text: String
   }
 });
 (DxItem as any).$_optionName = "items";

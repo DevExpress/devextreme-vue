@@ -116,25 +116,21 @@ const DxItem = createConfigurationComponent({
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:disabled": null,
-    "update:html": null,
     "update:icon": null,
     "update:onClick": null,
     "update:stylingMode": null,
     "update:template": null,
     "update:text": null,
     "update:type": null,
-    "update:visible": null,
   },
   props: {
     disabled: Boolean,
-    html: String,
     icon: String,
     onClick: Function,
     stylingMode: String,
     template: {},
     text: String,
-    type: String,
-    visible: Boolean
+    type: String
   }
 });
 (DxItem as any).$_optionName = "items";

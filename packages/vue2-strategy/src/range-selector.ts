@@ -518,7 +518,7 @@ const DxCommonSeriesSettingsHoverStyle = createConfigurationComponent({
     "update:color": null,
     "update:dashStyle": null,
     "update:hatching": null,
-    "update:lightening": null,
+    "update:highlight": null,
     "update:width": null,
   },
   props: {
@@ -526,7 +526,7 @@ const DxCommonSeriesSettingsHoverStyle = createConfigurationComponent({
     color: [Object, String],
     dashStyle: String,
     hatching: Object,
-    lightening: Boolean,
+    highlight: Boolean,
     width: Number
   }
 });
@@ -592,7 +592,7 @@ const DxCommonSeriesSettingsSelectionStyle = createConfigurationComponent({
     "update:color": null,
     "update:dashStyle": null,
     "update:hatching": null,
-    "update:lightening": null,
+    "update:highlight": null,
     "update:width": null,
   },
   props: {
@@ -600,7 +600,7 @@ const DxCommonSeriesSettingsSelectionStyle = createConfigurationComponent({
     color: [Object, String],
     dashStyle: String,
     hatching: Object,
-    lightening: Boolean,
+    highlight: Boolean,
     width: Number
   }
 });
@@ -742,7 +742,7 @@ const DxHoverStyle = createConfigurationComponent({
     "update:color": null,
     "update:dashStyle": null,
     "update:hatching": null,
-    "update:lightening": null,
+    "update:highlight": null,
     "update:size": null,
     "update:width": null,
   },
@@ -751,7 +751,7 @@ const DxHoverStyle = createConfigurationComponent({
     color: [Object, String],
     dashStyle: String,
     hatching: Object,
-    lightening: Boolean,
+    highlight: Boolean,
     size: Number,
     width: Number
   }
@@ -1279,7 +1279,7 @@ const DxSelectionStyle = createConfigurationComponent({
     "update:color": null,
     "update:dashStyle": null,
     "update:hatching": null,
-    "update:lightening": null,
+    "update:highlight": null,
     "update:size": null,
     "update:width": null,
   },
@@ -1288,7 +1288,7 @@ const DxSelectionStyle = createConfigurationComponent({
     color: [Object, String],
     dashStyle: String,
     hatching: Object,
-    lightening: Boolean,
+    highlight: Boolean,
     size: Number,
     width: Number
   }

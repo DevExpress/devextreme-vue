@@ -121,7 +121,9 @@ const DxHeaderFilter = createConfigurationComponent({
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:allowSearch": null,
+    "update:allowSelectAll": null,
     "update:height": null,
+    "update:search": null,
     "update:searchTimeout": null,
     "update:showRelevantValues": null,
     "update:texts": null,
@@ -129,7 +131,9 @@ const DxHeaderFilter = createConfigurationComponent({
   },
   props: {
     allowSearch: Boolean,
+    allowSelectAll: Boolean,
     height: Number,
+    search: Object,
     searchTimeout: Number,
     showRelevantValues: Boolean,
     texts: Object,
@@ -139,6 +143,7 @@ const DxHeaderFilter = createConfigurationComponent({
 (DxHeaderFilter as any).$_optionName = "headerFilter";
 (DxHeaderFilter as any).$_expectedChildren = {
   headerFilterTexts: { isCollectionItem: false, optionName: "texts" },
+  search: { isCollectionItem: false, optionName: "search" },
   texts: { isCollectionItem: false, optionName: "texts" }
 };
 const DxHeaderFilterTexts = createConfigurationComponent({
@@ -175,6 +180,23 @@ const DxPivotGridFieldChooserTexts = createConfigurationComponent({
   }
 });
 (DxPivotGridFieldChooserTexts as any).$_optionName = "texts";
+const DxSearch = createConfigurationComponent({
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:editorOptions": null,
+    "update:enabled": null,
+    "update:mode": null,
+    "update:timeout": null,
+  },
+  props: {
+    editorOptions: {},
+    enabled: Boolean,
+    mode: String,
+    timeout: Number
+  }
+});
+(DxSearch as any).$_optionName = "search";
 const DxTexts = createConfigurationComponent({
   emits: {
     "update:isActive": null,
@@ -207,6 +229,7 @@ export {
   DxHeaderFilter,
   DxHeaderFilterTexts,
   DxPivotGridFieldChooserTexts,
+  DxSearch,
   DxTexts
 };
 import type * as DxPivotGridFieldChooserTypes from "devextreme/ui/pivot_grid_field_chooser_types";

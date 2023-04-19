@@ -394,7 +394,8 @@ const DxTreeList = createComponent({
       sorting: { isCollectionItem: false, optionName: "sorting" },
       stateStoring: { isCollectionItem: false, optionName: "stateStoring" },
       toolbar: { isCollectionItem: false, optionName: "toolbar" },
-      treeListHeaderFilter: { isCollectionItem: false, optionName: "headerFilter" }
+      treeListHeaderFilter: { isCollectionItem: false, optionName: "headerFilter" },
+      treeListSelection: { isCollectionItem: false, optionName: "selection" }
     };
   }
 });
@@ -691,7 +692,9 @@ const DxColumnChooser = createConfigurationComponent({
     "update:enabled": null,
     "update:height": null,
     "update:mode": null,
+    "update:search": null,
     "update:searchTimeout": null,
+    "update:selection": null,
     "update:sortOrder": null,
     "update:title": null,
     "update:width": null,
@@ -702,13 +705,51 @@ const DxColumnChooser = createConfigurationComponent({
     enabled: Boolean,
     height: Number,
     mode: String,
+    search: Object,
     searchTimeout: Number,
+    selection: Object,
     sortOrder: String,
     title: String,
     width: Number
   }
 });
 (DxColumnChooser as any).$_optionName = "columnChooser";
+(DxColumnChooser as any).$_expectedChildren = {
+  columnChooserSearch: { isCollectionItem: false, optionName: "search" },
+  columnChooserSelection: { isCollectionItem: false, optionName: "selection" },
+  search: { isCollectionItem: false, optionName: "search" },
+  selection: { isCollectionItem: false, optionName: "selection" }
+};
+const DxColumnChooserSearch = createConfigurationComponent({
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:editorOptions": null,
+    "update:enabled": null,
+    "update:timeout": null,
+  },
+  props: {
+    editorOptions: {},
+    enabled: Boolean,
+    timeout: Number
+  }
+});
+(DxColumnChooserSearch as any).$_optionName = "search";
+const DxColumnChooserSelection = createConfigurationComponent({
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:allowSelectAll": null,
+    "update:recursive": null,
+    "update:selectByClick": null,
+  },
+  props: {
+    allowSelectAll: Boolean,
+    recursive: Boolean,
+    selectByClick: Boolean
+  }
+});
+(DxColumnChooserSelection as any).$_optionName = "selection";
 const DxColumnFixing = createConfigurationComponent({
   emits: {
     "update:isActive": null,
@@ -748,22 +789,49 @@ const DxColumnHeaderFilter = createConfigurationComponent({
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:allowSearch": null,
+    "update:allowSelectAll": null,
     "update:dataSource": null,
     "update:groupInterval": null,
     "update:height": null,
+    "update:search": null,
     "update:searchMode": null,
     "update:width": null,
   },
   props: {
     allowSearch: Boolean,
+    allowSelectAll: Boolean,
     dataSource: {},
     groupInterval: [Number, String],
     height: Number,
+    search: Object,
     searchMode: String,
     width: Number
   }
 });
 (DxColumnHeaderFilter as any).$_optionName = "headerFilter";
+(DxColumnHeaderFilter as any).$_expectedChildren = {
+  columnHeaderFilterSearch: { isCollectionItem: false, optionName: "search" },
+  search: { isCollectionItem: false, optionName: "search" }
+};
+const DxColumnHeaderFilterSearch = createConfigurationComponent({
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:editorOptions": null,
+    "update:enabled": null,
+    "update:mode": null,
+    "update:searchExpr": null,
+    "update:timeout": null,
+  },
+  props: {
+    editorOptions: {},
+    enabled: Boolean,
+    mode: String,
+    searchExpr: [Array, Function, String],
+    timeout: Number
+  }
+});
+(DxColumnHeaderFilterSearch as any).$_optionName = "search";
 const DxColumnLookup = createConfigurationComponent({
   emits: {
     "update:isActive": null,
@@ -975,7 +1043,6 @@ const DxField = createConfigurationComponent({
     "update:customizeText": null,
     "update:dataField": null,
     "update:dataType": null,
-    "update:defaultFilterOperation": null,
     "update:editorOptions": null,
     "update:editorTemplate": null,
     "update:falseText": null,
@@ -991,7 +1058,6 @@ const DxField = createConfigurationComponent({
     customizeText: Function,
     dataField: String,
     dataType: String,
-    defaultFilterOperation: String,
     editorOptions: {},
     editorTemplate: {},
     falseText: String,
@@ -1050,8 +1116,6 @@ const DxFilterBuilder = createConfigurationComponent({
     "update:onDisposing": null,
     "update:onEditorPrepared": null,
     "update:onEditorPreparing": null,
-    "update:onFocusIn": null,
-    "update:onFocusOut": null,
     "update:onInitialized": null,
     "update:onOptionChanged": null,
     "update:onValueChanged": null,
@@ -1082,8 +1146,6 @@ const DxFilterBuilder = createConfigurationComponent({
     onDisposing: Function,
     onEditorPrepared: Function,
     onEditorPreparing: Function,
-    onFocusIn: Function,
-    onFocusOut: Function,
     onInitialized: Function,
     onOptionChanged: Function,
     onValueChanged: Function,
@@ -1106,7 +1168,6 @@ const DxFilterBuilderPopup = createConfigurationComponent({
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:accessKey": null,
-    "update:activeStateEnabled": null,
     "update:animation": null,
     "update:bindingOptions": null,
     "update:closeOnOutsideClick": null,
@@ -1133,8 +1194,6 @@ const DxFilterBuilderPopup = createConfigurationComponent({
     "update:minWidth": null,
     "update:onContentReady": null,
     "update:onDisposing": null,
-    "update:onFocusIn": null,
-    "update:onFocusOut": null,
     "update:onHidden": null,
     "update:onHiding": null,
     "update:onInitialized": null,
@@ -1163,7 +1222,6 @@ const DxFilterBuilderPopup = createConfigurationComponent({
   },
   props: {
     accessKey: String,
-    activeStateEnabled: Boolean,
     animation: Object,
     bindingOptions: Object,
     closeOnOutsideClick: [Boolean, Function],
@@ -1190,8 +1248,6 @@ const DxFilterBuilderPopup = createConfigurationComponent({
     minWidth: [Function, Number, String],
     onContentReady: Function,
     onDisposing: Function,
-    onFocusIn: Function,
-    onFocusOut: Function,
     onHidden: Function,
     onHiding: Function,
     onInitialized: Function,
@@ -1348,8 +1404,6 @@ const DxForm = createConfigurationComponent({
     "update:onDisposing": null,
     "update:onEditorEnterKey": null,
     "update:onFieldDataChanged": null,
-    "update:onFocusIn": null,
-    "update:onFocusOut": null,
     "update:onInitialized": null,
     "update:onOptionChanged": null,
     "update:optionalMark": null,
@@ -1392,8 +1446,6 @@ const DxForm = createConfigurationComponent({
     onDisposing: Function,
     onEditorEnterKey: Function,
     onFieldDataChanged: Function,
-    onFocusIn: Function,
-    onFocusOut: Function,
     onInitialized: Function,
     onOptionChanged: Function,
     optionalMark: String,
@@ -1532,9 +1584,11 @@ const DxHeaderFilter = createConfigurationComponent({
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:allowSearch": null,
+    "update:allowSelectAll": null,
     "update:dataSource": null,
     "update:groupInterval": null,
     "update:height": null,
+    "update:search": null,
     "update:searchMode": null,
     "update:searchTimeout": null,
     "update:texts": null,
@@ -1543,9 +1597,11 @@ const DxHeaderFilter = createConfigurationComponent({
   },
   props: {
     allowSearch: Boolean,
+    allowSelectAll: Boolean,
     dataSource: {},
     groupInterval: [Number, String],
     height: Number,
+    search: Object,
     searchMode: String,
     searchTimeout: Number,
     texts: Object,
@@ -1849,7 +1905,6 @@ const DxPopup = createConfigurationComponent({
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:accessKey": null,
-    "update:activeStateEnabled": null,
     "update:animation": null,
     "update:bindingOptions": null,
     "update:closeOnOutsideClick": null,
@@ -1876,8 +1931,6 @@ const DxPopup = createConfigurationComponent({
     "update:minWidth": null,
     "update:onContentReady": null,
     "update:onDisposing": null,
-    "update:onFocusIn": null,
-    "update:onFocusOut": null,
     "update:onHidden": null,
     "update:onHiding": null,
     "update:onInitialized": null,
@@ -1906,7 +1959,6 @@ const DxPopup = createConfigurationComponent({
   },
   props: {
     accessKey: String,
-    activeStateEnabled: Boolean,
     animation: Object,
     bindingOptions: Object,
     closeOnOutsideClick: [Boolean, Function],
@@ -1933,8 +1985,6 @@ const DxPopup = createConfigurationComponent({
     minWidth: [Function, Number, String],
     onContentReady: Function,
     onDisposing: Function,
-    onFocusIn: Function,
-    onFocusOut: Function,
     onHidden: Function,
     onHiding: Function,
     onInitialized: Function,
@@ -2135,6 +2185,25 @@ const DxScrolling = createConfigurationComponent({
   }
 });
 (DxScrolling as any).$_optionName = "scrolling";
+const DxSearch = createConfigurationComponent({
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:editorOptions": null,
+    "update:enabled": null,
+    "update:mode": null,
+    "update:searchExpr": null,
+    "update:timeout": null,
+  },
+  props: {
+    editorOptions: {},
+    enabled: Boolean,
+    mode: String,
+    searchExpr: [Array, Function, String],
+    timeout: Number
+  }
+});
+(DxSearch as any).$_optionName = "search";
 const DxSearchPanel = createConfigurationComponent({
   emits: {
     "update:isActive": null,
@@ -2165,11 +2234,13 @@ const DxSelection = createConfigurationComponent({
     "update:allowSelectAll": null,
     "update:mode": null,
     "update:recursive": null,
+    "update:selectByClick": null,
   },
   props: {
     allowSelectAll: Boolean,
     mode: String,
-    recursive: Boolean
+    recursive: Boolean,
+    selectByClick: Boolean
   }
 });
 (DxSelection as any).$_optionName = "selection";
@@ -2398,7 +2469,9 @@ const DxTreeListHeaderFilter = createConfigurationComponent({
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:allowSearch": null,
+    "update:allowSelectAll": null,
     "update:height": null,
+    "update:search": null,
     "update:searchTimeout": null,
     "update:texts": null,
     "update:visible": null,
@@ -2406,7 +2479,9 @@ const DxTreeListHeaderFilter = createConfigurationComponent({
   },
   props: {
     allowSearch: Boolean,
+    allowSelectAll: Boolean,
     height: Number,
+    search: Object,
     searchTimeout: Number,
     texts: Object,
     visible: Boolean,
@@ -2415,9 +2490,28 @@ const DxTreeListHeaderFilter = createConfigurationComponent({
 });
 (DxTreeListHeaderFilter as any).$_optionName = "headerFilter";
 (DxTreeListHeaderFilter as any).$_expectedChildren = {
+  search: { isCollectionItem: false, optionName: "search" },
   texts: { isCollectionItem: false, optionName: "texts" },
+  treeListHeaderFilterSearch: { isCollectionItem: false, optionName: "search" },
   treeListHeaderFilterTexts: { isCollectionItem: false, optionName: "texts" }
 };
+const DxTreeListHeaderFilterSearch = createConfigurationComponent({
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:editorOptions": null,
+    "update:enabled": null,
+    "update:mode": null,
+    "update:timeout": null,
+  },
+  props: {
+    editorOptions: {},
+    enabled: Boolean,
+    mode: String,
+    timeout: Number
+  }
+});
+(DxTreeListHeaderFilterSearch as any).$_optionName = "search";
 const DxTreeListHeaderFilterTexts = createConfigurationComponent({
   emits: {
     "update:isActive": null,
@@ -2433,6 +2527,21 @@ const DxTreeListHeaderFilterTexts = createConfigurationComponent({
   }
 });
 (DxTreeListHeaderFilterTexts as any).$_optionName = "texts";
+const DxTreeListSelection = createConfigurationComponent({
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:allowSelectAll": null,
+    "update:mode": null,
+    "update:recursive": null,
+  },
+  props: {
+    allowSelectAll: Boolean,
+    mode: String,
+    recursive: Boolean
+  }
+});
+(DxTreeListSelection as any).$_optionName = "selection";
 const DxValidationRule = createConfigurationComponent({
   emits: {
     "update:isActive": null,
@@ -2482,9 +2591,12 @@ export {
   DxCollision,
   DxColumn,
   DxColumnChooser,
+  DxColumnChooserSearch,
+  DxColumnChooserSelection,
   DxColumnFixing,
   DxColumnFixingTexts,
   DxColumnHeaderFilter,
+  DxColumnHeaderFilterSearch,
   DxColumnLookup,
   DxCompareRule,
   DxCursorOffset,
@@ -2527,6 +2639,7 @@ export {
   DxRequiredRule,
   DxRowDragging,
   DxScrolling,
+  DxSearch,
   DxSearchPanel,
   DxSelection,
   DxShow,
@@ -2538,7 +2651,9 @@ export {
   DxToolbar,
   DxToolbarItem,
   DxTreeListHeaderFilter,
+  DxTreeListHeaderFilterSearch,
   DxTreeListHeaderFilterTexts,
+  DxTreeListSelection,
   DxValidationRule
 };
 import type * as DxTreeListTypes from "devextreme/ui/tree_list_types";

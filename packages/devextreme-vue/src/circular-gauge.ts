@@ -306,14 +306,12 @@ const DxLoadingIndicator = createConfigurationComponent({
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:backgroundColor": null,
-    "update:enabled": null,
     "update:font": null,
     "update:show": null,
     "update:text": null,
   },
   props: {
     backgroundColor: String,
-    enabled: Boolean,
     font: Object,
     show: Boolean,
     text: String

@@ -14,6 +14,7 @@ export { DxColorBox } from "./color-box";
 export { DxContextMenu } from "./context-menu";
 export { DxDataGrid } from "./data-grid";
 export { DxDateBox } from "./date-box";
+export { DxDateRangeBox } from "./date-range-box";
 export { DxDeferRendering } from "./defer-rendering";
 export { DxDiagram } from "./diagram";
 export { DxDraggable } from "./draggable";

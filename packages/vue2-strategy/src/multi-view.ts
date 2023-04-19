@@ -133,14 +133,12 @@ const DxItem = createConfigurationComponent({
     "update:html": null,
     "update:template": null,
     "update:text": null,
-    "update:visible": null,
   },
   props: {
     disabled: Boolean,
     html: String,
     template: {},
-    text: String,
-    visible: Boolean
+    text: String
   }
 });
 (DxItem as any).$_optionName = "items";

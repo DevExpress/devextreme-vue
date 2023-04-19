@@ -427,27 +427,6 @@ const DxFont = createConfigurationComponent({
   }
 });
 (DxFont as any).$_optionName = "font";
-const DxFormat = createConfigurationComponent({
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:currency": null,
-    "update:formatter": null,
-    "update:parser": null,
-    "update:precision": null,
-    "update:type": null,
-    "update:useCurrencyAccountingStyle": null,
-  },
-  props: {
-    currency: String,
-    formatter: Function,
-    parser: Function,
-    precision: Number,
-    type: String,
-    useCurrencyAccountingStyle: Boolean
-  }
-});
-(DxFormat as any).$_optionName = "format";
 const DxImage = createConfigurationComponent({
   emits: {
     "update:isActive": null,
@@ -826,7 +805,6 @@ const DxTooltip = createConfigurationComponent({
     "update:customizeTooltip": null,
     "update:enabled": null,
     "update:font": null,
-    "update:format": null,
     "update:opacity": null,
     "update:paddingLeftRight": null,
     "update:paddingTopBottom": null,
@@ -843,7 +821,6 @@ const DxTooltip = createConfigurationComponent({
     customizeTooltip: Function,
     enabled: Boolean,
     font: Object,
-    format: [Object, Function, String],
     opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
@@ -855,7 +832,6 @@ const DxTooltip = createConfigurationComponent({
 (DxTooltip as any).$_expectedChildren = {
   border: { isCollectionItem: false, optionName: "border" },
   font: { isCollectionItem: false, optionName: "font" },
-  format: { isCollectionItem: false, optionName: "format" },
   shadow: { isCollectionItem: false, optionName: "shadow" },
   tooltipBorder: { isCollectionItem: false, optionName: "border" }
 };
@@ -945,7 +921,6 @@ export {
   DxControlBar,
   DxExport,
   DxFont,
-  DxFormat,
   DxImage,
   DxLabel,
   DxLayer,

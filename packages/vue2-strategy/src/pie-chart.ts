@@ -599,13 +599,13 @@ const DxHoverStyle = createConfigurationComponent({
     "update:border": null,
     "update:color": null,
     "update:hatching": null,
-    "update:lightening": null,
+    "update:highlight": null,
   },
   props: {
     border: Object,
     color: [Object, String],
     hatching: Object,
-    lightening: Boolean
+    highlight: Boolean
   }
 });
 (DxHoverStyle as any).$_optionName = "hoverStyle";
@@ -886,13 +886,13 @@ const DxSelectionStyle = createConfigurationComponent({
     "update:border": null,
     "update:color": null,
     "update:hatching": null,
-    "update:lightening": null,
+    "update:highlight": null,
   },
   props: {
     border: Object,
     color: [Object, String],
     hatching: Object,
-    lightening: Boolean
+    highlight: Boolean
   }
 });
 (DxSelectionStyle as any).$_optionName = "selectionStyle";

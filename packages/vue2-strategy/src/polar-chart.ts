@@ -747,7 +747,6 @@ const DxCommonSeriesSettings = createConfigurationComponent({
     "update:hoveredElement": null,
     "update:area": null,
     "update:argumentField": null,
-    "update:axis": null,
     "update:bar": null,
     "update:barPadding": null,
     "update:barWidth": null,
@@ -780,7 +779,6 @@ const DxCommonSeriesSettings = createConfigurationComponent({
   props: {
     area: {},
     argumentField: String,
-    axis: String,
     bar: {},
     barPadding: Number,
     barWidth: Number,
@@ -833,7 +831,7 @@ const DxCommonSeriesSettingsHoverStyle = createConfigurationComponent({
     "update:color": null,
     "update:dashStyle": null,
     "update:hatching": null,
-    "update:lightening": null,
+    "update:highlight": null,
     "update:width": null,
   },
   props: {
@@ -841,7 +839,7 @@ const DxCommonSeriesSettingsHoverStyle = createConfigurationComponent({
     color: [Object, String],
     dashStyle: String,
     hatching: Object,
-    lightening: Boolean,
+    highlight: Boolean,
     width: Number
   }
 });
@@ -901,7 +899,7 @@ const DxCommonSeriesSettingsSelectionStyle = createConfigurationComponent({
     "update:color": null,
     "update:dashStyle": null,
     "update:hatching": null,
-    "update:lightening": null,
+    "update:highlight": null,
     "update:width": null,
   },
   props: {
@@ -909,7 +907,7 @@ const DxCommonSeriesSettingsSelectionStyle = createConfigurationComponent({
     color: [Object, String],
     dashStyle: String,
     hatching: Object,
-    lightening: Boolean,
+    highlight: Boolean,
     width: Number
   }
 });
@@ -1128,7 +1126,7 @@ const DxHoverStyle = createConfigurationComponent({
     "update:color": null,
     "update:dashStyle": null,
     "update:hatching": null,
-    "update:lightening": null,
+    "update:highlight": null,
     "update:size": null,
     "update:width": null,
   },
@@ -1137,7 +1135,7 @@ const DxHoverStyle = createConfigurationComponent({
     color: [Object, String],
     dashStyle: String,
     hatching: Object,
-    lightening: Boolean,
+    highlight: Boolean,
     size: Number,
     width: Number
   }
@@ -1624,7 +1622,7 @@ const DxSelectionStyle = createConfigurationComponent({
     "update:color": null,
     "update:dashStyle": null,
     "update:hatching": null,
-    "update:lightening": null,
+    "update:highlight": null,
     "update:size": null,
     "update:width": null,
   },
@@ -1633,7 +1631,7 @@ const DxSelectionStyle = createConfigurationComponent({
     color: [Object, String],
     dashStyle: String,
     hatching: Object,
-    lightening: Boolean,
+    highlight: Boolean,
     size: Number,
     width: Number
   }
@@ -1644,7 +1642,6 @@ const DxSeries = createConfigurationComponent({
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:argumentField": null,
-    "update:axis": null,
     "update:barPadding": null,
     "update:barWidth": null,
     "update:border": null,
@@ -1674,7 +1671,6 @@ const DxSeries = createConfigurationComponent({
   },
   props: {
     argumentField: String,
-    axis: String,
     barPadding: Number,
     barWidth: Number,
     border: Object,

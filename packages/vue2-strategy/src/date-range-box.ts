@@ -1,4 +1,4 @@
-import ColorBox, { Properties } from "devextreme/ui/color_box";
+import DateRangeBox, { Properties } from "devextreme/ui/date_range_box";
 import { createComponent } from "./core/index";
 import { createConfigurationComponent } from "./core/index";
 
@@ -9,26 +9,34 @@ type AccessibleOptions = Pick<Properties,
   "applyButtonText" |
   "applyValueMode" |
   "buttons" |
+  "calendarOptions" |
   "cancelButtonText" |
+  "dateOutOfRangeMessage" |
+  "dateSerializationFormat" |
   "deferRendering" |
   "disabled" |
+  "disabledDates" |
+  "displayFormat" |
   "dropDownButtonTemplate" |
   "dropDownOptions" |
-  "editAlphaChannel" |
   "elementAttr" |
-  "fieldTemplate" |
+  "endDate" |
   "focusStateEnabled" |
   "height" |
   "hint" |
   "hoverStateEnabled" |
   "inputAttr" |
+  "invalidDateMessage" |
   "isValid" |
-  "keyStep" |
   "label" |
   "labelMode" |
+  "max" |
+  "maxLength" |
+  "min" |
   "name" |
   "onChange" |
   "onClosed" |
+  "onContentReady" |
   "onCopy" |
   "onCut" |
   "onDisposing" |
@@ -45,28 +53,34 @@ type AccessibleOptions = Pick<Properties,
   "onValueChanged" |
   "opened" |
   "openOnFieldClick" |
+  "pickerType" |
   "placeholder" |
   "readOnly" |
   "rtlEnabled" |
   "showClearButton" |
   "showDropDownButton" |
+  "spellcheck" |
+  "startDate" |
   "stylingMode" |
   "tabIndex" |
   "text" |
+  "todayButtonText" |
+  "useMaskBehavior" |
   "validationError" |
   "validationErrors" |
   "validationMessageMode" |
   "validationMessagePosition" |
   "validationStatus" |
   "value" |
+  "valueChangeEvent" |
   "visible" |
   "width"
 >;
 
-interface DxColorBox extends AccessibleOptions {
-  readonly instance?: ColorBox;
+interface DxDateRangeBox extends AccessibleOptions {
+  readonly instance?: DateRangeBox;
 }
-const DxColorBox = createComponent({
+const DxDateRangeBox = createComponent({
   props: {
     acceptCustomValue: Boolean,
     accessKey: String,
@@ -74,26 +88,34 @@ const DxColorBox = createComponent({
     applyButtonText: String,
     applyValueMode: String,
     buttons: Array,
+    calendarOptions: Object,
     cancelButtonText: String,
+    dateOutOfRangeMessage: String,
+    dateSerializationFormat: String,
     deferRendering: Boolean,
     disabled: Boolean,
+    disabledDates: [Array, Function],
+    displayFormat: [Object, Function, String],
     dropDownButtonTemplate: {},
     dropDownOptions: Object,
-    editAlphaChannel: Boolean,
     elementAttr: Object,
-    fieldTemplate: {},
+    endDate: {},
     focusStateEnabled: Boolean,
     height: [Function, Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     inputAttr: {},
+    invalidDateMessage: String,
     isValid: Boolean,
-    keyStep: Number,
     label: String,
     labelMode: String,
+    max: {},
+    maxLength: [Number, String],
+    min: {},
     name: String,
     onChange: Function,
     onClosed: Function,
+    onContentReady: Function,
     onCopy: Function,
     onCut: Function,
     onDisposing: Function,
@@ -110,20 +132,26 @@ const DxColorBox = createComponent({
     onValueChanged: Function,
     opened: Boolean,
     openOnFieldClick: Boolean,
+    pickerType: String,
     placeholder: String,
     readOnly: Boolean,
     rtlEnabled: Boolean,
     showClearButton: Boolean,
     showDropDownButton: Boolean,
+    spellcheck: Boolean,
+    startDate: {},
     stylingMode: String,
     tabIndex: Number,
     text: String,
+    todayButtonText: String,
+    useMaskBehavior: Boolean,
     validationError: {},
     validationErrors: Array,
     validationMessageMode: String,
     validationMessagePosition: String,
     validationStatus: String,
-    value: String,
+    value: Array,
+    valueChangeEvent: String,
     visible: Boolean,
     width: [Function, Number, String]
   },
@@ -136,26 +164,34 @@ const DxColorBox = createComponent({
     "update:applyButtonText": null,
     "update:applyValueMode": null,
     "update:buttons": null,
+    "update:calendarOptions": null,
     "update:cancelButtonText": null,
+    "update:dateOutOfRangeMessage": null,
+    "update:dateSerializationFormat": null,
     "update:deferRendering": null,
     "update:disabled": null,
+    "update:disabledDates": null,
+    "update:displayFormat": null,
     "update:dropDownButtonTemplate": null,
     "update:dropDownOptions": null,
-    "update:editAlphaChannel": null,
     "update:elementAttr": null,
-    "update:fieldTemplate": null,
+    "update:endDate": null,
     "update:focusStateEnabled": null,
     "update:height": null,
     "update:hint": null,
     "update:hoverStateEnabled": null,
     "update:inputAttr": null,
+    "update:invalidDateMessage": null,
     "update:isValid": null,
-    "update:keyStep": null,
     "update:label": null,
     "update:labelMode": null,
+    "update:max": null,
+    "update:maxLength": null,
+    "update:min": null,
     "update:name": null,
     "update:onChange": null,
     "update:onClosed": null,
+    "update:onContentReady": null,
     "update:onCopy": null,
     "update:onCut": null,
     "update:onDisposing": null,
@@ -172,33 +208,41 @@ const DxColorBox = createComponent({
     "update:onValueChanged": null,
     "update:opened": null,
     "update:openOnFieldClick": null,
+    "update:pickerType": null,
     "update:placeholder": null,
     "update:readOnly": null,
     "update:rtlEnabled": null,
     "update:showClearButton": null,
     "update:showDropDownButton": null,
+    "update:spellcheck": null,
+    "update:startDate": null,
     "update:stylingMode": null,
     "update:tabIndex": null,
     "update:text": null,
+    "update:todayButtonText": null,
+    "update:useMaskBehavior": null,
     "update:validationError": null,
     "update:validationErrors": null,
     "update:validationMessageMode": null,
     "update:validationMessagePosition": null,
     "update:validationStatus": null,
     "update:value": null,
+    "update:valueChangeEvent": null,
     "update:visible": null,
     "update:width": null,
   },
   model: { prop: "value", event: "update:value" },
   computed: {
-    instance(): ColorBox {
+    instance(): DateRangeBox {
       return (this as any).$_instance;
     }
   },
   beforeCreate() {
-    (this as any).$_WidgetClass = ColorBox;
+    (this as any).$_WidgetClass = DateRangeBox;
     (this as any).$_expectedChildren = {
       button: { isCollectionItem: true, optionName: "buttons" },
+      calendarOptions: { isCollectionItem: false, optionName: "calendarOptions" },
+      displayFormat: { isCollectionItem: false, optionName: "displayFormat" },
       dropDownOptions: { isCollectionItem: false, optionName: "dropDownOptions" }
     };
   }
@@ -266,6 +310,102 @@ const DxButton = createConfigurationComponent({
 (DxButton as any).$_expectedChildren = {
   options: { isCollectionItem: false, optionName: "options" }
 };
+const DxCalendarOptions = createConfigurationComponent({
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:accessKey": null,
+    "update:activeStateEnabled": null,
+    "update:bindingOptions": null,
+    "update:cellTemplate": null,
+    "update:dateSerializationFormat": null,
+    "update:disabled": null,
+    "update:disabledDates": null,
+    "update:elementAttr": null,
+    "update:firstDayOfWeek": null,
+    "update:focusStateEnabled": null,
+    "update:height": null,
+    "update:hint": null,
+    "update:hoverStateEnabled": null,
+    "update:isValid": null,
+    "update:max": null,
+    "update:maxZoomLevel": null,
+    "update:min": null,
+    "update:minZoomLevel": null,
+    "update:name": null,
+    "update:onDisposing": null,
+    "update:onInitialized": null,
+    "update:onOptionChanged": null,
+    "update:onValueChanged": null,
+    "update:readOnly": null,
+    "update:rtlEnabled": null,
+    "update:showTodayButton": null,
+    "update:showWeekNumbers": null,
+    "update:tabIndex": null,
+    "update:validationError": null,
+    "update:validationErrors": null,
+    "update:validationMessageMode": null,
+    "update:validationMessagePosition": null,
+    "update:validationStatus": null,
+    "update:value": null,
+    "update:visible": null,
+    "update:weekNumberRule": null,
+    "update:width": null,
+    "update:zoomLevel": null,
+  },
+  props: {
+    accessKey: String,
+    activeStateEnabled: Boolean,
+    bindingOptions: Object,
+    cellTemplate: {},
+    dateSerializationFormat: String,
+    disabled: Boolean,
+    disabledDates: [Array, Function],
+    elementAttr: Object,
+    firstDayOfWeek: {
+      type: Number,
+      validator: (v) => typeof(v) !== "number" || [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ].indexOf(v) !== -1
+    },
+    focusStateEnabled: Boolean,
+    height: [Function, Number, String],
+    hint: String,
+    hoverStateEnabled: Boolean,
+    isValid: Boolean,
+    max: {},
+    maxZoomLevel: String,
+    min: {},
+    minZoomLevel: String,
+    name: String,
+    onDisposing: Function,
+    onInitialized: Function,
+    onOptionChanged: Function,
+    onValueChanged: Function,
+    readOnly: Boolean,
+    rtlEnabled: Boolean,
+    showTodayButton: Boolean,
+    showWeekNumbers: Boolean,
+    tabIndex: Number,
+    validationError: {},
+    validationErrors: Array,
+    validationMessageMode: String,
+    validationMessagePosition: String,
+    validationStatus: String,
+    value: {},
+    visible: Boolean,
+    weekNumberRule: String,
+    width: [Function, Number, String],
+    zoomLevel: String
+  }
+});
+(DxCalendarOptions as any).$_optionName = "calendarOptions";
 const DxCollision = createConfigurationComponent({
   emits: {
     "update:isActive": null,
@@ -279,6 +419,27 @@ const DxCollision = createConfigurationComponent({
   }
 });
 (DxCollision as any).$_optionName = "collision";
+const DxDisplayFormat = createConfigurationComponent({
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:currency": null,
+    "update:formatter": null,
+    "update:parser": null,
+    "update:precision": null,
+    "update:type": null,
+    "update:useCurrencyAccountingStyle": null,
+  },
+  props: {
+    currency: String,
+    formatter: Function,
+    parser: Function,
+    precision: Number,
+    type: String,
+    useCurrencyAccountingStyle: Boolean
+  }
+});
+(DxDisplayFormat as any).$_optionName = "displayFormat";
 const DxDropDownOptions = createConfigurationComponent({
   emits: {
     "update:isActive": null,
@@ -645,14 +806,16 @@ const DxToolbarItem = createConfigurationComponent({
 (DxToolbarItem as any).$_optionName = "toolbarItems";
 (DxToolbarItem as any).$_isCollectionItem = true;
 
-export default DxColorBox;
+export default DxDateRangeBox;
 export {
-  DxColorBox,
+  DxDateRangeBox,
   DxAnimation,
   DxAt,
   DxBoundaryOffset,
   DxButton,
+  DxCalendarOptions,
   DxCollision,
+  DxDisplayFormat,
   DxDropDownOptions,
   DxFrom,
   DxHide,
@@ -664,5 +827,5 @@ export {
   DxTo,
   DxToolbarItem
 };
-import type * as DxColorBoxTypes from "devextreme/ui/color_box_types";
-export { DxColorBoxTypes };
+import type * as DxDateRangeBoxTypes from "devextreme/ui/date_range_box_types";
+export { DxDateRangeBoxTypes };
