@@ -34,6 +34,9 @@ jobs:
     - name: Restore devextreme
       run: npm run restore-devextreme
 
+    - name: Link devextreme
+      run: npm run link-devextreme
+
     - name: Generate metadata
       run: npm run generate-metadata
 
