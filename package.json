@@ -12,7 +12,7 @@
     "devextreme": "./devextreme"
   },
   "scripts": {
-    "link-devextreme": "npm run build-dist --prefix $npm_package_config_devextreme && npm link $npm_package_config_devextreme/artifacts/npm/devextreme --force --workspace=devextreme-vue --workspace=devextreme-vue2-strategy",
+    "link-devextreme": "npm run build-dist --prefix $npm_package_config_devextreme && npm link $npm_package_config_devextreme/artifacts/npm/devextreme --legacy-peer-deps --workspace=devextreme-vue --workspace=devextreme-vue2-strategy",
     "restore-submodule": "git submodule init && git submodule update && cd devextreme && git add . && cd .. && git submodule update --force --checkout",
     "restore-devextreme": "npm run restore-submodule && npm i --prefix ./devextreme",
     "pull-devextreme": "npm run restore-submodule -- --remote && npm i --prefix ./devextreme",
