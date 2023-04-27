@@ -712,6 +712,7 @@ const DxColumnChooser = createConfigurationComponent({
     "update:enabled": null,
     "update:height": null,
     "update:mode": null,
+    "update:position": null,
     "update:search": null,
     "update:searchTimeout": null,
     "update:selection": null,
@@ -725,6 +726,7 @@ const DxColumnChooser = createConfigurationComponent({
     enabled: Boolean,
     height: Number,
     mode: String,
+    position: Object,
     search: Object,
     searchTimeout: Number,
     selection: Object,
@@ -737,6 +739,7 @@ const DxColumnChooser = createConfigurationComponent({
 (DxColumnChooser as any).$_expectedChildren = {
   columnChooserSearch: { isCollectionItem: false, optionName: "search" },
   columnChooserSelection: { isCollectionItem: false, optionName: "selection" },
+  position: { isCollectionItem: false, optionName: "position" },
   search: { isCollectionItem: false, optionName: "search" },
   selection: { isCollectionItem: false, optionName: "selection" }
 };
