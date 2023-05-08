@@ -104,3 +104,5 @@ export default DxRecurrenceEditor;
 export {
   DxRecurrenceEditor
 };
+import type * as DxRecurrenceEditorTypes from "devextreme/ui/recurrence_editor_types";
+export { DxRecurrenceEditorTypes };
