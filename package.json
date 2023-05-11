@@ -8,7 +8,17 @@
     "type": "git",
     "url": "https://github.com/DevExpress/devextreme-vue.git"
   },
+  "config": {
+    "devextreme": "./devextreme"
+  },
   "scripts": {
+    "link-devextreme": "npm run build-npm-devextreme --prefix $npm_package_config_devextreme && npm link $npm_package_config_devextreme/artifacts/npm/devextreme --legacy-peer-deps --workspace=devextreme-vue --workspace=devextreme-vue2-strategy",
+    "restore-submodule": "git submodule init && git submodule update && cd devextreme && git add . && cd .. && git submodule update --force --checkout",
+    "restore-devextreme": "npm run restore-submodule && npm i --prefix ./devextreme",
+    "pull-devextreme": "npm run restore-submodule -- --remote && npm i --prefix ./devextreme",
+    "generate-metadata:discover": "npm run discover-declarations --prefix $npm_package_config_devextreme",
+    "generate-metadata:integration": "dx-tools integration-data-generator --js-scripts $npm_package_config_devextreme/js --artifacts $npm_package_config_devextreme/artifacts/internal-tools --output-path ./packages/devextreme-vue/metadata/integration-data.json",
+    "generate-metadata": "npm run generate-metadata:discover && npm run generate-metadata:integration",
     "clean:packages": "npm run clean --yes --ws --if-present && npm run clean:root",
     "clean:root": "del-cli node_modules",
     "start:packages": "npn run start --ws --if-present",
@@ -16,8 +26,7 @@
     "lint": "gulp lint",
     "test": "jest",
     "test-watch": "jest --watch",
-    "pack": "npm run update-integration-meta && npm run pack --ws --if-present",
-    "update-integration-meta": "dx-tools integration-data-generator --js-scripts ../devextreme/js  --artifacts  ../devextreme/artifacts/internal-tools --output-path ./packages/devextreme-vue/metadata/integration-data.json --version 23_1"
+    "pack": "npm run generate-metadata && npm run pack --ws --if-present"
   },
   "keywords": [
     "vue",
@@ -30,7 +39,7 @@
     "cpy-cli": "^3.1.1",
     "del-cli": "^3.0.1",
     "devextreme": "23.1-next",
-    "devextreme-internal-tools": "^10.0.0-beta.5",
+    "devextreme-internal-tools": "^10.0.0-beta.6",
     "gulp": "^4.0.2",
     "gulp-tslint": "^8.1.4",
     "jest": "^26.6.3",
