@@ -12,12 +12,12 @@
     "devextreme": "./devextreme"
   },
   "scripts": {
-    "link-devextreme": "cross-env-shell npm run build-npm-devextreme --prefix $npm_package_config_devextreme && npm link $npm_package_config_devextreme/artifacts/npm/devextreme --legacy-peer-deps --workspace=devextreme-vue --workspace=devextreme-vue2-strategy",
+    "link-devextreme": "npm run build-npm-devextreme --prefix %npm_package_config_devextreme% && npm link %npm_package_config_devextreme%/artifacts/npm/devextreme --legacy-peer-deps --workspace=devextreme-vue --workspace=devextreme-vue2-strategy",
     "restore-submodule": "git submodule init && git submodule update && cd devextreme && git add . && cd .. && git submodule update --force --checkout",
     "restore-devextreme": "npm run restore-submodule && npm i --prefix ./devextreme",
     "pull-devextreme": "npm run restore-submodule -- --remote && npm i --prefix ./devextreme",
-    "generate-metadata:discover": "cross-env-shell npm run discover-declarations --prefix $npm_package_config_devextreme",
-    "generate-metadata:integration": "cross-env-shell dx-tools integration-data-generator --js-scripts $npm_package_config_devextreme/js --artifacts $npm_package_config_devextreme/artifacts/internal-tools --output-path ./packages/devextreme-vue/metadata/integration-data.json",
+    "generate-metadata:discover": "npm run discover-declarations --prefix %npm_package_config_devextreme%",
+    "generate-metadata:integration": "dx-tools integration-data-generator --js-scripts %npm_package_config_devextreme%/js --artifacts %npm_package_config_devextreme%/artifacts/internal-tools --output-path ./packages/devextreme-vue/metadata/integration-data.json",
     "generate-metadata": "npm run generate-metadata:discover && npm run generate-metadata:integration",
     "clean:packages": "npm run clean --yes --ws --if-present && npm run clean:root",
     "clean:root": "del-cli node_modules",
@@ -37,7 +37,6 @@
   "devDependencies": {
     "@types/jest": "^26.0.24",
     "cpy-cli": "^3.1.1",
-    "cross-env": "^7.0.3",
     "del-cli": "^3.0.1",
     "devextreme": "23.1-next",
     "devextreme-internal-tools": "^10.0.0-beta.6",
