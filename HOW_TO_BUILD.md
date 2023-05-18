@@ -15,7 +15,7 @@ To get the latest `devextreme` commits, update the submodule:
 
     npm run pull-devextreme
 
-After that, regenerate the code and commit the changes in the submodule file.
+After that, generate the code (see the last paragraph) and commit the changes in the submodule file.
 
 ## Link DevExtreme Modules
 
