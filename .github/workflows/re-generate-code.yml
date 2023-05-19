@@ -41,11 +41,7 @@ jobs:
           changes=$(git diff --name-status HEAD -- $paths)
           if [ -n "$changes" ]; then
             
-            git config --global user.email "DXGitHubRobot@devexpress.com"
-            git config --global user.name "DX Robot"
-  
             git checkout -b $branch_name
-            git add -- $paths
             git commit -m "Update generated code"
             git push --set-upstream origin $branch_name
             
