@@ -33,6 +33,8 @@ jobs:
 
       - name: Get changes and make PR
         shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           paths="packages/devextreme-vue/src packages/vue2-strategy/src"
           branch_name=robot/update-generated-code
@@ -41,6 +43,9 @@ jobs:
           changes=$(git diff --name-status HEAD -- $paths)
           if [ -n "$changes" ]; then
             
+            git config --global user.email "DXGitHubRobot@devexpress.com"
+            git config --global user.name "DX Robot"
+  
             git checkout -b $branch_name
             git commit -m "Update generated code"
             git push --set-upstream origin $branch_name
