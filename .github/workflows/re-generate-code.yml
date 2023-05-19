@@ -48,7 +48,8 @@ jobs:
   
             git checkout -b $branch_name
             git commit -a -m "Update generated code"
-            git push --set-upstream origin $branch_name
+            git pull --rebase
+            git push --set-upstream origin $branch_name --force
             
             gh pr create --title "Update generated code" --body "Update generated code" --reviewer @DevExpress/devextreme-essentials
           fi
