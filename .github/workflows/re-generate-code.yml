@@ -1,0 +1,51 @@
+name: Update generate code
+
+on:
+  workflow_dispatch:
+
+jobs:
+  re-generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v3
+
+      - name: Use Node.js 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install packages
+        run: npm i
+
+      - name: Pull devextreme
+        run: npm run pull-devextreme
+
+      - name: Generate metadata
+        run: npm run update-metadata
+
+      - name: Generate code
+        run: npm run build:packages
+
+      - name: Get changes and make PR
+        shell: bash
+        run: |
+          paths="packages/devextreme-vue/src packages/vue2-strategy/src"
+          branch_name=robot/update-generated-code
+          
+          git add . -N
+          changes=$(git diff --name-status HEAD -- $paths)
+          if [ -n "$changes" ]; then
+            
+            git config --global user.email "DXGitHubRobot@devexpress.com"
+            git config --global user.name "DX Robot"
+  
+            git checkout -b $branch_name
+            git add -- $paths
+            git commit -m "Update generated code"
+            git push --set-upstream origin $branch_name
+            
+            gh pr create --title "Update generated code" --body "Update generated code" --reviewer DevExpress/devextreme-essentials
+          fi
