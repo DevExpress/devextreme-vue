@@ -25,7 +25,7 @@ jobs:
         run: npm run pull-devextreme
 
       - name: Generate metadata
-        run: npm run update-metadata
+        run: npm run generate-metadata
 
       - name: Generate code
         run: npm run build:packages
