@@ -42,13 +42,12 @@ jobs:
           git add . -N
           changes=$(git diff --name-status HEAD -- $paths)
           if [ -n "$changes" ]; then
-            
             git config --global user.email "DXGitHubRobot@devexpress.com"
             git config --global user.name "DX Robot"
   
+            git push origin -d $branch_name
             git checkout -b $branch_name
             git commit -a -m "Update generated code"
-            git pull origin $branch_name --rebase
             git push --set-upstream origin $branch_name --force
             
             gh pr create --title "Update generated code" --body "Update generated code" --reviewer @DevExpress/devextreme-essentials
