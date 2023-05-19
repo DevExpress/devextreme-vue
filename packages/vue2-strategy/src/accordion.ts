@@ -1,4 +1,3 @@
-export { ExplicitTypes } from "devextreme/ui/accordion";
 import Accordion, { Properties } from "devextreme/ui/accordion";
 import { createComponent } from "./core/index";
 import { createConfigurationComponent } from "./core/index";

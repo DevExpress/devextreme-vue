@@ -1,4 +1,3 @@
-export { ExplicitTypes } from "devextreme/ui/tree_view";
 import TreeView, { Properties } from "devextreme/ui/tree_view";
 import { createComponent } from "./core/index";
 import { createConfigurationComponent } from "./core/index";
