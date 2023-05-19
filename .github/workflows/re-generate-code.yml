@@ -1,6 +1,7 @@
-name: Update generate code
+name: Update generated code
 
 on:
+  pull_request:
   workflow_dispatch:
 
 jobs:
