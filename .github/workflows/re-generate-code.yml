@@ -33,8 +33,6 @@ jobs:
 
       - name: Get changes and make PR
         shell: bash
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           paths="packages/devextreme-vue/src packages/vue2-strategy/src"
           branch_name=robot/update-generated-code
