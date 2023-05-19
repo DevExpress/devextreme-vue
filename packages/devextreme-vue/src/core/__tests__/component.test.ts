@@ -1458,7 +1458,7 @@ describe("component rendering", () => {
                     renderTemplate: true,
                     prop1Value: 2
                 });
-    
+
                 nextTick(() => {
                     expect(Widget.option.mock.calls[0][0]).toEqual("items");
                     expect(Widget.option.mock.calls[1][0]).toEqual("integrationOptions.templates");
