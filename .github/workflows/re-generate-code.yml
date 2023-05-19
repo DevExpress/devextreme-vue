@@ -47,7 +47,7 @@ jobs:
             git config --global user.name "DX Robot"
   
             git checkout -b $branch_name
-            git commit -m "Update generated code"
+            git commit -a -m "Update generated code"
             git push --set-upstream origin $branch_name
             
             gh pr create --title "Update generated code" --body "Update generated code" --reviewer DevExpress/devextreme-essentials
