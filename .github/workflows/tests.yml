@@ -15,7 +15,7 @@ jobs:
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Clone devextreme repo from PR author fork
       continue-on-error: true
@@ -25,10 +25,10 @@ jobs:
     - name: Clone devextreme repo
       run: test -d ../devextreme || git clone -b 22_2 https://github.com/devexpress/devextreme ../devextreme
 
-    - name: Use Node.js 16
-      uses: actions/setup-node@v2
+    - name: Use Node.js 18
+      uses: actions/setup-node@v3
       with:
-        node-version: '16'
+        node-version: '18'
 
     - name: Install packages in devextreme repo
       run: |
