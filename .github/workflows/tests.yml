@@ -40,6 +40,9 @@ jobs:
         cd ../devextreme
         npm run build-dist
 
+    - name: Downgrade npm to 6
+      run: npm install -g npm@6.14.18
+
     - name: Install devextreme package
       run: |
         cd ./packages/devextreme-vue
