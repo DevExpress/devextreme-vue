@@ -40,8 +40,7 @@ jobs:
         if: ${{ steps.check_branch.outputs.branch_exists }}
         shell: bash
         run: |
-          git checkout $branch_name
-          git pull --rebase
+          git switch $branch_name --force
 
       - name: Install packages
         run: npm i
