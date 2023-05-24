@@ -71,10 +71,10 @@ jobs:
             fi
           
             devextreme_sha=$(git ls-tree --object-only HEAD devextreme)
-            git commit -a -m "Update generated code, devextreme $devextreme_sha"
+            git commit -a -m "Update generated code. Update devextreme submodule to $devextreme_sha"
             git push --set-upstream origin $branch_name --force
           
             if ((! $branch_exists)); then
-              gh pr create --title "Update generated code" --body "Update generated code"
+              gh pr create --title "Update generated code" --body "Update generated code" --reviewer const314
             fi
           fi
