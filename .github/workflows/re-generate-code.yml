@@ -60,8 +60,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          $branch_exists=${{ steps.check_branch.outputs.branch_exists }}
-          echo $branch_exists
+          branch_exists=${{ steps.check_branch.outputs.branch_exists }}
           git add . -N
           if git diff --name-status --exit-code HEAD -- $paths; then    
             if ((! $branch_exists)); then
