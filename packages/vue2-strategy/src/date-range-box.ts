@@ -14,6 +14,7 @@ type AccessibleOptions = Pick<Properties,
   "dateSerializationFormat" |
   "deferRendering" |
   "disabled" |
+  "disableOutOfRangeSelection" |
   "displayFormat" |
   "dropDownButtonTemplate" |
   "dropDownOptions" |
@@ -98,6 +99,7 @@ const DxDateRangeBox = createComponent({
     dateSerializationFormat: String,
     deferRendering: Boolean,
     disabled: Boolean,
+    disableOutOfRangeSelection: Boolean,
     displayFormat: [Object, Function, String],
     dropDownButtonTemplate: {},
     dropDownOptions: Object,
@@ -179,6 +181,7 @@ const DxDateRangeBox = createComponent({
     "update:dateSerializationFormat": null,
     "update:deferRendering": null,
     "update:disabled": null,
+    "update:disableOutOfRangeSelection": null,
     "update:displayFormat": null,
     "update:dropDownButtonTemplate": null,
     "update:dropDownOptions": null,
