@@ -63,6 +63,8 @@ jobs:
           branch_exists=${{ steps.check_branch.outputs.branch_exists }}
           git add . -N
           if git diff --name-status --exit-code HEAD -- $paths; then    
+            echo "Generated code is up to date"            
+          else
             if ((! $branch_exists)); then
               git checkout master
               git checkout -b $branch_name
@@ -75,6 +77,4 @@ jobs:
             if ((! $branch_exists)); then
               gh pr create --title "Update generated code" --body "Update generated code"
             fi
-          else
-            echo "Generated code is up to date"
           fi
