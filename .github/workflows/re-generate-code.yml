@@ -9,6 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     permissions: write-all
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      branch_name: "robot/update-generated-code"
+      paths: "packages/devextreme-vue/src packages/vue2-strategy/src"
 
     steps:
       - name: Get sources
@@ -19,14 +23,34 @@ jobs:
         with:
           node-version: '18'
 
+      - name: Setup DX Robot
+        shell: bash
+        run: |
+          git config --global user.email "DXGitHubRobot@devexpress.com"
+          git config --global user.name "DX Robot"
+
+      - name: Check if branch exists
+        id: check_branch
+        shell: bash
+        run: |
+          git ls-remote --exit-code --quiet --heads origin $branch_name
+          echo "branch_exists=$((! $?))" >> $GITHUB_OUTPUT 
+
+      - name: Pull branch
+        if: ${{ steps.check_branch.outputs.branch_exists }}
+        shell: bash
+        run: |
+          git checkout $branch_name
+          git pull --rebase
+
       - name: Install packages
         run: npm i
 
-      - name: Pull devextreme
+      - name: Update submodule
         run: npm run pull-devextreme
 
       - name: Generate metadata
-        run: npm run generate-metadata
+        run: generate-metadata
 
       - name: Generate code
         run: npm run build:packages
@@ -36,19 +60,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          paths="packages/devextreme-vue/src packages/vue2-strategy/src"
-          branch_name=robot/update-generated-code
-          
           git add . -N
-          changes=$(git diff --name-status HEAD -- $paths)
-          if [ -n "$changes" ]; then
-            git config --global user.email "DXGitHubRobot@devexpress.com"
-            git config --global user.name "DX Robot"
-  
-            git push origin -d $branch_name
-            git checkout -b $branch_name
-            git commit -a -m "Update generated code"
-            git push --set-upstream origin $branch_name --force
+          if git diff --name-status --exit-code HEAD -- $paths; then
+            $branch_exists = ${{ steps.check_branch.outputs.branch_exists }}
             
-            gh pr create --title "Update generated code" --body "Update generated code"
+            if ((! $branch_exists")); then
+              git checkout master
+              git checkout -b $branch_name
+            fi
+          
+            devextreme_sha=$(git ls-tree --object-only HEAD devextreme)
+            git commit -a -m "Update generated code, devextreme $devextreme_sha"
+            git push --set-upstream origin $branch_name --force
+          
+            if ((! $branch_exists)); then
+              gh pr create --title "Update generated code" --body "Update generated code"
+            fi
           fi
