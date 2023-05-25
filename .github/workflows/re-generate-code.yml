@@ -32,6 +32,7 @@ jobs:
       - name: Check if branch exists
         id: check_branch
         shell: bash
+        continue-on-error: true
         run: |
           git ls-remote --exit-code --quiet --heads origin $branch_name
           echo "branch_exists=$((! $?))" >> $GITHUB_OUTPUT 
