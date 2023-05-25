@@ -40,7 +40,7 @@ jobs:
           fi           
 
       - name: Pull branch
-        if: ${{ steps.check_branch.outputs.branch_exists }}
+        if: steps.check_branch.outputs.branch_exists
         shell: bash
         run: |
           git fetch
