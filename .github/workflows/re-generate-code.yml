@@ -34,9 +34,9 @@ jobs:
         continue-on-error: true
         run: |
           if [[ -n $(git ls-remote --heads origin $branch_name) ]]; then
-            echo "branch_exists=1" >> $GITHUB_OUTPUT           
+            echo "branch_exists=true" >> $GITHUB_OUTPUT           
           else
-            echo "branch_exists=0" >> $GITHUB_OUTPUT                       
+            echo "branch_exists=false" >> $GITHUB_OUTPUT                       
           fi           
 
       - name: Pull branch
@@ -68,7 +68,7 @@ jobs:
           if git diff --name-status --exit-code HEAD -- $paths; then    
             echo "Generated code is up to date"            
           else
-            if ((! $branch_exists)); then
+            if ! $branch_exists; then
               git checkout master
               git checkout -b $branch_name
             fi
@@ -77,7 +77,7 @@ jobs:
             git commit -a -m "Update generated code. Update devextreme submodule to $devextreme_sha"
             git push --set-upstream origin $branch_name --force
           
-            if ((! $branch_exists)); then
+            if ! $branch_exists; then
               gh pr create --title "Update generated code" --body "Update generated code" --reviewer const314
             fi
           fi
