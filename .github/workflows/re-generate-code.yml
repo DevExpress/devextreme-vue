@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.TEST_PAT }}
       branch_name: "robot/update-generated-code"
       paths: "packages/devextreme-vue/src packages/vue2-strategy/src"
 
@@ -61,7 +61,7 @@ jobs:
       - name: Get changes and make PR
         shell: bash
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TEST_PAT }}
         run: |
           branch_exists=${{ steps.check_branch.outputs.branch_exists }}
           git add . -N
