@@ -1,4 +1,3 @@
-export { ExplicitTypes } from "devextreme/ui/tile_view";
 import TileView, { Properties } from "devextreme/ui/tile_view";
 import { createComponent } from "./core/index";
 import { createConfigurationComponent } from "./core/index";

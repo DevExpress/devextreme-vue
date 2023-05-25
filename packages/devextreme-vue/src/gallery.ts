@@ -1,4 +1,3 @@
-export { ExplicitTypes } from "devextreme/ui/gallery";
 import Gallery, { Properties } from "devextreme/ui/gallery";
 import { createComponent } from "./core/index";
 import { createConfigurationComponent } from "./core/index";
