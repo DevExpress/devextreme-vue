@@ -1,4 +1,3 @@
-export { ExplicitTypes } from "devextreme/ui/multi_view";
 import MultiView, { Properties } from "devextreme/ui/multi_view";
 import { createComponent } from "./core/index";
 import { createConfigurationComponent } from "./core/index";

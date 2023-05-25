@@ -1,4 +1,3 @@
-export { ExplicitTypes } from "devextreme/ui/validation_summary";
 import ValidationSummary, { Properties } from "devextreme/ui/validation_summary";
 import { createComponent } from "./core/index";
 import { createConfigurationComponent } from "./core/index";

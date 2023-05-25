@@ -1,4 +1,3 @@
-export { ExplicitTypes } from "devextreme/ui/tree_list";
 import TreeList, { Properties } from "devextreme/ui/tree_list";
 import { createComponent } from "./core/index";
 import { createConfigurationComponent } from "./core/index";

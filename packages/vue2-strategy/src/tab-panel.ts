@@ -1,4 +1,3 @@
-export { ExplicitTypes } from "devextreme/ui/tab_panel";
 import TabPanel, { Properties } from "devextreme/ui/tab_panel";
 import { createComponent } from "./core/index";
 import { createConfigurationComponent } from "./core/index";

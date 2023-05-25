@@ -1,4 +1,3 @@
-export { ExplicitTypes } from "devextreme/ui/data_grid";
 import DataGrid, { Properties } from "devextreme/ui/data_grid";
 import { createComponent } from "./core/index";
 import { createConfigurationComponent } from "./core/index";

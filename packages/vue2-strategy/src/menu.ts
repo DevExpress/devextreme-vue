@@ -1,4 +1,3 @@
-export { ExplicitTypes } from "devextreme/ui/menu";
 import Menu, { Properties } from "devextreme/ui/menu";
 import { createComponent } from "./core/index";
 import { createConfigurationComponent } from "./core/index";
