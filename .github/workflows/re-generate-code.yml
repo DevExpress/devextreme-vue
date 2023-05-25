@@ -69,6 +69,7 @@ jobs:
             echo "Generated code is up to date"            
           else
             if ! $branch_exists; then
+              git fetch
               git switch master
               git checkout -b $branch_name
             fi
