@@ -39,6 +39,9 @@ jobs:
             echo "branch_exists=false" >> $GITHUB_OUTPUT                       
           fi           
 
+      - name: Test
+        run: echo ${{ steps.check_branch.outputs.branch_exists }}
+
       - name: Pull branch
         if: steps.check_branch.outputs.branch_exists
         shell: bash
