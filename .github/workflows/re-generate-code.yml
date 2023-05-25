@@ -79,6 +79,6 @@ jobs:
             git push --set-upstream origin $branch_name --force
           
             if ! $branch_exists; then
-              gh pr create --title "Update generated code" --body "Update generated code" --reviewer const314
+              gh pr create --title "Update generated code" --body "Update generated code" --reviewer const314,IlyaKhD
             fi
           fi
