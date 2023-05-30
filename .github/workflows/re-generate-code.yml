@@ -79,6 +79,13 @@ jobs:
             git push --set-upstream origin $branch_name --force
           
             if ! $branch_exists; then
-              gh pr create --title "Update generated code" --body "Update generated code" --reviewer const314,IlyaKhD
+              gh api \
+                --method POST \
+                -H "Accept: application/vnd.github+json" \
+                /repos/${{ github.repository }}/pulls \
+                -f title='Update generated code' \
+                -f body='Update generated code' \
+                -f head=$branch_name \
+                -f base=${{ github.ref_name }}
             fi
           fi
