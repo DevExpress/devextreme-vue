@@ -1,3 +1,4 @@
+export { ExplicitTypes } from "devextreme/ui/tree_list";
 import TreeList, { Properties } from "devextreme/ui/tree_list";
 import { createComponent } from "./core/index";
 import { createConfigurationComponent } from "./core/index";
@@ -1760,7 +1761,7 @@ const DxLookup = createConfigurationComponent({
     calculateCellValue: Function,
     dataSource: {},
     displayExpr: [Function, String],
-    valueExpr: String
+    valueExpr: [String, Function]
   }
 });
 (DxLookup as any).$_optionName = "lookup";

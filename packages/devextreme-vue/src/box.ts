@@ -1,3 +1,4 @@
+export { ExplicitTypes } from "devextreme/ui/box";
 import Box, { Properties } from "devextreme/ui/box";
 import { createComponent } from "./core/index";
 import { createConfigurationComponent } from "./core/index";

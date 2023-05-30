@@ -1,3 +1,4 @@
+export { ExplicitTypes } from "devextreme/ui/toolbar";
 import Toolbar, { Properties } from "devextreme/ui/toolbar";
 import { createComponent } from "./core/index";
 import { createConfigurationComponent } from "./core/index";

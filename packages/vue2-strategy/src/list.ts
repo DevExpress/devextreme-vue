@@ -1,3 +1,4 @@
+export { ExplicitTypes } from "devextreme/ui/list";
 import List, { Properties } from "devextreme/ui/list";
 import { createComponent } from "./core/index";
 import { createConfigurationComponent } from "./core/index";

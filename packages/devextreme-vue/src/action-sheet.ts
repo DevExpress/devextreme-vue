@@ -1,3 +1,4 @@
+export { ExplicitTypes } from "devextreme/ui/action_sheet";
 import ActionSheet, { Properties } from "devextreme/ui/action_sheet";
 import { createComponent } from "./core/index";
 import { createConfigurationComponent } from "./core/index";

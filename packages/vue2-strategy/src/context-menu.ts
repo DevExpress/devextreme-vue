@@ -1,3 +1,4 @@
+export { ExplicitTypes } from "devextreme/ui/context_menu";
 import ContextMenu, { Properties } from "devextreme/ui/context_menu";
 import { createComponent } from "./core/index";
 import { createConfigurationComponent } from "./core/index";
