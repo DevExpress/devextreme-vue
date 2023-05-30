@@ -67,7 +67,7 @@ jobs:
           git add . -N
           #if git diff --name-status --exit-code HEAD -- $paths; then    
           #  echo "Generated code is up to date"            
-          else
+          #else
             if ! $branch_exists; then
               git fetch
               git switch master
