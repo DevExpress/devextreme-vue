@@ -1,11 +1,10 @@
 name: Update generated code
 
 on:
-  pull_request:
   workflow_dispatch:
 
 jobs:
-  re-generate:
+  update-generated-code:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
@@ -60,14 +59,12 @@ jobs:
 
       - name: Get changes and make PR
         shell: bash
-        env:
-          GITHUB_TOKEN: ${{ secrets.TEST_PAT }}
         run: |
           branch_exists=${{ steps.check_branch.outputs.branch_exists }}
           git add . -N
-          #if git diff --name-status --exit-code HEAD -- $paths; then    
-          #  echo "Generated code is up to date"            
-          #else
+          if git diff --name-status --exit-code HEAD -- $paths; then    
+            echo "Generated code is up to date"            
+          else
             if ! $branch_exists; then
               git fetch
               git switch master
@@ -75,10 +72,10 @@ jobs:
             fi
           
             devextreme_sha=$(git ls-tree --object-only HEAD devextreme)
-            git commit -a -m "Update generated code. Update devextreme submodule to $devextreme_sha"
+            git commit -a -m "Update devextreme submodule to $devextreme_sha. Update generated code."
             git push --set-upstream origin $branch_name --force
           
             if ! $branch_exists; then
-              gh pr create --title "Update generated code" --body "Update generated code" --reviewer const314 --reviewer DevExpress/devextreme-essentials
+              gh pr create --title "Update generated code" --body "Update generated code" --reviewer DevExpress/devextreme-essentials
             fi
-          #fi
+          fi
