@@ -1,4 +1,3 @@
-export { ExplicitTypes } from "devextreme/ui/tabs";
 import Tabs, { Properties } from "devextreme/ui/tabs";
 import { createComponent } from "./core/index";
 import { createConfigurationComponent } from "./core/index";
