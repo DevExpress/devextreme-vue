@@ -61,7 +61,7 @@ jobs:
       - name: Get changes and make PR
         shell: bash
         env:
-          GITHUB_TOKEN: ${{ secrets.TEST_PAT }}
+          GH_TOKEN: ${{ secrets.TEST_PAT }}
         run: |
           branch_exists=${{ steps.check_branch.outputs.branch_exists }}
           git add . -N
