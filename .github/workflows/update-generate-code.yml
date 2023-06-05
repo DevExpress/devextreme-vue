@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      GITHUB_TOKEN: ${{ secrets.TEST_PAT }}
+      GITHUB_TOKEN: ${{ secrets.DX_ROBOT_PAT }}
       branch_name: "robot/update-generated-code"
       paths: "packages/devextreme-vue/src packages/vue2-strategy/src"
 
