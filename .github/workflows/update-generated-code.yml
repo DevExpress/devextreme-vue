@@ -9,6 +9,7 @@ jobs:
     timeout-minutes: 20
     env:
       GITHUB_TOKEN: ${{ secrets.DX_ROBOT_PAT }}
+      DX_ROBOT_EMAIL: ${{ secrets.DX_ROBOT_EMAIL }}
       branch_name: "robot/update-generated-code"
       paths: "packages/devextreme-vue/src packages/vue2-strategy/src"
 
@@ -24,7 +25,7 @@ jobs:
       - name: Setup DX Robot
         shell: bash
         run: |
-          git config --global user.email "DXGitHubRobot@devexpress.com"
+          git config --global user.email $DX_ROBOT_EMAIL
           git config --global user.name "DX Robot"
 
       - name: Check if branch exists
@@ -57,7 +58,7 @@ jobs:
       - name: Generate code
         run: npm run build:packages
 
-      - name: Get changes and make PR
+      - name: Commit changes and make PR, if necessary
         shell: bash
         run: |
           branch_exists=${{ steps.check_branch.outputs.branch_exists }}
