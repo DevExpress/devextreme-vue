@@ -1,0 +1,82 @@
+name: Update generated code
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-generated-code:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GITHUB_TOKEN: ${{ secrets.DX_ROBOT_PAT }}
+      DX_ROBOT_EMAIL: ${{ secrets.DX_ROBOT_EMAIL }}
+      branch_name: "robot/update-generated-code"
+      paths: "packages/devextreme-vue/src packages/vue2-strategy/src"
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v3
+
+      - name: Use Node.js 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Setup DX Robot
+        shell: bash
+        run: |
+          git config --global user.email $DX_ROBOT_EMAIL
+          git config --global user.name "DX Robot"
+
+      - name: Check if branch exists
+        id: check_branch
+        shell: bash
+        continue-on-error: true
+        run: |
+          if [[ -n $(git ls-remote --heads origin $branch_name) ]]; then
+            echo "branch_exists=true" >> $GITHUB_OUTPUT           
+          else
+            echo "branch_exists=false" >> $GITHUB_OUTPUT                       
+          fi           
+
+      - name: Pull branch
+        if: steps.check_branch.outputs.branch_exists == 'true'
+        shell: bash
+        run: |
+          git fetch
+          git switch $branch_name --force
+
+      - name: Install packages
+        run: npm i
+
+      - name: Update submodule
+        run: npm run pull-devextreme
+
+      - name: Generate metadata
+        run: npm run generate-metadata
+
+      - name: Generate code
+        run: npm run build:packages
+
+      - name: Commit changes and make PR, if necessary
+        shell: bash
+        run: |
+          branch_exists=${{ steps.check_branch.outputs.branch_exists }}
+          git add . -N
+          if git diff --name-status --exit-code HEAD -- $paths; then    
+            echo "Generated code is up to date"            
+          else
+            if ! $branch_exists; then
+              git fetch
+              git switch master
+              git checkout -b $branch_name
+            fi
+          
+            devextreme_sha=$(git ls-tree --object-only HEAD devextreme)
+            git commit -a -m "Update devextreme submodule to $devextreme_sha. Update generated code."
+            git push --set-upstream origin $branch_name --force
+          
+            if ! $branch_exists; then
+              gh pr create --title "Update generated code" --body "Update generated code" --reviewer DevExpress/devextreme-essentials
+            fi
+          fi
