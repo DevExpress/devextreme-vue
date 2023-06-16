@@ -29,6 +29,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "@types/ws": "8.5.4",
     "cpy-cli": "^3.1.1",
     "del-cli": "^3.0.1",
     "devextreme-internal-tools": "^9.3.0",
