@@ -34,8 +34,19 @@ jobs:
     - name: Restore devextreme
       run: npm run restore-devextreme
 
-    - name: Link devextreme
-      run: npm run link-devextreme
+    - name: Build devextreme repo
+      working-directory: devextreme
+      run: npm run build-npm-devextreme
+
+    - name: Pack DevExtreme
+      working-directory: devextreme/artifacts/npm/devextreme
+      run: |
+        npm pack
+        mv devextreme*.tgz devextreme.tgz
+
+    - name: Install devextreme package
+      run: |
+        npm i --save-dev ./devextreme/artifacts/npm/devextreme/devextreme.tgz --workspace=devextreme-vue --workspace=devextreme-vue2-strategy --no-audit --no-fund
 
     - name: Generate metadata
       run: npm run generate-metadata
