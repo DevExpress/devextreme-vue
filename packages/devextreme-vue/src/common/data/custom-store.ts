@@ -2,7 +2,7 @@ export {
     GroupItem,
     isGroupItemsArray,
     isItemsArray,
-    isSummary,
-    LoadedSummary,
+    isLoadResultObject,
     LoadResult,
+    LoadResultObject,
 } from "devextreme/common/data/custom-store";
