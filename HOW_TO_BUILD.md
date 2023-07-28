@@ -7,7 +7,7 @@ We use `git-submodule` to keep the versions of `devextreme` and `devextreme-vue`
 
 After you clone the `devextreme-vue` repository, use the following command to load the `devextreme` submodule:
 
-    npm run restore-submodule
+    npm run restore-devextreme
 
 This command also resets all changes in the submodule, if any occur.
 

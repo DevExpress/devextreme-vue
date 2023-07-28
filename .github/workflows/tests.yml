@@ -19,7 +19,7 @@ jobs:
     - name: Use Node.js 18
       uses: actions/setup-node@v3
       with:
-        node-version: '18'
+        node-version: '18.16.1'
 
     - uses: actions/setup-dotnet@v3
       with:
@@ -35,18 +35,18 @@ jobs:
       run: npm run restore-devextreme
 
     - name: Build devextreme repo
-      working-directory: devextreme
+      working-directory: devextreme/packages/devextreme
       run: npm run build-npm-devextreme
 
     - name: Pack DevExtreme
-      working-directory: devextreme/artifacts/npm/devextreme
+      working-directory: devextreme/packages/devextreme/artifacts/npm/devextreme
       run: |
         npm pack
         mv devextreme*.tgz devextreme.tgz
 
     - name: Install devextreme package
       run: |
-        npm i --save-dev ./devextreme/artifacts/npm/devextreme/devextreme.tgz --workspace=devextreme-vue --workspace=devextreme-vue2-strategy --no-audit --no-fund
+        npm i --save-dev ./devextreme/packages/devextreme/artifacts/npm/devextreme/devextreme.tgz --workspace=devextreme-vue --workspace=devextreme-vue2-strategy --no-audit --no-fund
 
     - name: Generate metadata
       run: npm run generate-metadata
