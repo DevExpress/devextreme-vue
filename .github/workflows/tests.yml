@@ -35,7 +35,7 @@ jobs:
       run: npm run restore-devextreme
 
     - name: Build devextreme repo
-      working-directory: devextreme
+      working-directory: devextreme/packages/devextreme
       run: npm run build-npm-devextreme
 
     - name: Pack DevExtreme
