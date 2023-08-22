@@ -16,6 +16,7 @@
         "vue2-strategy/src/core"
       ]
     },
+    "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "target": "es5",
