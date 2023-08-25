@@ -22,7 +22,7 @@
     "clean:packages": "npm run clean --yes --ws --if-present && npm run clean:root",
     "clean:root": "del-cli node_modules",
     "start:packages": "npn run start --ws --if-present",
-    "build:packages": "npm run build --ws --if-present",
+    "build:packages": "npm run build -w devextreme-vue-generator && npm run build --ws --if-present",
     "lint": "gulp lint",
     "test": "jest",
     "test-watch": "jest --watch",
