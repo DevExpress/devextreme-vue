@@ -26,7 +26,7 @@
     "lint": "gulp lint",
     "test": "jest",
     "test-watch": "jest --watch",
-    "pack": "npm run generate-metadata && npm run pack --ws --if-present"
+    "pack": "npm run generate-metadata:integration && npm run pack --ws --if-present"
   },
   "keywords": [
     "vue",
