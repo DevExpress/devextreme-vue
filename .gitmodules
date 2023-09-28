@@ -1,4 +1,0 @@
-[submodule "devextreme"]
-	path = devextreme
-	url = https://github.com/DevExpress/DevExtreme.git
-	branch = 23_1

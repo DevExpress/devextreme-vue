@@ -2,47 +2,25 @@ import { convertTypes } from "./converter";
 
 it("deduplicates", () => {
     expect(convertTypes([
-        { type: "String", isCustomType: false, acceptableValues: [], importPath: "importPath", isImportedType: false },
-        { type: "Number", isCustomType: false, acceptableValues: [], importPath: "importPath", isImportedType: false },
-        { type: "String", isCustomType: false, acceptableValues: [], importPath: "importPath", isImportedType: false }
+        { type: "String", isCustomType: false, acceptableValues: [] },
+        { type: "Number", isCustomType: false, acceptableValues: [] },
+        { type: "String", isCustomType: false, acceptableValues: [] }
     ])).toEqual(["String", "Number"]);
 });
 
-it("returns undefined if finds Any", () => {
-        expect(convertTypes([{
-            type: "Any",
-            isCustomType: false,
-            acceptableValues: [],
-            importPath: "importPath",
-            isImportedType: false
-        }])).toBeUndefined();
-        expect(convertTypes([
-            {
-                type: "String",
-                isCustomType: false,
-                acceptableValues: [],
-                importPath: "importPath",
-                isImportedType: false
-            },
-            {
-                type: "Number",
-                isCustomType: false,
-                acceptableValues: [],
-                importPath: "importPath",
-                isImportedType: false
-            },
-            { type: "Any", isCustomType: false, acceptableValues: [], importPath: "importPath", isImportedType: false }
-        ])).toBeUndefined();
-    });
+it("returns undefiend if finds Any", () => {
+    expect(convertTypes([{ type: "Any", isCustomType: false, acceptableValues: [] }])).toBeUndefined();
+    expect(convertTypes([
+        { type: "String", isCustomType: false, acceptableValues: [] },
+        { type: "Number", isCustomType: false, acceptableValues: [] },
+        { type: "Any", isCustomType: false, acceptableValues: [] }
+    ])).toBeUndefined();
+});
 
 it("returns Object if finds isCustomType", () => {
-    expect(convertTypes([{
-        type: "CustomType",
-        isCustomType: true,
-        acceptableValues: [],
-        importPath: "importPath",
-        isImportedType: false
-    }])).toEqual(["Object"]);
+    expect(convertTypes([
+        { type: "CustomType", isCustomType: true, acceptableValues: [] }
+    ])).toEqual(["Object"]);
 });
 
 it("returns undefined if array is empty", () => {
@@ -58,34 +36,18 @@ it("returns undefined if array is null", () => {
 });
 
 it("expands custom types", () => {
-    expect(convertTypes([{
-        type: "CustomType",
-        isCustomType: true,
-        acceptableValues: [],
-        importPath: "importPath",
-        isImportedType: false
-    }], {
+    expect(convertTypes([
+        { type: "CustomType", isCustomType: true, acceptableValues: [] },
+    ], {
         CustomType: {
             name: "CustomType",
-            module: "module",
             types: [
-                {
-                    type: "String",
-                    isCustomType: false,
-                    acceptableValues: [],
-                    importPath: "importPath",
-                    isImportedType: false
-                },
-                {
-                    type: "Number",
-                    isCustomType: false,
-                    acceptableValues: [],
-                    importPath: "importPath",
-                    isImportedType: false
-                }
+                { type: "String", isCustomType: false, acceptableValues: []},
+                { type: "Number", isCustomType: false, acceptableValues: []}
             ],
             props: [],
-            templates: []
+            templates: [],
+            module: ""
         }
-    })).toEqual(["Object", "String", "Number"]);
+})).toEqual(["Object", "String", "Number"]);
 });
