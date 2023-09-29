@@ -1,7 +1,7 @@
 {
   "author": "Developer Express Inc.",
   "name": "devextreme-vue-generator",
-  "version": "3.0.1",
+  "version": "3.0.3",
   "description": "DevExtreme Vue UI and Visualization Components",
   "repository": {
     "type": "git",
@@ -27,7 +27,6 @@
   "license": "MIT",
   "dependencies": {
     "dasherize": "^2.0.0",
-    "devextreme-internal-tools": "^10.0.0-beta.5",
     "dot": "^1.1.3"
   },
   "devDependencies": {
