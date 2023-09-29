@@ -65,6 +65,9 @@ jobs:
     - name: Run update integration meta
       run: npm run update-integration-meta
 
+    - name: Build generator
+      run: npm run build -w devextreme-vue-generator
+
     - name: Run build
       run: npm run build:packages
 
