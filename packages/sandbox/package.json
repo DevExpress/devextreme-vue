@@ -2,7 +2,7 @@
   "name": "devextreme-vue-sandbox",
   "description": "DevExtreme Vue UI and Visualization Components",
   "private": true,
-  "version": "23.1.0",
+  "version": "23.1.6",
   "author": "Developer Express Inc.",
   "license": "MIT",
   "repository": {
@@ -10,7 +10,7 @@
     "url": "https://github.com/DevExpress/devextreme-vue.git"
   },
   "dependencies": {
-    "devextreme-vue": "~23.1.0"
+    "devextreme-vue": "~23.1.6"
   },
   "devDependencies": {
     "@types/jest": "^22.2.3",
