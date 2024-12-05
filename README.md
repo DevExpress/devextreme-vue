@@ -7,9 +7,8 @@ This project allows you to use [DevExtreme components](http://js.devexpress.com/
 
 * [Documentation](https://js.devexpress.com/Documentation/Guide/Vue_Components/DevExtreme_Vue_Components/)
 * [Technical Demos](https://js.devexpress.com/Demos/WidgetsGallery/Demo/DataGrid/Overview/Vue/Light/)
-* [API Reference](http://js.devexpress.com/Documentation/ApiReference/)
-* [DevExtreme Vue Application Template](https://github.com/DevExpress/devextreme-vue-template)
-* [Live example](https://codesandbox.io/s/github/lukyanovas/devextreme-vue-example)
+* [Responsive UI Templates](https://js.devexpress.com/Vue/Templates/UITemplates/)
+* [Application Template](https://js.devexpress.com/Vue/Documentation/Guide/Vue_Components/Application_Template/)
 
 ## License ##
 
