@@ -31,7 +31,7 @@
     "dot": "^1.1.3"
   },
   "devDependencies": {
-    "@types/dot": "^1.1.5",
+    "@types/dot": "^1.1.7",
     "@types/jest": "^26.0.24",
     "cpy-cli": "^4.0.0",
     "del-cli": "^3.0.1",
